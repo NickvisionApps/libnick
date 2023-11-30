@@ -10,7 +10,7 @@ permissions:
   id-token: write
   contents: read
 env:
-  VCPKG_ROOT: ${{ github.workspace }}/vcpkg/
+  VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 jobs:
   build:
     name: "Build"
@@ -19,9 +19,9 @@ jobs:
       matrix:
         config:
         - os: ubuntu-latest
-          vcpkg_triplet: x64-linux-release
+          vcpkg_triplet: x64-linux
         - os: windows-latest
-          vcpkg_triplet: x64-windows-release
+          vcpkg_triplet: x64-windows
       fail-fast: false
     steps:
       - uses: actions/checkout@v3.5.0
@@ -31,6 +31,8 @@ jobs:
         with:
           pkgs: pkgconf gettext-libintl maddy jsoncpp curl curlpp sqlite3 sqlcipher sqlitecpp[sqlcipher] dbus
           triplet: ${{ matrix.config.vcpkg_triplet }}
+          extra-args: "--allow-unsupported"
+          cache-key: ${{ matrix.config.os }}
           token: ${{ github.token }}
       - uses: threeal/cmake-action@v1.3.0
         with:
