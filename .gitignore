@@ -30,3 +30,25 @@
 *.exe
 *.out
 *.app
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Directories
+out/
+build/
+bin/
+.vs/
+.vscode/
+.idea/
+.fleet/
+.flatpak-builder/
+.flatpak/
+_nickbuild/
+
+# UI Files
+*.ui

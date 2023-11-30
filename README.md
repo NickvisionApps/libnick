@@ -1,2 +1,5 @@
 # libaura
- A cross-platform base for native Nickvision applications
+
+UNDER CONSTRUCTION
+
+A cross-platform base for native Nickvision applications
