@@ -5,14 +5,51 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+project ("libaura" VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+include(GNUInstallDirs)
+
+#libaura Library Setup
+include_directories(${PROJECT_SOURCE_DIR}/include)
+add_library (${PROJECT_NAME} SHARED
+	src/events/eventargs.cpp
+	src/events/notificationsenteventargs.cpp
+	src/events/shellnotificationsenteventargs.cpp
+	src/helpers/stringhelpers.cpp
+	src/helpers/webhelpers.cpp
+	src/keyring/credential.cpp
+	src/keyring/passwordgenerator.cpp
+	src/update/updater.cpp
+	src/appinfo.cpp
+	src/aura.cpp
+	src/configurationbase.cpp
+	src/dependencylocator.cpp
+	src/systemdirectories.cpp
+	src/userdirectories.cpp
+	src/version.cpp)
+set_target_properties(${PROJECT_NAME} PROPERTIES 
+	VERSION ${PROJECT_VERSION}
+	SOVERSION ${PROJECT_VERSION_MAJOR})
+
+#libaura Packages
+find_package(Intl REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl)
+find_package(unofficial-maddy CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC unofficial::maddy::maddy)
+find_package(jsoncpp CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC JsonCpp::JsonCpp)
+find_package(unofficial-curlpp CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC unofficial::curlpp::curlpp)
+find_package(sqlcipher CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher)
+find_package(SQLiteCpp CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC SQLiteCpp)
+if(LINUX)
+	find_package(DBus1 CONFIG REQUIRED)
+	target_link_libraries(${PROJECT_NAME} PUBLIC dbus-1)
 endif()
 
-project ("libaura" VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
-
-include_directories(${PROJECT_SOURCE_DIR}/include)
-
-add_subdirectory ("src")
+#libaura Install
+configure_file(${PROJECT_SOURCE_DIR}/pkg-config/libaura.pc.in libaura.pc @ONLY)
+install(TARGETS libaura LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
