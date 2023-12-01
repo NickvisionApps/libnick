@@ -20,7 +20,7 @@ jobs:
         config:
         - name: "Build on Linux"
           os: ubuntu-latest
-          artifact: "Linux-x64.zip"
+          artifact: "Linux-x64"
           conan-profile: conanprofile-linux.txt
           conan-file: conanfile-linux.txt
           env:
@@ -28,7 +28,7 @@ jobs:
             CXX: g++
         - name: "Build on Windows"
           os: windows-latest
-          artifact: "Windows-x64.zip"
+          artifact: "Windows-x64"
           conan-profile: conanprofile-windows.txt
           conan-file: conanfile-windows.txt
       fail-fast: false
