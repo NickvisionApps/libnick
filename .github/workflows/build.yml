@@ -9,21 +9,28 @@ name: Build
 permissions:
   id-token: write
   contents: read
+env:
+  BUILD_TYPE: Release
 jobs:
   build:
-    name: "Build"
+    name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
       matrix:
         config:
-        - os: ubuntu-latest
+        - name: "Build on Linux"
+          os: ubuntu-latest
           artifact: "Linux-x64.zip"
-          mode: "Release"
-          conan-install-cmd: conan install conanfile-linux.txt -s compiler.cppstd=20 --build missing
-        - os: windows-latest
+          conan-profile: conanprofile-linux.txt
+          conan-file: conanfile-linux.txt
+          env:
+            CC: gcc
+            CXX: g++
+        - name: "Build on Windows"
+          os: windows-latest
           artifact: "Windows-x64.zip"
-          mode: "Release"
-          conan-install-cmd: conan install conanfile-windows.txt -s compiler.cppstd=20 --build missing
+          conan-profile: conanprofile-windows.txt
+          conan-file: conanfile-windows.txt
       fail-fast: false
     steps:
       - name: "Checkout"  
@@ -32,19 +39,25 @@ jobs:
           submodules: recursive
       - name: "Get Conan"
         uses: turtlebrowser/get-conan@main
-      - name: "Create Conan Profile"
-        run: conan profile detect --force
       - name: "Install Conan"
-        run: ${{ matrix.config.conan-install-cmd }}
-      - name: "CMake Load Cache"
-        working-directory: /build
-        run: cmake ..
-      - name: "CMake Build"  
-        run: cmake --build . --config ${{ matrix.config.mode }}
+        run: conan install ${{matrix.config.conan-file}} --profile:host=${{matrix.config.conan-profile}} --profile:build=${{matrix.config.conan-profile}} -s compiler.cppstd=20 --build=missing
+      - name: "CMake Build (Linux)"
+	      if: matrix.config.os == ubuntu-latest
+        working-directory: ${{github.workspace}}/build
+        run: |
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/Release/generators/conan_toolchain.cmake" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake --build .
+      - name: "CMake Build (Windows)"
+	      if: matrix.config.os == windows-latest
+        working-directory: ${{github.workspace}}/build
+        run: |
+          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/generators/conan_toolchain.cmake"
+          cmake --build . --config ${{env.BUILD_TYPE}}
       - name: "CMake Install"
-        run: cmake --install build --prefix instdir --strip
+        working-directory: ${{github.workspace}}/build
+        run: cmake --install . --prefix "${{github.workspace}}/install"
       - name: Upload
         uses: actions/upload-artifact@v1
         with:
-          path: ./${{ matrix.config.artifact }}
-          name: ${{ matrix.config.artifact }}-${{ matrix.config.mode }}
+          path: ${{github.workspace}}/install
+          name: ${{matrix.config.artifact}}-${{env.BUILD_TYPE}}

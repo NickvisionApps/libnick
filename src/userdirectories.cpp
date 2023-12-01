@@ -139,7 +139,7 @@ namespace Nickvision::Aura
 		std::filesystem::path result;
 #ifndef _WIN32
 		result = getXDGDir("XDG_RUNTIME_DIR");
-		result = result.empty() ? ("/run/user/" / getenv("UID")) : result;
+		result = result.empty() ? (std::filesystem::path("/run/user/") / std::filesystem::path(getenv("UID"))) : result;
 #endif
 		return result;
 	}

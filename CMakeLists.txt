@@ -1,8 +1,13 @@
-﻿cmake_minimum_required (VERSION 3.9)
+﻿cmake_minimum_required (VERSION 3.20)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+if (POLICY CMP0141)
+  cmake_policy(SET CMP0141 NEW)
+  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+endif()
 
 project ("libaura" VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(GNUInstallDirs)
@@ -27,23 +32,23 @@ add_library (${PROJECT_NAME} SHARED
 	src/version.cpp)
 set_target_properties(${PROJECT_NAME} PROPERTIES 
 	VERSION ${PROJECT_VERSION}
-	SOVERSION ${PROJECT_VERSION_MAJOR})
+	SOVERSION ${PROJECT_VERSION})
 
 #libaura Packages
 find_package(Intl REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl)
-find_package(jsoncpp CONFIG REQUIRED)
+find_package(jsoncpp REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC JsonCpp::JsonCpp)
 find_package(CURL REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC CURL::libcurl)
-find_package(maddy CONFIG REQUIRED)
+find_package(maddy REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC maddy::maddy)
-find_package(sqlcipher CONFIG REQUIRED)
+find_package(sqlcipher REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher)
-find_package(SQLiteCpp CONFIG REQUIRED)
+find_package(SQLiteCpp REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC SQLiteCpp)
 if(LINUX)
-	find_package(DBus1 CONFIG REQUIRED)
+	find_package(DBus1 REQUIRED)
 	target_link_libraries(${PROJECT_NAME} PUBLIC dbus-1)
 endif()
 
