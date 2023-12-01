@@ -10,6 +10,10 @@
 
 namespace Nickvision::Aura::Keyring
 {
+#ifndef _WIN32
+	static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", 0 } } };
+#endif
+
 	std::optional<Credential> SystemCredentials::getCredential(const std::string& name)
 	{
 #ifdef _WIN32
@@ -24,7 +28,15 @@ namespace Nickvision::Aura::Keyring
 			}
 		}
 #else
-
+		GError* error{ nullptr };
+		char* password = secret_password_lookup_sync(KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), nullptr);
+		if (!error && password)
+		{
+			Credential c{ name, "", "default", password };
+			secret_password_free(password);
+			return c;
+		}
+		g_error_free(error);
 #endif
 		return std::nullopt;
 	}
@@ -52,9 +64,15 @@ namespace Nickvision::Aura::Keyring
 		}
 		return c;
 #else
-
+		GError* error{ nullptr };
+		secret_password_store_sync(KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, c.getName().c_str(), c.getPassword().c_str(), nullptr, &error, "application", c.getName().c_str(), nullptr);
+		if (error)
+		{
+			g_error_free(error);
+			return std::nullopt;
+		}
+		return c;
 #endif
-		return std::nullopt;
 	}
 
 	bool SystemCredentials::deleteCredential(const Credential& credential)
@@ -62,7 +80,13 @@ namespace Nickvision::Aura::Keyring
 #ifdef _WIN32
 		return CredDeleteA(credential.getName().c_str(), CRED_TYPE_GENERIC, 0);
 #else
-
+		GError* error{ nullptr };
+		bool res = secret_password_clear_sync(KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), nullptr);
+		if (!error)
+		{
+			return res;
+		}
+		g_error_free(error);
 #endif
 		return false;
 	}
