@@ -17,8 +17,12 @@ jobs:
       matrix:
         config:
         - os: ubuntu-latest
+          artifact: "Linux-x64.zip"
+          mode: "Release"
           conan-install-cmd: conan install conanfile-linux.txt -s compiler.cppstd=20 --build missing
         - os: windows-latest
+          artifact: "Windows-x64.zip"
+          mode: "Release"
           conan-install-cmd: conan install conanfile-windows.txt -s compiler.cppstd=20 --build missing
       fail-fast: false
     steps:
@@ -33,6 +37,12 @@ jobs:
       - name: "Install Conan"
         run: ${{ matrix.config.conan-install-cmd }}
       - name: "CMake Build"  
-        uses: threeal/cmake-action@v1.3.0
+        run: cmake --build . --config ${{ matrix.config.mode }}
+      - name: "CMake Install"
+        working-directory: instdir
+        run: cmake --install build --prefix instdir --strip
+      - name: Upload
+        uses: actions/upload-artifact@v1
         with:
-          run-build: true
+          path: ./${{ matrix.config.artifact }}
+          name: ${{ matrix.config.artifact }}-${{ matrix.config.mode }}
