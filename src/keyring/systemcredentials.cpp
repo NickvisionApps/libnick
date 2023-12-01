@@ -1,8 +1,11 @@
 #include "keyring/systemcredentials.h"
+#include <vector>
 #include "keyring/passwordgenerator.h"
 #ifdef _WIN32
 #include <windows.h>
 #include <wincred.h>
+#else
+#include <libsecret/secret.h>
 #endif
 
 namespace Nickvision::Aura::Keyring
@@ -20,6 +23,8 @@ namespace Nickvision::Aura::Keyring
 				return c;
 			}
 		}
+#else
+
 #endif
 		return std::nullopt;
 	}
@@ -46,6 +51,8 @@ namespace Nickvision::Aura::Keyring
 			return std::nullopt;
 		}
 		return c;
+#else
+
 #endif
 		return std::nullopt;
 	}
@@ -54,6 +61,8 @@ namespace Nickvision::Aura::Keyring
 	{
 #ifdef _WIN32
 		return CredDeleteA(credential.getName().c_str(), CRED_TYPE_GENERIC, 0);
+#else
+
 #endif
 		return false;
 	}
