@@ -17,9 +17,9 @@ jobs:
       matrix:
         config:
         - os: ubuntu-latest
-          conan-install-cmd: conan install conanfile-linux.txt -s compiler.cppstd=gnu20
+          conan-install-cmd: conan install conanfile-linux.txt -s compiler.cppstd=20 --build missing
         - os: windows-latest
-          conan-install-cmd: conan install conanfile-windows.txt -s compiler.cppstd=gnu20
+          conan-install-cmd: conan install conanfile-windows.txt -s compiler.cppstd=20 --build missing
       fail-fast: false
     steps:
       - name: "Checkout"  
