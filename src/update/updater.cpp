@@ -62,7 +62,7 @@ namespace Nickvision::Aura::Update
 						if (WebHelpers::downloadFile(asset.get("browser_download_url", "").asString(), setup))
 						{
 							std::string cmd{ "\"" + setup.string() + "\"" };
-							ShellExecute(NULL, "open", cmd.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+							ShellExecute(nullptr, "open", cmd.c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
 							exit(0);
 							return true;
 						}

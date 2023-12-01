@@ -51,8 +51,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_Profile, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -68,8 +68,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -93,8 +93,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -148,8 +148,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_Desktop, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -166,8 +166,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -184,8 +184,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_Downloads, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_Downloads, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -202,8 +202,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_Music, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_Music, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -220,8 +220,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_Pictures, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_Pictures, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -247,8 +247,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_Templates, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_Templates, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}
@@ -265,8 +265,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
-		wchar_t* p = NULL;
-		if (SHGetKnownFolderPath(FOLDERID_Videos, 0, NULL, &p) == S_OK)
+		wchar_t* p = nullptr;
+		if (SHGetKnownFolderPath(FOLDERID_Videos, 0, nullptr, &p) == S_OK)
 		{
 			result = p;
 		}

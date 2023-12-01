@@ -13,11 +13,11 @@ namespace Nickvision::Aura
 	std::string StringHelpers::trim(const std::string& s)
 	{
 		std::string result{ s };
-		result.erase(std::find_if(result.rbegin(), result.rend(), [](char ch) 
+		result.erase(std::find_if(result.rbegin(), result.rend(), [](unsigned char ch) 
 		{
 			return !std::isspace(ch);
 		}).base(), result.end());
-		result.erase(result.begin(), std::find_if(result.begin(), result.end(), [](char ch)
+		result.erase(result.begin(), std::find_if(result.begin(), result.end(), [](unsigned char ch)
 		{
 			return !std::isspace(ch);
 		}));
