@@ -4,9 +4,12 @@
 #include <filesystem>
 #include <functional>
 #include <string>
+#include <curl/curl.h>
 
 namespace Nickvision::Aura::WebHelpers
 {
+	typedef std::function<int(curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)> CurlProgressFunction;
+
 	/**
 	 * @brief Gets whether or not a url points to a valid website.
 	 * @param url The url to check
@@ -18,14 +21,14 @@ namespace Nickvision::Aura::WebHelpers
 	 * @param url The url of the file to download
 	 * @param path The path on disk to save the file
 	 * @param progress An optional function to receive progress on the download \n
-	 * std::function<int(double dltotal, double dlnow, double ultotal, double ulnow)> \n 
+	 * std::function<int(curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)> \n 
 	 *	dltotal - The total number of bytes to be downloaded \n 
 	 *	dlnow   - The total number of bytes currently downloaded \n 
 	 *  ultotal - The total number of bytes to be uploaded (will always be 0) \n 
 	 *	ulnow   - The total number of bytes currently uploaded (will always be 0) \n 
 	 * @param overwrite Whether or not to overwrite existing files on disk
 	 */
-	bool downloadFile(const std::string& url, const std::filesystem::path& path, std::function<int(double dltotal, double dlnow, double ultotal, double ulnow)> progress = {}, bool overwrite = true);
+	bool downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress = {}, bool overwrite = true);
 	/**
 	 * @brief Fetches a json string from a url.
 	 * @param url The url of the json string

@@ -50,5 +50,8 @@ bin/
 .flatpak/
 _nickbuild/
 
+# CMake
+CMakeUserPresets.json
+
 # UI Files
 *.ui

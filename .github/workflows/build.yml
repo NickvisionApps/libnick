@@ -9,8 +9,6 @@ name: Build
 permissions:
   id-token: write
   contents: read
-env:
-  VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 jobs:
   build:
     name: "Build"
@@ -19,21 +17,20 @@ jobs:
       matrix:
         config:
         - os: ubuntu-latest
-          vcpkg_triplet: x64-linux
+          conan-install-cmd: conan install conanfile-linux.txt -s compiler.cppstd=gnu20
         - os: windows-latest
-          vcpkg_triplet: x64-windows
+          conan-install-cmd: conan install conanfile-windows.txt -s compiler.cppstd=gnu20
       fail-fast: false
     steps:
       - uses: actions/checkout@v3.5.0
         with:
           submodules: recursive
-      - uses: johnwason/vcpkg-action@v5
-        with:
-          pkgs: pkgconf gettext-libintl maddy jsoncpp curl curlpp sqlite3 sqlcipher sqlitecpp[sqlcipher] dbus
-          triplet: ${{ matrix.config.vcpkg_triplet }}
-          extra-args: "--allow-unsupported"
-          cache-key: ${{ matrix.config.os }}
-          token: ${{ github.token }}
+      - name: "Get Conan"
+        uses: uses: turtlebrowser/get-conan@main
+      - name: "Create Conan Profile"
+        run: conan profile detect --force
+      - name: "Install Conan"
+        run: ${{ matrix.config.conan-install-cmd }}
       - uses: threeal/cmake-action@v1.3.0
         with:
           run-build: true
