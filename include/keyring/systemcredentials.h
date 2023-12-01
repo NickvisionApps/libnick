@@ -16,13 +16,15 @@ namespace Nickvision::Aura::Keyring::SystemCredentials
 	/**
 	 * @brief Adds a new credential with a random password to the system's credential manager.
 	 * @param name The name of the credential
-	 * @return The new Credential object if successful
+	 * @return The new Credential object, if successful
 	 */
 	std::optional<Credential> addNewCredential(const std::string& name);
 	/**
 	 * @brief Deletes a Credential from the system's credential manager 
+	 * @param credential The Credential to delete
+	 * @return True if successful, else false
 	 */
-	void deleteCredential(const Credential& name);
+	bool deleteCredential(const Credential& credential);
 }
 
 #endif //SYSTEMCREDENTIALS_H
