@@ -11,7 +11,7 @@
 namespace Nickvision::Aura::Keyring
 {
 #ifndef _WIN32
-	static const SecretSchema &KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { NULL, 0 } } };
+	static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { NULL, 0 } } };
 #endif
 
 	std::optional<Credential> SystemCredentials::getCredential(const std::string& name)
