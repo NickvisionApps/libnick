@@ -22,6 +22,7 @@ add_library (${PROJECT_NAME} SHARED
 	src/helpers/webhelpers.cpp
 	src/keyring/credential.cpp
 	src/keyring/passwordgenerator.cpp
+	src/keyring/systemcredentials.cpp
 	src/update/updater.cpp
 	src/appinfo.cpp
 	src/aura.cpp

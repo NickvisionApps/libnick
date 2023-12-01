@@ -16,7 +16,7 @@ namespace Nickvision::Aura::Keyring
 		 * @brief Constructs a credential.
 		 * @param id The id of the credential
 		 * @param name The name of the credential
-		 * @param uri The uri of the credential
+		 * @param uri The uri of the credential (can also be used as a comment for the Credential)
 		 * @param username The username of the credential
 		 * @param password The password of the credential
 		 */
@@ -45,12 +45,12 @@ namespace Nickvision::Aura::Keyring
 		 */
 		void setName(const std::string& name);
 		/**
-		 * @brief Gets the uri of the credential
+		 * @brief Gets the uri of the credential (can also be used as a comment for the Credential)
 		 * @return The uri of the credential
 		 */
 		const std::string& getUri() const;
 		/**
-		 * @brief Sets the uri of the credential
+		 * @brief Sets the uri of the credential (can also be used as a comment for the Credential)
 		 * @param uri The uri of the credential
 		 */
 		void setUri(const std::string& uri);
