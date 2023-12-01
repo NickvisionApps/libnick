@@ -22,15 +22,17 @@ jobs:
           conan-install-cmd: conan install conanfile-windows.txt -s compiler.cppstd=gnu20
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3.5.0
+      - name: "Checkout"  
+        uses: actions/checkout@v3.5.0
         with:
           submodules: recursive
       - name: "Get Conan"
-        uses: uses: turtlebrowser/get-conan@main
+        uses: turtlebrowser/get-conan@main
       - name: "Create Conan Profile"
         run: conan profile detect --force
       - name: "Install Conan"
         run: ${{ matrix.config.conan-install-cmd }}
-      - uses: threeal/cmake-action@v1.3.0
+      - name: "CMake Build"  
+        uses: threeal/cmake-action@v1.3.0
         with:
           run-build: true
