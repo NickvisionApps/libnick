@@ -81,7 +81,7 @@ namespace Nickvision::Aura
 		m_changelog = changelog;
 		if (m_changelog.empty())
 		{
-			m_htmlChangelog = "";
+			m_htmlChangelog = {};
 			return;
 		}
 		std::stringstream markdown;
