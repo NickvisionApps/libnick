@@ -21,7 +21,7 @@ namespace Nickvision::Aura::Keyring
 		 * @brief Moves a Store object.
 		 * @parma store The object to move
 		 */
-		Store(Store&& store);
+		Store(Store&& store) noexcept;
 		/**
 		 * @brief Gets the name of the store.
 		 * @return The name of the store
@@ -93,7 +93,7 @@ namespace Nickvision::Aura::Keyring
 		 * @param overwrite Whether or not to overwrite a store that already exists with the provided name
 		 * @return The created Store object, std::nullopt if creation failed
 		 */
-		static std::optional<Store> create(const std::string& name, const std::string& password, bool overwrite);
+		static std::optional<Store> create(const std::string& name, const std::string& password, bool overwrite = true);
 		/**
 		 * @brief Loads a store.
 		 * @param name The name of the store

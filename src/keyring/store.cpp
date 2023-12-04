@@ -18,7 +18,7 @@ namespace Nickvision::Aura::Keyring
 		m_database.exec("CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)");
 	}
 
-	Store::Store(Store&& store)
+	Store::Store(Store&& store) noexcept
 		: m_name{ std::move(store.m_name) },
 		m_database{ std::move(store.m_database) },
 		m_path{ std::move(store.m_path) }

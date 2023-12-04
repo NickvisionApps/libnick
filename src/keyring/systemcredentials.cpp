@@ -75,13 +75,13 @@ namespace Nickvision::Aura::Keyring
 #endif
 	}
 
-	bool SystemCredentials::deleteCredential(const Credential& credential)
+	bool SystemCredentials::deleteCredential(const std::string& name)
 	{
 #ifdef _WIN32
-		return CredDeleteA(credential.getName().c_str(), CRED_TYPE_GENERIC, 0);
+		return CredDeleteA(name.c_str(), CRED_TYPE_GENERIC, 0);
 #else
 		GError* error{ nullptr };
-		bool res = secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), NULL);
+		bool res = secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL);
 		if (!error)
 		{
 			return res;

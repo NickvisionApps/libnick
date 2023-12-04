@@ -20,11 +20,11 @@ namespace Nickvision::Aura::Keyring::SystemCredentials
 	 */
 	std::optional<Credential> addNewCredential(const std::string& name);
 	/**
-	 * @brief Deletes a Credential from the system's credential manager 
-	 * @param credential The Credential to delete
+	 * @brief Deletes a credential from the system's credential manager 
+	 * @param name The name of the credential to delete
 	 * @return True if successful, else false
 	 */
-	bool deleteCredential(const Credential& credential);
+	bool deleteCredential(const std::string& name);
 }
 
 #endif //SYSTEMCREDENTIALS_H
