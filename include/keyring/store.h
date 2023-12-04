@@ -78,6 +78,18 @@ namespace Nickvision::Aura::Keyring
 		 * @return True if successful, else false
 		 */
 		bool destroy();
+		/**
+		 * @brief Copies an Store
+		 * @param store The Store to copy
+		 * @return this
+		 */
+		Store& operator=(const Store& store);
+		/**
+		 * @brief Moves an Store
+		 * @param store The Store to move
+		 * @return this
+		 */
+		Store& operator=(Store&& store);
 
 	private:
 		Store(const std::string& name, const std::shared_ptr<SQLite::Database>& database);

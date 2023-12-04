@@ -96,6 +96,8 @@ namespace Nickvision::Aura::Events
 		}
 		/**
 		 * @brief Copies an Event
+		 * @param e The Event to copy
+		 * @return this
 		 */
 		Event& operator=(const Event& e)
 		{
@@ -109,6 +111,8 @@ namespace Nickvision::Aura::Events
 		}
 		/**
 		 * @brief Moves an Event
+		 * @param e The Event to move
+		 * @return this
 		 */
 		Event& operator=(Event&& e)
 		{

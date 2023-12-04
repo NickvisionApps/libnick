@@ -123,6 +123,32 @@ namespace Nickvision::Aura::Keyring
 		return std::filesystem::remove(m_path);
 	}
 
+	Store& Store::operator=(const Store& store)
+	{
+		if (this != &store)
+		{
+			std::lock_guard<std::mutex> lock{ m_mutex };
+			std::lock_guard<std::mutex> lock2{ store.m_mutex };
+			m_name = store.m_name;
+			m_database = store.m_database;
+			m_path = store.m_path;
+		}
+		return *this;
+	}
+
+	Store& Store::operator=(Store&& store)
+	{
+		if (this != &store)
+		{
+			std::lock_guard<std::mutex> lock{ m_mutex };
+			std::lock_guard<std::mutex> lock2{ store.m_mutex };
+			std::swap(m_name, store.m_name);
+			std::swap(m_database, store.m_database);
+			std::swap(m_path, store.m_path);
+		}
+		return *this;
+	}
+
 	std::filesystem::path Store::getStoreDir()
 	{
 		return UserDirectories::getConfig() / "Nickvision" / "Keyring";
