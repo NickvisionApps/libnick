@@ -94,7 +94,7 @@ namespace Nickvision::Aura
 			markdown << StringHelpers::trim(line);
 			markdown << std::endl;
 		}
-		std::shared_ptr<maddy::Parser> parser{ std::make_shared<maddy::Parser>() };
+		std::unique_ptr<maddy::Parser> parser{ std::make_unique<maddy::Parser>() };
 		m_htmlChangelog = parser->Parse(markdown);
 	}
 
