@@ -2,6 +2,7 @@
 #define STORE_H
 
 #include <filesystem>
+#include <memory>
 #include <mutex>
 #include <optional>
 #include <string>
@@ -17,6 +18,11 @@ namespace Nickvision::Aura::Keyring
 	class Store
 	{
 	public:
+		/**
+		 * @brief Copies a Store object.
+		 * @parma store The object to move
+		 */
+		Store(const Store& store);
 		/**
 		 * @brief Moves a Store object.
 		 * @parma store The object to move
@@ -74,9 +80,9 @@ namespace Nickvision::Aura::Keyring
 		bool destroy();
 
 	private:
+		Store(const std::string& name, const std::shared_ptr<SQLite::Database>& database);
 		mutable std::mutex m_mutex;
-		Store(const std::string& name, SQLite::Database& database);
-		SQLite::Database m_database;
+		std::shared_ptr<SQLite::Database> m_database;
 		std::string m_name;
 		std::filesystem::path m_path;
 

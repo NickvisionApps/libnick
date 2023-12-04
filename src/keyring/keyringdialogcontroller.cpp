@@ -2,14 +2,14 @@
 
 namespace Nickvision::Aura::Keyring
 {
-	KeyringDialogController::KeyringDialogController(const std::string& name, std::optional<Keyring>& keyring)
+	KeyringDialogController::KeyringDialogController(const std::string& name, const std::optional<Keyring>& keyring)
 		: m_name{ name },
-		m_keyring{ std::move(keyring) }
+		m_keyring{ keyring }
 	{
 
 	}
 
-	std::optional<Keyring>& KeyringDialogController::getKeyring()
+	const std::optional<Keyring>& KeyringDialogController::getKeyring()
 	{
 		return m_keyring;
 	}

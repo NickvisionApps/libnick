@@ -18,12 +18,12 @@ namespace Nickvision::Aura::Keyring
 		 * @param name The name of the controller
 		 * @param keyring The keyring managed by the controller, if available
 		 */
-		KeyringDialogController(const std::string& name, std::optional<Keyring>& keyring);
+		KeyringDialogController(const std::string& name, const std::optional<Keyring>& keyring);
 		/**
 		 * @brief Gets the keyring managed by the controller, if available.
 		 * @return The keyring if available, else std::nullopt
 		 */
-		std::optional<Keyring>& getKeyring();
+		const std::optional<Keyring>& getKeyring();
 		/**
 		 * @brief Gets whether or not the keyring is enabled (unlocked).
 		 * @retrun True if enabled, else false

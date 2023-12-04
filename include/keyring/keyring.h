@@ -62,7 +62,7 @@ namespace Nickvision::Aura::Keyring
 		bool destroy();
 
 	private:
-		Keyring(Store& store);
+		Keyring(const Store& store);
 		Store m_store;
 
 	public:

@@ -3,8 +3,8 @@
 
 namespace Nickvision::Aura::Keyring
 {
-	Keyring::Keyring(Store& store)
-		: m_store{ std::move(store) }
+	Keyring::Keyring(const Store& store)
+		: m_store{ store }
 	{
 
 	}

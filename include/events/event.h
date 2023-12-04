@@ -35,7 +35,7 @@ namespace Nickvision::Aura::Events
 		/**
 		 * @brief Constructs an Event via move.
 		 */
-		Event(Event&& e)
+		Event(Event&& e) noexcept
 		{
 			std::lock_guard<std::mutex> lock{ e.m_mutex };
 			m_handlers = std::move(e.m_handlers);
