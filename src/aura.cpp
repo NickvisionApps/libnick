@@ -3,7 +3,7 @@
 
 namespace Nickvision::Aura
 {
-	std::optional<Aura> Aura::m_instance = std::nullopt;
+	std::unique_ptr<Aura> Aura::m_instance = nullptr;
 
 	Aura::Aura(const std::string& id, const std::string& name)
 	{
@@ -28,7 +28,7 @@ namespace Nickvision::Aura
 	{
 		if (!m_instance)
 		{
-			m_instance = { id, name };
+			m_instance = std::unique_ptr<Aura>(new Aura(id, name));
 		}
 		return *m_instance;
 	}

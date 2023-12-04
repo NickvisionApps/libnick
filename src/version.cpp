@@ -85,6 +85,11 @@ namespace Nickvision::Aura
 		return m_str;
 	}
 
+	bool Version::empty() const
+	{
+		return m_major == 0 && m_minor == 0 && m_build == 0 && m_dev.empty();
+	}
+
 	bool Version::operator<(const Version& compare) const
 	{
 		if (m_major < compare.m_major)

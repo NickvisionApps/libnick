@@ -56,6 +56,11 @@ namespace Nickvision::Aura
 		 */
 		const std::string& toString() const;
 		/**
+		 * @brief Gets whether or not the Version object is empty
+		 * @return True if empty, else false
+		 */
+		bool empty() const;
+		/**
 		 * @brief Compares Version objects via < operator
 		 * @param compare The Version object to compare too
 		 * @return True if this < compare

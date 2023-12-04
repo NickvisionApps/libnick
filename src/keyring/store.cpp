@@ -28,19 +28,19 @@ namespace Nickvision::Aura::Keyring
 
 	const std::string& Store::getName() const
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_name;
 	}
 
 	const std::filesystem::path& Store::getPath() const
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_path;
 	}
 
 	std::vector<Credential> Store::getAllCredentials() const
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		std::vector<Credential> creds;
 		Statement query{ m_database, "SELECT * FROM credentials" };
 		while (query.executeStep())
@@ -52,7 +52,7 @@ namespace Nickvision::Aura::Keyring
 
 	std::optional<Credential> Store::getCredential(int id) const
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		Statement query{ m_database, "SELECT * FROM credentials where id = ?" };
 		query.bind(1, id);
 		query.executeStep();
@@ -65,7 +65,7 @@ namespace Nickvision::Aura::Keyring
 
 	std::vector<Credential> Store::getCredentials(const std::string& name) const
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		std::vector<Credential> creds;
 		Statement query{ m_database, "SELECT * FROM credentials where name = ?" };
 		query.bind(1, name);
@@ -78,7 +78,7 @@ namespace Nickvision::Aura::Keyring
 
 	bool Store::addCredential(const Credential& credential)
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		Statement query{ m_database, "INSERT INTO credentials (id, name, uri, username, password) VALUES (?, ?, ?, ?, ?)" };
 		query.bind(1, credential.getId());
 		query.bind(2, credential.getName());
@@ -90,7 +90,7 @@ namespace Nickvision::Aura::Keyring
 
 	bool Store::updateCredential(const Credential& credential)
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		Statement query{ m_database, "UPDATE credentials SET name = ?, uri = ?, username = ?, password = ? where id = ?" };
 		query.bind(5, credential.getId());
 		query.bind(1, credential.getName());
@@ -102,7 +102,7 @@ namespace Nickvision::Aura::Keyring
 
 	bool Store::deleteCredential(int id)
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		Statement query{ m_database, "DELETE FROM credentials WHERE id = ?" };
 		query.bind(1, id);
 		return query.exec() > 0;
@@ -110,7 +110,7 @@ namespace Nickvision::Aura::Keyring
 
 	bool Store::destroy()
 	{
-		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_database.~Database();
 		return std::filesystem::remove(m_path);
 	}
