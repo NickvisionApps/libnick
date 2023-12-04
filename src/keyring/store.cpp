@@ -10,28 +10,39 @@ namespace Nickvision::Aura::Keyring
 		return Store::getStoreDir() / (name + ".ring");
 	}
 
-	Store::Store(const std::string& name, std::unique_ptr<Database> database)
+	Store::Store(const std::string& name, Database& database)
 		: m_name{ name },
 		m_database{ std::move(database) },
 		m_path{ getPathFromName(name) }
 	{
-		m_database->exec("CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)");
+		m_database.exec("CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)");
+	}
+
+	Store::Store(Store&& store)
+		: m_name{ std::move(store.m_name) },
+		m_database{ std::move(store.m_database) },
+		m_path{ std::move(store.m_path) }
+	{
+
 	}
 
 	const std::string& Store::getName() const
 	{
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
 		return m_name;
 	}
 
 	const std::filesystem::path& Store::getPath() const
 	{
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
 		return m_path;
 	}
 
 	std::vector<Credential> Store::getAllCredentials() const
 	{
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
 		std::vector<Credential> creds;
-		Statement query{ *m_database, "SELECT * FROM credentials" };
+		Statement query{ m_database, "SELECT * FROM credentials" };
 		while (query.executeStep())
 		{
 			creds.push_back({ query.getColumn(0).getInt(), query.getColumn(1).getString(), query.getColumn(2).getString(), query.getColumn(3).getString(), query.getColumn(4).getString() });
@@ -41,7 +52,8 @@ namespace Nickvision::Aura::Keyring
 
 	std::optional<Credential> Store::getCredential(int id) const
 	{
-		Statement query{ *m_database, "SELECT * FROM credentials where id = ?" };
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		Statement query{ m_database, "SELECT * FROM credentials where id = ?" };
 		query.bind(1, id);
 		query.executeStep();
 		if (query.hasRow())
@@ -53,9 +65,9 @@ namespace Nickvision::Aura::Keyring
 
 	std::vector<Credential> Store::getCredentials(const std::string& name) const
 	{
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
 		std::vector<Credential> creds;
-
-		Statement query{ *m_database, "SELECT * FROM credentials where name = ?" };
+		Statement query{ m_database, "SELECT * FROM credentials where name = ?" };
 		query.bind(1, name);
 		while (query.executeStep())
 		{
@@ -66,7 +78,8 @@ namespace Nickvision::Aura::Keyring
 
 	bool Store::addCredential(const Credential& credential)
 	{
-		Statement query{ *m_database, "INSERT INTO credentials (id, name, uri, username, password) VALUES (?, ?, ?, ?, ?)" };
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		Statement query{ m_database, "INSERT INTO credentials (id, name, uri, username, password) VALUES (?, ?, ?, ?, ?)" };
 		query.bind(1, credential.getId());
 		query.bind(2, credential.getName());
 		query.bind(3, credential.getUri());
@@ -77,7 +90,8 @@ namespace Nickvision::Aura::Keyring
 
 	bool Store::updateCredential(const Credential& credential)
 	{
-		Statement query{ *m_database, "UPDATE credentials SET name = ?, uri = ?, username = ?, password = ? where id = ?" };
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		Statement query{ m_database, "UPDATE credentials SET name = ?, uri = ?, username = ?, password = ? where id = ?" };
 		query.bind(5, credential.getId());
 		query.bind(1, credential.getName());
 		query.bind(2, credential.getUri());
@@ -88,14 +102,16 @@ namespace Nickvision::Aura::Keyring
 
 	bool Store::deleteCredential(int id)
 	{
-		Statement query{ *m_database, "DELETE FROM credentials WHERE id = ?" };
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		Statement query{ m_database, "DELETE FROM credentials WHERE id = ?" };
 		query.bind(1, id);
 		return query.exec() > 0;
 	}
 
 	bool Store::destroy()
 	{
-		m_database.reset();
+		std::lock_guard<std::mutex> m_lock{ m_mutex };
+		m_database.~Database();
 		return std::filesystem::remove(m_path);
 	}
 
@@ -125,9 +141,9 @@ namespace Nickvision::Aura::Keyring
 		}
 		try
 		{
-			std::unique_ptr<Database> database{ std::make_unique<Database>(path.string(), OPEN_READWRITE | OPEN_CREATE) };
-			database->key(password);
-			return { { name, std::move(database) } };
+			Database database{ path.string(), OPEN_READWRITE | OPEN_CREATE };
+			database.key(password);
+			return { {name, database} };
 		}
 		catch (...)
 		{
@@ -148,9 +164,9 @@ namespace Nickvision::Aura::Keyring
 		}
 		try
 		{
-			std::unique_ptr<Database> database{ std::make_unique<Database>(path.string(), OPEN_READWRITE | OPEN_CREATE) };
-			database->key(password);
-			return { { name, std::move(database) } };
+			Database database{ path.string(), OPEN_READWRITE | OPEN_CREATE };
+			database.key(password);
+			return { {name, database} };
 		}
 		catch (...)
 		{
