@@ -26,7 +26,7 @@ namespace Nickvision::Aura
 
 	Aura& Aura::init(const std::string& id, const std::string& name)
 	{
-		if (!m_instance.has_value())
+		if (!m_instance)
 		{
 			m_instance = { id, name };
 		}
@@ -35,7 +35,7 @@ namespace Nickvision::Aura
 
 	Aura& Aura::getActive()
 	{
-		if (!m_instance.has_value())
+		if (!m_instance)
 		{
 			throw std::logic_error("Aura::init() must be called first.");
 		}

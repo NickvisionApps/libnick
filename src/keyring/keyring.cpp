@@ -59,14 +59,14 @@ namespace Nickvision::Aura::Keyring
 		if (password.empty())
 		{
 			std::optional<Credential> cred{ SystemCredentials::getCredential(name) };
-			password = cred.has_value() ? cred->getPassword() : "";
+			password = cred ? cred->getPassword() : "";
 		}
 		//If password not empty (a.k.a user-provided or system-provided), get store
 		if (!password.empty())
 		{
 			//Load store
 			std::optional<Store> storeLoad{ Store::load(name, password) };
-			if (storeLoad.has_value())
+			if (storeLoad)
 			{
 				return { { *storeLoad } };
 			}
@@ -74,7 +74,7 @@ namespace Nickvision::Aura::Keyring
 			else
 			{
 				std::optional<Store> storeCreate{ Store::create(name, password) };
-				if (storeCreate.has_value())
+				if (storeCreate)
 				{
 					return { { *storeCreate } };
 				}
@@ -88,10 +88,10 @@ namespace Nickvision::Aura::Keyring
 		else
 		{
 			std::optional<Credential> cred{ SystemCredentials::addCredential(name) };
-			if (cred.has_value())
+			if (cred)
 			{
 				std::optional<Store> storeCreate{ Store::create(name, cred->getPassword()) };
-				if (storeCreate.has_value())
+				if (storeCreate)
 				{
 					return { { *storeCreate } };
 				}

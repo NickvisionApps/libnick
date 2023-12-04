@@ -16,7 +16,7 @@ namespace Nickvision::Aura
 		if (locations.contains(dependency))
 		{
 			const std::optional<std::filesystem::path>& location = locations[dependency];
-			if (location.has_value() && std::filesystem::exists(location.value()))
+			if (location && std::filesystem::exists(location.value()))
 			{
 				return location;
 			}
