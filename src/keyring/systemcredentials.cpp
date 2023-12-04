@@ -70,7 +70,7 @@ namespace Nickvision::Aura::Keyring
 		return res;
 #else
 		GError* error{ nullptr };
-		secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().credential_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
+		secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
 		if (error)
 		{
 			g_error_free(error);
@@ -101,11 +101,11 @@ namespace Nickvision::Aura::Keyring
 		}
 #else
 		GError* error{ nullptr };
-		char* password = secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL);
+		char* password = secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), NULL);
 		if (!error && password)
 		{
 			secret_password_free(password);
-			secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().credential_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
+			secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
 			if (error)
 			{
 				g_error_free(error);
