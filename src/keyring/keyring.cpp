@@ -87,7 +87,7 @@ namespace Nickvision::Aura::Keyring
 		//Create a new store with a new password from the system credential store
 		else
 		{
-			std::optional<Credential> cred{ SystemCredentials::addNewCredential(name) };
+			std::optional<Credential> cred{ SystemCredentials::addCredential(name) };
 			if (cred.has_value())
 			{
 				std::optional<Store> storeCreate{ Store::create(name, cred->getPassword()) };

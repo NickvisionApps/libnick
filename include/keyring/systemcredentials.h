@@ -18,9 +18,21 @@ namespace Nickvision::Aura::Keyring::SystemCredentials
 	 * @param name The name of the credential
 	 * @return The new Credential object, if successful
 	 */
-	std::optional<Credential> addNewCredential(const std::string& name);
+	std::optional<Credential> addCredential(const std::string& name);
 	/**
-	 * @brief Deletes a credential from the system's credential manager 
+	 * @brief Adds a new credential to the system's credential manager.
+	 * @param name The new credential object
+	 * @return True if successful, else false
+	 */
+	bool addCredential(const Credential& credential);
+	/**
+	 * @brief Updates a credential in the system's credential manager.
+	 * @param name The updated credential object
+	 * @return True if successful, else false
+	 */
+	bool updateCredential(const Credential& credential);
+	/**
+	 * @brief Deletes a credential from the system's credential manager.
 	 * @param name The name of the credential to delete
 	 * @return True if successful, else false
 	 */

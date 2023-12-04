@@ -9,6 +9,9 @@
 
 namespace Nickvision::Aura::Keyring
 {
+	/**
+	 * @brief A model of a keyring object for managing credentials.
+	 */
 	class Keyring
 	{
 	public:
