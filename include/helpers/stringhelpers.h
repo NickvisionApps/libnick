@@ -48,6 +48,12 @@ namespace Nickvision::Aura::StringHelpers
 	 * @return The guid value
 	 */
 	std::string newGuid();
+	/**
+	 * @brief Gets whether or not the provided string is a valid url
+	 * @param s The string to check
+	 * @return True if the string is a valid url, else false
+	 */
+	bool isValidUrl(const std::string& s);
 
 }
 

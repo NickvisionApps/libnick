@@ -119,6 +119,7 @@ namespace Nickvision::Aura::Keyring
 	bool Store::destroy()
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
+		m_database->~Database();
 		m_database.reset();
 		return std::filesystem::remove(m_path);
 	}
