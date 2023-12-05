@@ -17,8 +17,6 @@ include(GNUInstallDirs)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 add_library (${PROJECT_NAME} SHARED
 	src/events/eventargs.cpp
-	src/events/notificationsenteventargs.cpp
-	src/events/shellnotificationsenteventargs.cpp
 	src/helpers/stringhelpers.cpp
 	src/helpers/webhelpers.cpp
 	src/keyring/credential.cpp
@@ -27,7 +25,8 @@ add_library (${PROJECT_NAME} SHARED
 	src/keyring/passwordgenerator.cpp
 	src/keyring/store.cpp
 	src/keyring/systemcredentials.cpp
-	src/network/networkmonitor.cpp
+	src/notifications/notificationsenteventargs.cpp
+	src/notifications/shellnotificationsenteventargs.cpp
 	src/update/updater.cpp
 	src/appinfo.cpp
 	src/aura.cpp

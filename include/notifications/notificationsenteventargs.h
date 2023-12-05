@@ -2,15 +2,15 @@
 #define NOTIFICATIONSENTEVENTARGS_H
 
 #include <string>
-#include "eventargs.h"
 #include "notificationseverity.h"
+#include "events/eventargs.h"
 
-namespace Nickvision::Aura::Events
+namespace Nickvision::Aura::Notifications
 {
 	/**
 	 * @brief Event args for when a notification is sent
 	 */
-	class NotificationSentEventArgs : public EventArgs
+	class NotificationSentEventArgs : public Events::EventArgs
 	{
 	public:
 		/**

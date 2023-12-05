@@ -1,6 +1,6 @@
-#include "events/notificationsenteventargs.h"
+#include "notifications/notificationsenteventargs.h"
 
-namespace Nickvision::Aura::Events
+namespace Nickvision::Aura::Notifications
 {
 	NotificationSentEventArgs::NotificationSentEventArgs(const std::string& message, NotificationSeverity severity, const std::string& action, const std::string& actionParam)
 		: m_message{ message },

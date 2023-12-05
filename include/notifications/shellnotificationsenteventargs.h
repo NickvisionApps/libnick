@@ -3,7 +3,7 @@
 
 #include "notificationsenteventargs.h"
 
-namespace Nickvision::Aura::Events
+namespace Nickvision::Aura::Notifications
 {
 	/**
 	 * @brief Event args for when a shell notification is sent
