@@ -15,7 +15,7 @@ namespace Nickvision::Aura::WebHelpers
 	 * @param url The url to check
 	 * @return True if valid website, else false
 	 */
-	bool getIsValidWebsite(const std::string& url);
+	bool isValidWebsite(const std::string& url);
 	/**
 	 * @brief Downloads a file to disk.
 	 * @param url The url of the file to download

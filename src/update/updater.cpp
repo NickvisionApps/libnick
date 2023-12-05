@@ -18,7 +18,7 @@ namespace Nickvision::Aura::Update
 		: m_latestStableReleaseId{ -1 },
 		m_latestPreviewReleaseId{ -1 }
 	{
-		if (!WebHelpers::getIsValidWebsite(Aura::getActive().getAppInfo().getSourceRepo()))
+		if (!WebHelpers::isValidWebsite(Aura::getActive().getAppInfo().getSourceRepo()))
 		{
 			throw std::invalid_argument("The source repo of the active Aura::AppInfo is invalid.");
 		}

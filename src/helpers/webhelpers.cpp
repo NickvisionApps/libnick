@@ -3,7 +3,7 @@
 
 namespace Nickvision::Aura
 {
-	bool WebHelpers::getIsValidWebsite(const std::string& url)
+	bool WebHelpers::isValidWebsite(const std::string& url)
 	{
 		curl_global_init(CURL_GLOBAL_DEFAULT);
 		CURL* curl{ curl_easy_init() };
