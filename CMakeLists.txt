@@ -25,6 +25,7 @@ add_library (${PROJECT_NAME} SHARED
 	src/keyring/passwordgenerator.cpp
 	src/keyring/store.cpp
 	src/keyring/systemcredentials.cpp
+	src/network/networkmonitor.cpp
 	src/notifications/notificationsenteventargs.cpp
 	src/notifications/shellnotificationsenteventargs.cpp
 	src/update/updater.cpp
