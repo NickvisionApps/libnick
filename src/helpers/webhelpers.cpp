@@ -15,7 +15,11 @@ namespace Nickvision::Aura
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
 		curl_easy_setopt(curl, CURLOPT_HEADER, false);
-		CURLcode code = curl_easy_perform(curl);
+#ifdef _WIN32
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
+#endif
+		CURLcode code{ curl_easy_perform(curl) };
 		curl_easy_cleanup(curl);
 		curl_global_cleanup();
 		return code == CURLE_OK;
@@ -39,21 +43,25 @@ namespace Nickvision::Aura
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](char* ptr, size_t size, size_t nmemb, void* data)
 		{
-			std::ofstream* stream{ (std::ofstream*)data };
+			std::ofstream* stream{ reinterpret_cast<std::ofstream*>(data) };
 			stream->write(ptr, size * nmemb);
 			return size * nmemb;
 		});
+#ifdef _WIN32
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
+#endif
 		if (progress)
 		{
 			curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
 			curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &progress);
 			curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, [](void* data, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
 			{
-				CurlProgressFunction& func{ *((CurlProgressFunction*)data) };
+				CurlProgressFunction& func{ *(reinterpret_cast<CurlProgressFunction*>(data)) };
 				return func(dltotal, dlnow, ultotal, ulnow);
 			});
 		}
-		CURLcode code = curl_easy_perform(curl);
+		CURLcode code{ curl_easy_perform(curl) };
 		curl_easy_cleanup(curl);
 		curl_global_cleanup();
 		return code == CURLE_OK;
@@ -77,11 +85,15 @@ namespace Nickvision::Aura
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](char* ptr, size_t size, size_t nmemb, void* data)
 		{
-			std::stringstream* stream{ (std::stringstream*)data };
+			std::stringstream* stream{ reinterpret_cast<std::stringstream*>(data) };
 			stream->write(ptr, size * nmemb);
 			return size * nmemb;
 		});
-		CURLcode code = curl_easy_perform(curl);
+#ifdef _WIN32
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
+#endif
+		CURLcode code{ curl_easy_perform(curl) };
 		curl_easy_cleanup(curl);
 		curl_slist_free_all(listHttpHeader);
 		curl_global_cleanup();
