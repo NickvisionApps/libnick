@@ -1,6 +1,7 @@
 #include "helpers/stringhelpers.h"
 #include <array>
 #include <iomanip>
+#include <regex>
 #include <sstream>
 #ifdef _WIN32
 #include <windows.h>
@@ -90,5 +91,15 @@ namespace Nickvision::Aura
 		out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[14]);
 		out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[15]);
 		return out.str();
+	}
+
+	bool StringHelpers::isValidUrl(const std::string& s)
+	{
+		if (s.empty())
+		{
+			return false;
+		}
+		std::regex urlRegex{ "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)" };
+		return std::regex_match(s, urlRegex);
 	}
 }

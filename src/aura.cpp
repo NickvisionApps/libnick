@@ -3,7 +3,7 @@
 
 namespace Nickvision::Aura
 {
-	std::optional<Aura> Aura::m_instance = std::nullopt;
+	std::unique_ptr<Aura> Aura::m_instance = nullptr;
 
 	Aura::Aura(const std::string& id, const std::string& name)
 	{
@@ -26,16 +26,16 @@ namespace Nickvision::Aura
 
 	Aura& Aura::init(const std::string& id, const std::string& name)
 	{
-		if (!m_instance.has_value())
+		if (!m_instance)
 		{
-			m_instance = { id, name };
+			m_instance = std::unique_ptr<Aura>(new Aura(id, name));
 		}
 		return *m_instance;
 	}
 
 	Aura& Aura::getActive()
 	{
-		if (!m_instance.has_value())
+		if (!m_instance)
 		{
 			throw std::logic_error("Aura::init() must be called first.");
 		}

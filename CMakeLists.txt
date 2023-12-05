@@ -3,6 +3,7 @@
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(SQLITE_HAS_CODEC ON)
 
 if (POLICY CMP0141)
   cmake_policy(SET CMP0141 NEW)
@@ -21,7 +22,10 @@ add_library (${PROJECT_NAME} SHARED
 	src/helpers/stringhelpers.cpp
 	src/helpers/webhelpers.cpp
 	src/keyring/credential.cpp
+	src/keyring/keyring.cpp
+	src/keyring/keyringdialogcontroller.cpp
 	src/keyring/passwordgenerator.cpp
+	src/keyring/store.cpp
 	src/keyring/systemcredentials.cpp
 	src/update/updater.cpp
 	src/appinfo.cpp
@@ -44,8 +48,6 @@ find_package(CURL REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC CURL::libcurl)
 find_package(maddy REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC maddy::maddy)
-find_package(sqlcipher REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher)
 find_package(SQLiteCpp REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC SQLiteCpp)
 if(LINUX)

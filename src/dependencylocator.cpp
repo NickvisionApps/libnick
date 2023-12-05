@@ -1,12 +1,15 @@
 #include "dependencylocator.h"
 #include <map>
+#include <mutex>
 #include "systemdirectories.h"
 
 namespace Nickvision::Aura
 {
-	const std::optional<std::filesystem::path>& DependencyLocator::find(std::string dependency)
+	const std::filesystem::path& DependencyLocator::find(std::string dependency)
 	{
-		static std::map<std::string, std::optional<std::filesystem::path>> locations;
+		static std::map<std::string, std::filesystem::path> locations;
+		static std::mutex mutex;
+		std::lock_guard<std::mutex> lock{ mutex };
 #ifdef _WIN32
 		if (!std::filesystem::path(dependency).has_extension())
 		{
@@ -15,13 +18,13 @@ namespace Nickvision::Aura
 #endif
 		if (locations.contains(dependency))
 		{
-			const std::optional<std::filesystem::path>& location = locations[dependency];
-			if (location.has_value() && std::filesystem::exists(location.value()))
+			const std::filesystem::path& location = locations[dependency];
+			if (std::filesystem::exists(location))
 			{
 				return location;
 			}
 		}
-		locations[dependency] = std::nullopt;
+		locations[dependency] = std::filesystem::path();
 		std::filesystem::path current{ std::filesystem::current_path() / dependency };
 		if (std::filesystem::exists(current))
 		{

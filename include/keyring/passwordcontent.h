@@ -1,6 +1,8 @@
 #ifndef PASSWORDCONTENT_H
 #define PASSWORDCONTENT_H
 
+#include "enumflags.h"
+
 namespace Nickvision::Aura::Keyring
 {
 	/**
@@ -14,40 +16,7 @@ namespace Nickvision::Aura::Keyring
 		Special = 8
 	};
 
-	inline PasswordContent operator~(PasswordContent a) 
-	{ 
-		return (PasswordContent)~(int)a; 
-	}
-
-	inline PasswordContent operator|(PasswordContent a, PasswordContent b) 
-	{ 
-		return (PasswordContent)((int)a | (int)b); 
-	}
-
-	inline PasswordContent operator&(PasswordContent a, PasswordContent b) 
-	{ 
-		return (PasswordContent)((int)a & (int)b);
-	}
-
-	inline PasswordContent operator^(PasswordContent a, PasswordContent b) 
-	{ 
-		return (PasswordContent)((int)a ^ (int)b);
-	}
-
-	inline PasswordContent& operator|=(PasswordContent& a, PasswordContent b) 
-	{ 
-		return (PasswordContent&)((int&)a |= (int)b);
-	}
-
-	inline PasswordContent& operator&=(PasswordContent& a, PasswordContent b) 
-	{ 
-		return (PasswordContent&)((int&)a &= (int)b);
-	}
-
-	inline PasswordContent& operator^=(PasswordContent& a, PasswordContent b) 
-	{ 
-		return (PasswordContent&)((int&)a ^= (int)b);
-	}
+	DEFINE_ENUM_FLAG_OPERATORS(PasswordContent);
 }
 
 #endif //PASSWORDCONTENT_H

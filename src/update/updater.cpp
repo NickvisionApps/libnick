@@ -27,18 +27,19 @@ namespace Nickvision::Aura::Update
 		m_repoName = fields[4];
 	}
 
-	std::optional<Version> Updater::getCurrentStableVersion()
+	Version Updater::fetchCurrentStableVersion()
 	{
-		return getCurrentVersion(VersionType::Stable);
+		return fetchCurrentVersion(VersionType::Stable);
 	}
 
-	std::optional<Version> Updater::getCurrentPreviewVersion()
+	Version Updater::fetchCurrentPreviewVersion()
 	{
-		return getCurrentVersion(VersionType::Preview);
+		return fetchCurrentVersion(VersionType::Preview);
 	}
 
 	bool Updater::windowsUpdate(VersionType versionType)
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 #ifdef _WIN32
 		if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
 		{
@@ -74,8 +75,9 @@ namespace Nickvision::Aura::Update
 		return false;
 	}
 
-	std::optional<Version> Updater::getCurrentVersion(VersionType versionType)
+	Version Updater::fetchCurrentVersion(VersionType versionType)
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		std::string releases = WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases");
 		if (!releases.empty())
 		{
@@ -89,16 +91,16 @@ namespace Nickvision::Aura::Update
 					if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
 					{
 						m_latestStableReleaseId = release.get("id", -1).asInt();
-						return { version };
+						return version;
 					}
 					if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
 					{
 						m_latestPreviewReleaseId = release.get("id", -1).asInt();
-						return { version };
+						return version;
 					}
 				}
 			}
 		}
-		return std::nullopt;
+		return {};
 	}
 }

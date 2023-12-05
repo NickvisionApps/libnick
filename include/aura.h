@@ -2,7 +2,7 @@
 #define AURA_H
 
 #include <map>
-#include <optional>
+#include <memory>
 #include <string>
 #include "appinfo.h"
 #include "configurationbase.h"
@@ -61,7 +61,7 @@ namespace Nickvision::Aura
 		static Aura& getActive();
 
 	private:
-		static std::optional<Aura> m_instance;
+		static std::unique_ptr<Aura> m_instance;
 	};
 }
 

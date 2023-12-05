@@ -78,14 +78,14 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_CONFIG_HOME");
 		result = result.empty() ? (getHome() / ".config") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
 	std::filesystem::path UserDirectories::getApplicationConfig()
 	{
 		std::filesystem::path result = getConfig() / Aura::getActive().getAppInfo().getName();
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -103,14 +103,14 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_CACHE_HOME");
 		result = result.empty() ? (getHome() / ".cache") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
 	std::filesystem::path UserDirectories::getApplicationCache()
 	{
 		std::filesystem::path result = getCache() / Aura::getActive().getAppInfo().getName();
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -123,14 +123,14 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_DATA_HOME");
 		result = result.empty() ? (getHome() / ".local/share") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
 	std::filesystem::path UserDirectories::getApplicationLocalData()
 	{
 		std::filesystem::path result = getLocalData() / Aura::getActive().getAppInfo().getName();
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -158,7 +158,7 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_DESKTOP_DIR");
 		result = result.empty() ? (getHome() / "Desktop") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -176,7 +176,7 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_DOCUMENTS_DIR");
 		result = result.empty() ? (getHome() / "Documents") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -194,7 +194,7 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_DOWNLOAD_DIR");
 		result = result.empty() ? (getHome() / "Downloads") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -212,7 +212,7 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_MUSIC_DIR");
 		result = result.empty() ? (getHome() / "Music") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -230,7 +230,7 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_PICTURES_DIR");
 		result = result.empty() ? (getHome() / "Pictures") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -257,7 +257,7 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_TEMPLATES_DIR");
 		result = result.empty() ? (getHome() / "Templates") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 
@@ -275,7 +275,7 @@ namespace Nickvision::Aura
 		result = getXDGDir("XDG_VIDEOS_DIR");
 		result = result.empty() ? (getHome() / "Videos") : result;
 #endif
-		std::filesystem::create_directory(result);
+		std::filesystem::create_directories(result);
 		return result;
 	}
 }
