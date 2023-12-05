@@ -7,6 +7,18 @@
 namespace Nickvision::Aura::StringHelpers
 {
 	/**
+	 * @brief Gets a fully lowercase string from the provided string.
+	 * @param s The string to get lowercase
+	 * @return The new lowercase string
+	 */
+	std::string toLower(std::string s);
+	/**
+	 * @brief Gets a fully uppercase string from the provided string.
+	 * @param s The string to get uppercase
+	 * @return The new uppercase string
+	 */
+	std::string toUpper(std::string s);
+	/**
 	 * @brief Trims whitespace form the beginning and end of a string.
 	 * @param s The string to trim (unmodified)
 	 * @return The new trimmed string

@@ -10,6 +10,9 @@
 
 namespace Nickvision::Aura::Keyring
 {
+	/**
+	 * @brief A controller for a KeyringDialog. 
+	 */
 	class KeyringDialogController
 	{
 	public:

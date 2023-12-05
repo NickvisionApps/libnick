@@ -55,9 +55,7 @@ namespace Nickvision::Aura::Update
 				for (const Json::Value& asset : root["assets"])
 				{
 					std::string name{ asset.get("name", "").asString() };
-					std::string nameLower{ name };
-					std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(), [](unsigned char c) { return std::tolower(c); });
-					if (nameLower.find("setup.exe") != std::string::npos)
+					if (StringHelpers::toLower(name).find("setup.exe") != std::string::npos)
 					{
 						std::filesystem::path setup{ UserDirectories::getApplicationCache() / name };
 						if (WebHelpers::downloadFile(asset.get("browser_download_url", "").asString(), setup))
