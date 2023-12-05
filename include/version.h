@@ -3,18 +3,10 @@
 
 #include <iostream>
 #include <string>
+#include "versiontype.h"
 
 namespace Nickvision::Aura
 {
-	/**
-	 * @brief Types of a version.
-	 */
-	enum class VersionType
-	{
-		Stable = 0,
-		Preview
-	};
-
 	/**
 	 * @brief A model for a version number. Formated in "major.minor.build-dev".
 	 */
