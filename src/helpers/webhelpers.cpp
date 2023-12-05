@@ -40,13 +40,13 @@ namespace Nickvision::Aura
 		std::ofstream out{ path, std::ios::binary | std::ios::trunc };
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](char* ptr, size_t size, size_t nmemb, void* data)
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, +[](char* ptr, size_t size, size_t nmemb, void* data)
 		{
-			std::ofstream* stream{ reinterpret_cast<std::ofstream*>(data) };
+			std::ofstream* stream{ static_cast<std::ofstream*>(data) };
 			stream->write(ptr, size * nmemb);
 			return size * nmemb;
 		});
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&out);
 #ifdef _WIN32
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -55,9 +55,9 @@ namespace Nickvision::Aura
 		{
 			curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
 			curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &progress);
-			curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, [](void* data, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
+			curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, +[](void* data, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
 			{
-				CurlProgressFunction& func{ *(reinterpret_cast<CurlProgressFunction*>(data)) };
+				CurlProgressFunction& func{ *(static_cast<CurlProgressFunction*>(data)) };
 				return func(dltotal, dlnow, ultotal, ulnow);
 			});
 		}
@@ -82,13 +82,13 @@ namespace Nickvision::Aura
 		curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/120.0");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, listHttpHeader);
 		curl_easy_setopt(curl, CURLOPT_HEADER, false);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](char* ptr, size_t size, size_t nmemb, void* data)
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, +[](char* ptr, size_t size, size_t nmemb, void* data)
 		{
-			std::stringstream* stream{ reinterpret_cast<std::stringstream*>(data) };
+			std::stringstream* stream{ static_cast<std::stringstream*>(data) };
 			stream->write(ptr, size * nmemb);
 			return size * nmemb;
 		});
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&out);
 #ifdef _WIN32
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
