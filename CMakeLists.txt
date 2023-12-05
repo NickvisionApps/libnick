@@ -26,6 +26,7 @@ add_library (${PROJECT_NAME} SHARED
 	src/keyring/store.cpp
 	src/keyring/systemcredentials.cpp
 	src/network/networkmonitor.cpp
+	src/network/networkstatechangedeventargs.cpp
 	src/notifications/notificationsenteventargs.cpp
 	src/notifications/shellnotificationsenteventargs.cpp
 	src/update/updater.cpp
@@ -52,8 +53,15 @@ target_link_libraries(${PROJECT_NAME} PUBLIC maddy::maddy)
 find_package(SQLiteCpp REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC SQLiteCpp)
 if(LINUX)
+	find_package(PkgConfig REQUIRED)
 	find_package(libsecret REQUIRED CONFIG)
 	target_link_libraries(${PROJECT_NAME} PUBLIC libsecret::libsecret)
+	pkg_check_modules(glib-2.0 REQUIRED IMPORTED_TARGET glib-2.0)
+	pkg_check_modules(gio-2.0 REQUIRED IMPORTED_TARGET gio-2.0)
+	pkg_check_modules(gmodule-2.0 REQUIRED IMPORTED_TARGET gmodule-2.0)
+	pkg_check_modules(gobject-2.0 REQUIRED IMPORTED_TARGET gobject-2.0)
+	pkg_check_modules(gthread-2.0 REQUIRED IMPORTED_TARGET gthread-2.0)
+	target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0)
 endif()
 
 #libaura Install
