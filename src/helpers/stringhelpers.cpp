@@ -1,4 +1,5 @@
 #include "helpers/stringhelpers.h"
+#include <algorithm>
 #include <array>
 #include <iomanip>
 #include <regex>
@@ -11,6 +12,18 @@
 
 namespace Nickvision::Aura
 {
+	std::string StringHelpers::toLower(std::string s)
+	{
+		std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+		return s;
+	}
+
+	std::string StringHelpers::toUpper(std::string s)
+	{
+		std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::toupper(c); });
+		return s;
+	}
+
 	std::string StringHelpers::trim(const std::string& s)
 	{
 		std::string result{ s };
