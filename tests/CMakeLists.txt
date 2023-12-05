@@ -3,7 +3,8 @@ project("libaura_test")
 enable_testing()
 
 add_executable(${PROJECT_NAME}
-versiontests.cpp)
+	stringtests.cpp
+	versiontests.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libaura-static)
 find_package(GTest REQUIRED)

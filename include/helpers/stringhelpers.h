@@ -25,7 +25,7 @@ namespace Nickvision::Aura::StringHelpers
 	 */
 	std::string trim(const std::string& s);
 	/**
-	 * @brief Trims whitespace form the beginning and end of a string.
+	 * @brief Trims the delimiter character form the beginning and end of a string.
 	 * @param s The string to trim (unmodified)
 	 * @param delimiter The character to trim
 	 * @return The new trimmed string
