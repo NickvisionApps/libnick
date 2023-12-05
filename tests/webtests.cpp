@@ -15,5 +15,12 @@ TEST(WebTests, ValidWebsite2)
 
 TEST(WebTests, DownloadFile1)
 {
-	EXPECT_TRUE(WebHelpers::downloadFile("https://www.w3.org/TR/2003/REC-PNG-20031110/iso_8859-1.txt", "test.txt"));
+	EXPECT_TRUE(WebHelpers::downloadFile("https://raw.githubusercontent.com/nlogozzo/nlogozzo/main/README.md", "readme.md"));
+}
+
+TEST(WebTests, FetchJsonString1)
+{
+	std::string s{ WebHelpers::fetchJsonString("https://api.github.com/repos/nickvisionapps/denaro/tags") };
+	std::cout << s << std::endl;
+	EXPECT_TRUE(!s.empty());
 }

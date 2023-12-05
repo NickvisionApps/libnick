@@ -3,6 +3,7 @@ project("libaura_test")
 enable_testing()
 
 add_executable(${PROJECT_NAME}
+	main.cpp
 	stringtests.cpp
 	versiontests.cpp
 	webtests.cpp)
