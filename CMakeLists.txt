@@ -27,6 +27,7 @@ add_library (${PROJECT_NAME} SHARED
 	src/keyring/passwordgenerator.cpp
 	src/keyring/store.cpp
 	src/keyring/systemcredentials.cpp
+	src/network/networkmonitor.cpp
 	src/update/updater.cpp
 	src/appinfo.cpp
 	src/aura.cpp
