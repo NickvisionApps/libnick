@@ -1,7 +1,7 @@
 #ifndef NOTIFICATIONSEVERITY_H
 #define NOTIFICATIONSEVERITY_H
 
-namespace Nickvision::Aura::Events
+namespace Nickvision::Aura::Notifications
 {
 	/**
 	 * @brief Severities for a notification 
