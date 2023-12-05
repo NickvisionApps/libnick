@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <regex>
 #include <sstream>
+#include <curl/curl.h>
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -112,7 +113,9 @@ namespace Nickvision::Aura
 		{
 			return false;
 		}
-		std::regex urlRegex{ "^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$" };
-		return std::regex_match(s, urlRegex);
+		CURLU* url{ curl_url() };
+		int res{ curl_url_set(url, CURLUPART_URL, s.c_str(), 0) };
+		curl_url_cleanup(url);
+		return res == CURLUE_OK;
 	}
 }

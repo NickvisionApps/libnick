@@ -13,11 +13,8 @@ namespace Nickvision::Aura
 		}
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
 		curl_easy_setopt(curl, CURLOPT_HEADER, false);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](char*, size_t size, size_t nmemb, void*)
-		{
-			return size * nmemb;
-		});
 		CURLcode code = curl_easy_perform(curl);
 		curl_easy_cleanup(curl);
 		curl_global_cleanup();

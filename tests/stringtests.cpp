@@ -66,7 +66,7 @@ TEST(StringTests, UrlValidity2)
 
 TEST(StringTests, UrlValidity3)
 {
-	EXPECT_FALSE(StringHelpers::isValidUrl("https://microsoft"));
+	EXPECT_TRUE(StringHelpers::isValidUrl("https://microsoft"));
 }
 
 TEST(StringTests, UrlValidity4)
