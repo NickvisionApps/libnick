@@ -15,8 +15,7 @@ include(GNUInstallDirs)
 
 #libaura Library Setup
 include_directories(${PROJECT_SOURCE_DIR}/include)
-add_library (${PROJECT_NAME} SHARED
-	src/events/eventargs.cpp
+set(SOURCES src/events/eventargs.cpp
 	src/helpers/stringhelpers.cpp
 	src/helpers/webhelpers.cpp
 	src/keyring/credential.cpp
@@ -37,31 +36,33 @@ add_library (${PROJECT_NAME} SHARED
 	src/systemdirectories.cpp
 	src/userdirectories.cpp
 	src/version.cpp)
+add_library (${PROJECT_NAME} SHARED ${SOURCES})
+add_library (${PROJECT_NAME}-static STATIC ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES 
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${PROJECT_VERSION})
 
 #libaura Packages
+set(LIBS Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy SQLiteCpp)
 find_package(Intl REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl)
 find_package(jsoncpp REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC JsonCpp::JsonCpp)
 find_package(CURL REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC CURL::libcurl)
 find_package(maddy REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC maddy::maddy)
 find_package(SQLiteCpp REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC SQLiteCpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBS})
+target_link_libraries(${PROJECT_NAME}-static PUBLIC ${LIBS})
 if(LINUX)
 	find_package(PkgConfig REQUIRED)
 	find_package(libsecret REQUIRED CONFIG)
 	target_link_libraries(${PROJECT_NAME} PUBLIC libsecret::libsecret)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC libsecret::libsecret)
 	pkg_check_modules(glib-2.0 REQUIRED IMPORTED_TARGET glib-2.0)
 	pkg_check_modules(gio-2.0 REQUIRED IMPORTED_TARGET gio-2.0)
 	pkg_check_modules(gmodule-2.0 REQUIRED IMPORTED_TARGET gmodule-2.0)
 	pkg_check_modules(gobject-2.0 REQUIRED IMPORTED_TARGET gobject-2.0)
 	pkg_check_modules(gthread-2.0 REQUIRED IMPORTED_TARGET gthread-2.0)
 	target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0)
 endif()
 
 #libaura Install
@@ -69,3 +70,6 @@ configure_file(${PROJECT_SOURCE_DIR}/pkg-config/libaura.pc.in libaura.pc @ONLY)
 install(TARGETS libaura LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
+
+#libaura Tests
+add_subdirectory(tests)
