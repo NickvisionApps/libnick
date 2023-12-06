@@ -62,7 +62,7 @@ if(LINUX)
 	pkg_check_modules(gthread-2.0 REQUIRED IMPORTED_TARGET gthread-2.0)
 	pkg_search_module(UUID REQUIRED uuid)
 	target_include_directories(${PROJECT_NAME} PUBLIC ${UUID_INCLUDE_DIRS})
-	target_link_libraries(${PROJECT_NAME} PUBLIC libsecret::libsecret PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0 ${UUID_LIBRARIES} -lresolv)
+	target_link_libraries(${PROJECT_NAME} PUBLIC resolv libsecret::libsecret PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0 ${UUID_LIBRARIES})
 endif()
 
 #libaura Install
@@ -72,4 +72,18 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INC
 install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
 
 #libaura Tests
-add_subdirectory(tests)
+enable_testing()
+
+add_executable(${PROJECT_NAME}_test
+	tests/eventtests.cpp
+	tests/main.cpp
+	tests/networktests.cpp
+	tests/stringtests.cpp
+	tests/versiontests.cpp
+	tests/webtests.cpp)
+
+find_package(GTest REQUIRED)
+target_link_libraries(${PROJECT_NAME}_test PRIVATE libaura GTest::gtest_main GTest::gmock_main)
+
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME}_test)
