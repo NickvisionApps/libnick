@@ -4,18 +4,23 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(SQLITE_HAS_CODEC ON)
-
+if(WIN32)
+	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+	set(BUILD_SHARED_LIBS ON)
+endif()
 if (POLICY CMP0141)
   cmake_policy(SET CMP0141 NEW)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("libaura" VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(GNUInstallDirs)
+
+project ("libaura" VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 
 #libaura Library Setup
 include_directories(${PROJECT_SOURCE_DIR}/include)
-set(SOURCES src/events/eventargs.cpp
+add_library (${PROJECT_NAME} SHARED
+	src/events/eventargs.cpp
 	src/helpers/stringhelpers.cpp
 	src/helpers/webhelpers.cpp
 	src/keyring/credential.cpp
@@ -36,23 +41,18 @@ set(SOURCES src/events/eventargs.cpp
 	src/systemdirectories.cpp
 	src/userdirectories.cpp
 	src/version.cpp)
-add_library (${PROJECT_NAME} SHARED ${SOURCES})
-add_library (${PROJECT_NAME}-static STATIC ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES 
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${PROJECT_VERSION})
 
 #libaura Packages
-set(LIBS Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy SQLiteCpp)
 find_package(Intl REQUIRED)
 find_package(jsoncpp REQUIRED)
 find_package(CURL REQUIRED)
 find_package(maddy REQUIRED)
 find_package(SQLiteCpp REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBS})
-target_link_libraries(${PROJECT_NAME}-static PUBLIC ${LIBS})
+target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy SQLiteCpp)
 if(LINUX)
-	set(LIBS-LINUX libsecret::libsecret PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0 -lresolv)
 	find_package(PkgConfig REQUIRED)
 	find_package(libsecret REQUIRED CONFIG)
 	pkg_check_modules(glib-2.0 REQUIRED IMPORTED_TARGET glib-2.0)
@@ -62,17 +62,12 @@ if(LINUX)
 	pkg_check_modules(gthread-2.0 REQUIRED IMPORTED_TARGET gthread-2.0)
 	pkg_search_module(UUID REQUIRED uuid)
 	target_include_directories(${PROJECT_NAME} PUBLIC ${UUID_INCLUDE_DIRS})
-	target_include_directories(${PROJECT_NAME}-static PUBLIC ${UUID_INCLUDE_DIRS})
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBS-LINUX} ${UUID_LIBRARIES})
-	target_link_libraries(${PROJECT_NAME}-static PUBLIC ${LIBS-LINUX} ${UUID_LIBRARIES})
-else()
-	target_link_libraries(${PROJECT_NAME}-static PUBLIC Advapi32 Shell32)
+	target_link_libraries(${PROJECT_NAME} PUBLIC libsecret::libsecret PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0 ${UUID_LIBRARIES} -lresolv)
 endif()
 
 #libaura Install
 configure_file(${PROJECT_SOURCE_DIR}/pkg-config/libaura.pc.in libaura.pc @ONLY)
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
-install(TARGETS ${PROJECT_NAME}-static LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
 
