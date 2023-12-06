@@ -5,6 +5,7 @@ enable_testing()
 add_executable(${PROJECT_NAME}
 	eventtests.cpp
 	main.cpp
+	networktests.cpp
 	stringtests.cpp
 	versiontests.cpp
 	webtests.cpp)

@@ -61,18 +61,17 @@ namespace Nickvision::Aura::Network
 				NLM_CONNECTIVITY connection;
 				if (pNLM->GetConnectivity(&connection) == S_OK)
 				{
-					switch (connection)
+					if ((connection & NLM_CONNECTIVITY_DISCONNECTED) == NLM_CONNECTIVITY_DISCONNECTED)
 					{
-					case NLM_CONNECTIVITY_DISCONNECTED:
 						newState = NetworkState::Disconnected;
-						break;
-					case NLM_CONNECTIVITY_IPV4_INTERNET:
-					case NLM_CONNECTIVITY_IPV6_INTERNET:
+					}
+					else if ((connection & NLM_CONNECTIVITY_IPV4_INTERNET) == NLM_CONNECTIVITY_IPV4_INTERNET || (connection & NLM_CONNECTIVITY_IPV6_INTERNET) == NLM_CONNECTIVITY_IPV6_INTERNET)
+					{
 						newState = NetworkState::ConnectedGlobal;
-						break;
-					default:
+					}
+					else
+					{
 						newState = NetworkState::ConnectedLocal;
-						break;
 					}
 				}
 			}
