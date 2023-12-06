@@ -16,7 +16,8 @@ TEST(NetworkTests, ConnectedGlobal)
 
 TEST(NetworkTests, DisableNetCheck)
 {
-	putenv("AURA_DISABLE_NETCHECK=true");
+	std::string disableNetCheck{ "AURA_DISABLE_NETCHECK=true" };
+	EXPECT_EQ(putenv(disableNetCheck.c_str()), 0);
 	NetworkMonitor netmon;
 	netmon.stateChanged() += [](const NetworkStateChangedEventArgs& e)
 	{

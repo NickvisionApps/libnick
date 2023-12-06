@@ -13,9 +13,8 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
+project ("libaura" LANGUAGES CXX VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(GNUInstallDirs)
-
-project ("libaura" VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 
 #libaura Library Setup
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -83,7 +82,7 @@ add_executable(${PROJECT_NAME}_test
 	tests/webtests.cpp)
 
 find_package(GTest REQUIRED)
-target_link_libraries(${PROJECT_NAME}_test PRIVATE libaura GTest::gtest_main GTest::gmock_main)
+target_link_libraries(${PROJECT_NAME}_test PUBLIC libaura GTest::gtest_main GTest::gmock_main)
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}_test)

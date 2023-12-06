@@ -35,9 +35,9 @@ namespace Nickvision::Aura
 			static_assert(std::is_base_of_v<ConfigurationBase, T> == true, "T must derive from ConfigurationBase");
 			if (!m_configFiles.contains(key))
 			{
-				m_configFiles[key] = new T(key);
+				m_configFiles[key] = static_cast<ConfigurationBase*>(new T(key));
 			}
-			return *((T*)m_configFiles[key]);
+			return *static_cast<T*>(m_configFiles[key]);
 		}
 
 	private:

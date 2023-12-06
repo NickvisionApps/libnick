@@ -6,6 +6,7 @@
 #include <atlbase.h>
 #include <netlistmgr.h>
 #else
+#include <glib.h>
 #include <gio/gio.h>
 #endif
 
@@ -19,7 +20,7 @@ namespace Nickvision::Aura::Network
 #else
 		m_networkChangedHandlerId = g_signal_connect_data(G_OBJECT(g_network_monitor_get_default()), "network-changed", G_CALLBACK((void(*)(GNetworkMonitor*, bool, void*))([](GNetworkMonitor*, bool, void* data)
 		{
-			reinterpret_cast<NetworkMonitor*>(data)->checkConnectionState();
+			static_cast<NetworkMonitor*>(data)->checkConnectionState();
 		})), this, nullptr, G_CONNECT_DEFAULT);
 #endif
 	}
