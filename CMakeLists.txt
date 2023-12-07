@@ -77,6 +77,7 @@ add_executable(${PROJECT_NAME}_test
 	tests/main.cpp
 	tests/networktests.cpp
 	tests/stringtests.cpp
+	tests/updatertests.cpp
 	tests/versiontests.cpp
 	tests/webtests.cpp)
 
