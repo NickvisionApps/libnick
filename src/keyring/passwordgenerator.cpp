@@ -1,4 +1,5 @@
 #include "keyring/passwordgenerator.h"
+#include <ctime>
 #include <random>
 
 namespace Nickvision::Aura::Keyring

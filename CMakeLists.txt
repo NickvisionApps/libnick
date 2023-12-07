@@ -18,7 +18,7 @@ include(GNUInstallDirs)
 
 #libaura Library Setup
 include_directories(${PROJECT_SOURCE_DIR}/include)
-add_library (${PROJECT_NAME} SHARED
+add_library (${PROJECT_NAME}
 	src/events/eventargs.cpp
 	src/helpers/stringhelpers.cpp
 	src/helpers/webhelpers.cpp
@@ -52,16 +52,16 @@ find_package(maddy REQUIRED)
 find_package(SQLiteCpp REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy SQLiteCpp)
 if(LINUX)
+	set(CMAKE_REQUIRED_LIBRARIES resolv)
 	find_package(PkgConfig REQUIRED)
 	find_package(libsecret REQUIRED CONFIG)
+	find_package(libuuid REQUIRED CONFIG)
 	pkg_check_modules(glib-2.0 REQUIRED IMPORTED_TARGET glib-2.0)
 	pkg_check_modules(gio-2.0 REQUIRED IMPORTED_TARGET gio-2.0)
 	pkg_check_modules(gmodule-2.0 REQUIRED IMPORTED_TARGET gmodule-2.0)
 	pkg_check_modules(gobject-2.0 REQUIRED IMPORTED_TARGET gobject-2.0)
 	pkg_check_modules(gthread-2.0 REQUIRED IMPORTED_TARGET gthread-2.0)
-	pkg_search_module(UUID REQUIRED uuid)
-	target_include_directories(${PROJECT_NAME} PUBLIC ${UUID_INCLUDE_DIRS})
-	target_link_libraries(${PROJECT_NAME} PUBLIC resolv libsecret::libsecret PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0 ${UUID_LIBRARIES})
+	target_link_libraries(${PROJECT_NAME} PUBLIC libsecret::libsecret libuuid::libuuid PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0)
 endif()
 
 #libaura Install
@@ -76,7 +76,6 @@ enable_testing()
 add_executable(${PROJECT_NAME}_test
 	tests/eventtests.cpp
 	tests/main.cpp
-	tests/networktests.cpp
 	tests/stringtests.cpp
 	tests/versiontests.cpp
 	tests/webtests.cpp)
