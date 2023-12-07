@@ -52,7 +52,6 @@ find_package(maddy REQUIRED)
 find_package(SQLiteCpp REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy SQLiteCpp)
 if(LINUX)
-	set(CMAKE_REQUIRED_LIBRARIES resolv)
 	find_package(PkgConfig REQUIRED)
 	find_package(libsecret REQUIRED CONFIG)
 	find_package(libuuid REQUIRED CONFIG)
@@ -76,6 +75,7 @@ enable_testing()
 add_executable(${PROJECT_NAME}_test
 	tests/eventtests.cpp
 	tests/main.cpp
+	tests/networktests.cpp
 	tests/stringtests.cpp
 	tests/versiontests.cpp
 	tests/webtests.cpp)

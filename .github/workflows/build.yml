@@ -34,11 +34,16 @@ jobs:
       fail-fast: false
     steps:
       - name: "Checkout"  
-        uses: actions/checkout@v3.5.0
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: "Get Conan"
         uses: turtlebrowser/get-conan@main
+      - name: "Setup Conan Settings (Linux)"
+        if: ${{ matrix.config.os == 'ubuntu-latest'}}
+        run: |
+          mv conansettings.yml settings_user.yml
+          conan config install settings_user.yml
       - name: "Install Conan"
         run: conan install ${{matrix.config.conan-file}} --profile:host=${{matrix.config.conan-profile}} --profile:build=${{matrix.config.conan-profile}} -s compiler.cppstd=20 --build=missing
       - name: "CMake Build (Linux)"

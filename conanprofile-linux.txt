@@ -6,3 +6,5 @@ compiler.cppstd=gnu20
 compiler.libcxx=libstdc++11
 compiler.version=11
 os=Linux
+os.libc=glibc
+os.libc.version=2.35
