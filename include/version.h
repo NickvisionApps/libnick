@@ -59,11 +59,23 @@ namespace Nickvision::Aura
 		 */
 		bool operator<(const Version& compare) const;
 		/**
+		 * @brief Compares Version objects via <= operator
+		 * @param compare The Version object to compare too
+		 * @return True if this <= compare
+		 */
+		bool operator<=(const Version& compare) const;
+		/**
 		 * @brief Compares Version objects via > operator
 		 * @param compare The Version object to compare too
 		 * @return True if this > compare
 		 */
 		bool operator>(const Version& compare) const;
+		/**
+		 * @brief Compares Version objects via >= operator
+		 * @param compare The Version object to compare too
+		 * @return True if this >= compare
+		 */
+		bool operator>=(const Version& compare) const;
 		/**
 		 * @brief Compares Version objects via == operator
 		 * @param compare The Version object to compare too

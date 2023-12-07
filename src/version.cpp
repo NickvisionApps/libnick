@@ -120,6 +120,11 @@ namespace Nickvision::Aura
 		return false;
 	}
 
+	bool Version::operator<=(const Version& compare) const
+	{
+		return operator>(compare) || operator==(compare);
+	}
+
 	bool Version::operator>(const Version& compare) const
 	{
 		if (m_major > compare.m_major)
@@ -148,6 +153,11 @@ namespace Nickvision::Aura
 			}
 		}
 		return false;
+	}
+
+	bool Version::operator>=(const Version& compare) const
+	{
+		return operator<(compare) || operator==(compare);
 	}
 
 	bool Version::operator==(const Version& compare) const
