@@ -5,6 +5,10 @@ namespace Nickvision::Aura
 {
 	bool WebHelpers::isValidWebsite(const std::string& url)
 	{
+		if (url.empty())
+		{
+			return false;
+		}
 		curl_global_init(CURL_GLOBAL_DEFAULT);
 		CURL* curl{ curl_easy_init() };
 		if (!curl)
@@ -27,6 +31,10 @@ namespace Nickvision::Aura
 
 	bool WebHelpers::downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress, bool overwrite)
 	{
+		if (url.empty())
+		{
+			return false;
+		}
 		if (std::filesystem::exists(path) && !overwrite)
 		{
 			return false;
@@ -69,6 +77,10 @@ namespace Nickvision::Aura
 
 	std::string WebHelpers::fetchJsonString(const std::string& url)
 	{
+		if (url.empty())
+		{
+			return "";
+		}
 		curl_global_init(CURL_GLOBAL_DEFAULT);
 		CURL* curl{ curl_easy_init() };
 		if (!curl)

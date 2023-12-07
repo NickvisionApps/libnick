@@ -14,17 +14,28 @@
 
 namespace Nickvision::Aura::Update
 {
-	Updater::Updater()
+	Updater::Updater(std::string githubRepoUrl)
 		: m_latestStableReleaseId{ -1 },
 		m_latestPreviewReleaseId{ -1 }
 	{
-		if (!WebHelpers::isValidWebsite(Aura::getActive().getAppInfo().getSourceRepo()))
+		if (!WebHelpers::isValidWebsite(githubRepoUrl))
 		{
-			throw std::invalid_argument("The source repo of the active Aura::AppInfo is invalid.");
+			githubRepoUrl = Aura::getActive().getAppInfo().getSourceRepo();
+			if (!WebHelpers::isValidWebsite(githubRepoUrl))
+			{
+				throw std::invalid_argument("The source repo of the active Aura::AppInfo is invalid.");
+			}
 		}
-		std::vector<std::string> fields = StringHelpers::split(Aura::getActive().getAppInfo().getSourceRepo(), "/");
-		m_repoOwner = fields[3];
-		m_repoName = fields[4];
+		try
+		{
+			std::vector<std::string> fields = StringHelpers::split(githubRepoUrl, "/");
+			m_repoOwner = fields[3];
+			m_repoName = fields[4];
+		}
+		catch (...)
+		{
+			throw std::invalid_argument("The url is not a valid github repo.");
+		}
 	}
 
 	Version Updater::fetchCurrentStableVersion()
