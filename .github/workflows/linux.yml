@@ -1,0 +1,56 @@
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    types: [ "review_requested", "ready_for_review" ]
+  workflow_dispatch:
+name: Linux
+permissions:
+  id-token: write
+  contents: read
+env:
+  BUILD_TYPE: Release
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+        - name: "x64"
+          os: ubuntu-latest
+          artifact: "Linux-x64"
+          env:
+            CC: gcc
+            CXX: g++
+      fail-fast: false
+    steps:
+      - name: "Checkout"  
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: "Get Conan"
+        uses: turtlebrowser/get-conan@main
+      - name: "Setup Conan Settings"
+        run: |
+          mv conan/conansettings.yml settings_user.yml
+          conan config install settings_user.yml
+      - name: "Install Conan"
+        run: conan install conan/conanfile-linux.txt --profile:host=conan/conanprofile-linux.txt --profile:build=conan/conanprofile-linux.txt -s compiler.cppstd=20 --build=missing
+      - name: "CMake Build"
+        working-directory: ${{github.workspace}}/build
+        run: |
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/Release/generators/conan_toolchain.cmake" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake --build .
+      - name: "CMake Install"
+        working-directory: ${{github.workspace}}/build
+        run: cmake --install . --prefix "${{github.workspace}}/install"
+      - name: "CMake Test"
+        working-directory: ${{github.workspace}}/build
+        run: ctest
+      - name: Upload
+        uses: actions/upload-artifact@v1
+        with:
+          path: ${{github.workspace}}/install
+          name: ${{matrix.config.artifact}}-${{env.BUILD_TYPE}}

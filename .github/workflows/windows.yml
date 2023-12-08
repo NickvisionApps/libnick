@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
     types: [ "review_requested", "ready_for_review" ]
   workflow_dispatch:
-name: Build
+name: Windows
 permissions:
   id-token: write
   contents: read
@@ -18,19 +18,9 @@ jobs:
     strategy:
       matrix:
         config:
-        - name: "Build on Linux"
-          os: ubuntu-latest
-          artifact: "Linux-x64"
-          conan-profile: conanprofile-linux.txt
-          conan-file: conanfile-linux.txt
-          env:
-            CC: gcc
-            CXX: g++
-        - name: "Build on Windows"
+        - name: "x64"
           os: windows-latest
           artifact: "Windows-x64"
-          conan-profile: conanprofile-windows.txt
-          conan-file: conanfile-windows.txt
       fail-fast: false
     steps:
       - name: "Checkout"  
@@ -39,21 +29,9 @@ jobs:
           submodules: recursive
       - name: "Get Conan"
         uses: turtlebrowser/get-conan@main
-      - name: "Setup Conan Settings (Linux)"
-        if: ${{ matrix.config.os == 'ubuntu-latest'}}
-        run: |
-          mv conansettings.yml settings_user.yml
-          conan config install settings_user.yml
       - name: "Install Conan"
-        run: conan install ${{matrix.config.conan-file}} --profile:host=${{matrix.config.conan-profile}} --profile:build=${{matrix.config.conan-profile}} -s compiler.cppstd=20 --build=missing
-      - name: "CMake Build (Linux)"
-        if: ${{ matrix.config.os == 'ubuntu-latest'}}
-        working-directory: ${{github.workspace}}/build
-        run: |
-          cmake .. -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/Release/generators/conan_toolchain.cmake" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-          cmake --build .
-      - name: "CMake Build (Windows)"
-        if: ${{ matrix.config.os == 'windows-latest'}}
+        run: conan install conan/conanfile-windows.txt --profile:host=conan/conanprofile-windows.txt --profile:build=conan/conanprofile-windows.txt -s compiler.cppstd=20 --build=missing
+      - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |
           cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/generators/conan_toolchain.cmake"
