@@ -69,20 +69,25 @@ install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PR
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
 
-#libaura Tests
-enable_testing()
+#libaura_test
+if(BUILD_TESTING)
+{
+	#libaura_test Setup
+	enable_testing()
+	add_executable(${PROJECT_NAME}_test
+		tests/eventtests.cpp
+		tests/main.cpp
+		tests/networktests.cpp
+		tests/stringtests.cpp
+		tests/updatertests.cpp
+		tests/versiontests.cpp
+		tests/webtests.cpp)
 
-add_executable(${PROJECT_NAME}_test
-	tests/eventtests.cpp
-	tests/main.cpp
-	tests/networktests.cpp
-	tests/stringtests.cpp
-	tests/updatertests.cpp
-	tests/versiontests.cpp
-	tests/webtests.cpp)
+	#libaura_test Packages
+	find_package(GTest REQUIRED)
+	target_link_libraries(${PROJECT_NAME}_test PUBLIC libaura GTest::gtest_main GTest::gmock_main)
 
-find_package(GTest REQUIRED)
-target_link_libraries(${PROJECT_NAME}_test PUBLIC libaura GTest::gtest_main GTest::gmock_main)
-
-include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME}_test)
+	#libaura_test Tests
+	include(GoogleTest)
+	gtest_discover_tests(${PROJECT_NAME}_test)
+}

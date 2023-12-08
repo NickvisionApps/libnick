@@ -44,7 +44,7 @@ jobs:
       - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |
-          cmake .. -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/Release/generators/conan_toolchain.cmake" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/Release/generators/conan_toolchain.cmake" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TESTING=ON
           cmake --build .
       - name: "CMake Install"
         working-directory: ${{github.workspace}}/build
