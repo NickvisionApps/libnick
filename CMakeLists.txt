@@ -71,7 +71,6 @@ install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROO
 
 #libaura_test
 if(BUILD_TESTING)
-{
 	#libaura_test Setup
 	enable_testing()
 	add_executable(${PROJECT_NAME}_test
@@ -90,4 +89,4 @@ if(BUILD_TESTING)
 	#libaura_test Tests
 	include(GoogleTest)
 	gtest_discover_tests(${PROJECT_NAME}_test)
-}
+endif()
