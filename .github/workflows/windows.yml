@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         config:
-        - name: "x64"
+        - name: "Build on x64"
           os: windows-latest
           artifact: "Windows-x64"
       fail-fast: false
@@ -30,7 +30,10 @@ jobs:
       - name: "Get Conan"
         uses: turtlebrowser/get-conan@main
       - name: "Install Conan"
-        run: conan install conan/conanfile-windows.txt --profile:host=conan/conanprofile-windows.txt --profile:build=conan/conanprofile-windows.txt -s compiler.cppstd=20 --build=missing
+        run: |
+          move conan/conanfile-windows.txt conanfile.txt
+          move conan/conanprofile-windows.txt conanprofile.txt
+          conan install conanfile.txt --profile:host=conanprofile.txt --profile:build=conanprofile.txt -s compiler.cppstd=20 --build=missing
       - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |

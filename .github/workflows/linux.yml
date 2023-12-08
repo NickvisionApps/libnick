@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         config:
-        - name: "x64"
+        - name: "Build on x64"
           os: ubuntu-latest
           artifact: "Linux-x64"
           env:
@@ -37,7 +37,10 @@ jobs:
           mv conan/conansettings.yml settings_user.yml
           conan config install settings_user.yml
       - name: "Install Conan"
-        run: conan install conan/conanfile-linux.txt --profile:host=conan/conanprofile-linux.txt --profile:build=conan/conanprofile-linux.txt -s compiler.cppstd=20 --build=missing
+        run: |
+          mv conan/conanfile-linux.txt conanfile.txt
+          mv conan/conanprofile-linux.txt conanprofile.txt
+          conan install conanfile.txt --profile:host=conanprofile.txt --profile:build=conanprofile.txt -s compiler.cppstd=20 --build=missing
       - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |
