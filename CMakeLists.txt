@@ -70,7 +70,7 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INC
 install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
 
 #libaura_test
-if(BUILD_TESTING)
+if(NOT SKIP_TESTS)
 	#libaura_test Setup
 	enable_testing()
 	add_executable(${PROJECT_NAME}_test
