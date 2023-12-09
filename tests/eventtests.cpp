@@ -40,5 +40,5 @@ TEST(EventTests, Event1)
 	e.invoke(true);
 	e.invoke(false);
 	e.invoke(true);
-	EXPECT_EQ(count, 1);
+	ASSERT_EQ(count, 1);
 }

@@ -11,7 +11,7 @@ TEST(NetworkTests, ConnectedGlobal)
 	NetworkMonitor netmon;
 	netmon.stateChanged() += [](const NetworkStateChangedEventArgs& e)
 	{
-		EXPECT_EQ(e.getState(), NetworkState::ConnectedGlobal);
+		ASSERT_EQ(e.getState(), NetworkState::ConnectedGlobal);
 	};
 	netmon.checkConnectionState();
 }
@@ -19,14 +19,14 @@ TEST(NetworkTests, ConnectedGlobal)
 TEST(NetworkTests, DisableNetCheck)
 {
 #ifdef _WIN32
-	EXPECT_EQ(_putenv("AURA_DISABLE_NETCHECK=true"), 0);
+	ASSERT_EQ(_putenv("AURA_DISABLE_NETCHECK=true"), 0);
 #else
-	EXPECT_EQ(setenv("AURA_DISABLE_NETCHECK", "true", true), 0);
+	ASSERT_EQ(setenv("AURA_DISABLE_NETCHECK", "true", true), 0);
 #endif
 	NetworkMonitor netmon;
 	netmon.stateChanged() += [](const NetworkStateChangedEventArgs& e)
 	{
-		EXPECT_EQ(e.getState(), NetworkState::ConnectedGlobal);
+		ASSERT_EQ(e.getState(), NetworkState::ConnectedGlobal);
 	};
 	netmon.checkConnectionState();
 }
