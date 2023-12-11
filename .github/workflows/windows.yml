@@ -46,7 +46,7 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: ctest --output-on-failure
       - name: Upload
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           path: ${{github.workspace}}/install
           name: ${{matrix.config.artifact}}-${{env.BUILD_TYPE}}
