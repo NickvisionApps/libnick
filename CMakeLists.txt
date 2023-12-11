@@ -26,6 +26,7 @@ add_library (${PROJECT_NAME}
 	src/keyring/keyring.cpp
 	src/keyring/keyringdialogcontroller.cpp
 	src/keyring/passwordgenerator.cpp
+	src/keyring/passwordstrength.cpp
 	src/keyring/store.cpp
 	src/keyring/systemcredentials.cpp
 	src/network/networkmonitor.cpp

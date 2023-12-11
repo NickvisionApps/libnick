@@ -1,6 +1,8 @@
 #ifndef PASSWORDSTRENGTH_H
 #define PASSWORDSTRENGTH_H
 
+#include <string>
+
 namespace Nickvision::Aura::Keyring
 {
     /**
