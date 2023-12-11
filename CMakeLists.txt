@@ -44,6 +44,11 @@ add_library (${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES 
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${PROJECT_VERSION})
+if(MSVC)
+  target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
+else()
+  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()
 
 #libaura Packages
 find_package(Intl REQUIRED)
