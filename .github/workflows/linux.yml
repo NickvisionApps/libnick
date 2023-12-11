@@ -32,7 +32,7 @@ jobs:
           submodules: recursive
       - name: "Setup XDG"
         run: |
-          sudo apt install xdg-user-dirs - y
+          sudo apt-get install xdg-user-dirs -y
           xdg-user-dirs-update
       - name: "Setup Keyring"
         uses: t1m0thyj/unlock-keyring@v1
