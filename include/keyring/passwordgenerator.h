@@ -33,7 +33,7 @@ namespace Nickvision::Aura::Keyring
 		 * @param length The length of the generated password
 		 * @return The generated password
 		 */
-		std::string next(int length = 16);
+		std::string next(size_t length = 16);
 
 	private:
 		std::vector<char> m_chars;

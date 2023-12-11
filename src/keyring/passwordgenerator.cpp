@@ -42,7 +42,7 @@ namespace Nickvision::Aura::Keyring
 		}
 	}
 
-	std::string PasswordGenerator::next(int length)
+	std::string PasswordGenerator::next(size_t length)
 	{
 		std::string pass;
 		while (pass.size() < length)
