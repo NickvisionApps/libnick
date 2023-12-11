@@ -5,14 +5,16 @@ namespace Nickvision::Aura::Keyring
 {
 	static std::string sqlite3_column_string(sqlite3_stmt* statement, int index)
 	{
-		(void)sqlite3_column_bytes(statement, index);
+		sqlite3_column_bytes(statement, index);
 		const char* data{ static_cast<const char*>(sqlite3_column_blob(statement, index)) };
 		return { data, static_cast<size_t>(sqlite3_column_bytes(statement, index)) };
 	}
 
 	static std::filesystem::path getPathFromName(const std::string& name)
 	{
-		return Store::getStoreDir() / (name + ".ring");
+		std::filesystem::path dir{ UserDirectories::getConfig() / "Nickvision" / "Keyring" };
+		std::filesystem::create_directories(dir);
+		return dir / (name + ".ring");
 	}
 
 	Store::Store(const std::string& name, const std::string& password)
@@ -48,7 +50,7 @@ namespace Nickvision::Aura::Keyring
 	{
 		if (m_database)
 		{
-			sqlite3_close_v2(m_database);
+			sqlite3_close(m_database);
 		}
 	}
 
@@ -218,7 +220,7 @@ namespace Nickvision::Aura::Keyring
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (m_database)
 		{
-			sqlite3_close_v2(m_database);
+			sqlite3_close(m_database);
 			m_database = nullptr;
 		}
 		return std::filesystem::exists(m_path) ? std::filesystem::remove(m_path) : true;
@@ -262,18 +264,19 @@ namespace Nickvision::Aura::Keyring
 			{
 				if (sqlite3_exec(m_database, "SELECT count(*) FROM sqlite_master;", nullptr, nullptr, nullptr) == SQLITE_OK)
 				{
-					sqlite3_exec(m_database, "CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)", nullptr, nullptr, nullptr);
-					return;
+					if (sqlite3_exec(m_database, "CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)", nullptr, nullptr, nullptr) == SQLITE_OK)
+					{
+						return;
+					}
+					std::cout << "Cannot create table" << std::endl;
 				}
+				std::cout << "Invalid key" << std::endl;
 			}
-			sqlite3_close_v2(m_database);
+			std::cout << "Cannot key" << std::endl;
+			sqlite3_close(m_database);
 		}
+		std::cout << "Cannot open" << std::endl;
 		m_database = nullptr;
-	}
-
-	std::filesystem::path Store::getStoreDir()
-	{
-		return UserDirectories::getConfig() / "Nickvision" / "Keyring";
 	}
 
 	bool Store::exists(const std::string& name)

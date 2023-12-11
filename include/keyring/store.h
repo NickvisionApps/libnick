@@ -116,11 +116,6 @@ namespace Nickvision::Aura::Keyring
 
 	public:
 		/**
-		 * @brief Gets the directory where stores are saved on disk.
-		 * @return The directory for stores
-		 */
-		static std::filesystem::path getStoreDir();
-		/**
 		 * @brief Gets whether or not a store exists with the provided name.
 		 * @param name The name of the store to check
 		 * @return True if a store with the provied name exists, else false

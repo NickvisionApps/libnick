@@ -48,7 +48,7 @@ namespace Nickvision::Aura::Keyring
 	{
 		if (m_store.destroy())
 		{
-			(void)SystemCredentials::deleteCredential(m_store.getName()); //keyring's password may not be in system credentials
+			SystemCredentials::deleteCredential(m_store.getName()); //keyring's password may not be in system credentials
 			return true;
 		}
 		return false;
@@ -95,7 +95,7 @@ namespace Nickvision::Aura::Keyring
 	{
 		if (Store::destroy(name))
 		{
-			(void)SystemCredentials::deleteCredential(name);
+			SystemCredentials::deleteCredential(name); //keyring's password may not be in system credentials
 			return true;
 		}
 		return false;
