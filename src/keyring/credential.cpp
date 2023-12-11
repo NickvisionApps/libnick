@@ -89,52 +89,13 @@ namespace Nickvision::Aura::Keyring
 		return m_id != compare.m_id;
 	}
 
-	PasswordStrength Credential::getPasswordStrength(const std::string& password)
-	{
-		if (password.empty())
-		{
-			return PasswordStrength::Blank;
-		}
-		if (password.size() < 4)
-		{
-			return PasswordStrength::VeryWeak;
-		}
-		int strength = 1;
-		bool containsDigit = false;
-		bool containsLetter = false;
-		bool containsSymbol = false;
-		if (password.size() >= 8)
-		{
-			strength++;
-		}
-		for (char ch : password)
-		{
-			if (!containsDigit && std::isdigit(ch))
-			{
-				strength++;
-				containsDigit = true;
-			}
-			if (!containsLetter && std::isalpha(ch))
-			{
-				strength++;
-				containsLetter = true;
-			}
-			if (!containsSymbol && !std::isalnum(ch))
-			{
-				strength++;
-				containsSymbol = true;
-			}
-		}
-		return (PasswordStrength)strength;
-	}
-
 	std::ostream& operator<<(std::ostream& os, const Credential& credential)
 	{
 		os << "[CRED: " << credential.getName() << "] " << std::endl;
 		os << "Uri: " << credential.getUri() << std::endl;
 		os << "Username: " << credential.getUsername() << std::endl;
 		os << "Password: " << credential.getPassword() << std::endl;
-		os << "Strength: " << (int)Credential::getPasswordStrength(credential.getPassword()) << std::endl;
+		os << "Strength: " << (int)getPasswordStrength(credential.getPassword()) << std::endl;
 		return os;
 	}
 }

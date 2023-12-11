@@ -110,14 +110,6 @@ namespace Nickvision::Aura::Keyring
 		std::string m_uri;
 		std::string m_username;
 		std::string m_password;
-
-	public:
-		/**
-		 * @brief Calculates the strength of a given password.
-		 * @param password The password to measure the strength of
-		 * @return The strength of the password
-		 */
-		static PasswordStrength getPasswordStrength(const std::string& password);
 	};
 }
 
