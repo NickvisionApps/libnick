@@ -31,7 +31,7 @@ namespace Nickvision::Aura::Keyring
 		std::lock_guard<std::mutex> lock{ store.m_mutex };
 		m_name = store.m_name;
 		m_password = store.m_password;
-		m_database = store.m_database;
+		m_database = nullptr;
 		m_path = store.m_path;
 		loadDatabase();
 	}
@@ -41,7 +41,7 @@ namespace Nickvision::Aura::Keyring
 		std::lock_guard<std::mutex> lock{ store.m_mutex };
 		m_name = std::move(store.m_name);
 		m_password = std::move(store.m_password);
-		m_database = std::move(store.m_database);
+		m_database = nullptr;
 		m_path = std::move(store.m_path);
 		loadDatabase();
 	}
@@ -234,7 +234,7 @@ namespace Nickvision::Aura::Keyring
 			std::lock_guard<std::mutex> lock2{ store.m_mutex };
 			m_name = store.m_name;
 			m_password = store.m_password;
-			m_database = store.m_database;
+			m_database = nullptr;
 			m_path = store.m_path;
 			loadDatabase();
 		}
@@ -249,7 +249,7 @@ namespace Nickvision::Aura::Keyring
 			std::lock_guard<std::mutex> lock2{ store.m_mutex };
 			std::swap(m_name, store.m_name);
 			std::swap(m_password, store.m_password);
-			std::swap(m_database, store.m_database);
+			m_database = nullptr;
 			std::swap(m_path, store.m_path);
 			loadDatabase();
 		}
@@ -258,6 +258,7 @@ namespace Nickvision::Aura::Keyring
 
 	void Store::loadDatabase()
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (sqlite3_open_v2(m_path.string().c_str(), &m_database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nullptr) == SQLITE_OK)
 		{
 			if (sqlite3_key(m_database, m_password.c_str(), static_cast<int>(m_password.size())) == SQLITE_OK)
