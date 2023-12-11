@@ -31,9 +31,9 @@ jobs:
         with:
           submodules: recursive
       - name: "Setup libsecret"
-      - run: |
-	  sudo apt install libsecret-1-0 libsecret-1-dev libglib2.0-dev
-	  sudo make --directory=/usr/share/doc/git/contrib/credential/libsecret
+        run: |
+          sudo apt install libsecret-1-0 libsecret-1-dev libglib2.0-dev
+          sudo make --directory=/usr/share/doc/git/contrib/credential/libsecret
       - name: "Get Conan"
         uses: turtlebrowser/get-conan@main
       - name: "Setup Conan Settings"
