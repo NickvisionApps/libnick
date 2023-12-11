@@ -19,9 +19,9 @@ TEST(StoreTests, AddCredentials)
 	ASSERT_TRUE(store.isValid());
 	ASSERT_TRUE(store.addCredential({ "YT", "https://youtube.com", "theawesomeguy", "abc123!" }));
 	ASSERT_TRUE(store.addCredential({ "Google", "https://google.com", "me@gmail.com", "abc12345!" }));
-	ASSERT_EQ(store.getAllCredentials().size(), 2);
+	ASSERT_TRUE(store.getAllCredentials().size() == 2);
 	std::vector<Credential> creds{ store.getCredentials("YT") };
-	ASSERT_EQ(creds.size(), 1);
+	ASSERT_TRUE(creds.size() == 1);
 	std::cout << creds[0] << std::endl;
 	ASSERT_EQ(creds[0].getName(), "YT");
 	ASSERT_EQ(creds[0].getUri(), "https://youtube.com");

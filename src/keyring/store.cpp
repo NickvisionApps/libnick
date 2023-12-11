@@ -268,14 +268,10 @@ namespace Nickvision::Aura::Keyring
 					{
 						return;
 					}
-					std::cout << "Cannot create table" << std::endl;
 				}
-				std::cout << "Invalid key" << std::endl;
 			}
-			std::cout << "Cannot key" << std::endl;
 			sqlite3_close(m_database);
 		}
-		std::cout << "Cannot open" << std::endl;
 		m_database = nullptr;
 	}
 
