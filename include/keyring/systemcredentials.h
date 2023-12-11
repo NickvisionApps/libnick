@@ -20,13 +20,13 @@ namespace Nickvision::Aura::Keyring::SystemCredentials
 	 */
 	std::optional<Credential> addCredential(const std::string& name);
 	/**
-	 * @brief Adds a new credential to the system's credential manager.
+	 * @brief Adds a new credential to the system's credential manager. On Linux, only the name and password of a credential will be stored. On Windows, all fields of a credential will be stored.
 	 * @param name The new credential object
 	 * @return True if successful, else false
 	 */
 	bool addCredential(const Credential& credential);
 	/**
-	 * @brief Updates a credential in the system's credential manager.
+	 * @brief Updates a credential in the system's credential manager. On Linux, only the name and password of a credential will be stored. On Windows, all fields of a credential will be stored.
 	 * @param name The updated credential object
 	 * @return True if successful, else false
 	 */

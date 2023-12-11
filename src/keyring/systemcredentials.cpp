@@ -47,7 +47,7 @@ namespace Nickvision::Aura::Keyring
 	std::optional<Credential> SystemCredentials::addCredential(const std::string& name)
 	{
 		PasswordGenerator passGen;
-		Credential c{ name, "", "NickvisionKeyring", passGen.next() };
+		Credential c{ name, "", "default", passGen.next() };
 		if (addCredential(c))
 		{
 			return c;
