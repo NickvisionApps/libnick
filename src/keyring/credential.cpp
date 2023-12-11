@@ -15,7 +15,7 @@ namespace Nickvision::Aura::Keyring
 	}
 
 	Credential::Credential(const std::string& name, const std::string& uri, const std::string& username, const std::string& password)
-		: m_id{ (int)std::hash<std::string>()(StringHelpers::newGuid()) },
+		: m_id{ static_cast<int>(std::hash<std::string>()(StringHelpers::newGuid())) },
 		m_name{ name },
 		m_uri{ uri },
 		m_username{ username },

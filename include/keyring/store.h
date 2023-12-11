@@ -7,7 +7,7 @@
 #include <optional>
 #include <string>
 #include <vector>
-#include <SQLiteCpp/SQLiteCpp.h>
+#include <sqlcipher/sqlite3.h>
 #include "credential.h"
 
 namespace Nickvision::Aura::Keyring
@@ -19,8 +19,15 @@ namespace Nickvision::Aura::Keyring
 	{
 	public:
 		/**
+		 * @brief Constructs a Store object. The isValid() function should be called to ensure the object is valid.
+		 * @param name The name of the store
+		 * @param password The password of the store
+		 */
+		Store(const std::string& name, const std::string& password);
+		/**
 		 * @brief Copies a Store object.
 		 * @parma store The object to move
+		 * @brief Deconstructs a Store object.
 		 */
 		Store(const Store& store);
 		/**
@@ -28,6 +35,14 @@ namespace Nickvision::Aura::Keyring
 		 * @parma store The object to move
 		 */
 		Store(Store&& store) noexcept;
+		/**
+		 * @brief Deconstructs a Store object.
+		 */
+		~Store();
+		/**
+		 * @brief Gets whether or not the store object is valid.
+		 */
+		bool isValid() const;
 		/**
 		 * @brief Gets the name of the store.
 		 * @return The name of the store
@@ -89,13 +104,14 @@ namespace Nickvision::Aura::Keyring
 		 * @param store The Store to move
 		 * @return this
 		 */
-		Store& operator=(Store&& store);
+		Store& operator=(Store&& store) noexcept;
 
 	private:
-		Store(const std::string& name, const std::shared_ptr<SQLite::Database>& database);
+		void loadDatabase();
 		mutable std::mutex m_mutex;
-		std::shared_ptr<SQLite::Database> m_database;
 		std::string m_name;
+		std::string m_password;
+		sqlite3* m_database;
 		std::filesystem::path m_path;
 
 	public:
@@ -104,21 +120,6 @@ namespace Nickvision::Aura::Keyring
 		 * @return The directory for stores
 		 */
 		static std::filesystem::path getStoreDir();
-		/**
-		 * @brief Creates a new store.
-		 * @param name The name of the store
-		 * @param password The password of the store
-		 * @param overwrite Whether or not to overwrite a store that already exists with the provided name
-		 * @return The created Store object, std::nullopt if creation failed
-		 */
-		static std::optional<Store> create(const std::string& name, const std::string& password, bool overwrite = true);
-		/**
-		 * @brief Loads a store.
-		 * @param name The name of the store
-		 * @param password The password of the store
-		 * @return The loaded Store object, std::nullopt if loading failed
-		 */
-		static std::optional<Store> load(const std::string& name, const std::string& password);
 		/**
 		 * @brief Gets whether or not a store exists with the provided name.
 		 * @param name The name of the store to check

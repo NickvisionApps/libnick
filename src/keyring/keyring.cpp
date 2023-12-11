@@ -48,7 +48,8 @@ namespace Nickvision::Aura::Keyring
 	{
 		if (m_store.destroy())
 		{
-			return SystemCredentials::deleteCredential(m_store.getName());
+			(void)SystemCredentials::deleteCredential(m_store.getName()); //keyring's password may not be in system credentials
+			return true;
 		}
 		return false;
 	}
@@ -59,46 +60,27 @@ namespace Nickvision::Aura::Keyring
 		if (password.empty())
 		{
 			std::optional<Credential> cred{ SystemCredentials::getCredential(name) };
-			password = cred ? cred->getPassword() : "";
+			if (cred.has_value())
+			{
+				password = cred->getPassword();
+			}
+			else
+			{
+				cred = SystemCredentials::addCredential(name);
+				password = cred ? cred->getPassword() : "";
+			}
 		}
 		//If password not empty (a.k.a user-provided or system-provided), get store
 		if (!password.empty())
 		{
-			//Load store
-			std::optional<Store> storeLoad{ Store::load(name, password) };
-			if (storeLoad)
+			Store store{ name, password };
+			if (store.isValid())
 			{
-				return { { *storeLoad } };
+				return { { store } };
 			}
-			//Store unable to be loaded, create a new one
 			else
 			{
-				std::optional<Store> storeCreate{ Store::create(name, password) };
-				if (storeCreate)
-				{
-					return { { *storeCreate } };
-				}
-				else
-				{
-					return std::nullopt;
-				}
-			}
-		}
-		//Create a new store with a new password from the system credential store
-		else
-		{
-			std::optional<Credential> cred{ SystemCredentials::addCredential(name) };
-			if (cred)
-			{
-				std::optional<Store> storeCreate{ Store::create(name, cred->getPassword()) };
-				if (storeCreate)
-				{
-					return { { *storeCreate } };
-				}
-				else
-				{
-					return std::nullopt;
-				}
+				return std::nullopt;
 			}
 		}
 		return std::nullopt;
@@ -113,7 +95,8 @@ namespace Nickvision::Aura::Keyring
 	{
 		if (Store::destroy(name))
 		{
-			return SystemCredentials::deleteCredential(name);
+			(void)SystemCredentials::deleteCredential(name);
+			return true;
 		}
 		return false;
 	}

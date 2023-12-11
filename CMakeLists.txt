@@ -55,8 +55,8 @@ find_package(Intl REQUIRED)
 find_package(jsoncpp REQUIRED)
 find_package(CURL REQUIRED)
 find_package(maddy REQUIRED)
-find_package(SQLiteCpp REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy SQLiteCpp)
+find_package(sqlcipher REQUIRED CONFIG)
+target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy sqlcipher::sqlcipher)
 if(LINUX)
 	find_package(PkgConfig REQUIRED)
 	find_package(libsecret REQUIRED CONFIG)
@@ -83,6 +83,7 @@ if(NOT SKIP_TESTS)
 		tests/eventtests.cpp
 		tests/main.cpp
 		tests/networktests.cpp
+		tests/storetests.cpp
 		tests/stringtests.cpp
 		tests/systemcredentialstests.cpp
 		tests/updatertests.cpp

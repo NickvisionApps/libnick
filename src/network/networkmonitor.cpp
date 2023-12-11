@@ -16,7 +16,7 @@ namespace Nickvision::Aura::Network
 		: m_connectionState{ false }
 	{
 #ifdef _WIN32
-		CoInitialize(NULL);
+		CoInitialize(nullptr);
 #else
 		m_networkChangedHandlerId = g_signal_connect_data(G_OBJECT(g_network_monitor_get_default()), "network-changed", G_CALLBACK((void(*)(GNetworkMonitor*, bool, void*))([](GNetworkMonitor*, bool, void* data)
 		{
