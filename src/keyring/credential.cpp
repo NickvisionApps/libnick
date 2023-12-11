@@ -127,4 +127,14 @@ namespace Nickvision::Aura::Keyring
 		}
 		return (PasswordStrength)strength;
 	}
+
+	std::ostream& operator<<(std::ostream& os, const Credential& credential)
+	{
+		os << "[CRED: " << credential.getName() << "] " << std::endl;
+		os << "Uri: " << credential.getUri() << std::endl;
+		os << "Username: " << credential.getUsername() << std::endl;
+		os << "Password: " << credential.getPassword() << std::endl;
+		os << "Strength: " << (int)Credential::getPasswordStrength(credential.getPassword()) << std::endl;
+		return os;
+	}
 }

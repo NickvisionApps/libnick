@@ -22,9 +22,12 @@ namespace Nickvision::Aura::Keyring
 		{
 			if (cred->CredentialBlob)
 			{
-				Credential c{ cred->TargetName, cred->Comment, cred->UserName, LPCSTR(cred->CredentialBlob) };
+				std::string name{ cred->TargetName ? cred->TargetName : "" };
+				std::string url{ cred->Comment ? cred->Comment : "" };
+				std::string username{ cred->UserName ? cred->UserName : "" };
+				std::string password{ LPCSTR(cred->CredentialBlob) ? LPCSTR(cred->CredentialBlob) : "", cred->CredentialBlobSize };
 				CredFree(cred);
-				return c;
+				return { { name, url, username, password } };
 			}
 		}
 #else

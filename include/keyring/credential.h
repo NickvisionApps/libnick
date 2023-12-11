@@ -1,6 +1,7 @@
 #ifndef CREDENTIAL_H
 #define CREDENTIAL_H
 
+#include <iostream>
 #include <string>
 #include "passwordstrength.h"
 
@@ -98,6 +99,10 @@ namespace Nickvision::Aura::Keyring
 		 * @return True if this != compare
 		 */
 		bool operator!=(const Credential& compare) const;
+		/**
+		 * @brief Outputs the Credential object
+		 */
+		friend std::ostream& operator<<(std::ostream& os, const Credential& credential);
 
 	private:
 		int m_id;
