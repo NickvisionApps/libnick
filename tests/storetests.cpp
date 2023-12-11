@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <iostream>
 #include "keyring/passwordgenerator.h"
 #include "keyring/store.h"
 
@@ -6,6 +7,11 @@ using namespace Nickvision::Aura::Keyring;
 
 static const std::string storeName{ "AuraTestStore" };
 static const std::string storePassword{ PasswordGenerator().next() };
+
+TEST(StoreTest, EnsureNoStore)
+{
+	ASSERT_TRUE(Store::destroy(storeName));
+}
 
 TEST(StoreTests, CreateStrore)
 {

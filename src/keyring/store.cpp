@@ -56,6 +56,7 @@ namespace Nickvision::Aura::Keyring
 
 	bool Store::isValid() const
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_database;
 	}
 
@@ -234,6 +235,10 @@ namespace Nickvision::Aura::Keyring
 			std::lock_guard<std::mutex> lock2{ store.m_mutex };
 			m_name = store.m_name;
 			m_password = store.m_password;
+			if (m_database)
+			{
+				sqlite3_close(m_database);
+			}
 			m_database = nullptr;
 			m_path = store.m_path;
 			loadDatabase();
@@ -249,6 +254,10 @@ namespace Nickvision::Aura::Keyring
 			std::lock_guard<std::mutex> lock2{ store.m_mutex };
 			std::swap(m_name, store.m_name);
 			std::swap(m_password, store.m_password);
+			if (m_database)
+			{
+				sqlite3_close(m_database);
+			}
 			m_database = nullptr;
 			std::swap(m_path, store.m_path);
 			loadDatabase();
@@ -263,15 +272,24 @@ namespace Nickvision::Aura::Keyring
 		{
 			if (sqlite3_key(m_database, m_password.c_str(), static_cast<int>(m_password.size())) == SQLITE_OK)
 			{
-				if (sqlite3_exec(m_database, "SELECT count(*) FROM sqlite_master;", nullptr, nullptr, nullptr) == SQLITE_OK)
+				if (sqlite3_exec(m_database, "CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)", nullptr, nullptr, nullptr) == SQLITE_OK)
 				{
-					if (sqlite3_exec(m_database, "CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)", nullptr, nullptr, nullptr) == SQLITE_OK)
-					{
-						return;
-					}
+					return;
+				}
+				else
+				{
+					std::cerr << "[STORE] Unable to exec create table command. Key may be invalid." << std::endl;
 				}
 			}
+			else
+			{
+				std::cerr << "[STORE] Unable to key the database." << std::endl;
+			}
 			sqlite3_close(m_database);
+		}
+		else
+		{
+			std::cerr << "[STORE] Unable to open the database." << std::endl;
 		}
 		m_database = nullptr;
 	}
@@ -288,6 +306,6 @@ namespace Nickvision::Aura::Keyring
 		{
 			return std::filesystem::remove(path);
 		}
-		return false;
+		return true;
 	}
 }
