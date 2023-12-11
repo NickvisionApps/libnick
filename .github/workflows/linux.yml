@@ -30,6 +30,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: "Setup XDG"
+        run: |
+          sudo apt install xdg-user-dirs - y
+          xdg-user-dirs-update
       - name: "Setup Keyring"
         uses: t1m0thyj/unlock-keyring@v1
       - name: "Get Conan"
