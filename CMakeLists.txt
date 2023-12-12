@@ -33,6 +33,7 @@ add_library (${PROJECT_NAME}
 	src/network/networkstatechangedeventargs.cpp
 	src/notifications/notificationsenteventargs.cpp
 	src/notifications/shellnotificationsenteventargs.cpp
+	src/taskbar/taskbaritem.cpp
 	src/update/updater.cpp
 	src/appinfo.cpp
 	src/aura.cpp
