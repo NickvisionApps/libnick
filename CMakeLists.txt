@@ -83,6 +83,7 @@ if(NOT SKIP_TESTS)
 		tests/eventtests.cpp
 		tests/main.cpp
 		tests/networktests.cpp
+		tests/passwordtests.cpp
 		tests/storetests.cpp
 		tests/stringtests.cpp
 		tests/systemcredentialstests.cpp

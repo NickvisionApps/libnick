@@ -12,9 +12,10 @@ namespace Nickvision::Aura::Keyring
 		{
 			return PasswordStrength::VeryWeak;
 		}
-		int strength = 1;
+		int strength = 0;
 		bool containsDigit = false;
-		bool containsLetter = false;
+		bool containsLower = false;
+		bool containsUpper = false;
 		bool containsSymbol = false;
 		if (password.size() >= 12)
 		{
@@ -27,10 +28,15 @@ namespace Nickvision::Aura::Keyring
 				strength++;
 				containsDigit = true;
 			}
-			if (!containsLetter && std::isalpha(ch))
+			if (!containsLower && std::isalpha(ch) && std::islower(ch))
 			{
 				strength++;
-				containsLetter = true;
+				containsLower = true;
+			}
+			if (!containsUpper && std::isalpha(ch) && std::isupper(ch))
+			{
+				strength++;
+				containsUpper = true;
 			}
 			if (!containsSymbol && !std::isalnum(ch))
 			{
