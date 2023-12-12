@@ -36,10 +36,6 @@ namespace Nickvision::Aura::Keyring
 		 */
 		Store(Store&& store) noexcept;
 		/**
-		 * @brief Deconstructs a Store object.
-		 */
-		~Store();
-		/**
 		 * @brief Gets whether or not the store object is valid.
 		 */
 		bool isValid() const;
@@ -107,11 +103,10 @@ namespace Nickvision::Aura::Keyring
 		Store& operator=(Store&& store) noexcept;
 
 	private:
-		void loadDatabase();
 		mutable std::mutex m_mutex;
 		std::string m_name;
 		std::string m_password;
-		sqlite3* m_database;
+		std::shared_ptr<sqlite3> m_database;
 		std::filesystem::path m_path;
 
 	public:

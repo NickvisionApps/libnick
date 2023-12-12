@@ -1,4 +1,5 @@
 #include "keyring/store.h"
+#include <iostream>
 #include "userdirectories.h"
 
 namespace Nickvision::Aura::Keyring
@@ -23,7 +24,34 @@ namespace Nickvision::Aura::Keyring
 		m_database{ nullptr },
 		m_path{ getPathFromName(name) }
 	{
-		loadDatabase();
+		sqlite3* database{ nullptr };
+		if (sqlite3_open_v2(m_path.string().c_str(), &database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nullptr) == SQLITE_OK)
+		{
+			if (sqlite3_key(database, m_password.c_str(), static_cast<int>(m_password.size())) == SQLITE_OK)
+			{
+				if (sqlite3_exec(database, "CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)", nullptr, nullptr, nullptr) == SQLITE_OK)
+				{
+					m_database = { database, [](sqlite3* sql)
+					{
+						sqlite3_close(sql);
+					}};
+					return;
+				}
+				else
+				{
+					std::cerr << "[STORE] Unable to exec create table command. Key may be invalid." << std::endl;
+				}
+			}
+			else
+			{
+				std::cerr << "[STORE] Unable to key the database." << std::endl;
+			}
+			sqlite3_close(database);
+		}
+		else
+		{
+			std::cerr << "[STORE] Unable to open the database." << std::endl;
+		}
 	}
 
 	Store::Store(const Store& store)
@@ -31,9 +59,8 @@ namespace Nickvision::Aura::Keyring
 		std::lock_guard<std::mutex> lock{ store.m_mutex };
 		m_name = store.m_name;
 		m_password = store.m_password;
-		m_database = nullptr;
+		m_database = store.m_database;
 		m_path = store.m_path;
-		loadDatabase();
 	}
 
 	Store::Store(Store&& store) noexcept
@@ -41,23 +68,14 @@ namespace Nickvision::Aura::Keyring
 		std::lock_guard<std::mutex> lock{ store.m_mutex };
 		m_name = std::move(store.m_name);
 		m_password = std::move(store.m_password);
-		m_database = nullptr;
+		m_database = std::move(store.m_database);
 		m_path = std::move(store.m_path);
-		loadDatabase();
-	}
-
-	Store::~Store()
-	{
-		if (m_database)
-		{
-			sqlite3_close(m_database);
-		}
 	}
 
 	bool Store::isValid() const
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
-		return m_database;
+		return m_database ? true : false;
 	}
 
 	const std::string& Store::getName() const
@@ -79,7 +97,7 @@ namespace Nickvision::Aura::Keyring
 		if (m_database)
 		{
 			sqlite3_stmt* statement;
-			if (sqlite3_prepare_v2(m_database, "SELECT * FROM credentials", -1, &statement, nullptr) == SQLITE_OK)
+			if (sqlite3_prepare_v2(m_database.get(), "SELECT * FROM credentials", -1, &statement, nullptr) == SQLITE_OK)
 			{
 				while (sqlite3_step(statement) == SQLITE_ROW)
 				{
@@ -98,7 +116,7 @@ namespace Nickvision::Aura::Keyring
 		if (m_database)
 		{
 			sqlite3_stmt* statement;
-			if (sqlite3_prepare_v2(m_database, "SELECT * FROM credentials where id = ?", -1, &statement, nullptr) == SQLITE_OK)
+			if (sqlite3_prepare_v2(m_database.get(), "SELECT * FROM credentials where id = ?", -1, &statement, nullptr) == SQLITE_OK)
 			{
 				if (sqlite3_bind_int(statement, 1, id) == SQLITE_OK)
 				{
@@ -120,7 +138,7 @@ namespace Nickvision::Aura::Keyring
 		if (m_database)
 		{
 			sqlite3_stmt* statement;
-			if (sqlite3_prepare_v2(m_database, "SELECT * FROM credentials where name = ?", -1, &statement, nullptr) == SQLITE_OK)
+			if (sqlite3_prepare_v2(m_database.get(), "SELECT * FROM credentials where name = ?", -1, &statement, nullptr) == SQLITE_OK)
 			{
 				if (sqlite3_bind_text(statement, 1, name.c_str(), -1, SQLITE_TRANSIENT) == SQLITE_OK)
 				{
@@ -142,7 +160,7 @@ namespace Nickvision::Aura::Keyring
 		if (m_database)
 		{
 			sqlite3_stmt* statement;
-			if (sqlite3_prepare_v2(m_database, "INSERT INTO credentials (id, name, uri, username, password) VALUES (?,?,?,?,?)", -1, &statement, nullptr) == SQLITE_OK)
+			if (sqlite3_prepare_v2(m_database.get(), "INSERT INTO credentials (id, name, uri, username, password) VALUES (?,?,?,?,?)", -1, &statement, nullptr) == SQLITE_OK)
 			{
 				if (sqlite3_bind_int(statement, 1, credential.getId()) == SQLITE_OK)
 				{
@@ -173,7 +191,7 @@ namespace Nickvision::Aura::Keyring
 		if (m_database)
 		{
 			sqlite3_stmt* statement;
-			if (sqlite3_prepare_v2(m_database, "UPDATE credentials SET name = ?, uri = ?, username = ?, password = ? where id = ?", -1, &statement, nullptr) == SQLITE_OK)
+			if (sqlite3_prepare_v2(m_database.get(), "UPDATE credentials SET name = ?, uri = ?, username = ?, password = ? where id = ?", -1, &statement, nullptr) == SQLITE_OK)
 			{
 				if (sqlite3_bind_int(statement, 5, credential.getId()) == SQLITE_OK)
 				{
@@ -204,7 +222,7 @@ namespace Nickvision::Aura::Keyring
 		if (m_database)
 		{
 			sqlite3_stmt* statement;
-			if (sqlite3_prepare_v2(m_database, "DELETE FROM credentials WHERE id = ?", -1, &statement, nullptr) == SQLITE_OK)
+			if (sqlite3_prepare_v2(m_database.get(), "DELETE FROM credentials WHERE id = ?", -1, &statement, nullptr) == SQLITE_OK)
 			{
 				if (sqlite3_bind_int(statement, 1, id) == SQLITE_OK)
 				{
@@ -221,7 +239,7 @@ namespace Nickvision::Aura::Keyring
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (m_database)
 		{
-			sqlite3_close(m_database);
+			sqlite3_close(m_database.get());
 			m_database = nullptr;
 		}
 		return std::filesystem::exists(m_path) ? std::filesystem::remove(m_path) : true;
@@ -235,13 +253,8 @@ namespace Nickvision::Aura::Keyring
 			std::lock_guard<std::mutex> lock2{ store.m_mutex };
 			m_name = store.m_name;
 			m_password = store.m_password;
-			if (m_database)
-			{
-				sqlite3_close(m_database);
-			}
-			m_database = nullptr;
+			m_database = store.m_database;
 			m_path = store.m_path;
-			loadDatabase();
 		}
 		return *this;
 	}
@@ -252,46 +265,12 @@ namespace Nickvision::Aura::Keyring
 		{
 			std::lock_guard<std::mutex> lock{ m_mutex };
 			std::lock_guard<std::mutex> lock2{ store.m_mutex };
-			std::swap(m_name, store.m_name);
-			std::swap(m_password, store.m_password);
-			if (m_database)
-			{
-				sqlite3_close(m_database);
-			}
-			m_database = nullptr;
-			std::swap(m_path, store.m_path);
-			loadDatabase();
+			m_name = std::move(store.m_name);
+			m_password = std::move(store.m_password);
+			m_database = std::move(store.m_database);
+			m_path = std::move(store.m_path);
 		}
 		return *this;
-	}
-
-	void Store::loadDatabase()
-	{
-		std::lock_guard<std::mutex> lock{ m_mutex };
-		if (sqlite3_open_v2(m_path.string().c_str(), &m_database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nullptr) == SQLITE_OK)
-		{
-			if (sqlite3_key(m_database, m_password.c_str(), static_cast<int>(m_password.size())) == SQLITE_OK)
-			{
-				if (sqlite3_exec(m_database, "CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)", nullptr, nullptr, nullptr) == SQLITE_OK)
-				{
-					return;
-				}
-				else
-				{
-					std::cerr << "[STORE] Unable to exec create table command. Key may be invalid." << std::endl;
-				}
-			}
-			else
-			{
-				std::cerr << "[STORE] Unable to key the database." << std::endl;
-			}
-			sqlite3_close(m_database);
-		}
-		else
-		{
-			std::cerr << "[STORE] Unable to open the database." << std::endl;
-		}
-		m_database = nullptr;
 	}
 
 	bool Store::exists(const std::string& name)

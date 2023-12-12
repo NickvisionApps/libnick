@@ -114,13 +114,13 @@ namespace Nickvision::Aura::Events
 		 * @param e The Event to move
 		 * @return this
 		 */
-		Event& operator=(Event&& e)
+		Event& operator=(Event&& e) noexcept
 		{
 			if (this != &e)
 			{
 				std::lock_guard<std::mutex> lock{ m_mutex };
 				std::lock_guard<std::mutex> lock2{ e.m_mutex };
-				std::swap(m_handlers, e.m_handlers);
+				m_handlers = std::move(e.m_handlers);
 			}
 			return *this;
 		}
