@@ -26,6 +26,7 @@ namespace Nickvision::Aura::Events
 		Event() { }
 		/**
 		 * @brief Constructs an Event via copy.
+		 * @param e The object to copy
 		 */
 		Event(const Event& e) 
 		{ 
@@ -34,6 +35,7 @@ namespace Nickvision::Aura::Events
 		}
 		/**
 		 * @brief Constructs an Event via move.
+		 * @param e The object to move
 		 */
 		Event(Event&& e) noexcept
 		{

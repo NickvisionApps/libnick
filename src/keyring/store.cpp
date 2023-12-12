@@ -25,11 +25,12 @@ namespace Nickvision::Aura::Keyring
 		m_path{ getPathFromName(name) }
 	{
 		sqlite3* database{ nullptr };
+		char* err{ nullptr };
 		if (sqlite3_open_v2(m_path.string().c_str(), &database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nullptr) == SQLITE_OK)
 		{
 			if (sqlite3_key(database, m_password.c_str(), static_cast<int>(m_password.size())) == SQLITE_OK)
 			{
-				if (sqlite3_exec(database, "CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)", nullptr, nullptr, nullptr) == SQLITE_OK)
+				if (sqlite3_exec(database, "CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY, name TEXT, uri TEXT, username TEXT, password TEXT)", nullptr, nullptr, &err) == SQLITE_OK)
 				{
 					m_database = { database, [](sqlite3* sql)
 					{
@@ -39,7 +40,8 @@ namespace Nickvision::Aura::Keyring
 				}
 				else
 				{
-					std::cerr << "[STORE] Unable to exec create table command. Key may be invalid." << std::endl;
+					std::cerr << "[STORE] Unable to exec create table command. Key may be invalid. " << std::string(err ? err : "") << std::endl;
+					sqlite3_free(err);
 				}
 			}
 			else

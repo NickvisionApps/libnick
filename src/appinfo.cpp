@@ -212,7 +212,7 @@ namespace Nickvision::Aura
 	std::vector<std::string> AppInfo::convertUrlMapToVector(const std::map<std::string, std::string>& urls)
 	{
 		std::vector<std::string> vec;
-		for (const std::pair<std::string, std::string>& pair : urls)
+		for (const std::pair<const std::string, std::string>& pair : urls)
 		{
 			vec.push_back(pair.first + " " + pair.second);
 		}

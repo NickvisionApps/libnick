@@ -13,7 +13,7 @@ namespace Nickvision::Aura
 
 	Aura::~Aura()
 	{
-		for (const std::pair<std::string, ConfigurationBase*>& pair : m_configFiles)
+		for (const std::pair<const std::string, ConfigurationBase*>& pair : m_configFiles)
 		{
 			delete pair.second;
 		}

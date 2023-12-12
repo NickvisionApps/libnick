@@ -63,6 +63,11 @@ if(LINUX)
 	pkg_check_modules(gthread-2.0 REQUIRED IMPORTED_TARGET gthread-2.0)
 	target_link_libraries(${PROJECT_NAME} PUBLIC libsecret::libsecret libuuid::libuuid PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0)
 endif()
+if(MSVC)
+  target_compile_options(${PROJECT_NAME} PRIVATE /W4)
+else()
+  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+endif()
 
 #libaura Install
 configure_file(${PROJECT_SOURCE_DIR}/pkg-config/libaura.pc.in libaura.pc @ONLY)

@@ -5,28 +5,38 @@
 
 using namespace Nickvision::Aura::Keyring;
 
-static const std::string storeName{ "AuraTestStore" };
-static const std::string storePassword{ PasswordGenerator().next() };
-
-TEST(StoreTest, EnsureNoStore)
+class StoreTest : public testing::Test
 {
-	ASSERT_TRUE(Store::destroy(storeName));
+public:
+	static std::shared_ptr<Store> m_store;
+
+	static void SetUpTestSuite()
+	{
+		Store::destroy("org.nickvision.aura.test");
+		PasswordGenerator passGen;
+		m_store = std::make_shared<Store>("org.nickvision.aura.test", passGen.next());
+	}
+};
+
+std::shared_ptr<Store> StoreTest::m_store = nullptr;
+
+TEST_F(StoreTest, CheckValidStore)
+{
+	ASSERT_TRUE(m_store->isValid());
 }
 
-TEST(StoreTests, CreateStrore)
+TEST_F(StoreTest, AddCredentials)
 {
-	Store store{ storeName, storePassword };
-	ASSERT_TRUE(store.isValid());
+	ASSERT_TRUE(m_store->isValid());
+	ASSERT_TRUE(m_store->addCredential({ "YT", "https://youtube.com", "theawesomeguy", "abc123!" }));
+	ASSERT_TRUE(m_store->addCredential({ "Google", "https://google.com", "me@gmail.com", "abc12345!" }));
 }
 
-TEST(StoreTests, AddCredentials)
+TEST_F(StoreTest, EnsureCredentials)
 {
-	Store store{ storeName, storePassword };
-	ASSERT_TRUE(store.isValid());
-	ASSERT_TRUE(store.addCredential({ "YT", "https://youtube.com", "theawesomeguy", "abc123!" }));
-	ASSERT_TRUE(store.addCredential({ "Google", "https://google.com", "me@gmail.com", "abc12345!" }));
-	ASSERT_TRUE(store.getAllCredentials().size() == 2);
-	std::vector<Credential> creds{ store.getCredentials("YT") };
+	ASSERT_TRUE(m_store->isValid());
+	ASSERT_TRUE(m_store->getAllCredentials().size() == 2);
+	std::vector<Credential> creds{ m_store->getCredentials("YT") };
 	ASSERT_TRUE(creds.size() == 1);
 	std::cout << creds[0] << std::endl;
 	ASSERT_EQ(creds[0].getName(), "YT");
@@ -35,9 +45,8 @@ TEST(StoreTests, AddCredentials)
 	ASSERT_EQ(creds[0].getPassword(), "abc123!");
 }
 
-TEST(StoreTests, DeleteStore)
+TEST_F(StoreTest, DestroyStore)
 {
-	Store store{ storeName, storePassword };
-	ASSERT_TRUE(store.isValid());
-	ASSERT_TRUE(store.destroy());
+	ASSERT_TRUE(m_store->isValid());
+	ASSERT_TRUE(m_store->destroy());
 }

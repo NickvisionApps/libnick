@@ -13,30 +13,30 @@
 namespace Nickvision::Aura::Keyring
 {
 	/**
-	 * @brief A store object for credentials. Backed by sqlciphe.
+	 * @brief A store object for credentials. Backed by sqlcipher.
 	 */
 	class Store
 	{
 	public:
 		/**
-		 * @brief Constructs a Store object. The isValid() function should be called to ensure the object is valid.
+		 * @brief Constructs a Store object. The isValid() function should be called to ensure that the store was loaded successfully.
 		 * @param name The name of the store
 		 * @param password The password of the store
 		 */
 		Store(const std::string& name, const std::string& password);
 		/**
 		 * @brief Copies a Store object.
-		 * @parma store The object to move
-		 * @brief Deconstructs a Store object.
+		 * @param store The object to move
 		 */
 		Store(const Store& store);
 		/**
 		 * @brief Moves a Store object.
-		 * @parma store The object to move
+		 * @param store The object to move
 		 */
 		Store(Store&& store) noexcept;
 		/**
 		 * @brief Gets whether or not the store object is valid.
+		 * @return True if valid, else false
 		 */
 		bool isValid() const;
 		/**
@@ -90,13 +90,13 @@ namespace Nickvision::Aura::Keyring
 		 */
 		bool destroy();
 		/**
-		 * @brief Copies an Store
+		 * @brief Copies a Store object.
 		 * @param store The Store to copy
 		 * @return this
 		 */
 		Store& operator=(const Store& store);
 		/**
-		 * @brief Moves an Store
+		 * @brief Moves a Store object.
 		 * @param store The Store to move
 		 * @return this
 		 */
