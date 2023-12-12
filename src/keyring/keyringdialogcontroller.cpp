@@ -39,9 +39,9 @@ namespace Nickvision::Aura::Keyring
 	{
 		if (m_keyring)
 		{
-			m_keyring->destroy();
+			bool res{ m_keyring->destroy() };
 			m_keyring = std::nullopt;
-			return true;
+			return res;
 		}
 		return false;
 	}

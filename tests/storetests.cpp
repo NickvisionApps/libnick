@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <iostream>
 #include "keyring/passwordgenerator.h"
 #include "keyring/store.h"
 

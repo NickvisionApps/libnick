@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <iostream>
 #include "helpers/stringhelpers.h"
 
 using namespace Nickvision::Aura;

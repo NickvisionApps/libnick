@@ -81,6 +81,7 @@ if(NOT SKIP_TESTS)
 	enable_testing()
 	add_executable(${PROJECT_NAME}_test
 		tests/eventtests.cpp
+		tests/keyringtests.cpp
 		tests/main.cpp
 		tests/networktests.cpp
 		tests/passwordtests.cpp
