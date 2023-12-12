@@ -21,6 +21,5 @@ TEST(WebTests, DownloadFile1)
 TEST(WebTests, FetchJsonString1)
 {
 	std::string s{ WebHelpers::fetchJsonString("https://api.github.com/repos/nickvisionapps/denaro/tags") };
-	std::cout << s << std::endl;
 	ASSERT_TRUE(!s.empty());
 }

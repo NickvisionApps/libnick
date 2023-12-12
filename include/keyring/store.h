@@ -113,7 +113,7 @@ namespace Nickvision::Aura::Keyring
 		/**
 		 * @brief Gets whether or not a store exists with the provided name.
 		 * @param name The name of the store to check
-		 * @return True if a store with the provied name exists, else false
+		 * @return True if a store with the provided name exists, else false
 		 */
 		static bool exists(const std::string& name);
 		/**

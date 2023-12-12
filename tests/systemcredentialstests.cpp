@@ -9,7 +9,6 @@ static const std::string randCredentialName{ "RandomAuraTestCredential1" };
 TEST(SystemCredentialsTests, AddRandCredential)
 {
 	std::optional<Credential> cred{ SystemCredentials::addCredential(randCredentialName) };
-	std::cout << cred.value() << std::endl;
 	ASSERT_TRUE(cred.has_value());
 	ASSERT_TRUE(cred.value().getName() == randCredentialName);
 	ASSERT_TRUE(!cred.value().getPassword().empty());
@@ -18,7 +17,6 @@ TEST(SystemCredentialsTests, AddRandCredential)
 TEST(SystemCredentialsTests, FetchRandCredential)
 {
 	std::optional<Credential> cred{ SystemCredentials::getCredential(randCredentialName) };
-	std::cout << cred.value() << std::endl;
 	ASSERT_TRUE(cred.has_value());
 	ASSERT_TRUE(cred.value().getName() == randCredentialName);
 	ASSERT_TRUE(!cred.value().getPassword().empty());
@@ -29,7 +27,6 @@ TEST(SystemCredentialsTests, UpdateRandCredential)
 	Credential updatedCred{ randCredentialName, "", "", "abc123" };
 	ASSERT_TRUE(SystemCredentials::updateCredential(updatedCred));
 	std::optional<Credential> cred{ SystemCredentials::getCredential(randCredentialName) };
-	std::cout << cred.value() << std::endl;
 	ASSERT_TRUE(cred.has_value());
 	ASSERT_TRUE(cred.value().getName() == randCredentialName);
 	ASSERT_TRUE(cred.value().getPassword() == "abc123");

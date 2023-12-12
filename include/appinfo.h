@@ -124,12 +124,12 @@ namespace Nickvision::Aura
 		 */
 		void setSupportUrl(const std::string& supportUrl);
 		/**
-		 * @brief Gets the extra links for the appplication
+		 * @brief Gets the extra links for the application
 		 * @return The extra links for the application
 		 */
 		std::map<std::string, std::string>& getExtraLinks();
 		/**
-		 * @brief Gets the extra links for the appplication
+		 * @brief Gets the extra links for the application
 		 * @return The extra links for the application
 		 */
 		const std::map<std::string, std::string>& getExtraLinks() const;

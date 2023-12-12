@@ -30,15 +30,9 @@ TEST_F(StoreTest, AddCredentials)
 	ASSERT_TRUE(m_store->isValid());
 	ASSERT_TRUE(m_store->addCredential({ "YT", "https://youtube.com", "theawesomeguy", "abc123!" }));
 	ASSERT_TRUE(m_store->addCredential({ "Google", "https://google.com", "me@gmail.com", "abc12345!" }));
-}
-
-TEST_F(StoreTest, EnsureCredentials)
-{
-	ASSERT_TRUE(m_store->isValid());
 	ASSERT_TRUE(m_store->getAllCredentials().size() == 2);
 	std::vector<Credential> creds{ m_store->getCredentials("YT") };
 	ASSERT_TRUE(creds.size() == 1);
-	std::cout << creds[0] << std::endl;
 	ASSERT_EQ(creds[0].getName(), "YT");
 	ASSERT_EQ(creds[0].getUri(), "https://youtube.com");
 	ASSERT_EQ(creds[0].getUsername(), "theawesomeguy");

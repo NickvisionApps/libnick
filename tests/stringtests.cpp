@@ -51,7 +51,9 @@ TEST(StringTests, Split1)
 
 TEST(StringTests, Guid1)
 {
-	ASSERT_NO_THROW(std::cout << StringHelpers::newGuid() << std::endl);
+	std::string s;
+	ASSERT_NO_THROW(s = StringHelpers::newGuid());
+	ASSERT_FALSE(s.empty());
 }
 
 TEST(StringTests, UrlValidity1)

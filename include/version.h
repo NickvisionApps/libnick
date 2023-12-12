@@ -8,7 +8,7 @@
 namespace Nickvision::Aura
 {
 	/**
-	 * @brief A model for a version number. Formated in "major.minor.build-dev".
+	 * @brief A model for a version number. Formatted in "major.minor.build-dev".
 	 */
 	class Version
 	{

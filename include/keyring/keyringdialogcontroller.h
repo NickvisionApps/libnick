@@ -29,7 +29,7 @@ namespace Nickvision::Aura::Keyring
 		const std::optional<Keyring>& getKeyring();
 		/**
 		 * @brief Gets whether or not the keyring is enabled (unlocked).
-		 * @retrun True if enabled, else false
+		 * @return True if enabled, else false
 		 */
 		bool isEnabled() const;
 		/**

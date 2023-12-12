@@ -76,7 +76,7 @@ namespace Nickvision::Aura::Keyring
 		/**
 		 * @brief Gets whether or not a keyring exists with the provided name.
 		 * @param name The name of the keyring to check
-		 * @return True if a keyring with the provied name exists, else false
+		 * @return True if a keyring with the provided name exists, else false
 		 */
 		static bool exists(const std::string& name);
 		/**
