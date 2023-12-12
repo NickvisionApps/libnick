@@ -15,9 +15,7 @@ namespace Nickvision::Aura::Network
 	NetworkMonitor::NetworkMonitor()
 		: m_connectionState{ false }
 	{
-#ifdef _WIN32
-		CoInitialize(nullptr);
-#else
+#ifndef _WIN32
 		m_networkChangedHandlerId = g_signal_connect_data(G_OBJECT(g_network_monitor_get_default()), "network-changed", G_CALLBACK((void(*)(GNetworkMonitor*, bool, void*))([](GNetworkMonitor*, bool, void* data)
 		{
 			static_cast<NetworkMonitor*>(data)->checkConnectionState();
@@ -27,9 +25,7 @@ namespace Nickvision::Aura::Network
 
 	NetworkMonitor::~NetworkMonitor()
 	{
-#ifdef _WIN32
-		CoUninitialize();
-#else
+#ifndef _WIN32
 		g_signal_handler_disconnect(G_OBJECT(g_network_monitor_get_default()), m_networkChangedHandlerId);
 #endif
 	}
