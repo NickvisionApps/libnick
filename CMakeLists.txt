@@ -80,6 +80,7 @@ if(NOT SKIP_TESTS)
 	#libaura_test Setup
 	enable_testing()
 	add_executable(${PROJECT_NAME}_test
+		tests/auratests.cpp
 		tests/eventtests.cpp
 		tests/keyringtests.cpp
 		tests/main.cpp
