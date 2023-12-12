@@ -1,6 +1,7 @@
 #ifndef CONFIGURATIONBASE_H
 #define CONFIGURATIONBASE_H
 
+#include <filesystem>
 #include <string>
 #include <json/json.h>
 #include "events/event.h"
@@ -18,6 +19,9 @@ namespace Nickvision::Aura
 		 * @param key The key of the config file
 		 */
 		ConfigurationBase(const std::string& key);
+		/**
+		 * @brief Deconstructs a ConfigurationBase. 
+		 */
 		virtual ~ConfigurationBase() = default;
 		/**
 		 * Gets the key of the config file.
@@ -31,13 +35,17 @@ namespace Nickvision::Aura
 		Events::Event<Events::EventArgs>& saved();
 		/**
 		 * @brief Saves the config file to disk. 
+		 * @return True if saved to disk, else false
 		 */
-		void save();
+		bool save();
 
 	protected:
 		Json::Value m_json;
 		std::string m_key;
 		Events::Event<Events::EventArgs> m_saved;
+
+	private:
+		std::filesystem::path m_path;
 	};
 }
 

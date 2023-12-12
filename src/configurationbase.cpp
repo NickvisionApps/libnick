@@ -6,12 +6,12 @@
 namespace Nickvision::Aura
 {
 	ConfigurationBase::ConfigurationBase(const std::string& key)
-		: m_key{ key }
+		: m_key{ key },
+		m_path{ UserDirectories::getApplicationConfig() / (key + ".json") }
 	{
-		std::filesystem::path path{ UserDirectories::getApplicationConfig() / (key + ".json") };
-		if (std::filesystem::exists(path))
+		if (std::filesystem::exists(m_path))
 		{
-			std::ifstream in{ path };
+			std::ifstream in{ m_path };
 			in >> m_json;
 		}
 	}
@@ -26,14 +26,15 @@ namespace Nickvision::Aura
 		return m_saved;
 	}
 
-	void ConfigurationBase::save()
+	bool ConfigurationBase::save()
 	{
 		if (m_key.empty())
 		{
-			throw std::invalid_argument("Key must not be empty.");
+			return false;
 		}
-		std::ofstream out{ UserDirectories::getApplicationConfig() / (m_key + ".json") };
+		std::ofstream out{ m_path };
 		out << m_json;
 		m_saved.invoke({});
+		return true;
 	}
 }
