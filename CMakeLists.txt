@@ -19,7 +19,8 @@ include(GNUInstallDirs)
 #libaura Library Setup
 include_directories(${PROJECT_SOURCE_DIR}/include)
 add_library (${PROJECT_NAME}
-	src/events/eventargs.cpp
+	src/filesystem/filesystemchangedeventargs.cpp
+	src/filesystem/filesystemwatcher.cpp
 	src/helpers/stringhelpers.cpp
 	src/helpers/webhelpers.cpp
 	src/keyring/credential.cpp
