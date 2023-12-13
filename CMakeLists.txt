@@ -90,6 +90,7 @@ if(NOT SKIP_TESTS)
 		tests/storetests.cpp
 		tests/stringtests.cpp
 		tests/systemcredentialstests.cpp
+		tests/taskbartests.cpp
 		tests/updatertests.cpp
 		tests/versiontests.cpp
 		tests/webtests.cpp)
