@@ -2,6 +2,8 @@
 #include <memory>
 #include <string>
 #ifdef _WIN32
+#include <dwmapi.h>
+#pragma comment(lib,"dwmapi.lib")
 using namespace Gdiplus;
 #endif
 
@@ -106,8 +108,10 @@ namespace Nickvision::Aura::Taskbar
 			}
 			else
 			{
+				DWORD accentColor;
+				BOOL opaue{ FALSE };
 				Graphics windowGraphics{ m_hwnd };
-				SolidBrush background{ Color::Color(0, 0, 0) };
+				SolidBrush background{ DwmGetColorizationColor(&accentColor, &opaue) == S_OK ? Color::Color(accentColor) : Color::Color(0, 0, 0) };
 				SolidBrush foreground{ Color::Color(255, 255, 255) };
 				Bitmap bitmap{ 16, 16, &windowGraphics };
 				Graphics graphics{ &bitmap };
