@@ -32,9 +32,8 @@ namespace Nickvision::Aura::Taskbar
 		/**
 		 * @brief Sets the state of the progress.
 		 * @param state The new ProgressState
-		 * @return True if taskbar item updated, else false
 		 */
-		bool setProgressState(ProgressState state);
+		void setProgressState(ProgressState state);
 		/**
 		 * @brief Gets the value of the progress.
 		 * @return The progress value
@@ -43,9 +42,8 @@ namespace Nickvision::Aura::Taskbar
 		/**
 		 * @brief Sets the value of the progress. Settings the progress value will set the progress state to normal.
 		 * @param progress The new progress value
-		 * @return True if taskbar item updated, else false
 		 */
-		bool setProgress(double progress);
+		void setProgress(double progress);
 		/**
 		 * @brief Gets whether or not the taskbar item is shown in an urgent state.
 		 * @return True if in urgent state, else false
@@ -54,9 +52,8 @@ namespace Nickvision::Aura::Taskbar
 		/**
 		 * @brief Sets whether or not the taskbar item is shown in an urgent state.
 		 * @param urgent True for urgent state, else false
-		 * @return True if taskbar item updated, else false
 		 */
-		bool setUrgent(bool urgent);
+		void setUrgent(bool urgent);
 		/**
 		 * @brief Gets whether or not the count is visible on the taskbar item.
 		 * @return True if count visible, else false
@@ -65,9 +62,8 @@ namespace Nickvision::Aura::Taskbar
 		/**
 		 * @brief Sets whether or not the count is visible on the taskbar item.
 		 * @param countVisible True for visible count, else false
-		 * @return True if taskbar item updated, else false
 		 */
-		bool setCountVisible(bool countVisible);
+		void setCountVisible(bool countVisible);
 		/**
 		 * @brief Gets the count shown on the taskbar item.
 		 * @return The count value
@@ -76,9 +72,8 @@ namespace Nickvision::Aura::Taskbar
 		/**
 		 * @brief Sets the count shown on the taskbar item.
 		 * @param count The new count value
-		 * @return True if taskbar item updated, else false
 		 */
-		bool setCount(long count);
+		void setCount(long count);
 #ifdef _WIN32
 		/**
 		 * @brief Connects a taskbar item to the application.

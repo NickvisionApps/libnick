@@ -10,6 +10,7 @@ namespace Nickvision::Aura::Taskbar
 		m_count{ 0 }
 	{
 #ifdef _WIN32
+		CoInitialize(nullptr);
 		m_hwnd = nullptr;
 		m_background = nullptr;
 		m_foreground = nullptr;
@@ -29,16 +30,15 @@ namespace Nickvision::Aura::Taskbar
 		return m_progressState;
 	}
 
-	bool TaskbarItem::setProgressState(ProgressState state)
+	void TaskbarItem::setProgressState(ProgressState state)
 	{
 		m_progressState = state;
 #ifdef _WIN32
 		if (m_taskbar)
 		{
-			return m_taskbar->SetProgressState(m_hwnd, (TBPFLAG)m_progressState) == S_OK;
+			m_taskbar->SetProgressState(m_hwnd, (TBPFLAG)m_progressState) == S_OK;
 		}
 #endif
-		return false;
 	}
 
 	double TaskbarItem::getProgress() const
@@ -46,18 +46,16 @@ namespace Nickvision::Aura::Taskbar
 		return m_progress;
 	}
 
-	bool TaskbarItem::setProgress(double progress)
+	void TaskbarItem::setProgress(double progress)
 	{
-		bool res{ false };
 		m_progress = progress;
 #ifdef _WIN32
 		if (m_taskbar)
 		{
-			res = m_taskbar->SetProgressValue(m_hwnd, static_cast<unsigned long>(progress * 100), 100u) == S_OK;
+			m_taskbar->SetProgressValue(m_hwnd, static_cast<unsigned long>(progress * 100), 100u) == S_OK;
 		}
 #endif
 		setProgressState(ProgressState::Normal);
-		return res;
 	}
 
 	bool TaskbarItem::getUrgent() const
@@ -65,7 +63,7 @@ namespace Nickvision::Aura::Taskbar
 		return m_urgent;
 	}
 
-	bool TaskbarItem::setUrgent(bool urgent)
+	void TaskbarItem::setUrgent(bool urgent)
 	{
 		m_urgent = urgent;
 #ifdef _WIN32
@@ -74,13 +72,12 @@ namespace Nickvision::Aura::Taskbar
 			FLASHWINFO flashInfo;
 			flashInfo.cbSize = sizeof(FLASHWINFO);
 			flashInfo.hwnd = m_hwnd;
-			flashInfo.dwTimeout = urgent ? (FLASHW_TRAY | FLASHW_TIMER) : FLASHW_STOP;
+			flashInfo.dwFlags = urgent ? (FLASHW_TRAY | FLASHW_TIMER) : FLASHW_STOP;
 			flashInfo.uCount = UINT_MAX;
 			flashInfo.dwTimeout = 0;
-			return FlashWindowEx(&flashInfo);
+			FlashWindowEx(&flashInfo);
 		}
 #endif
-		return false;
 	}
 
 	bool TaskbarItem::getCountVisible() const
@@ -88,7 +85,7 @@ namespace Nickvision::Aura::Taskbar
 		return m_countVisible;
 	}
 
-	bool TaskbarItem::setCountVisible(bool countVisible)
+	void TaskbarItem::setCountVisible(bool countVisible)
 	{
 		m_countVisible = countVisible;
 #ifdef _WIN32
@@ -96,14 +93,13 @@ namespace Nickvision::Aura::Taskbar
 		{
 			if (!countVisible)
 			{
-				return m_taskbar->SetOverlayIcon(m_hwnd, nullptr, L"") == S_OK;
+				m_taskbar->SetOverlayIcon(m_hwnd, nullptr, L"") == S_OK;
 			}
 			else
 			{
-				
+					
 			}
 		}
-		return false;
 #endif
 	}
 
@@ -112,17 +108,16 @@ namespace Nickvision::Aura::Taskbar
 		return m_count;
 	}
 
-	bool TaskbarItem::setCount(long count)
+	void TaskbarItem::setCount(long count)
 	{
 		m_count = count;
 		setCountVisible(count >= 0);
-		return false;
 	}
 
 #ifdef _WIN32
 	bool TaskbarItem::connect(HWND hwnd, HBRUSH background, HBRUSH foreground)
 	{
-		if (!hwnd || !background || !foreground)
+		if (!hwnd)
 		{
 			return false;
 		}
