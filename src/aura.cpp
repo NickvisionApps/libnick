@@ -11,14 +11,6 @@ namespace Nickvision::Aura
 		m_appInfo.setName(name);
 	}
 
-	Aura::~Aura()
-	{
-		for (const std::pair<const std::string, ConfigurationBase*>& pair : m_configFiles)
-		{
-			delete pair.second;
-		}
-	}
-
 	AppInfo& Aura::getAppInfo()
 	{
 		return m_appInfo;

@@ -16,10 +16,6 @@ namespace Nickvision::Aura
 	{
 	public:
 		/**
-		 * @brief Destructs an Aura object.
-		 */
-		~Aura();
-		/**
 		 * @brief Gets the AppInfo object for the application.
 		 */
 		AppInfo& getAppInfo();
@@ -35,15 +31,15 @@ namespace Nickvision::Aura
 			static_assert(std::is_base_of_v<ConfigurationBase, T> == true, "T must derive from ConfigurationBase");
 			if (!m_configFiles.contains(key))
 			{
-				m_configFiles[key] = static_cast<ConfigurationBase*>(new T(key));
+				m_configFiles[key] = std::make_unique<T>(key);
 			}
-			return *static_cast<T*>(m_configFiles[key]);
+			return *static_cast<T*>(m_configFiles[key].get());
 		}
 
 	private:
 		Aura(const std::string& id, const std::string& name);
 		AppInfo m_appInfo;
-		std::map<std::string, ConfigurationBase*> m_configFiles;
+		std::map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
 
 	public:
 		/**
