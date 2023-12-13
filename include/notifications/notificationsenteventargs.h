@@ -41,6 +41,7 @@ namespace Nickvision::Aura::Notifications
 		 * @return The parameter of the additional action
 		 */
 		const std::string& getActionParam() const;
+
 	protected:
 		std::string m_message;
 		NotificationSeverity m_severity;

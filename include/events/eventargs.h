@@ -12,7 +12,7 @@ namespace Nickvision::Aura::Events
 		/**
 		 * @brief Constructs an EventArgs.
 		 */
-		EventArgs();
+		EventArgs() = default;
 	};
 }
 
