@@ -1,5 +1,5 @@
-#ifndef TASKBAR_ITEM_H
-#define TASKBAR_ITEM_H
+#ifndef TASKBARITEM_H
+#define TASKBARITEM_H
 
 #include "progressstate.h"
 #ifdef _WIN32
@@ -99,4 +99,4 @@ namespace Nickvision::Aura::Taskbar
 	};
 }
 
-#endif //TASKBAR_ITEM_H
+#endif //TASKBARITEM_H

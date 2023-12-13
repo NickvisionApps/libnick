@@ -1,5 +1,5 @@
-#ifndef PROGRESS_STATE_H
-#define PROGRESS_STATE_H
+#ifndef PROGRESSSTATE_H
+#define PROGRESSSTATE_H
 
 namespace Nickvision::Aura::Taskbar
 {
@@ -16,4 +16,4 @@ namespace Nickvision::Aura::Taskbar
 	};
 }
 
-#endif //PROGRESS_STATE_H
+#endif //PROGRESSSTATE_H
