@@ -5,7 +5,9 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <atlbase.h>
+#include <gdiplus.h>
 #include <shlobj_core.h>
+#pragma comment(lib,"gdiplus.lib")
 #endif
 
 namespace Nickvision::Aura::Taskbar
@@ -78,11 +80,9 @@ namespace Nickvision::Aura::Taskbar
 		/**
 		 * @brief Connects a taskbar item to the application.
 		 * @param hwnd The HWND of the application
-		 * @param background The brush to use for the background of the count icon
-		 * @param foreground The brush to use for the foreground of the count icon
 		 * @return True if connectin successful, else false
 		 */
-		bool connect(HWND hwnd, HBRUSH background, HBRUSH foreground);
+		bool connect(HWND hwnd);
 #endif
 
 	private:
@@ -93,9 +93,8 @@ namespace Nickvision::Aura::Taskbar
 		long m_count;
 #ifdef _WIN32
 		HWND m_hwnd;
-		HBRUSH m_background;
-		HBRUSH m_foreground;
 		CComPtr<ITaskbarList3> m_taskbar;
+		ULONG_PTR m_gdi;
 #endif
 	};
 }

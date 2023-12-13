@@ -1,4 +1,9 @@
 #include "taskbar/taskbaritem.h"
+#include <memory>
+#include <string>
+#ifdef _WIN32
+using namespace Gdiplus;
+#endif
 
 namespace Nickvision::Aura::Taskbar
 {
@@ -10,19 +15,23 @@ namespace Nickvision::Aura::Taskbar
 		m_count{ 0 }
 	{
 #ifdef _WIN32
+		GdiplusStartupInput gdiStartupIn;
+		GdiplusStartupOutput gdiStartupOut;
 		CoInitialize(nullptr);
+		GdiplusStartup(&m_gdi, &gdiStartupIn, &gdiStartupOut);
 		m_hwnd = nullptr;
-		m_background = nullptr;
-		m_foreground = nullptr;
 		m_taskbar = nullptr;
 #endif
 	}
 
 	TaskbarItem::~TaskbarItem()
 	{
-		setCountVisible(false);
 		setProgressState(ProgressState::NoProgress);
 		setUrgent(false);
+		setCountVisible(false);
+#ifdef _WIN32
+		GdiplusShutdown(m_gdi);
+#endif
 	}
 
 	ProgressState TaskbarItem::getProgressState() const
@@ -36,7 +45,7 @@ namespace Nickvision::Aura::Taskbar
 #ifdef _WIN32
 		if (m_taskbar)
 		{
-			m_taskbar->SetProgressState(m_hwnd, (TBPFLAG)m_progressState) == S_OK;
+			m_taskbar->SetProgressState(m_hwnd, (TBPFLAG)m_progressState);
 		}
 #endif
 	}
@@ -52,7 +61,7 @@ namespace Nickvision::Aura::Taskbar
 #ifdef _WIN32
 		if (m_taskbar)
 		{
-			m_taskbar->SetProgressValue(m_hwnd, static_cast<unsigned long>(progress * 100), 100u) == S_OK;
+			m_taskbar->SetProgressValue(m_hwnd, static_cast<unsigned long>(progress * 100), 100u);
 		}
 #endif
 		setProgressState(ProgressState::Normal);
@@ -91,13 +100,28 @@ namespace Nickvision::Aura::Taskbar
 #ifdef _WIN32
 		if (m_taskbar)
 		{
-			if (!countVisible)
+			if (!m_countVisible)
 			{
-				m_taskbar->SetOverlayIcon(m_hwnd, nullptr, L"") == S_OK;
+				m_taskbar->SetOverlayIcon(m_hwnd, nullptr, L"");
 			}
 			else
 			{
-					
+				Graphics windowGraphics{ m_hwnd };
+				SolidBrush background{ Color::Color(0, 0, 0) };
+				SolidBrush foreground{ Color::Color(255, 255, 255) };
+				Bitmap bitmap{ 16, 16, &windowGraphics };
+				Graphics graphics{ &bitmap };
+				FontFamily fontFamily{ L"Microsoft Sans Serif" };
+				Font font{ &fontFamily, m_count <= 99 ? (m_count < 10 ? 9.0f : 7.5f) : 7.0f };
+				std::wstring countStr{ m_count > 99 ? L"99+" : std::to_wstring(m_count) };
+				SizeF stringSize;
+				graphics.MeasureString(countStr.c_str(), (int)countStr.length(), &font, SizeF(16, 16), StringFormat::GenericDefault(), &stringSize);
+				graphics.FillEllipse(&background, Rect(0, 0, 16, 16));
+				graphics.DrawString(countStr.c_str(), (int)countStr.length(), &font, PointF((16 - stringSize.Width) / 2, (16 - stringSize.Height) / 2), &foreground);
+				HICON icon{ nullptr };
+				bitmap.GetHICON(&icon);
+				m_taskbar->SetOverlayIcon(m_hwnd, icon, std::to_wstring(m_count).c_str());
+				DestroyIcon(icon);
 			}
 		}
 #endif
@@ -115,7 +139,7 @@ namespace Nickvision::Aura::Taskbar
 	}
 
 #ifdef _WIN32
-	bool TaskbarItem::connect(HWND hwnd, HBRUSH background, HBRUSH foreground)
+	bool TaskbarItem::connect(HWND hwnd)
 	{
 		if (!hwnd)
 		{
@@ -124,8 +148,6 @@ namespace Nickvision::Aura::Taskbar
 		if (CoCreateInstance(CLSID_TaskbarList, nullptr, CLSCTX_ALL, __uuidof(ITaskbarList3), (LPVOID*)&m_taskbar) == S_OK)
 		{
 			m_hwnd = hwnd;
-			m_background = background;
-			m_foreground = foreground;
 			m_taskbar->HrInit();
 			return true;
 		}
