@@ -42,7 +42,7 @@ namespace Nickvision::Aura::Network
 	private:
 		Events::Event<NetworkStateChangedEventArgs> m_stateChanged;
 		NetworkState m_connectionState;
-#ifndef _WIN32
+#ifdef __linux__
 		unsigned long m_networkChangedHandlerId;
 #endif
 	};

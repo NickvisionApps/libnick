@@ -12,7 +12,7 @@ namespace Nickvision::Aura
 		{
 #ifdef _WIN32
 			return StringHelpers::split<std::filesystem::path>(var, ";");
-#else
+#elif defined(__linux__)
 			return StringHelpers::split<std::filesystem::path>(var, ":");
 #endif
 		}
@@ -26,7 +26,7 @@ namespace Nickvision::Aura
 		{
 #ifdef _WIN32
 			return StringHelpers::split<std::filesystem::path>(var, ";");
-#else
+#elif defined(__linux__)
 			return StringHelpers::split<std::filesystem::path>(var, ":");
 #endif
 		}
@@ -40,7 +40,7 @@ namespace Nickvision::Aura
 		{
 #ifdef _WIN32
 			return StringHelpers::split<std::filesystem::path>(var, ";");
-#else
+#elif defined(__linux__)
 			return StringHelpers::split<std::filesystem::path>(var, ":");
 #endif
 		}

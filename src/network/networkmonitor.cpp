@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <atlbase.h>
 #include <netlistmgr.h>
-#else
+#elif defined(__linux__)
 #include <glib.h>
 #include <gio/gio.h>
 #endif
@@ -17,7 +17,7 @@ namespace Nickvision::Aura::Network
 	{
 #ifdef _WIN32
 		CoInitialize(nullptr);
-#else
+#elif defined(__linux__)
 		m_networkChangedHandlerId = g_signal_connect_data(G_OBJECT(g_network_monitor_get_default()), "network-changed", G_CALLBACK((void(*)(GNetworkMonitor*, bool, void*))([](GNetworkMonitor*, bool, void* data)
 		{
 			static_cast<NetworkMonitor*>(data)->checkConnectionState();
@@ -27,7 +27,7 @@ namespace Nickvision::Aura::Network
 
 	NetworkMonitor::~NetworkMonitor()
 	{
-#ifndef _WIN32
+#ifdef __linux__
 		g_signal_handler_disconnect(G_OBJECT(g_network_monitor_get_default()), m_networkChangedHandlerId);
 #endif
 	}
@@ -74,7 +74,7 @@ namespace Nickvision::Aura::Network
 					}
 				}
 			}
-#else
+#elif defined(__linux__)
 			GNetworkMonitor* netMon{ g_network_monitor_get_default() };
 			GNetworkConnectivity connection{ g_network_monitor_get_connectivity(netMon) };
 			switch (connection)

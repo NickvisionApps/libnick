@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "network/networkmonitor.h"
-#ifndef _WIN32
+#ifdef __linux__
 #include <stdlib.h>
 #endif
 
@@ -20,7 +20,7 @@ TEST(NetworkTests, DisableNetCheck)
 {
 #ifdef _WIN32
 	ASSERT_EQ(_putenv("AURA_DISABLE_NETCHECK=true"), 0);
-#else
+#elif defined(__linux__)
 	ASSERT_EQ(setenv("AURA_DISABLE_NETCHECK", "true", true), 0);
 #endif
 	NetworkMonitor netmon;

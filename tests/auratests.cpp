@@ -77,7 +77,7 @@ TEST_F(AuraTest, DependencyCheckCmd)
 }
 #endif
 
-#ifndef _WIN32
+#ifdef __linux__
 TEST_F(AuraTest, DependencyCheckLs)
 {
 	ASSERT_FALSE(DependencyLocator::find("ls").empty());
