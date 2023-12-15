@@ -115,7 +115,11 @@ namespace Nickvision::Aura::Filesystem
 					{
 						continue;
 					}
-					m_changed.invoke({ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])), static_cast<FileAction>(info->Action) });
+					std::filesystem::path changed{ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])) };
+					if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
+					{
+						m_changed.invoke({ changed , static_cast<FileAction>(info->Action) });
+					}
 				}
 			}
 			else
