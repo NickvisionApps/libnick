@@ -6,15 +6,15 @@ using namespace Nickvision::Aura::Taskbar;
 class TaskbarTest : public testing::Test 
 {
 public:
-	static std::shared_ptr<TaskbarItem> m_taskbar;
+	static std::unique_ptr<TaskbarItem> m_taskbar;
 
 	static void SetUpTestSuite()
 	{
-		m_taskbar = std::make_shared<TaskbarItem>();
+		m_taskbar = std::make_unique<TaskbarItem>();
 	}
 };
 
-std::shared_ptr<TaskbarItem> TaskbarTest::m_taskbar = nullptr;
+std::unique_ptr<TaskbarItem> TaskbarTest::m_taskbar = nullptr;
 
 #ifdef _WIN32
 TEST_F(TaskbarTest, ConnectWindows)
