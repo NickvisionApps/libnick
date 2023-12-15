@@ -1,6 +1,8 @@
 #ifndef TASKBARITEM_H
 #define TASKBARITEM_H
 
+#include <memory>
+#include <string>
 #include "progressstate.h"
 #ifdef _WIN32
 #include <windows.h>
@@ -8,6 +10,9 @@
 #include <gdiplus.h>
 #include <shlobj_core.h>
 #pragma comment(lib,"gdiplus.lib")
+#elif defined(__linux__)
+#include <glib.h>
+#include <gio/gio.h>
 #endif
 
 namespace Nickvision::Aura::Taskbar
@@ -80,9 +85,16 @@ namespace Nickvision::Aura::Taskbar
 		/**
 		 * @brief Connects a taskbar item to the application.
 		 * @param hwnd The HWND of the application
-		 * @return True if connectin successful, else false
+		 * @return True if connection successful, else false
 		 */
 		bool connect(HWND hwnd);
+#elif defined(__linux__)
+		/**
+		 * @brief Connects a taskbar item to the application.
+		 * @param desktopFile Desktop file name with extension
+		 * @return True if connection successful, else false
+		 */
+		bool connect(const std::string& desktopFile);
 #endif
 
 	private:
@@ -95,6 +107,9 @@ namespace Nickvision::Aura::Taskbar
 		HWND m_hwnd;
 		CComPtr<ITaskbarList3> m_taskbar;
 		ULONG_PTR m_gdi;
+#elif defined(__linux__)
+		std::shared_ptr<GDBusConnection> m_connection;
+		std::string m_appUri;
 #endif
 	};
 }

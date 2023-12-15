@@ -1,10 +1,11 @@
 #include "taskbar/taskbaritem.h"
-#include <memory>
-#include <string>
+#include <array>
 #ifdef _WIN32
 #include <dwmapi.h>
 #pragma comment(lib,"dwmapi.lib")
 using namespace Gdiplus;
+#elif defined(__linux__)
+#include <stdlib.h>
 #endif
 
 namespace Nickvision::Aura::Taskbar
@@ -23,6 +24,9 @@ namespace Nickvision::Aura::Taskbar
 		GdiplusStartup(&m_gdi, &gdiStartupIn, &gdiStartupOut);
 		m_hwnd = nullptr;
 		m_taskbar = nullptr;
+#elif defined(__linux__)
+		m_connection = nullptr;
+		m_appUri = "";
 #endif
 	}
 
@@ -49,6 +53,17 @@ namespace Nickvision::Aura::Taskbar
 		{
 			m_taskbar->SetProgressState(m_hwnd, (TBPFLAG)m_progressState);
 		}
+#elif defined(__linux__)
+		if (m_connection)
+		{
+			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress-visible"), g_variant_new_bool(m_progressState >= ProgressState::Normal)) };
+			GVariant* tuple{ g_variant_new_tuple(params, 2) };
+			g_dbus_message_set_body(message, tuple);
+			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_object_unref(G_OBJECT(message));
+			g_object_unref(G_OBJECT(tuple));
+		}
 #endif
 	}
 
@@ -63,7 +78,18 @@ namespace Nickvision::Aura::Taskbar
 #ifdef _WIN32
 		if (m_taskbar)
 		{
-			m_taskbar->SetProgressValue(m_hwnd, static_cast<unsigned long>(progress * 100), 100u);
+			m_taskbar->SetProgressValue(m_hwnd, static_cast<unsigned long>(m_progress * 100), 100u);
+		}
+#elif defined(__linux__)
+		if (m_connection)
+		{
+			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress"), g_variant_new_double(m_progress)) };
+			GVariant* tuple{ g_variant_new_tuple(params, 2) };
+			g_dbus_message_set_body(message, tuple);
+			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_object_unref(G_OBJECT(message));
+			g_object_unref(G_OBJECT(tuple));
 		}
 #endif
 		setProgressState(ProgressState::Normal);
@@ -83,10 +109,21 @@ namespace Nickvision::Aura::Taskbar
 			FLASHWINFO flashInfo;
 			flashInfo.cbSize = sizeof(FLASHWINFO);
 			flashInfo.hwnd = m_hwnd;
-			flashInfo.dwFlags = urgent ? (FLASHW_TRAY | FLASHW_TIMER) : FLASHW_STOP;
+			flashInfo.dwFlags = m_urgent ? (FLASHW_TRAY | FLASHW_TIMER) : FLASHW_STOP;
 			flashInfo.uCount = UINT_MAX;
 			flashInfo.dwTimeout = 0;
 			FlashWindowEx(&flashInfo);
+		}
+#elif defined(__linux__)
+		if (m_connection)
+		{
+			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("urgent"), g_variant_new_bool(m_urgent)) };
+			GVariant* tuple{ g_variant_new_tuple(params, 2) };
+			g_dbus_message_set_body(message, tuple);
+			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_object_unref(G_OBJECT(message));
+			g_object_unref(G_OBJECT(tuple));
 		}
 #endif
 	}
@@ -128,6 +165,17 @@ namespace Nickvision::Aura::Taskbar
 				DestroyIcon(icon);
 			}
 		}
+#elif defined(__linux__)
+		if (m_connection)
+		{
+			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("count-visible"), g_variant_new_bool(m_countVisible)) };
+			GVariant* tuple{ g_variant_new_tuple(params, 2) };
+			g_dbus_message_set_body(message, tuple);
+			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_object_unref(G_OBJECT(message));
+			g_object_unref(G_OBJECT(tuple));
+		}
 #endif
 	}
 
@@ -139,6 +187,18 @@ namespace Nickvision::Aura::Taskbar
 	void TaskbarItem::setCount(long count)
 	{
 		m_count = count;
+#ifdef __linux__
+		if (m_connection)
+		{
+			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("count"), g_variant_new_int64(m_count)) };
+			GVariant* tuple{ g_variant_new_tuple(params, 2) };
+			g_dbus_message_set_body(message, tuple);
+			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_object_unref(G_OBJECT(message));
+			g_object_unref(G_OBJECT(tuple));
+		}
+#endif
 		setCountVisible(count >= 0);
 	}
 
@@ -152,7 +212,25 @@ namespace Nickvision::Aura::Taskbar
 		if (CoCreateInstance(CLSID_TaskbarList, nullptr, CLSCTX_ALL, __uuidof(ITaskbarList3), (LPVOID*)&m_taskbar) == S_OK)
 		{
 			m_hwnd = hwnd;
-			m_taskbar->HrInit();
+			return m_taskbar->HrInit() == S_OK;
+		}
+		return false;
+	}
+#elif defined(__linux__)
+	bool TaskbarItem::connect(const std::string& desktopFile)
+	{
+		if (desktopFile.empty())
+		{
+			reutrn false;
+		}
+		m_connection = { g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr), [](GDBusConnection* connection)
+		{
+			g_dbus_connection_close_sync(connection, nullptr, nullptr);
+			g_object_unref(G_OBJECT(connection));
+		}};
+		if (m_connection)
+		{
+			m_appUri = "application://" + desktopFile;
 			return true;
 		}
 		return false;
