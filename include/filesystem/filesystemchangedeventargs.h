@@ -2,7 +2,7 @@
 #define FILESYSTEMCHANGEDEVENTARGS_H
 
 #include <filesystem>
-#include "watcherflags.h"
+#include "fileaction.h"
 #include "events/eventargs.h"
 
 namespace Nickvision::Aura::Filesystem
@@ -16,23 +16,23 @@ namespace Nickvision::Aura::Filesystem
 		/**
 		 * @brief Constructs a FileSystemChangedEventArgs.
 		 * @param path The path of the file/folder that changed
-		 * @param why The flag that was changed on the file/folder
+		 * @param why The action that caused the file to change
 		 */
-		FileSystemChangedEventArgs(const std::filesystem::path& path, WatcherFlags why);
+		FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why);
 		/**
 		 * @brief Gets the path of the changed file system object.
 		 * @return The path of the changed file/folder
 		 */
 		const std::filesystem::path& getPath() const;
 		/**
-		 * @brief Gets the flag that was changed on the file system object.
-		 * @return The flah that was changed on the file/folder
+		 * @brief Gets the action that caused the file to change.
+		 * @return The action that caused the file to change
 		 */
-		WatcherFlags getWhy() const;
+		FileAction getWhy() const;
 
 	private:
 		std::filesystem::path m_path;
-		WatcherFlags m_why;
+		FileAction m_why;
 	};
 }
 

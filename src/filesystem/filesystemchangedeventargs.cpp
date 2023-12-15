@@ -2,7 +2,7 @@
 
 namespace Nickvision::Aura::Filesystem
 {
-	FileSystemChangedEventArgs::FileSystemChangedEventArgs(const std::filesystem::path& path, WatcherFlags why)
+	FileSystemChangedEventArgs::FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why)
 		: m_path{ path },
 		m_why{ why }
 	{
@@ -14,7 +14,7 @@ namespace Nickvision::Aura::Filesystem
 		return m_path;
 	}
 
-	WatcherFlags FileSystemChangedEventArgs::getWhy() const
+	FileAction FileSystemChangedEventArgs::getWhy() const
 	{
 		return m_why;
 	}
