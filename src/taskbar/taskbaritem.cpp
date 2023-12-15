@@ -57,10 +57,10 @@ namespace Nickvision::Aura::Taskbar
 		if (m_connection)
 		{
 			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
-			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress-visible"), g_variant_new_bool(m_progressState >= ProgressState::Normal)) };
+			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress-visible"), g_variant_new_boolean(m_progressState >= ProgressState::Normal)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
 			g_object_unref(G_OBJECT(tuple));
 		}
@@ -84,10 +84,10 @@ namespace Nickvision::Aura::Taskbar
 		if (m_connection)
 		{
 			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
-			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress"), g_variant_new_double(m_progress)) };
+			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress"), g_variant_new_double(m_progress)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
 			g_object_unref(G_OBJECT(tuple));
 		}
@@ -118,10 +118,10 @@ namespace Nickvision::Aura::Taskbar
 		if (m_connection)
 		{
 			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
-			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("urgent"), g_variant_new_bool(m_urgent)) };
+			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("urgent"), g_variant_new_boolean(m_urgent)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
 			g_object_unref(G_OBJECT(tuple));
 		}
@@ -169,10 +169,10 @@ namespace Nickvision::Aura::Taskbar
 		if (m_connection)
 		{
 			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
-			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("count-visible"), g_variant_new_bool(m_countVisible)) };
+			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("count-visible"), g_variant_new_boolean(m_countVisible)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
 			g_object_unref(G_OBJECT(tuple));
 		}
@@ -191,10 +191,10 @@ namespace Nickvision::Aura::Taskbar
 		if (m_connection)
 		{
 			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
-			GVariant* params[2]{ g_variant_new_string(m_appUrl.c_str()), g_variant_new_dict_entry(g_variant_new_string("count"), g_variant_new_int64(m_count)) };
+			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("count"), g_variant_new_int64(m_count)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_bus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
 			g_object_unref(G_OBJECT(tuple));
 		}
@@ -221,7 +221,7 @@ namespace Nickvision::Aura::Taskbar
 	{
 		if (desktopFile.empty())
 		{
-			reutrn false;
+			return false;
 		}
 		m_connection = { g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr), [](GDBusConnection* connection)
 		{
