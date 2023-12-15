@@ -5,9 +5,16 @@ namespace Nickvision::Aura::Filesystem
 {
 	FileSystemWatcher::FileSystemWatcher(const std::filesystem::path& path, WatcherFlags watcherFlags)
 		: m_path{ path },
-		m_watcherFlags{ watcherFlags }
+		m_watching{ true },
+		m_watcherFlags{ watcherFlags },
+		m_watchThread{ &FileSystemWatcher::watch, this }
 	{
+		
+	}
 
+	FileSystemWatcher::~FileSystemWatcher()
+	{
+		m_watching = false;
 	}
 
 	const std::filesystem::path& FileSystemWatcher::getPath() const
@@ -25,8 +32,15 @@ namespace Nickvision::Aura::Filesystem
 		return m_watcherFlags;
 	}
 
+	bool FileSystemWatcher::containsExtension(const std::filesystem::path& extension)
+	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
+		return std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) != m_extensionFilters.end();
+	}
+
 	bool FileSystemWatcher::addExtensionFilter(const std::filesystem::path& extension)
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) == m_extensionFilters.end())
 		{
 			m_extensionFilters.push_back(extension);
@@ -37,6 +51,7 @@ namespace Nickvision::Aura::Filesystem
 
 	bool FileSystemWatcher::removeExtensionFilter(const std::filesystem::path& extension)
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		auto find{ std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) };
 		if (find != m_extensionFilters.end())
 		{
@@ -48,7 +63,16 @@ namespace Nickvision::Aura::Filesystem
 
 	bool FileSystemWatcher::clearExtensionFilters()
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_extensionFilters.clear();
 		return true;
+	}
+
+	void FileSystemWatcher::watch()
+	{
+		while (m_watching)
+		{
+
+		}
 	}
 }

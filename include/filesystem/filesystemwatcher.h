@@ -2,6 +2,8 @@
 #define FILESYSTEMWATCHER_H
 
 #include <filesystem>
+#include <mutex>
+#include <thread>
 #include <vector>
 #include "filesystemchangedeventargs.h"
 #include "watcherflags.h"
@@ -22,6 +24,10 @@ namespace Nickvision::Aura::Filesystem
 		 */
 		FileSystemWatcher(const std::filesystem::path& path, WatcherFlags watcherFlags);
 		/**
+		 * @brief Deconstructs a FileSystemWatcher. 
+		 */
+		~FileSystemWatcher();
+		/**
 		 * @brief Gets the path of the file system object being watched.
 		 * @return The path of the folder being watched
 		 */
@@ -36,6 +42,12 @@ namespace Nickvision::Aura::Filesystem
 		 * @return The flags of watched properties
 		 */
 		WatcherFlags getWatcherFlags() const;
+		/**
+		 * @brief Gets whether or not the file extension is being watched.
+		 * @param extension The file extension to check
+		 * @return True if watched, else false
+		 */
+		bool containsExtension(const std::filesystem::path& extension);
 		/**
 		 * @brief Adds an extension of a file to watch for changes in the folder.
 		 * @param extension The file extension to add
@@ -55,10 +67,17 @@ namespace Nickvision::Aura::Filesystem
 		bool clearExtensionFilters();
 
 	private:
+		/**
+		 * @brief Runs the loop to watch a folder for changes.
+		 */
+		void watch();
+		mutable std::mutex m_mutex;
 		std::filesystem::path m_path;
+		bool m_watching;
 		Events::Event<FileSystemChangedEventArgs> m_changed;
 		WatcherFlags m_watcherFlags;
 		std::vector<std::filesystem::path> m_extensionFilters;
+		std::jthread m_watchThread;
 	};
 }
 
