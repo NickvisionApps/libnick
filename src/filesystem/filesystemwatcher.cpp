@@ -109,27 +109,13 @@ namespace Nickvision::Aura::Filesystem
 				{
 					continue;
 				}
-				FILE_NOTIFY_INFORMATION* info = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(&buffer[0]);
-				while (true)
+				for(FILE_NOTIFY_INFORMATION* info = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(&buffer[0]); info->NextEntryOffset != 0; info = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(reinterpret_cast<BYTE*>(info) + info->NextEntryOffset))
 				{
-					std::filesystem::path changed{ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])) };
-					if (info->Action == FILE_ACTION_ADDED)
+					if (info->Action == FILE_ACTION_RENAMED_NEW_NAME)
 					{
-						m_changed.invoke({ changed, FileAction::Added });
+						continue;
 					}
-					else if (info->Action == FILE_ACTION_REMOVED)
-					{
-						m_changed.invoke({ changed, FileAction::Removed });
-					}
-					else if (info->Action == FILE_ACTION_MODIFIED)
-					{
-						m_changed.invoke({ changed, FileAction::Modified });
-					}
-					else if(info->Action == FILE_ACTION_RENAMED_OLD_NAME)
-					{
-						m_changed.invoke({ changed, FileAction::Renamed });
-					}
-					info = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(reinterpret_cast<BYTE*>(info) + info->NextEntryOffset);
+					m_changed.invoke({ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])), static_cast<FileAction>(info->Action) });
 				}
 			}
 			else
