@@ -86,6 +86,7 @@ if(NOT SKIP_TESTS)
 	add_executable(${PROJECT_NAME}_test
 		tests/auratests.cpp
 		tests/eventtests.cpp
+		tests/filewatchertests.cpp
 		tests/keyringtests.cpp
 		tests/main.cpp
 		tests/networktests.cpp
