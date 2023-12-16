@@ -22,7 +22,7 @@ namespace Nickvision::Aura::Filesystem
 		 * @param path The path of the folder to watch
 		 * @param watcherFlags The flags of what to watch changes for
 		 */
-		FileSystemWatcher(const std::filesystem::path& path, WatcherFlags watcherFlags);
+		FileSystemWatcher(const std::filesystem::path& path, WatcherFlags watcherFlags = WatcherFlags::FileName | WatcherFlags::DirectoryName | WatcherFlags::Atributes | WatcherFlags::Size | WatcherFlags::LastWrite | WatcherFlags::LastAccess | WatcherFlags::CreationTime | WatcherFlags::Security);
 		/**
 		 * @brief Deconstructs a FileSystemWatcher. 
 		 */
