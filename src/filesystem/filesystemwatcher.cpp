@@ -98,29 +98,39 @@ namespace Nickvision::Aura::Filesystem
 		while (m_watching)
 		{
 #ifdef _WIN32
+			DWORD waitResult{ 0 };
 			ReadDirectoryChangesW(folder, buffer.data(), static_cast<DWORD>(buffer.size()), true, (DWORD)m_watcherFlags, &bytes, &overlapped, nullptr);
-			if (WaitForSingleObject(overlapped.hEvent, INFINITE) == WAIT_OBJECT_0)
+			if ((waitResult = WaitForSingleObject(overlapped.hEvent, 100)) == WAIT_OBJECT_0)
 			{
-				if (!GetOverlappedResult(folder, &overlapped, &bytes, true))
+				if (!m_watching || !GetOverlappedResult(folder, &overlapped, &bytes, true))
 				{
 					break;
 				}
-				if (bytes != 0)
+				if (bytes == 0)
 				{
 					continue;
 				}
-				for(FILE_NOTIFY_INFORMATION* info = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(&buffer[0]); info->NextEntryOffset != 0; info = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(reinterpret_cast<BYTE*>(info) + info->NextEntryOffset))
+				while (true)
 				{
-					if (info->Action == FILE_ACTION_RENAMED_NEW_NAME)
+					FILE_NOTIFY_INFORMATION* info{ reinterpret_cast<FILE_NOTIFY_INFORMATION*>(&buffer[0]) };
+					if (info->Action != FILE_ACTION_RENAMED_NEW_NAME)
 					{
-						continue;
+						std::filesystem::path changed{ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])) };
+						if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
+						{
+							m_changed.invoke({ changed , static_cast<FileAction>(info->Action) });
+						}
 					}
-					std::filesystem::path changed{ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])) };
-					if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
+					if (info->NextEntryOffset == 0)
 					{
-						m_changed.invoke({ changed , static_cast<FileAction>(info->Action) });
+						break;
 					}
+					info = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(reinterpret_cast<BYTE*>(info) + info->NextEntryOffset);
 				}
+			}
+			else if (waitResult == WAIT_TIMEOUT)
+			{
+				continue;
 			}
 			else
 			{
