@@ -34,23 +34,24 @@ TEST_F(FileWatcherTest, AddFileA)
 {
 	std::ofstream out{ a };
 	ASSERT_NO_THROW(out.close());
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 TEST_F(FileWatcherTest, AddFileB)
 {
 	std::ofstream out{ b };
 	ASSERT_NO_THROW(out.close());
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 TEST_F(FileWatcherTest, CheckResults)
 {
-	std::this_thread::sleep_for(std::chrono::seconds(2));
-	ASSERT_NO_THROW(m_watcher.reset());
 	ASSERT_EQ(m_modifications, 1);	
 }
 
 TEST_F(FileWatcherTest, Cleanup)
 {
+	ASSERT_NO_THROW(m_watcher.reset());
 	ASSERT_TRUE(std::filesystem::remove(a));
 	ASSERT_TRUE(std::filesystem::remove(b));
 }
