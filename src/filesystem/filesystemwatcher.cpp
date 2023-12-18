@@ -1,12 +1,5 @@
 #include "filesystem/filesystemwatcher.h"
 #include <algorithm>
-#ifdef _WIN32
-#include <windows.h>
-#elif defined(__linux__)
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/inotify.h>
-#endif
 
 namespace Nickvision::Aura::Filesystem
 {
@@ -17,12 +10,19 @@ namespace Nickvision::Aura::Filesystem
 		m_watching{ true },
 		m_watchThread{ &FileSystemWatcher::watch, this }
 	{
-
+		
 	}
 
 	FileSystemWatcher::~FileSystemWatcher()
 	{
 		m_watching = false;
+#ifdef _WIN32
+		if (m_terminateEvent)
+		{
+			SetEvent(m_terminateEvent);
+			CloseHandle(m_terminateEvent);
+		}
+#endif
 	}
 
 	const std::filesystem::path& FileSystemWatcher::getPath() const
@@ -84,6 +84,11 @@ namespace Nickvision::Aura::Filesystem
 	void FileSystemWatcher::watch()
 	{
 #ifdef _WIN32
+		m_terminateEvent = CreateEventA(nullptr, 1, 0, nullptr);
+		if (!m_terminateEvent)
+		{
+			return;
+		}
 		HANDLE folder{ CreateFileW(m_path.c_str(), FILE_LIST_DIRECTORY, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, nullptr) };
 		if (folder == INVALID_HANDLE_VALUE)
 		{
@@ -99,10 +104,11 @@ namespace Nickvision::Aura::Filesystem
 		std::vector<BYTE> buffer(1024 * 256);
 		DWORD bytes{ 0 };
 		bool pending{ false };
+		HANDLE events[2]{ overlapped.hEvent, m_terminateEvent };
 		while (m_watching)
 		{
 			pending = ReadDirectoryChangesW(folder, &buffer[0], DWORD(buffer.size()), m_includeSubdirectories ? 1 : 0, DWORD(m_watcherFlags), &bytes, &overlapped, nullptr);
-			if (WaitForSingleObject(overlapped.hEvent, INFINITE) == WAIT_OBJECT_0)
+			if (WaitForMultipleObjects(2, events, 0, INFINITE) == WAIT_OBJECT_0)
 			{
 				if (!GetOverlappedResult(folder, &overlapped, &bytes, 1) || bytes == 0)
 				{

@@ -8,6 +8,9 @@
 #include "filesystemchangedeventargs.h"
 #include "watcherflags.h"
 #include "events/event.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace Nickvision::Aura::Filesystem
 {
@@ -85,6 +88,9 @@ namespace Nickvision::Aura::Filesystem
 		bool m_watching;
 		std::vector<std::filesystem::path> m_extensionFilters;
 		std::jthread m_watchThread;
+#ifdef _WIN32
+		HANDLE m_terminateEvent;
+#endif
 	};
 }
 
