@@ -63,7 +63,7 @@ namespace Nickvision::Aura::Update
 			Json::Reader reader;
 			if (reader.parse(release, root, false))
 			{
-				for (const Json::Value& asset : root["assets"])
+				for (const Json::Value& asset : root.get("assets", {}))
 				{
 					std::string name{ asset.get("name", "").asString() };
 					if (StringHelpers::toLower(name).find("setup.exe") != std::string::npos)
@@ -96,7 +96,7 @@ namespace Nickvision::Aura::Update
 			{
 				for (const Json::Value& release : root)
 				{
-					std::string version{ release.get("tag_name", "").asString() };
+					std::string version{ release.get("tag_name", "0.0.0").asString() };
 					if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
 					{
 						m_latestStableReleaseId = release.get("id", -1).asInt();
