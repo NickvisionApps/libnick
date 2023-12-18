@@ -12,7 +12,7 @@ public:
 
 	static void SetUpTestSuite()
 	{
-		m_watcher = std::make_unique<FileSystemWatcher>(std::filesystem::current_path());
+		m_watcher = std::make_unique<FileSystemWatcher>(std::filesystem::current_path(), false);
 		m_watcher->addExtensionFilter(".txt");
 		m_watcher->changed() += onChanged;
 	}

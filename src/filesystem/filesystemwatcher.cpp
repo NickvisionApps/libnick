@@ -10,10 +10,11 @@
 
 namespace Nickvision::Aura::Filesystem
 {
-	FileSystemWatcher::FileSystemWatcher(const std::filesystem::path& path, WatcherFlags watcherFlags)
+	FileSystemWatcher::FileSystemWatcher(const std::filesystem::path& path, bool incudeSubdirectories, WatcherFlags watcherFlags)
 		: m_path{ path },
-		m_watching{ true },
+		m_includeSubdirectories{ incudeSubdirectories },
 		m_watcherFlags{ watcherFlags },
+		m_watching{ true },
 		m_watchThread{ &FileSystemWatcher::watch, this }
 	{
 
@@ -29,14 +30,19 @@ namespace Nickvision::Aura::Filesystem
 		return m_path;
 	}
 
-	Events::Event<FileSystemChangedEventArgs>& FileSystemWatcher::changed()
-	{
-		return m_changed;
-	}
-
 	WatcherFlags FileSystemWatcher::getWatcherFlags() const
 	{
 		return m_watcherFlags;
+	}
+
+	bool FileSystemWatcher::getIncludeSubdirectories() const
+	{
+		return m_includeSubdirectories;
+	}
+
+	Events::Event<FileSystemChangedEventArgs>& FileSystemWatcher::changed()
+	{
+		return m_changed;
 	}
 
 	bool FileSystemWatcher::containsExtension(const std::filesystem::path& extension)
@@ -84,7 +90,7 @@ namespace Nickvision::Aura::Filesystem
 			return;
 		}
 		OVERLAPPED overlapped{ 0 };
-		overlapped.hEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
+		overlapped.hEvent = CreateEvent(nullptr, 1, 0, nullptr);
 		if (!overlapped.hEvent)
 		{
 			CloseHandle(folder);
@@ -95,10 +101,10 @@ namespace Nickvision::Aura::Filesystem
 		bool pending{ false };
 		while (m_watching)
 		{
-			pending = ReadDirectoryChangesW(folder, &buffer[0], DWORD(buffer.size()), TRUE, DWORD(m_watcherFlags), &bytes, &overlapped, nullptr);
+			pending = ReadDirectoryChangesW(folder, &buffer[0], DWORD(buffer.size()), m_includeSubdirectories ? 1 : 0, DWORD(m_watcherFlags), &bytes, &overlapped, nullptr);
 			if (WaitForSingleObject(overlapped.hEvent, INFINITE) == WAIT_OBJECT_0)
 			{
-				if (!GetOverlappedResult(folder, &overlapped, &bytes, TRUE) || bytes == 0)
+				if (!GetOverlappedResult(folder, &overlapped, &bytes, 1) || bytes == 0)
 				{
 					CloseHandle(folder);
 					return;
