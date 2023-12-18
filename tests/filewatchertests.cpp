@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <fstream>
+#include <iostream>
 #include "filesystem/filesystemwatcher.h"
 
 using namespace Nickvision::Aura::Filesystem;
@@ -29,6 +30,7 @@ int FileWatcherTest::m_modifications = 0;
 
 static std::filesystem::path a{ "a.txt" };
 static std::filesystem::path b{ "b.md" };
+static std::filesystem::path c{ "c.txt" };
 
 TEST_F(FileWatcherTest, AddFileA)
 {
@@ -44,9 +46,29 @@ TEST_F(FileWatcherTest, AddFileB)
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
-TEST_F(FileWatcherTest, CheckResults)
+TEST_F(FileWatcherTest, AddFileC)
 {
-	ASSERT_EQ(m_modifications, 1);	
+	std::ofstream out{ c };
+	ASSERT_NO_THROW(out.close());
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+}
+
+TEST_F(FileWatcherTest, WaitForNotifications)
+{
+	bool found{ true };
+	int cycles{ 0 };
+	while (m_modifications != 2)
+	{
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		cycles++;
+		if (cycles >= 200)
+		{
+			std::cout << "Timeout" << std::endl;
+			found = false;
+			break;
+		}
+	}
+	ASSERT_TRUE(found);
 }
 
 TEST_F(FileWatcherTest, Cleanup)
@@ -54,4 +76,5 @@ TEST_F(FileWatcherTest, Cleanup)
 	ASSERT_NO_THROW(m_watcher.reset());
 	ASSERT_TRUE(std::filesystem::remove(a));
 	ASSERT_TRUE(std::filesystem::remove(b));
+	ASSERT_TRUE(std::filesystem::remove(c));
 }
