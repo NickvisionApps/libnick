@@ -16,7 +16,7 @@ namespace Nickvision::Aura::Filesystem
 		m_watcherFlags{ watcherFlags },
 		m_watchThread{ &FileSystemWatcher::watch, this }
 	{
-		
+
 	}
 
 	FileSystemWatcher::~FileSystemWatcher()
@@ -77,42 +77,36 @@ namespace Nickvision::Aura::Filesystem
 
 	void FileSystemWatcher::watch()
 	{
-		//Initialization
 #ifdef _WIN32
 		HANDLE folder{ CreateFileW(m_path.c_str(), FILE_LIST_DIRECTORY, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, nullptr) };
 		if (folder == INVALID_HANDLE_VALUE)
 		{
 			return;
 		}
-		DWORD bytes{ 0 };
 		OVERLAPPED overlapped{ 0 };
-		overlapped.hEvent = CreateEventA(nullptr, true, false, nullptr);
+		overlapped.hEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
 		if (!overlapped.hEvent)
 		{
 			CloseHandle(folder);
 			return;
 		}
 		std::vector<BYTE> buffer(1024 * 256);
-#endif
-		//Watch
+		DWORD bytes{ 0 };
+		bool pending{ false };
 		while (m_watching)
 		{
-#ifdef _WIN32
-			DWORD waitResult{ 0 };
-			ReadDirectoryChangesW(folder, buffer.data(), static_cast<DWORD>(buffer.size()), true, (DWORD)m_watcherFlags, &bytes, &overlapped, nullptr);
-			if ((waitResult = WaitForSingleObject(overlapped.hEvent, 100)) == WAIT_OBJECT_0)
+			pending = ReadDirectoryChangesW(folder, &buffer[0], DWORD(buffer.size()), TRUE, DWORD(m_watcherFlags), &bytes, &overlapped, nullptr);
+			if (WaitForSingleObject(overlapped.hEvent, INFINITE) == WAIT_OBJECT_0)
 			{
-				if (!m_watching || !GetOverlappedResult(folder, &overlapped, &bytes, true))
+				if (!GetOverlappedResult(folder, &overlapped, &bytes, TRUE) || bytes == 0)
 				{
-					break;
+					CloseHandle(folder);
+					return;
 				}
-				if (bytes == 0)
+				pending = false;
+				FILE_NOTIFY_INFORMATION* info{ reinterpret_cast<FILE_NOTIFY_INFORMATION*>(&buffer[0]) };
+				while(true)
 				{
-					continue;
-				}
-				while (true)
-				{
-					FILE_NOTIFY_INFORMATION* info{ reinterpret_cast<FILE_NOTIFY_INFORMATION*>(&buffer[0]) };
 					if (info->Action != FILE_ACTION_RENAMED_NEW_NAME)
 					{
 						std::filesystem::path changed{ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])) };
@@ -128,18 +122,16 @@ namespace Nickvision::Aura::Filesystem
 					info = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(reinterpret_cast<BYTE*>(info) + info->NextEntryOffset);
 				}
 			}
-			else if (waitResult == WAIT_TIMEOUT)
-			{
-				continue;
-			}
 			else
 			{
 				break;
 			}
-#endif
 		}
-		//Cleanup
-#ifdef _WIN32
+		if (pending)
+		{
+			CancelIo(folder);
+			GetOverlappedResult(folder, &overlapped, &bytes, TRUE);
+		}
 		CloseHandle(folder);
 #endif
 	}
