@@ -25,6 +25,7 @@ namespace Nickvision::Aura::Filesystem
 		 * @param path The path of the folder to watch
 		 * @param includeSubdirectories Whether or not to include subdirectories for the folder
 		 * @param watcherFlags The flags of what to watch changes for
+		 * @exception std::runtime_error Thrown if unable to initialize watcher
 		 */
 		FileSystemWatcher(const std::filesystem::path& path, bool includeSubdirectories, WatcherFlags watcherFlags = WatcherFlags::FileName | WatcherFlags::DirectoryName | WatcherFlags::Atributes | WatcherFlags::Size | WatcherFlags::LastWrite | WatcherFlags::LastAccess | WatcherFlags::CreationTime | WatcherFlags::Security);
 		/**
@@ -90,6 +91,8 @@ namespace Nickvision::Aura::Filesystem
 		std::jthread m_watchThread;
 #ifdef _WIN32
 		HANDLE m_terminateEvent;
+#elif defined(__linux__)
+		int m_notify;
 #endif
 	};
 }

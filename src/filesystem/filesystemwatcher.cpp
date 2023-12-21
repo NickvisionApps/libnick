@@ -1,5 +1,11 @@
 #include "filesystem/filesystemwatcher.h"
 #include <algorithm>
+#include <stdexcept>
+#ifdef __linux__
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/inotify.h>
+#endif
 
 namespace Nickvision::Aura::Filesystem
 {
@@ -7,21 +13,32 @@ namespace Nickvision::Aura::Filesystem
 		: m_path{ path },
 		m_includeSubdirectories{ incudeSubdirectories },
 		m_watcherFlags{ watcherFlags },
-		m_watching{ true },
-		m_watchThread{ &FileSystemWatcher::watch, this }
+		m_watching{ true }
 	{
-		
+#ifdef _WIN32
+		m_terminateEvent = CreateEventA(nullptr, 1, 0, nullptr);
+		if (!m_terminateEvent)
+		{
+			throw std::runtime_error("Unable to create event.");
+		}
+#elif defined(__linux__)
+		m_notify = inotify_init();
+		if (m_notify == -1)
+		{
+			throw std::runtime_error("Unable to init inotify.");
+		}
+#endif
+		m_watchThread = std::jthread(&FileSystemWatcher::watch, this);
 	}
 
 	FileSystemWatcher::~FileSystemWatcher()
 	{
 		m_watching = false;
 #ifdef _WIN32
-		if (m_terminateEvent)
-		{
-			SetEvent(m_terminateEvent);
-			CloseHandle(m_terminateEvent);
-		}
+		SetEvent(m_terminateEvent);
+		CloseHandle(m_terminateEvent);
+#elif defined(__linux__)
+		close(m_notify);
 #endif
 	}
 
@@ -84,11 +101,6 @@ namespace Nickvision::Aura::Filesystem
 	void FileSystemWatcher::watch()
 	{
 #ifdef _WIN32
-		m_terminateEvent = CreateEventA(nullptr, 1, 0, nullptr);
-		if (!m_terminateEvent)
-		{
-			return;
-		}
 		HANDLE folder{ CreateFileW(m_path.c_str(), FILE_LIST_DIRECTORY, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, nullptr) };
 		if (folder == INVALID_HANDLE_VALUE)
 		{
@@ -145,6 +157,8 @@ namespace Nickvision::Aura::Filesystem
 			GetOverlappedResult(folder, &overlapped, &bytes, TRUE);
 		}
 		CloseHandle(folder);
+#elif defined(__linux__)
+		std::vector<int> watches;
 #endif
 	}
 }
