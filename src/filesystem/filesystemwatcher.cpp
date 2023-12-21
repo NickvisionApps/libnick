@@ -204,7 +204,7 @@ namespace Nickvision::Aura::Filesystem
 			{
 				if ((pfd.revents & POLLIN) == POLLIN)
 				{
-					std::vector<char> buff(4096);
+					std::vector<char> buf(4096);
 					while (true)
 					{
 						ssize_t len{ read(m_notify, buf, buf.size()) };
