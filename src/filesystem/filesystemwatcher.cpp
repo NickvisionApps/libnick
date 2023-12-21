@@ -207,7 +207,7 @@ namespace Nickvision::Aura::Filesystem
 					std::vector<char> buf(4096);
 					while (true)
 					{
-						ssize_t len{ read(m_notify, buf, buf.size()) };
+						ssize_t len{ read(m_notify, &buf[0], buf.size()) };
 						if (len == -1 && errno != EAGAIN)
 						{
 							return;
