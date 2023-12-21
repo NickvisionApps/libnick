@@ -36,18 +36,21 @@ TEST_F(FileWatcherTest, AddFileA)
 {
 	std::ofstream out{ a };
 	ASSERT_NO_THROW(out.close());
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 TEST_F(FileWatcherTest, AddFileB)
 {
 	std::ofstream out{ b };
 	ASSERT_NO_THROW(out.close());
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 TEST_F(FileWatcherTest, AddFileC)
 {
 	std::ofstream out{ c };
 	ASSERT_NO_THROW(out.close());
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 TEST_F(FileWatcherTest, CheckResults)
