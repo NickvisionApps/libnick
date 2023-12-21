@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <stdexcept>
 #ifdef __linux__
+#include <errno.h>
+#include <poll.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/inotify.h>
@@ -129,7 +131,7 @@ namespace Nickvision::Aura::Filesystem
 				}
 				pending = false;
 				FILE_NOTIFY_INFORMATION* info{ reinterpret_cast<FILE_NOTIFY_INFORMATION*>(&buffer[0]) };
-				while(true)
+				while (true)
 				{
 					if (info->Action != FILE_ACTION_RENAMED_NEW_NAME)
 					{
@@ -158,7 +160,91 @@ namespace Nickvision::Aura::Filesystem
 		}
 		CloseHandle(folder);
 #elif defined(__linux__)
-		std::vector<int> watches;
+		int mask{ 0 };
+		if ((m_watcherFlags & WatcherFlags::FileName) == WatcherFlags::FileName)
+		{
+			mask |= IN_CREATE;
+			mask |= IN_DELETE;
+			mask |= IN_MOVED_FROM;
+		}
+		if ((m_watcherFlags & WatcherFlags::DirectoryName) == WatcherFlags::DirectoryName)
+		{
+			mask |= IN_DELETE_SELF;
+			mask |= IN_MOVE_SELF;
+		}
+		if ((m_watcherFlags & WatcherFlags::Atributes) == WatcherFlags::Atributes)
+		{
+			mask |= IN_ATTRIB;
+		}
+		if ((m_watcherFlags & WatcherFlags::Size) == WatcherFlags::Size)
+		{
+			mask |= IN_MODIFY;
+		}
+		if ((m_watcherFlags & WatcherFlags::LastWrite) == WatcherFlags::LastWrite)
+		{
+			mask |= IN_CLOSE_WRITE;
+		}
+		if ((m_watcherFlags & WatcherFlags::LastAccess) == WatcherFlags::LastAccess)
+		{
+			mask |= IN_ACCESS;
+			mask |= IN_OPEN;
+		}
+		int watch{ inotify_add_watch(m_notify, m_path.c_str(), mask) };
+		struct pollfd pfd;
+		pfd.fd = m_notify;
+		pfd.events = POLLIN;
+		while (m_watching)
+		{
+			int res{ poll(&pfd, 1, 500) };
+			if (res == -1)
+			{
+				return;
+			}
+			else if (res == 1)
+			{
+				if ((pfd.revents & POLLIN) == POLLIN)
+				{
+					std::vector<char> buff(4096);
+					while (true)
+					{
+						ssize_t len{ read(m_notify, buf, buf.size()) };
+						if (len == -1 && errno != EAGAIN)
+						{
+							return;
+						}
+						if (len <= 0)
+						{
+							break;
+						}
+						const struct inotify_event* event{ nullptr };
+						for (char* ptr = buf.data(); ptr < buf.data() + len; ptr += sizeof(struct inotify_event) + event->len)
+						{
+							event = (const struct inotify_event*)ptr;
+							std::filesystem::path changed{ m_path / std::string(event->name ? event->name : "") };
+							if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
+							{
+								if (event->mask & IN_CREATE)
+								{
+									m_changed.invoke({ changed , FileAction::Added });
+								}
+								else if((event->mask & IN_DELETE) || (event->mask & IN_DELETE_SELF))
+								{
+									m_changed.invoke({ changed , FileAction::Removed });
+								}
+								else if ((event->mask & IN_MOVED_FROM) || (event->mask & IN_MOVE_SELF))
+								{
+									m_changed.invoke({ changed , FileAction::Renamed });
+								}
+								else
+								{
+									m_changed.invoke({ changed , FileAction::Modified });
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 #endif
 	}
 }
