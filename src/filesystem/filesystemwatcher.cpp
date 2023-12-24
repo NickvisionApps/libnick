@@ -190,15 +190,16 @@ namespace Nickvision::Aura::Filesystem
 		int watch{ inotify_add_watch(m_notify, m_path.c_str(), mask) };
 		while (m_watching)
 		{
-			std::vector<char> buf(1024 * (sizeof(struct inotify_evnet) + 16));
-			int length{ read(m_notify, &buf[0], buf.size()) };
+			std::vector<char> buf(1024 * (sizeof(struct inotify_event) + 16));
+			ssize_t length{ read(m_notify, &buf[0], buf.size()) };
 			if (length < 0)
 			{
 				return;
 			}
-			for (int i = 0; i < length; i += sizeof(struct inotify_evnet) + event->len)
+			struct inotify_event* event{ nullptr };
+			for (ssize_t i = 0; i < length; i += sizeof(struct inotify_event) + event->len)
 			{
-				struct inotify_event* event{ reinterpret_cast<struct inotify_event*>(&buf[i]) };
+				event = reinterpret_cast<struct inotify_event*>(&buf[i]);
 				if (event->len)
 				{
 					std::filesystem::path changed{ m_path / std::string(event->name ? event->name : "") };
