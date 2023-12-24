@@ -7,6 +7,7 @@
 #ifdef _WIN32
 #include <shlobj_core.h>
 #elif defined(__linux__)
+#include <stdlib.h>
 #include <pwd.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -14,10 +15,20 @@
 
 namespace Nickvision::Aura
 {
-	std::filesystem::path getXDGDir(const std::string& key)
+	std::string getEnvVar(const std::string& key)
 	{
 		char* var = getenv(key.c_str());
 		if (var)
+		{
+			return { var };
+		}
+		return "";
+	}
+
+	std::filesystem::path getXDGDir(const std::string& key)
+	{
+		std::string var{ getEnvVar(key) };
+		if (!var.empty())
 		{
 			return var;
 		}
@@ -58,8 +69,8 @@ namespace Nickvision::Aura
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		char* var = getenv("HOME");
-		result = var ? var : getpwuid(getuid())->pw_dir;
+		std::filesystem::path var{ getEnvVar("HOME") };
+		result = !var.empty() ? var : getpwuid(getuid())->pw_dir;
 #endif
 		return result;
 	}
@@ -75,8 +86,8 @@ namespace Nickvision::Aura
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		result = getXDGDir("XDG_CONFIG_HOME");
-		result = result.empty() ? (getHome() / ".config") : result;
+		std::filesystem::path var{ getEnvVar("XDG_CONFIG_HOME") };
+		result = !var.empty() ? var : (getHome() / ".config");
 #endif
 		std::filesystem::create_directories(result);
 		return result;
@@ -100,8 +111,8 @@ namespace Nickvision::Aura
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		result = getXDGDir("XDG_CACHE_HOME");
-		result = result.empty() ? (getHome() / ".cache") : result;
+		std::filesystem::path var{ getEnvVar("XDG_CACHE_HOME") };
+		result = !var.empty() ? var : (getHome() / ".cache");
 #endif
 		std::filesystem::create_directories(result);
 		return result;
@@ -120,8 +131,8 @@ namespace Nickvision::Aura
 #ifdef _WIN32
 		result = getConfig();
 #elif defined(__linux__)
-		result = getXDGDir("XDG_DATA_HOME");
-		result = result.empty() ? (getHome() / ".local/share") : result;
+		std::filesystem::path var{ getEnvVar("XDG_DATA_HOME") };
+		result = !var.empty() ? var : (getHome() / ".local/share");
 #endif
 		std::filesystem::create_directories(result);
 		return result;
@@ -138,8 +149,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef __linux__
-		result = getXDGDir("XDG_RUNTIME_DIR");
-		result = result.empty() ? (std::filesystem::path("/run/user/") / std::filesystem::path(getenv("UID"))) : result;
+		std::filesystem::path var{ getEnvVar("XDG_RUNTIME_DIR") };
+		result = !var.empty() ? var : (std::filesystem::path("/run/user/") / getEnvVar("UID"));
 #endif
 		return result;
 	}

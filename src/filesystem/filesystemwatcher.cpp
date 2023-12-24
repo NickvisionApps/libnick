@@ -22,7 +22,7 @@ namespace Nickvision::Aura::Filesystem
 			throw std::runtime_error("Unable to create event.");
 		}
 #elif defined(__linux__)
-		m_notify = inotify_init();
+		m_notify = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
 		if (m_notify == -1)
 		{
 			throw std::runtime_error("Unable to init inotify.");
@@ -202,7 +202,7 @@ namespace Nickvision::Aura::Filesystem
 				event = reinterpret_cast<struct inotify_event*>(&buf[i]);
 				if (event->len)
 				{
-					std::filesystem::path changed{ m_path / std::string(event->name ? event->name : "") };
+					std::filesystem::path changed{ m_path / std::string(event->name, event->len) };
 					if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
 					{
 						if (event->mask & IN_CREATE)
