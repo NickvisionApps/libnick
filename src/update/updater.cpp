@@ -97,6 +97,10 @@ namespace Nickvision::Aura::Update
 				for (const Json::Value& release : root)
 				{
 					std::string version{ release.get("tag_name", "0.0.0").asString() };
+					if (version == "0.0.0")
+					{
+						return {};
+					}
 					if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
 					{
 						m_latestStableReleaseId = release.get("id", -1).asInt();

@@ -194,7 +194,7 @@ namespace Nickvision::Aura::Filesystem
 			ssize_t length{ read(m_notify, &buf[0], buf.size()) };
 			if (length < 0)
 			{
-				return;
+				continue;
 			}
 			struct inotify_event* event{ nullptr };
 			for (ssize_t i = 0; i < length; i += sizeof(struct inotify_event) + event->len)
