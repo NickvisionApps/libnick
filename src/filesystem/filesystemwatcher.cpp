@@ -2,8 +2,6 @@
 #include <algorithm>
 #include <stdexcept>
 #ifdef __linux__
-#include <errno.h>
-#include <poll.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/inotify.h>
@@ -190,61 +188,43 @@ namespace Nickvision::Aura::Filesystem
 			mask |= IN_OPEN;
 		}
 		int watch{ inotify_add_watch(m_notify, m_path.c_str(), mask) };
-		struct pollfd pfd;
-		pfd.fd = m_notify;
-		pfd.events = POLLIN;
 		while (m_watching)
 		{
-			int res{ poll(&pfd, 1, 500) };
-			if (res == -1)
+			std::vector<char> buf(1024 * (sizeof(struct inotify_evnet) + 16));
+			int length{ read(m_notify, &buf[0], buf.size()) };
+			if (length < 0)
 			{
 				return;
 			}
-			else if (res == 1)
+			for (int i = 0; i < length; i += sizeof(struct inotify_evnet) + event->len)
 			{
-				if ((pfd.revents & POLLIN) == POLLIN)
+				struct inotify_event* event{ reinterpret_cast<struct inotify_event*>(&buf[i]) };
+				if (event->len)
 				{
-					std::vector<char> buf(4096);
-					while (true)
+					std::filesystem::path changed{ m_path / std::string(event->name ? event->name : "") };
+					if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
 					{
-						ssize_t len{ read(m_notify, &buf[0], buf.size()) };
-						if (len == -1 && errno != EAGAIN)
+						if (event->mask & IN_CREATE)
 						{
-							return;
+							m_changed.invoke({ changed , FileAction::Added });
 						}
-						if (len <= 0)
+						else if ((event->mask & IN_DELETE) || (event->mask & IN_DELETE_SELF))
 						{
-							break;
+							m_changed.invoke({ changed , FileAction::Removed });
 						}
-						const struct inotify_event* event{ nullptr };
-						for (char* ptr = buf.data(); ptr < buf.data() + len; ptr += sizeof(struct inotify_event) + event->len)
+						else if ((event->mask & IN_MOVED_FROM) || (event->mask & IN_MOVE_SELF))
 						{
-							event = (const struct inotify_event*)ptr;
-							std::filesystem::path changed{ m_path / std::string(event->name ? event->name : "") };
-							if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
-							{
-								if (event->mask & IN_CREATE)
-								{
-									m_changed.invoke({ changed , FileAction::Added });
-								}
-								else if((event->mask & IN_DELETE) || (event->mask & IN_DELETE_SELF))
-								{
-									m_changed.invoke({ changed , FileAction::Removed });
-								}
-								else if ((event->mask & IN_MOVED_FROM) || (event->mask & IN_MOVE_SELF))
-								{
-									m_changed.invoke({ changed , FileAction::Renamed });
-								}
-								else
-								{
-									m_changed.invoke({ changed , FileAction::Modified });
-								}
-							}
+							m_changed.invoke({ changed , FileAction::Renamed });
+						}
+						else
+						{
+							m_changed.invoke({ changed , FileAction::Modified });
 						}
 					}
 				}
 			}
 		}
+		inotify_rm_watch(m_notify, watch);
 #endif
 	}
 }
