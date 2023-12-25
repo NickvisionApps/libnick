@@ -53,7 +53,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::string StringHelpers::replace(std::string s, std::string toReplace, std::string replace)
+	std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace)
 	{
 		if (s.empty() || toReplace.empty())
 		{

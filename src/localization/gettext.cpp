@@ -7,13 +7,15 @@ namespace Nickvision::Aura
 {
 	bool Localization::init()
 	{
+		bool res{ true };
 		std::string name{ StringHelpers::toLower(StringHelpers::replace(Aura::getActive().getAppInfo().getEnglishShortName(), " ", "")) };
 		if (name.empty())
 		{
 			name = StringHelpers::toLower(StringHelpers::replace(Aura::getActive().getAppInfo().getName(), " ", ""));
 		}
-		bindtextdomain(name.c_str(), std::filesystem::current_path().string().c_str());
-		bind_textdomain_codeset(name.c_str(), "UTF-8");
-		textdomain(name.c_str());
+		res &= bindtextdomain(name.c_str(), std::filesystem::current_path().string().c_str()) != nullptr;
+		res &= bind_textdomain_codeset(name.c_str(), "UTF-8") != nullptr;
+		res &= textdomain(name.c_str()) != nullptr;
+		return res;
 	}
 }

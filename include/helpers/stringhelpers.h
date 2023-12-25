@@ -62,7 +62,7 @@ namespace Nickvision::Aura::StringHelpers
 	 * @param replace The new string to replace with
 	 * @return The new replaced string
 	 */
-	std::string replace(std::string s, std::string toReplace, std::string replace);
+	std::string replace(std::string s, const std::string& toReplace, const std::string& replace);
 	/**
 	 * @brief Generates a new guid value.
 	 * @return The guid value
