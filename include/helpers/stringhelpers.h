@@ -56,6 +56,14 @@ namespace Nickvision::Aura::StringHelpers
 		return splits;
 	}
 	/**
+	 * @brief Replaces a substring within a string with a new string.
+	 * @param s The string to work on
+	 * @param toRepalce The substring to be replaced
+	 * @param replace The new string to replace with
+	 * @return The new replaced string
+	 */
+	std::string replace(std::string s, std::string toReplace, std::string replace);
+	/**
 	 * @brief Generates a new guid value.
 	 * @return The guid value
 	 */

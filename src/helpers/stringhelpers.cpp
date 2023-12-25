@@ -53,6 +53,20 @@ namespace Nickvision::Aura
 		return result;
 	}
 
+	std::string StringHelpers::replace(std::string s, std::string toReplace, std::string replace)
+	{
+		if (s.empty() || toReplace.empty())
+		{
+			return s;
+		}
+		size_t r{ s.find(toReplace) };
+		if (r == std::string::npos)
+		{
+			return s;
+		}
+		return s.replace(r, toReplace.size(), replace);
+	}
+
 	std::string StringHelpers::newGuid()
 	{
 		std::array<unsigned char, 16> guid;
