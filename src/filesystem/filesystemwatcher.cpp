@@ -202,7 +202,7 @@ namespace Nickvision::Aura::Filesystem
 				event = reinterpret_cast<struct inotify_event*>(&buf[i]);
 				if (event->len)
 				{
-					std::filesystem::path changed{ m_path / std::string(event->name, event->len) };
+					std::filesystem::path changed{ m_path / event->name };
 					if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
 					{
 						if (event->mask & IN_CREATE)
