@@ -1,14 +1,13 @@
 #include "systemdirectories.h"
-#include <cstdlib>
+#include "aura.h"
 #include "helpers/stringhelpers.h"
 
 namespace Nickvision::Aura
 {
-
 	std::vector<std::filesystem::path> SystemDirectories::getPath()
 	{
-		char* var = std::getenv("PATH");
-		if (var)
+		std::string var{ Aura::getEnvVar("PATH") };
+		if (!var.empty())
 		{
 #ifdef _WIN32
 			return StringHelpers::split<std::filesystem::path>(var, ";");
@@ -21,8 +20,8 @@ namespace Nickvision::Aura
 
 	std::vector<std::filesystem::path> SystemDirectories::getConfig()
 	{
-		char* var = std::getenv("XDG_CONFIG_DIRS");
-		if (var)
+		std::string var{ Aura::getEnvVar("XDG_CONFIG_DIRS") };
+		if (!var.empty())
 		{
 #ifdef _WIN32
 			return StringHelpers::split<std::filesystem::path>(var, ";");
@@ -35,8 +34,8 @@ namespace Nickvision::Aura
 
 	std::vector<std::filesystem::path> SystemDirectories::getData()
 	{
-		char* var = std::getenv("XDG_DATA_DIRS");
-		if (var)
+		std::string var{ Aura::getEnvVar("XDG_DATA_DIRS") };
+		if (!var.empty())
 		{
 #ifdef _WIN32
 			return StringHelpers::split<std::filesystem::path>(var, ";");

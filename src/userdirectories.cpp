@@ -1,5 +1,4 @@
 #include "userdirectories.h"
-#include <cstdlib>
 #include <fstream>
 #include <string>
 #include "aura.h"
@@ -15,19 +14,9 @@
 
 namespace Nickvision::Aura
 {
-	std::string getEnvVar(const std::string& key)
-	{
-		char* var = getenv(key.c_str());
-		if (var)
-		{
-			return { var };
-		}
-		return "";
-	}
-
 	std::filesystem::path getXDGDir(const std::string& key)
 	{
-		std::string var{ getEnvVar(key) };
+		std::string var{ Aura::getEnvVar(key) };
 		if (!var.empty())
 		{
 			return var;
@@ -69,7 +58,7 @@ namespace Nickvision::Aura
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		std::filesystem::path var{ getEnvVar("HOME") };
+		std::filesystem::path var{ Aura::getEnvVar("HOME") };
 		result = !var.empty() ? var : getpwuid(getuid())->pw_dir;
 #endif
 		return result;
@@ -86,7 +75,7 @@ namespace Nickvision::Aura
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		std::filesystem::path var{ getEnvVar("XDG_CONFIG_HOME") };
+		std::filesystem::path var{ Aura::getEnvVar("XDG_CONFIG_HOME") };
 		result = !var.empty() ? var : (getHome() / ".config");
 #endif
 		std::filesystem::create_directories(result);
@@ -111,7 +100,7 @@ namespace Nickvision::Aura
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		std::filesystem::path var{ getEnvVar("XDG_CACHE_HOME") };
+		std::filesystem::path var{ Aura::getEnvVar("XDG_CACHE_HOME") };
 		result = !var.empty() ? var : (getHome() / ".cache");
 #endif
 		std::filesystem::create_directories(result);
@@ -131,7 +120,7 @@ namespace Nickvision::Aura
 #ifdef _WIN32
 		result = getConfig();
 #elif defined(__linux__)
-		std::filesystem::path var{ getEnvVar("XDG_DATA_HOME") };
+		std::filesystem::path var{ Aura::getEnvVar("XDG_DATA_HOME") };
 		result = !var.empty() ? var : (getHome() / ".local/share");
 #endif
 		std::filesystem::create_directories(result);
@@ -149,8 +138,8 @@ namespace Nickvision::Aura
 	{
 		std::filesystem::path result;
 #ifdef __linux__
-		std::filesystem::path var{ getEnvVar("XDG_RUNTIME_DIR") };
-		result = !var.empty() ? var : (std::filesystem::path("/run/user/") / getEnvVar("UID"));
+		std::filesystem::path var{ Aura::getEnvVar("XDG_RUNTIME_DIR") };
+		result = !var.empty() ? var : (std::filesystem::path("/run/user/") / Aura::getEnvVar("UID"));
 #endif
 		return result;
 	}

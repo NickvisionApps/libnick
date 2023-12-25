@@ -1,3 +1,7 @@
+#if (defined(_WIN32) && !defined(_CRT_SECURE_NO_WARNINGS))
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #ifndef AURA_H
 #define AURA_H
 
@@ -55,6 +59,12 @@ namespace Nickvision::Aura
 		 * @return The active aura instance
 		 */
 		static Aura& getActive();
+		/**
+		 * @brief Gets a system environment variable.
+		 * @param key The environment variable to get
+		 * @return The environment variable if found, else empty string
+		 */
+		static std::string getEnvVar(const std::string& key);
 
 	private:
 		static std::unique_ptr<Aura> m_instance;

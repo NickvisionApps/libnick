@@ -1,10 +1,6 @@
 #ifndef USERDIRECTORIES_H
 #define USERDIRECTORIES_H
 
-#ifdef _WIN32
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 #include <filesystem>
 
 namespace Nickvision::Aura::UserDirectories

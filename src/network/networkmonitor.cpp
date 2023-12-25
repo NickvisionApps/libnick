@@ -1,5 +1,5 @@
 #include "network/networkmonitor.h"
-#include <cstdlib>
+#include "aura.h"
 #include "helpers/stringhelpers.h"
 #ifdef _WIN32
 #include <windows.h>
@@ -45,8 +45,7 @@ namespace Nickvision::Aura::Network
 	void NetworkMonitor::checkConnectionState()
 	{
 		NetworkState newState{ NetworkState::Disconnected };
-		char* envNoNetCheck{ std::getenv("AURA_DISABLE_NETCHECK") };
-		std::string noNetCheck{ envNoNetCheck ? StringHelpers::toLower(envNoNetCheck) : "" };
+		std::string noNetCheck{ StringHelpers::toLower(Aura::getEnvVar("AURA_DISABLE_NETCHECK")) };
 		if (!noNetCheck.empty() && (noNetCheck == "true" || noNetCheck == "t" || noNetCheck == "yes" || noNetCheck == "y" || noNetCheck == "1"))
 		{
 			newState = NetworkState::ConnectedGlobal;
