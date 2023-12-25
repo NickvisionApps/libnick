@@ -89,6 +89,7 @@ if(NOT SKIP_TESTS)
 		tests/auratests.cpp
 		tests/eventtests.cpp
 		tests/filewatchertests.cpp
+		tests/ipctests.cpp
 		tests/keyringtests.cpp
 		tests/main.cpp
 		tests/networktests.cpp
