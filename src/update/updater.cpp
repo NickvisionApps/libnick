@@ -48,10 +48,10 @@ namespace Nickvision::Aura::Update
 		return fetchCurrentVersion(VersionType::Preview);
 	}
 
+#ifdef _WIN32
 	bool Updater::windowsUpdate(VersionType versionType)
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
-#ifdef _WIN32
 		if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
 		{
 			return false;
@@ -80,9 +80,9 @@ namespace Nickvision::Aura::Update
 				}
 			}
 		}
-#endif
 		return false;
 	}
+#endif
 
 	Version Updater::fetchCurrentVersion(VersionType versionType)
 	{
@@ -96,8 +96,8 @@ namespace Nickvision::Aura::Update
 			{
 				for (const Json::Value& release : root)
 				{
-					std::string version{ release.get("tag_name", "0.0.0").asString() };
-					if (version == "0.0.0")
+					std::string version{ release.get("tag_name", "NULL").asString() };
+					if (version == "NULL")
 					{
 						return {};
 					}
