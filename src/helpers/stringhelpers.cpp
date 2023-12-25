@@ -7,7 +7,7 @@
 #include <curl/curl.h>
 #ifdef _WIN32
 #include <windows.h>
-#else
+#elif defined(__linux__)
 #include <uuid/uuid.h>
 #endif
 
@@ -83,7 +83,7 @@ namespace Nickvision::Aura
 			(unsigned char)win.Data4[6],
 			(unsigned char)win.Data4[7]
 		};
-#else
+#elif defined(__linux__)
 		uuid_generate(guid.data());
 #endif
 		std::ostringstream out;

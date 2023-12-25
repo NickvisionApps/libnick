@@ -48,10 +48,10 @@ namespace Nickvision::Aura::Update
 		return fetchCurrentVersion(VersionType::Preview);
 	}
 
+#ifdef _WIN32
 	bool Updater::windowsUpdate(VersionType versionType)
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
-#ifdef _WIN32
 		if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
 		{
 			return false;
@@ -63,7 +63,7 @@ namespace Nickvision::Aura::Update
 			Json::Reader reader;
 			if (reader.parse(release, root, false))
 			{
-				for (const Json::Value& asset : root["assets"])
+				for (const Json::Value& asset : root.get("assets", {}))
 				{
 					std::string name{ asset.get("name", "").asString() };
 					if (StringHelpers::toLower(name).find("setup.exe") != std::string::npos)
@@ -72,17 +72,20 @@ namespace Nickvision::Aura::Update
 						if (WebHelpers::downloadFile(asset.get("browser_download_url", "").asString(), setup))
 						{
 							std::string cmd{ "\"" + setup.string() + "\"" };
-							ShellExecute(nullptr, "open", cmd.c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
-							exit(0);
-							return true;
+							if ((INT_PTR)ShellExecuteA(nullptr, "open", cmd.c_str(), nullptr, nullptr, SW_SHOWDEFAULT) > 32)
+							{
+								std::exit(0);
+								return true;
+							}
+							return false;
 						}
 					}
 				}
 			}
 		}
-#endif
 		return false;
 	}
+#endif
 
 	Version Updater::fetchCurrentVersion(VersionType versionType)
 	{
@@ -96,7 +99,11 @@ namespace Nickvision::Aura::Update
 			{
 				for (const Json::Value& release : root)
 				{
-					std::string version{ release.get("tag_name", "").asString() };
+					std::string version{ release.get("tag_name", "NULL").asString() };
+					if (version == "NULL")
+					{
+						return {};
+					}
 					if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
 					{
 						m_latestStableReleaseId = release.get("id", -1).asInt();

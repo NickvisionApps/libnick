@@ -4,13 +4,13 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <wincred.h>
-#else
+#elif defined(__linux__)
 #include <libsecret/secret.h>
 #endif
 
 namespace Nickvision::Aura::Keyring
 {
-#ifndef _WIN32
+#ifdef __linux__
 	static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
 #endif
 
@@ -30,7 +30,7 @@ namespace Nickvision::Aura::Keyring
 				return { { credName, credUrl, credUsername, credPassword } };
 			}
 		}
-#else
+#elif defined(__linux__)
 		GError* error{ nullptr };
 		char* password = secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL);
 		if (!error && password)
@@ -71,7 +71,7 @@ namespace Nickvision::Aura::Keyring
 		bool res = CredWriteA(cred, 0);
 		CredFree(cred);
 		return res;
-#else
+#elif defined(__linux__)
 		GError* error{ nullptr };
 		secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
 		if (error)
@@ -102,7 +102,7 @@ namespace Nickvision::Aura::Keyring
 			CredFree(cred);
 			return res;
 		}
-#else
+#elif defined(__linux__)
 		GError* error{ nullptr };
 		char* password = secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), NULL);
 		if (!error && password)
@@ -125,7 +125,7 @@ namespace Nickvision::Aura::Keyring
 	{
 #ifdef _WIN32
 		return CredDeleteA(name.c_str(), CRED_TYPE_GENERIC, 0);
-#else
+#elif defined(__linux__)
 		GError* error{ nullptr };
 		bool res = secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL);
 		if (!error)

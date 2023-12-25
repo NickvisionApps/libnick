@@ -7,17 +7,17 @@ using namespace Nickvision::Aura::Keyring;
 class StoreTest : public testing::Test
 {
 public:
-	static std::shared_ptr<Store> m_store;
+	static std::unique_ptr<Store> m_store;
 
 	static void SetUpTestSuite()
 	{
 		Store::destroy("org.nickvision.aura.test");
 		PasswordGenerator passGen;
-		m_store = std::make_shared<Store>("org.nickvision.aura.test", passGen.next());
+		m_store = std::make_unique<Store>("org.nickvision.aura.test", passGen.next());
 	}
 };
 
-std::shared_ptr<Store> StoreTest::m_store = nullptr;
+std::unique_ptr<Store> StoreTest::m_store = nullptr;
 
 TEST_F(StoreTest, CheckValidStore)
 {

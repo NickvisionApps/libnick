@@ -19,7 +19,8 @@ include(GNUInstallDirs)
 #libaura Library Setup
 include_directories(${PROJECT_SOURCE_DIR}/include)
 add_library (${PROJECT_NAME}
-	src/events/eventargs.cpp
+	src/filesystem/filesystemchangedeventargs.cpp
+	src/filesystem/filesystemwatcher.cpp
 	src/helpers/stringhelpers.cpp
 	src/helpers/webhelpers.cpp
 	src/keyring/credential.cpp
@@ -33,6 +34,7 @@ add_library (${PROJECT_NAME}
 	src/network/networkstatechangedeventargs.cpp
 	src/notifications/notificationsenteventargs.cpp
 	src/notifications/shellnotificationsenteventargs.cpp
+	src/taskbar/taskbaritem.cpp
 	src/update/updater.cpp
 	src/appinfo.cpp
 	src/aura.cpp
@@ -53,15 +55,17 @@ find_package(maddy REQUIRED)
 find_package(sqlcipher REQUIRED CONFIG)
 target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy sqlcipher::sqlcipher)
 if(LINUX)
-	find_package(PkgConfig REQUIRED)
+	set(THREADS_PREFER_PTHREAD_FLAG ON)
+	find_package(Threads REQUIRED)
 	find_package(libsecret REQUIRED CONFIG)
 	find_package(libuuid REQUIRED CONFIG)
+	find_package(PkgConfig REQUIRED)
 	pkg_check_modules(glib-2.0 REQUIRED IMPORTED_TARGET glib-2.0)
 	pkg_check_modules(gio-2.0 REQUIRED IMPORTED_TARGET gio-2.0)
 	pkg_check_modules(gmodule-2.0 REQUIRED IMPORTED_TARGET gmodule-2.0)
 	pkg_check_modules(gobject-2.0 REQUIRED IMPORTED_TARGET gobject-2.0)
 	pkg_check_modules(gthread-2.0 REQUIRED IMPORTED_TARGET gthread-2.0)
-	target_link_libraries(${PROJECT_NAME} PUBLIC libsecret::libsecret libuuid::libuuid PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0)
+	target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads libsecret::libsecret libuuid::libuuid PkgConfig::glib-2.0 PkgConfig::gio-2.0 PkgConfig::gmodule-2.0 PkgConfig::gobject-2.0 PkgConfig::gthread-2.0)
 endif()
 if(MSVC)
   target_compile_options(${PROJECT_NAME} PRIVATE /W4)
@@ -82,6 +86,7 @@ if(NOT SKIP_TESTS)
 	add_executable(${PROJECT_NAME}_test
 		tests/auratests.cpp
 		tests/eventtests.cpp
+		tests/filewatchertests.cpp
 		tests/keyringtests.cpp
 		tests/main.cpp
 		tests/networktests.cpp
@@ -89,6 +94,7 @@ if(NOT SKIP_TESTS)
 		tests/storetests.cpp
 		tests/stringtests.cpp
 		tests/systemcredentialstests.cpp
+		tests/taskbartests.cpp
 		tests/updatertests.cpp
 		tests/versiontests.cpp
 		tests/webtests.cpp)

@@ -30,12 +30,14 @@ namespace Nickvision::Aura::Update
 		 * @return The current preview version if available, else empty Version
 		 */
 		Version fetchCurrentPreviewVersion();
+#ifdef _WIN32
 		/**
 		 * @brief Downloads and installs an application update for Windows. getCurrentStableVersion or getCurrentPreviewVersion should be called first before running this method. This method will force quit the current running application to install the update.
 		 * @param versionType The type of version update to install
 		 * @return True if successful, else false
 		 */
 		bool windowsUpdate(VersionType versionType);
+#endif
 
 	private:
 		mutable std::mutex m_mutex;

@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <filesystem>
 #include "helpers/webhelpers.h"
 
 using namespace Nickvision::Aura;
@@ -16,6 +17,7 @@ TEST(WebTests, ValidWebsite2)
 TEST(WebTests, DownloadFile1)
 {
 	ASSERT_TRUE(WebHelpers::downloadFile("https://raw.githubusercontent.com/nlogozzo/nlogozzo/main/README.md", "readme.md"));
+	ASSERT_TRUE(std::filesystem::remove("readme.md"));
 }
 
 TEST(WebTests, FetchJsonString1)

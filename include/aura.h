@@ -1,3 +1,7 @@
+#if (defined(_WIN32) && !defined(_CRT_SECURE_NO_WARNINGS))
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #ifndef AURA_H
 #define AURA_H
 
@@ -16,10 +20,6 @@ namespace Nickvision::Aura
 	{
 	public:
 		/**
-		 * @brief Destructs an Aura object.
-		 */
-		~Aura();
-		/**
 		 * @brief Gets the AppInfo object for the application.
 		 */
 		AppInfo& getAppInfo();
@@ -35,15 +35,15 @@ namespace Nickvision::Aura
 			static_assert(std::is_base_of_v<ConfigurationBase, T> == true, "T must derive from ConfigurationBase");
 			if (!m_configFiles.contains(key))
 			{
-				m_configFiles[key] = static_cast<ConfigurationBase*>(new T(key));
+				m_configFiles[key] = std::make_unique<T>(key);
 			}
-			return *static_cast<T*>(m_configFiles[key]);
+			return *static_cast<T*>(m_configFiles[key].get());
 		}
 
 	private:
 		Aura(const std::string& id, const std::string& name);
 		AppInfo m_appInfo;
-		std::map<std::string, ConfigurationBase*> m_configFiles;
+		std::map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
 
 	public:
 		/**
@@ -59,6 +59,12 @@ namespace Nickvision::Aura
 		 * @return The active aura instance
 		 */
 		static Aura& getActive();
+		/**
+		 * @brief Gets a system environment variable.
+		 * @param key The environment variable to get
+		 * @return The environment variable if found, else empty string
+		 */
+		static std::string getEnvVar(const std::string& key);
 
 	private:
 		static std::unique_ptr<Aura> m_instance;

@@ -1,4 +1,5 @@
 #include "aura.h"
+#include <cstdlib>
 #include <stdexcept>
 
 namespace Nickvision::Aura
@@ -9,14 +10,6 @@ namespace Nickvision::Aura
 	{
 		m_appInfo.setId(id);
 		m_appInfo.setName(name);
-	}
-
-	Aura::~Aura()
-	{
-		for (const std::pair<const std::string, ConfigurationBase*>& pair : m_configFiles)
-		{
-			delete pair.second;
-		}
 	}
 
 	AppInfo& Aura::getAppInfo()
@@ -40,5 +33,15 @@ namespace Nickvision::Aura
 			throw std::logic_error("Aura::init() must be called first.");
 		}
 		return *m_instance;
+	}
+
+	std::string Aura::getEnvVar(const std::string& key)
+	{
+		char* var = std::getenv(key.c_str());
+		if (var)
+		{
+			return { var };
+		}
+		return "";
 	}
 }

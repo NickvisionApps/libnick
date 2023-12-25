@@ -25,6 +25,7 @@ namespace Nickvision::Aura::Notifications
 		 * @return The title of the notification
 		 */
 		const std::string& getTitle() const;
+
 	protected:
 		std::string m_title;
 	};

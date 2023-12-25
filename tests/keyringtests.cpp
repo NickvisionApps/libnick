@@ -7,16 +7,16 @@ using namespace Nickvision::Aura::Keyring;
 class KeyringTest : public testing::Test
 {
 public:
-	static std::shared_ptr<KeyringDialogController> m_controller;
+	static std::unique_ptr<KeyringDialogController> m_controller;
 
 	static void SetUpTestSuite()
 	{
 		Keyring::destroy("org.nickvision.aura.test.keyring");
-		m_controller = std::make_shared<KeyringDialogController>("org.nickvision.aura.test.keyring", Keyring::access("org.nickvision.aura.test.keyring"));
+		m_controller = std::make_unique<KeyringDialogController>("org.nickvision.aura.test.keyring", Keyring::access("org.nickvision.aura.test.keyring"));
 	}
 };
 
-std::shared_ptr<KeyringDialogController> KeyringTest::m_controller = nullptr;
+std::unique_ptr<KeyringDialogController> KeyringTest::m_controller = nullptr;
 
 TEST_F(KeyringTest, CheckValidKeyring)
 {
