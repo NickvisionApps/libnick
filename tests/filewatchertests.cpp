@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <fstream>
-#include <iostream>
 #include "filesystem/filesystemwatcher.h"
 
 using namespace Nickvision::Aura::Filesystem;
