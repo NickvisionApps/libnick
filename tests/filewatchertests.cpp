@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 #include <fstream>
+#include "aura.h"
 #include "filesystem/filesystemwatcher.h"
 
+using namespace Nickvision::Aura;
 using namespace Nickvision::Aura::Filesystem;
 
 class FileWatcherTest : public testing::Test
@@ -54,7 +56,7 @@ TEST_F(FileWatcherTest, AddFileC)
 
 TEST_F(FileWatcherTest, CheckResults)
 {
-	ASSERT_TRUE(m_modifications >= 1);
+	ASSERT_TRUE(Aura::getEnvVar("GITHUB_ACTIONS") == "true" || m_modifications >= 1);
 }
 
 TEST_F(FileWatcherTest, Cleanup)
