@@ -65,6 +65,13 @@ namespace Nickvision::Aura
 		 * @return The environment variable if found, else empty string
 		 */
 		static std::string getEnvVar(const std::string& key);
+		/**
+		 * @brief Sets a system environment variable.
+		 * @param key The environment variable to set
+		 * @param value The value for the environment variable
+		 * @return True if set, else false
+		 */
+		static bool setEnvVar(const std::string& key, const std::string& value);
 
 	private:
 		static std::unique_ptr<Aura> m_instance;

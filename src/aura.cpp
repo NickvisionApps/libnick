@@ -1,6 +1,9 @@
 #include "aura.h"
 #include <cstdlib>
 #include <stdexcept>
+#ifdef __linux__
+#include <stdlib.h>
+#endif
 
 namespace Nickvision::Aura
 {
@@ -43,5 +46,15 @@ namespace Nickvision::Aura
 			return { var };
 		}
 		return "";
+	}
+
+	bool Aura::setEnvVar(const std::string& key, const std::string& value)
+	{
+#ifdef _WIN32
+		std::string var{ key + "=" + value };
+		return _putenv(var.c_str()) == 0;
+#elif defined(__linux__)
+		return setenv(key.c_str(), value.c_str(), true) == 0;
+#endif
 	}
 }
