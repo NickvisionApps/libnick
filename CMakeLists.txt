@@ -30,6 +30,7 @@ add_library (${PROJECT_NAME}
 	src/keyring/passwordstrength.cpp
 	src/keyring/store.cpp
 	src/keyring/systemcredentials.cpp
+	src/localization/gettext.cpp
 	src/network/networkmonitor.cpp
 	src/network/networkstatechangedeventargs.cpp
 	src/notifications/notificationsenteventargs.cpp
