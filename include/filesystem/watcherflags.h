@@ -12,7 +12,7 @@ namespace Nickvision::Aura::Filesystem
 	{
 		FileName = 1,
 		DirectoryName = 2,
-		Atributes = 4,
+		Attributes = 4,
 		Size = 8,
 		LastWrite = 16,
 		LastAccess = 32

@@ -170,7 +170,7 @@ namespace Nickvision::Aura::Filesystem
 			mask |= IN_DELETE_SELF;
 			mask |= IN_MOVE_SELF;
 		}
-		if ((m_watcherFlags & WatcherFlags::Atributes) == WatcherFlags::Atributes)
+		if ((m_watcherFlags & WatcherFlags::Attributes) == WatcherFlags::Attributes)
 		{
 			mask |= IN_ATTRIB;
 		}

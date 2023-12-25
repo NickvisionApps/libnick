@@ -27,7 +27,7 @@ namespace Nickvision::Aura::Filesystem
 		 * @param watcherFlags The flags of what to watch changes for
 		 * @exception std::runtime_error Thrown if unable to initialize watcher
 		 */
-		FileSystemWatcher(const std::filesystem::path& path, bool includeSubdirectories, WatcherFlags watcherFlags = WatcherFlags::FileName | WatcherFlags::DirectoryName | WatcherFlags::Atributes | WatcherFlags::Size | WatcherFlags::LastWrite | WatcherFlags::LastAccess);
+		FileSystemWatcher(const std::filesystem::path& path, bool includeSubdirectories, WatcherFlags watcherFlags = WatcherFlags::FileName | WatcherFlags::DirectoryName | WatcherFlags::Attributes | WatcherFlags::Size | WatcherFlags::LastWrite | WatcherFlags::LastAccess);
 		/**
 		 * @brief Deconstructs a FileSystemWatcher. 
 		 */
