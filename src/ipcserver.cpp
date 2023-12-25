@@ -10,7 +10,7 @@ namespace Nickvision::Aura
 	{
 #ifdef _WIN32
 		m_pipeName = "\\\\.\\pipe\\" + m_id;
-		m_serverPipe = nullptr;
+		m_overlapped.hEvent = CreateEventA(nullptr, 1, 0, nullptr);
 #endif
 	}
 
@@ -18,10 +18,7 @@ namespace Nickvision::Aura
 	{
 		m_running = false;
 #ifdef _WIN32
-		if (m_serverPipe)
-		{
-			CloseHandle(m_serverPipe);
-		}
+		SetEvent(m_overlapped.hEvent);
 #endif
 	}
 
@@ -36,6 +33,10 @@ namespace Nickvision::Aura
 		HANDLE pipe{ CreateFileA(m_pipeName.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
 		if (pipe != INVALID_HANDLE_VALUE)
 		{
+			if (args.empty())
+			{
+				return true;
+			}
 			std::string argc{ std::to_string(args.size()) };
 			WriteFile(pipe, &argc, argc.size(), nullptr, nullptr);
 			for (const std::string& arg : args)
@@ -46,7 +47,7 @@ namespace Nickvision::Aura
 			CloseHandle(pipe);
 			return true;
 		}
-		else
+		else if(!m_running)
 		{
 			m_running = true;
 			m_server = std::jthread(&IPCServer::runServer, this);
@@ -59,31 +60,32 @@ namespace Nickvision::Aura
 	{
 #ifdef _WIN32
 		std::vector<char> buffer(2048);
-		m_serverPipe = CreateNamedPipeA(m_pipeName.c_str(), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT, 1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, nullptr);
-		if (m_serverPipe == INVALID_HANDLE_VALUE)
+		HANDLE pipe{ CreateNamedPipeA(m_pipeName.c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT, 1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, nullptr) };
+		if (pipe == INVALID_HANDLE_VALUE)
 		{
 			m_running = false;
-			m_serverPipe = nullptr;
 			return;
 		}
+		std::cout << "[AURA: " << m_id << "] Server started on this instance." << std::endl;
 		while (m_running)
 		{
-			if (ConnectNamedPipe(m_serverPipe, nullptr))
+			if (ConnectNamedPipe(pipe, &m_overlapped))
 			{
 				DWORD read;
-				ReadFile(m_serverPipe, &buffer[0], sizeof(buffer) - 1, &read, nullptr);
+				ReadFile(pipe, &buffer[0], sizeof(buffer) - 1, &read, nullptr);
 				size_t argc{ std::stoull({ &buffer[0], read }) };
 				std::vector<std::string> args(argc);
 				for (int i = 0; i < argc; i++)
 				{
-					ReadFile(m_serverPipe, &buffer[0], sizeof(buffer) - 1, &read, nullptr);
+					ReadFile(pipe, &buffer[0], sizeof(buffer) - 1, &read, nullptr);
 					args[i] = { &buffer[0], read };
 				}
 				std::cout << "[AURA: " << m_id << "] Command received." << std::endl;
 				m_commandReceived.invoke({ args });
 			}
-			DisconnectNamedPipe(m_serverPipe);
+			DisconnectNamedPipe(pipe);
 		}
+		CloseHandle(pipe);
 #endif
 	}
-}
+} 

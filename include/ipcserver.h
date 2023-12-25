@@ -46,7 +46,7 @@ namespace Nickvision::Aura
 		std::jthread m_server;
 #ifdef _WIN32
 		std::string m_pipeName;
-		HANDLE m_serverPipe;
+		OVERLAPPED m_overlapped;
 #endif
 		void runServer();
 	};
