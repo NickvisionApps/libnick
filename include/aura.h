@@ -43,6 +43,11 @@ namespace Nickvision::Aura
 		}
 
 	private:
+		/**
+		 * @brief Constructs an Aura.
+		 * @param id The application id
+		 * @param name The application name
+		 */
 		Aura(const std::string& id, const std::string& name);
 		AppInfo m_appInfo;
 		std::map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
