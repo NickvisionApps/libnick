@@ -15,7 +15,7 @@ namespace Nickvision::Aura
 		HANDLE find{ FindFirstFileA(m_pipeName.c_str(), &fd) };
 		if (find == INVALID_HANDLE_VALUE) //no server exists
 		{
-			m_serverPipe = CreateNamedPipeA(m_pipeName.c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT, 1, 2048, 2048, NMPWAIT_USE_DEFAULT_WAIT, nullptr);
+			m_serverPipe = CreateNamedPipeA(m_pipeName.c_str(), PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, 1, 0, 0, NMPWAIT_USE_DEFAULT_WAIT, nullptr);
 			if (m_serverPipe == INVALID_HANDLE_VALUE)
 			{
 				throw std::runtime_error("Unable to start IPC server.");
@@ -69,28 +69,16 @@ namespace Nickvision::Aura
 		{
 			return true;
 		}
-		HANDLE clientPipe{ CreateFileA(m_pipeName.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
+		HANDLE clientPipe{ CreateFileA(m_pipeName.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
 		if (clientPipe == INVALID_HANDLE_VALUE)
 		{
 			return false;
 		}
-		char success{ 0 };
 		std::string argc{ std::to_string(args.size()) };
 		WriteFile(clientPipe, argc.c_str(), DWORD(argc.size()), nullptr, nullptr);
-		ReadFile(clientPipe, &success, sizeof(char), nullptr, nullptr);
-		if (success != 1)
-		{
-			return false;
-		}
 		for (const std::string& arg : args)
 		{
-			success = 0;
 			WriteFile(clientPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
-			ReadFile(clientPipe, &success, sizeof(char), nullptr, nullptr);
-			if (success != 1)
-			{
-				return false;
-			}
 		}
 		CloseHandle(clientPipe);
 		return true;
@@ -101,8 +89,7 @@ namespace Nickvision::Aura
 	void InterProcessCommunicator::runServer()
 	{
 #ifdef _WIN32
-		std::vector<char> buffer(2048);
-		char success{ 1 };
+		std::vector<char> buffer(1024);
 		while (m_serverRunning)
 		{
 			if (ConnectNamedPipe(m_serverPipe, nullptr))
@@ -111,11 +98,9 @@ namespace Nickvision::Aura
 				ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
 				size_t argc{ std::stoull({ &buffer[0], read }) };
 				std::vector<std::string> args(argc);
-				WriteFile(m_serverPipe, &success, sizeof(char), nullptr, nullptr);
 				for (int i = 0; i < argc; i++)
 				{
 					ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
-					WriteFile(m_serverPipe, &success, sizeof(char), nullptr, nullptr);
 					args[i] = { &buffer[0], read };
 				}
 				m_commandReceived.invoke({ args });
