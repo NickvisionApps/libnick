@@ -21,6 +21,7 @@ namespace Nickvision::Aura
 		/**
 		 * @brief Constructs an InterProcessCommunicator.
 		 * If this is the first IPC instance for all processes, this instance will become an IPC server. Else, this instance will become an IPC client.
+		 * @throw std::logic_error Thrown if Aura::init() was not called before creating the IPC
 		 * @throw std::runtime_error Thrown if the client or server IPC cannot be created
 		 */
 		InterProcessCommunicator();

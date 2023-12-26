@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
-#include "interprocesscommunicator.h"
 #include <mutex>
+#include "aura.h"
+#include "interprocesscommunicator.h"
 
 using namespace Nickvision::Aura;
 using namespace Nickvision::Aura::Events;
@@ -10,15 +11,24 @@ static std::vector<std::string> args{ "test1", "test2" };
 class IPCTest : public testing::Test
 {
 public:
-	static std::mutex m_mutex;
 	static std::unique_ptr<InterProcessCommunicator> m_server;
-	static int m_received;
+
+	static void SetUpTestSuite()
+	{
+		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests");
+		m_server = std::make_unique<InterProcessCommunicator>();
+		m_server->commandReceived() += onCommandReceived;
+	}
 
 	static int getReceived()
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_received;
 	}
+
+private:
+	static std::mutex m_mutex;
+	static int m_received;
 
 	static void onCommandReceived(const ParamEventArgs<std::vector<std::string>>& e)
 	{
@@ -28,13 +38,11 @@ public:
 };
 
 std::mutex IPCTest::m_mutex = {};
-std::unique_ptr<InterProcessCommunicator> IPCTest::m_server = nullptr;
 int IPCTest::m_received = 0;
+std::unique_ptr<InterProcessCommunicator> IPCTest::m_server = nullptr;
 
-TEST_F(IPCTest, CheckServerStart)
+TEST_F(IPCTest, CheckServerStatus)
 {
-	ASSERT_NO_THROW(m_server = std::make_unique<InterProcessCommunicator>());
-	m_server->commandReceived() += onCommandReceived;
 	ASSERT_TRUE(m_server->isServer());
 }
 
