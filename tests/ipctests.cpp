@@ -1,46 +1,56 @@
 #include <gtest/gtest.h>
-#include "ipcserver.h"
+#include "interprocesscommunicator.h"
+#include <mutex>
 
 using namespace Nickvision::Aura;
 using namespace Nickvision::Aura::Events;
 
-class IPCServerTest : public testing::Test
+static std::vector<std::string> args{ "test1", "test2" };
+
+class IPCTest : public testing::Test
 {
 public:
-	static std::unique_ptr<IPCServer> m_server;
-	static bool m_received;
-	static std::vector<std::string> m_args;
+	static std::mutex m_mutex;
+	static std::unique_ptr<InterProcessCommunicator> m_server;
+	static int m_received;
 
-	static void SetUpTestSuite()
+	static int getReceived()
 	{
-		m_server = std::make_unique<IPCServer>();
-		m_server->commandReceived() += onCommandReceived;
+		std::lock_guard<std::mutex> lock{ m_mutex };
+		return m_received;
 	}
 
-private:
 	static void onCommandReceived(const ParamEventArgs<std::vector<std::string>>& e)
 	{
-		m_received = e.getParam()[0] == m_args[0] && e.getParam()[1] == m_args[1];
+		std::lock_guard<std::mutex> lock{ m_mutex };
+		m_received += (e.getParam()[0] == args[0] && e.getParam()[1] == args[1] ? 1 : 0);
 	}
 };
 
-std::unique_ptr<IPCServer> IPCServerTest::m_server = nullptr;
-bool IPCServerTest::m_received = false;
-std::vector<std::string> IPCServerTest::m_args = { "test1", "test2" };
+std::mutex IPCTest::m_mutex = {};
+std::unique_ptr<InterProcessCommunicator> IPCTest::m_server = nullptr;
+int IPCTest::m_received = 0;
 
-TEST_F(IPCServerTest, StartServer)
+TEST_F(IPCTest, CheckServerStart)
 {
-	ASSERT_FALSE(m_server->communicate(m_args));
+	ASSERT_NO_THROW(m_server = std::make_unique<InterProcessCommunicator>());
+	m_server->commandReceived() += onCommandReceived;
+	ASSERT_TRUE(m_server->isServer());
 }
 
-TEST_F(IPCServerTest, SendArgs)
+TEST_F(IPCTest, Client1Send)
 {
-	ASSERT_TRUE(m_server->communicate(m_args));
-	std::this_thread::sleep_for(std::chrono::seconds(1));
-	ASSERT_TRUE(m_received);
+	InterProcessCommunicator client;
+	ASSERT_TRUE(client.isClient());
+	ASSERT_TRUE(client.communicate(args));
 }
 
-TEST_F(IPCServerTest, Cleanup)
+TEST_F(IPCTest, CheckServerReceived)
+{
+	ASSERT_TRUE(getReceived() > 0);
+}
+
+TEST_F(IPCTest, Cleanup)
 {
 	ASSERT_NO_THROW(m_server.reset());
 }
