@@ -59,7 +59,7 @@ namespace Nickvision::Aura
 		 */
 		void runServer();
 		std::string m_id;
-		bool m_running;
+		bool m_serverRunning;
 		Events::Event<Events::ParamEventArgs<std::vector<std::string>>> m_commandReceived;
 		std::jthread m_server;
 #ifdef _WIN32

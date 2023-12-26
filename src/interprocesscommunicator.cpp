@@ -6,7 +6,7 @@ namespace Nickvision::Aura
 {
 	InterProcessCommunicator::InterProcessCommunicator()
 		: m_id{ Aura::getActive().getAppInfo().getId() },
-		m_running{ false }
+		m_serverRunning{ false }
 	{
 #ifdef _WIN32
 		m_pipeName = "\\\\.\\pipe\\" + m_id;
@@ -20,11 +20,11 @@ namespace Nickvision::Aura
 			{
 				throw std::runtime_error("Unable to start IPC server.");
 			}
-			m_running = true;
+			m_serverRunning = true;
 			FindClose(find);
 		}
 #endif
-		if (m_running)
+		if (m_serverRunning)
 		{
 			m_server = std::jthread(&InterProcessCommunicator::runServer, this);
 		}
@@ -32,7 +32,7 @@ namespace Nickvision::Aura
 
 	InterProcessCommunicator::~InterProcessCommunicator()
 	{
-		m_running = false;
+		m_serverRunning = false;
 #ifdef _WIN32
 		if (m_serverPipe)
 		{
@@ -49,17 +49,17 @@ namespace Nickvision::Aura
 
 	bool InterProcessCommunicator::isServer() const
 	{
-		return m_running;
+		return m_serverRunning;
 	}
 
 	bool InterProcessCommunicator::isClient() const
 	{
-		return !m_running;
+		return !m_serverRunning;
 	}
 
 	bool InterProcessCommunicator::communicate(const std::vector<std::string>& args)
 	{
-		if (m_running) //server
+		if (m_serverRunning)
 		{
 			m_commandReceived.invoke({ args });
 			return true;
@@ -76,7 +76,7 @@ namespace Nickvision::Aura
 		}
 		char success{ 0 };
 		std::string argc{ std::to_string(args.size()) };
-		WriteFile(clientPipe, argc.c_str(), argc.size(), nullptr, nullptr);
+		WriteFile(clientPipe, argc.c_str(), DWORD(argc.size()), nullptr, nullptr);
 		ReadFile(clientPipe, &success, sizeof(char), nullptr, nullptr);
 		if (success != 1)
 		{
@@ -85,7 +85,7 @@ namespace Nickvision::Aura
 		for (const std::string& arg : args)
 		{
 			success = 0;
-			WriteFile(clientPipe, arg.c_str(), arg.size(), nullptr, nullptr);
+			WriteFile(clientPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
 			ReadFile(clientPipe, &success, sizeof(char), nullptr, nullptr);
 			if (success != 1)
 			{
@@ -103,18 +103,18 @@ namespace Nickvision::Aura
 #ifdef _WIN32
 		std::vector<char> buffer(2048);
 		char success{ 1 };
-		while (m_running)
+		while (m_serverRunning)
 		{
 			if (ConnectNamedPipe(m_serverPipe, nullptr))
 			{
 				DWORD read;
-				ReadFile(m_serverPipe, &buffer[0], buffer.size(), &read, nullptr);
+				ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
 				size_t argc{ std::stoull({ &buffer[0], read }) };
 				std::vector<std::string> args(argc);
 				WriteFile(m_serverPipe, &success, sizeof(char), nullptr, nullptr);
 				for (int i = 0; i < argc; i++)
 				{
-					ReadFile(m_serverPipe, &buffer[0], buffer.size(), &read, nullptr);
+					ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
 					WriteFile(m_serverPipe, &success, sizeof(char), nullptr, nullptr);
 					args[i] = { &buffer[0], read };
 				}
