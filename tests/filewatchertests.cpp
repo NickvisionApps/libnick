@@ -68,9 +68,9 @@ TEST_F(FileWatcherTest, AddFileC)
 TEST_F(FileWatcherTest, CheckResults)
 {
 #ifdef _WIN32
-	ASSERT_TRUE(Aura::getEnvVar("GITHUB_ACTIONS") == "true" || getModifications() >= 1);
+	ASSERT_TRUE(Aura::getEnvVar("GITHUB_ACTIONS") == "true" || getModifications() > 0);
 #elif defined(__linux__)
-	ASSERT_TRUE(getModifications() >= 1);
+	ASSERT_TRUE(getModifications() > 0);
 #endif
 }
 

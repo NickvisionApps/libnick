@@ -62,6 +62,7 @@ TEST_F(IPCTest, Client1Send)
 
 TEST_F(IPCTest, CheckServerReceived)
 {
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 #ifdef _WIN32
 	ASSERT_TRUE(Aura::getEnvVar("GITHUB_ACTIONS") == "true" || getReceived() > 0);
 #elif defined(__linux__)

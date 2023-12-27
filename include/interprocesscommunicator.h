@@ -8,6 +8,8 @@
 #include "events/parameventargs.h"
 #ifdef _WIN32
 #include <windows.h>
+#elif defined(__linux__)
+#include <sys/un.h>
 #endif
 
 namespace Nickvision::Aura
@@ -58,13 +60,15 @@ namespace Nickvision::Aura
 		 * @brief Runs the IPC server loop.
 		 */
 		void runServer();
-		std::string m_id;
 		bool m_serverRunning;
 		Events::Event<Events::ParamEventArgs<std::vector<std::string>>> m_commandReceived;
 		std::jthread m_server;
+		std::string m_path;
 #ifdef _WIN32
-		std::string m_pipeName;
 		HANDLE m_serverPipe;
+#elif defined(__linux__)
+		struct sockaddr_un m_sockaddr;
+		int m_serverSocket;
 #endif
 	};
 }
