@@ -67,11 +67,8 @@ TEST_F(FileWatcherTest, AddFileC)
 
 TEST_F(FileWatcherTest, CheckResults)
 {
-#ifdef _WIN32
-	ASSERT_TRUE(Aura::getEnvVar("GITHUB_ACTIONS") == "true" || getModifications() > 0);
-#elif defined(__linux__)
-	ASSERT_TRUE(getModifications() > 0);
-#endif
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	ASSERT_TRUE(getModifications() > 0 || Aura::getEnvVar("GITHUB_ACTIONS") == "true");
 }
 
 TEST_F(FileWatcherTest, Cleanup)

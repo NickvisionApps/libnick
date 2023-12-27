@@ -48,3 +48,9 @@ TEST_F(TaskbarTest, SetCount)
 	ASSERT_NO_THROW(m_taskbar->setCount(5));
 	ASSERT_TRUE(m_taskbar->getCountVisible());
 }
+
+TEST_F(TaskbarTest, Cleanup)
+{
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	ASSERT_NO_THROW(m_taskbar.reset());
+}
