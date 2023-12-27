@@ -62,6 +62,10 @@ namespace Nickvision::Aura::Keyring
 		bool destroy();
 
 	private:
+		/**
+		 * @brief Constructs a Keyring.
+		 * @param store The Store database for the Keyring
+		 */
 		Keyring(const Store& store);
 		Store m_store;
 
@@ -85,9 +89,6 @@ namespace Nickvision::Aura::Keyring
 		 * @return True if successful, else false
 		 */
 		static bool destroy(const std::string& name);
-
-	private:
-
 	};
 }
 

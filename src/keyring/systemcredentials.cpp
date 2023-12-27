@@ -39,7 +39,10 @@ namespace Nickvision::Aura::Keyring
 			secret_password_free(password);
 			return c;
 		}
-		g_error_free(error);
+		if (error)
+		{
+			g_error_free(error);
+		}
 #endif
 		return std::nullopt;
 	}
@@ -116,7 +119,10 @@ namespace Nickvision::Aura::Keyring
 			}
 			return true;
 		}
-		g_error_free(error);
+		if (error)
+		{
+			g_error_free(error);
+		}
 #endif
 		return false;
 	}
@@ -132,7 +138,10 @@ namespace Nickvision::Aura::Keyring
 		{
 			return res;
 		}
-		g_error_free(error);
+		if (error)
+		{
+			g_error_free(error);
+		}
 #endif
 		return false;
 	}

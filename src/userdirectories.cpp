@@ -14,7 +14,7 @@
 
 namespace Nickvision::Aura
 {
-	std::filesystem::path getXDGDir(const std::string& key)
+	static std::filesystem::path getXDGDir(const std::string& key)
 	{
 		std::string var{ Aura::getEnvVar(key) };
 		if (!var.empty())

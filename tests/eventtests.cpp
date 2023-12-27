@@ -11,10 +11,12 @@ public:
 	{
 
 	}
+
 	bool getState() const
 	{
 		return m_state;
 	}
+
 private:
 	bool m_state;
 };

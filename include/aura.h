@@ -13,6 +13,9 @@
 
 namespace Nickvision::Aura
 {
+	template<typename T>
+	concept DerivedConfigurationBase = std::is_base_of_v<ConfigurationBase, T>;
+
 	/**
 	 * @brief An application base
 	 */
@@ -29,10 +32,9 @@ namespace Nickvision::Aura
 		 * @param key The key of the config file
 		 * @return The config object
 		 */
-		template<typename T>
+		template<DerivedConfigurationBase T>
 		T& getConfig(const std::string& key)
 		{
-			static_assert(std::is_base_of_v<ConfigurationBase, T> == true, "T must derive from ConfigurationBase");
 			if (!m_configFiles.contains(key))
 			{
 				m_configFiles[key] = std::make_unique<T>(key);
@@ -41,6 +43,11 @@ namespace Nickvision::Aura
 		}
 
 	private:
+		/**
+		 * @brief Constructs an Aura.
+		 * @param id The application id
+		 * @param name The application name
+		 */
 		Aura(const std::string& id, const std::string& name);
 		AppInfo m_appInfo;
 		std::map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;

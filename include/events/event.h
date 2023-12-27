@@ -10,15 +10,16 @@
 
 namespace Nickvision::Aura::Events
 {
+	template<typename T>
+	concept DerivedEventArgs = std::is_base_of_v<EventArgs, T>;
+
 	/**
 	 * @brief An event that can have handlers subscribe to it, which in turn will be called when the event is invoked.
 	 * @tparam T Derived type of EventArgs
 	 */
-	template <typename T> 
+	template <DerivedEventArgs T>
 	class Event
 	{
-		static_assert(std::is_base_of_v<EventArgs, T> == true, "T must derive from EventArgs");
-
 	public:
 		/**
 		 * @brief Constructs an Event.
