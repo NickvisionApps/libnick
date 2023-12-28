@@ -62,7 +62,7 @@ namespace Nickvision::Aura
 		 * @param id The application id
 		 * @param name The application name
 		 * @param englishShortName The application short name in English
-		 * @throw std::runtime_error Thrown if the gettext system fails to initialize
+		 * @throw std::runtime_error Thrown if creation of Aura object fails
 		 * @return The active aura instance
 		 */
 		static Aura& init(const std::string& id, const std::string& name, const std::string& englishShortName);

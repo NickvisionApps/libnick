@@ -32,7 +32,10 @@ namespace Nickvision::Aura
 	{
 		if (!m_instance)
 		{
-			m_instance = std::unique_ptr<Aura>(new Aura(id, name, englishShortName));
+			if (!(m_instance = std::unique_ptr<Aura>(new Aura(id, name, englishShortName))))
+			{
+				throw std::runtime_error("Unable to make Aura object.");
+			}
 		}
 		return *m_instance;
 	}
