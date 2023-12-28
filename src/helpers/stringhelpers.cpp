@@ -1,8 +1,10 @@
 #include "helpers/stringhelpers.h"
 #include <algorithm>
 #include <array>
+#include <codecvt>
 #include <iomanip>
 #include <limits>
+#include <locale>
 #include <regex>
 #include <sstream>
 #include <curl/curl.h>
@@ -145,5 +147,17 @@ namespace Nickvision::Aura
 		int res{ curl_url_set(url, CURLUPART_URL, s.c_str(), 0) };
 		curl_url_cleanup(url);
 		return res == CURLUE_OK;
+	}
+
+	std::string StringHelpers::toString(const std::wstring& s)
+	{
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		return converter.to_bytes(s);
+	}
+
+	std::wstring StringHelpers::toWstring(const std::string& s)
+	{
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		return converter.from_bytes(s);
 	}
 }

@@ -14,6 +14,7 @@
 
 namespace Nickvision::Aura
 {
+#ifdef __linux__
 	static std::filesystem::path getXDGDir(const std::string& key)
 	{
 		std::string var{ Aura::getEnvVar(key) };
@@ -46,6 +47,7 @@ namespace Nickvision::Aura
 		}
 		return { };
 	}
+#endif
 
 	std::filesystem::path UserDirectories::getHome()
 	{

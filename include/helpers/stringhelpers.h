@@ -1,6 +1,8 @@
 #ifndef STRINGHELPERS_H
 #define STRINGHELPERS_H
 
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 #include <string>
 #include <vector>
 
@@ -83,6 +85,18 @@ namespace Nickvision::Aura::StringHelpers
 	 * @return True if the string is a valid url, else false
 	 */
 	bool isValidUrl(const std::string& s);
+	/**
+	 * @brief Converts the wstring to a string.
+	 * @param s The wstring to convert
+	 * @return The string version of the wstring
+	 */
+	std::string toString(const std::wstring& s);
+	/**
+	 * @brief Converts the string to a wstring.
+	 * @param s The string to convert
+	 * @return The wstring version of the string
+	 */
+	std::wstring toWstring(const std::string& s);
 
 }
 
