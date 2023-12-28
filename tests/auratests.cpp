@@ -70,16 +70,13 @@ TEST_F(AuraTest, ResetAppConfig)
 	ASSERT_TRUE(std::filesystem::remove(UserDirectories::getApplicationConfig() / ("config.json")));
 }
 
+TEST_F(AuraTest, DependencyCheck)
+{
 #ifdef _WIN32
-TEST_F(AuraTest, DependencyCheckCmd)
-{
-	ASSERT_FALSE(DependencyLocator::find("cmd").empty());
-}
+	std::filesystem::path depdency{ DependencyLocator::find("cmd") };
+#elif defined(__linux__)
+	std::filesystem::path depdency{ DependencyLocator::find("ls") };
 #endif
-
-#ifdef __linux__
-TEST_F(AuraTest, DependencyCheckLs)
-{
-	ASSERT_FALSE(DependencyLocator::find("ls").empty());
+	ASSERT_TRUE(!depdency.empty());
+	ASSERT_TRUE(std::filesystem::exists(depdency));
 }
-#endif
