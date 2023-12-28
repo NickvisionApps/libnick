@@ -73,10 +73,10 @@ TEST_F(AuraTest, ResetAppConfig)
 TEST_F(AuraTest, DependencyCheck)
 {
 #ifdef _WIN32
-	std::filesystem::path depdency{ DependencyLocator::find("cmd") };
+	std::filesystem::path dependency{ DependencyLocator::find("cmd") };
 #elif defined(__linux__)
-	std::filesystem::path depdency{ DependencyLocator::find("ls") };
+	std::filesystem::path dependency{ DependencyLocator::find("ls") };
 #endif
-	ASSERT_TRUE(!depdency.empty());
-	ASSERT_TRUE(std::filesystem::exists(depdency));
+	ASSERT_TRUE(!dependency.empty());
+	ASSERT_TRUE(std::filesystem::exists(dependency));
 }
