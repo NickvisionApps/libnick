@@ -30,6 +30,7 @@ add_library (${PROJECT_NAME}
 	src/keyring/passwordstrength.cpp
 	src/keyring/store.cpp
 	src/keyring/systemcredentials.cpp
+	src/localization/documentation.cpp
 	src/localization/gettext.cpp
 	src/network/networkmonitor.cpp
 	src/network/networkstatechangedeventargs.cpp
@@ -50,12 +51,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 	SOVERSION ${PROJECT_VERSION})
 
 #libaura Packages
-find_package(Intl REQUIRED)
-find_package(jsoncpp REQUIRED)
+find_package(Boost COMPONENTS locale REQUIRED)
 find_package(CURL REQUIRED)
+find_package(jsoncpp REQUIRED)
+find_package(Intl REQUIRED)
 find_package(maddy REQUIRED)
 find_package(sqlcipher REQUIRED CONFIG)
-target_link_libraries(${PROJECT_NAME} PUBLIC Intl::Intl JsonCpp::JsonCpp CURL::libcurl maddy::maddy sqlcipher::sqlcipher)
+target_link_libraries(${PROJECT_NAME} PUBLIC Boost::locale CURL::libcurl JsonCpp::JsonCpp Intl::Intl maddy::maddy sqlcipher::sqlcipher)
 if(LINUX)
 	set(THREADS_PREFER_PTHREAD_FLAG ON)
 	find_package(Threads REQUIRED)

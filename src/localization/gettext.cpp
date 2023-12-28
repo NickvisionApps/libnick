@@ -1,5 +1,6 @@
 #include "localization/gettext.h"
 #include <filesystem>
+#include <cstdlib>
 
 namespace Nickvision::Aura::Localization
 {
@@ -11,8 +12,8 @@ namespace Nickvision::Aura::Localization
 		res &= (wbindtextdomain(domainName.c_str(), std::filesystem::current_path().c_str()) != nullptr);
 #elif defined(__linux__)
 		res &= (bindtextdomain(domainName.c_str(), std::filesystem::current_path().c_str()) != nullptr);
-#endif
 		res &= (bind_textdomain_codeset(domainName.c_str(), "UTF-8") != nullptr);
+#endif
 		res &= (textdomain(domainName.c_str()) != nullptr);
 		return res;
 	}
