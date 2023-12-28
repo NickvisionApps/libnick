@@ -51,9 +51,10 @@ namespace Nickvision::Aura
 		 * @brief Communicates to the IPC server instance. 
 		 * If this instance is the running server, commandReceived will be triggered with the passed arguments.
 		 * @param args The command-line arguments
+		 * @param exitIfClient Whether or not to exit this process if it is an IPC client
 		 * @return True if command-line arguments were sent to a server instance
 		 */
-		bool communicate(const std::vector<std::string>& args);
+		bool communicate(const std::vector<std::string>& args, bool exitIfClient = false);
 
 	private:
 		/**

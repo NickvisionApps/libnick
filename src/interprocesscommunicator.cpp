@@ -1,4 +1,5 @@
 #include "interprocesscommunicator.h"
+#include <cstdlib>
 #include <stdexcept>
 #include "aura.h"
 #ifdef __linux__
@@ -96,55 +97,55 @@ namespace Nickvision::Aura
 		return !m_serverRunning;
 	}
 
-	bool InterProcessCommunicator::communicate(const std::vector<std::string>& args)
+	bool InterProcessCommunicator::communicate(const std::vector<std::string>& args, bool exitIfClient)
 	{
 		if (m_serverRunning)
 		{
 			m_commandReceived.invoke({ args });
 			return true;
 		}
-		if (args.empty())
+		if (!args.empty())
 		{
-			return true;
-		}
-		std::string argc{ std::to_string(args.size()) };
+			std::string argc{ std::to_string(args.size()) };
 #ifdef _WIN32
-
-		HANDLE clientPipe{ CreateFileA(m_path.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
-		if (clientPipe == INVALID_HANDLE_VALUE)
-		{
-			return false;
-		}
-		WriteFile(clientPipe, argc.c_str(), DWORD(argc.size()), nullptr, nullptr);
-		for (const std::string& arg : args)
-		{
-			WriteFile(clientPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
-		}
-		CloseHandle(clientPipe);
-		return true;
+			HANDLE clientPipe{ CreateFileA(m_path.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
+			if (clientPipe == INVALID_HANDLE_VALUE)
+			{
+				return false;
+			}
+			WriteFile(clientPipe, argc.c_str(), DWORD(argc.size()), nullptr, nullptr);
+			for (const std::string& arg : args)
+			{
+				WriteFile(clientPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
+			}
+			CloseHandle(clientPipe);
 #elif defined(__linux__)
-		int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
-		if (connect(clientSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) == -1)
-		{
-			return false;
-		}
-		write(clientSocket, argc.c_str(), argc.size());
-		for (const std::string& arg : args)
-		{
-			write(clientSocket, arg.c_str(), arg.size());
-		}
-		close(clientSocket);
-		return true;
+			int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+			if (connect(clientSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) == -1)
+			{
+				return false;
+			}
+			write(clientSocket, argc.c_str(), argc.size());
+			for (const std::string& arg : args)
+			{
+				write(clientSocket, arg.c_str(), arg.size());
+			}
+			close(clientSocket);
 #endif
-		return false;
+		}
+		if (exitIfClient)
+		{
+			std::exit(0);
+		}
+		return true;
 	}
 
 	void InterProcessCommunicator::runServer()
 	{
 		std::vector<char> buffer(1024);
-#ifdef _WIN32
 		while (m_serverRunning)
 		{
+#ifdef _WIN32
 			if (ConnectNamedPipe(m_serverPipe, nullptr))
 			{
 				DWORD read;
@@ -158,10 +159,7 @@ namespace Nickvision::Aura
 				m_commandReceived.invoke({ args });
 				DisconnectNamedPipe(m_serverPipe);
 			}
-		}
 #elif defined(__linux__)
-		while (m_serverRunning)
-		{
 			int clientSocket{ accept(m_serverSocket, nullptr, nullptr) };
 			if (!m_serverRunning)
 			{
@@ -180,7 +178,7 @@ namespace Nickvision::Aura
 			}
 			m_commandReceived.invoke({ args });
 			close(clientSocket);
-		}
 #endif
+		}
 	}
 } 
