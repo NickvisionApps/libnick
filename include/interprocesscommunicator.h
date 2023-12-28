@@ -22,7 +22,7 @@ namespace Nickvision::Aura
 	public:
 		/**
 		 * @brief Constructs an InterProcessCommunicator.
-		 * If this is the first IPC instance for all processes, this instance will become an IPC server. Else, this instance will become an IPC client.
+		 * @brief If this is the first IPC instance for all processes, this instance will become an IPC server. Else, this instance will become an IPC client.
 		 * @throw std::logic_error Thrown if Aura::init() was not called before creating the IPC
 		 * @throw std::runtime_error Thrown if the client or server IPC cannot be created
 		 */
@@ -33,7 +33,7 @@ namespace Nickvision::Aura
 		~InterProcessCommunicator();
 		/**
 		 * @brief Gets the event for when a command is received. 
-		 * This event is only triggered on IPC server instances.
+		 * @brief This event is only triggered on IPC server instances.
 		 * @return The command received event
 		 */
 		Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& commandReceived();
@@ -49,7 +49,7 @@ namespace Nickvision::Aura
 		bool isClient() const;
 		/**
 		 * @brief Communicates to the IPC server instance. 
-		 * If this instance is the running server, commandReceived will be triggered with the passed arguments.
+		 * @brief If this instance is the running server, commandReceived will be triggered with the passed arguments.
 		 * @param args The command-line arguments
 		 * @param exitIfClient Whether or not to exit this process if it is an IPC client
 		 * @return True if command-line arguments were sent to a server instance

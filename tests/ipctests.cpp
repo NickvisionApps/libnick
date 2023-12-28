@@ -15,7 +15,7 @@ public:
 
 	static void SetUpTestSuite()
 	{
-		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests");
+		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
 		m_server = std::make_unique<InterProcessCommunicator>();
 		m_server->commandReceived() += onCommandReceived;
 	}

@@ -17,7 +17,7 @@ namespace Nickvision::Aura
 	concept DerivedConfigurationBase = std::is_base_of_v<ConfigurationBase, T>;
 
 	/**
-	 * @brief An application base
+	 * @brief An application base.
 	 */
 	class Aura
 	{
@@ -45,21 +45,27 @@ namespace Nickvision::Aura
 	private:
 		/**
 		 * @brief Constructs an Aura.
+		 * @brief This also calls Localization::Gettext::init().
 		 * @param id The application id
 		 * @param name The application name
+		 * @param englishShortName The application short name in English
+		 * @throw std::runtime_error Thrown if the gettext system fails to initialize
 		 */
-		Aura(const std::string& id, const std::string& name);
+		Aura(const std::string& id, const std::string& name, const std::string& englishShortName);
 		AppInfo m_appInfo;
 		std::map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
 
 	public:
 		/**
 		 * @brief Initializes Aura.
+		 * @brief This also calls Localization::Gettext::init().
 		 * @param id The application id
 		 * @param name The application name
+		 * @param englishShortName The application short name in English
+		 * @throw std::runtime_error Thrown if the gettext system fails to initialize
 		 * @return The active aura instance
 		 */
-		static Aura& init(const std::string& id, const std::string& name);
+		static Aura& init(const std::string& id, const std::string& name, const std::string& englishShortName);
 		/**
 		 * @brief Gets the active aura instance. Aura::init() must have been called first.
 		 * @throw std::logic_error Thrown if Aura::init() was not yet called

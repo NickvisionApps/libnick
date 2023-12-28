@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <array>
 #include <iomanip>
+#include <limits>
 #include <regex>
 #include <sstream>
 #include <curl/curl.h>
@@ -65,6 +66,16 @@ namespace Nickvision::Aura
 			return s;
 		}
 		return s.replace(r, toReplace.size(), replace);
+	}
+
+	unsigned int StringHelpers::stoui(const std::string& s, size_t* idx, int base)
+	{
+		unsigned long ul{ std::stoul(s, idx, base) };
+		if (ul > (std::numeric_limits<unsigned>::max)())
+		{
+			return (std::numeric_limits<unsigned>::max)();
+		}
+		return static_cast<unsigned int>(ul);
 	}
 
 	std::string StringHelpers::newGuid()

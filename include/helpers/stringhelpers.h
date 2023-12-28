@@ -64,6 +64,15 @@ namespace Nickvision::Aura::StringHelpers
 	 */
 	std::string replace(std::string s, const std::string& toReplace, const std::string& replace);
 	/**
+	 * @brief Converts a string to an unsigned int
+	 * @param s The string to convert
+	 * @param idx The address of a size_t to store the number of characters processed
+	 * @param base The number base
+	 * @return The unsigned int version of the string
+	 * @return UINT_MAX if the converted string is too long
+	 */
+	unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10);
+	/**
 	 * @brief Generates a new guid value.
 	 * @return The guid value
 	 */

@@ -1,5 +1,6 @@
 #include "taskbar/taskbaritem.h"
 #include <array>
+#include <limits>
 #ifdef _WIN32
 #include <dwmapi.h>
 #pragma comment(lib,"dwmapi.lib")
@@ -110,7 +111,7 @@ namespace Nickvision::Aura::Taskbar
 			flashInfo.cbSize = sizeof(FLASHWINFO);
 			flashInfo.hwnd = m_hwnd;
 			flashInfo.dwFlags = m_urgent ? (FLASHW_TRAY | FLASHW_TIMER) : FLASHW_STOP;
-			flashInfo.uCount = UINT_MAX;
+			flashInfo.uCount = (std::numeric_limits<unsigned>::max)();
 			flashInfo.dwTimeout = 0;
 			FlashWindowEx(&flashInfo);
 		}

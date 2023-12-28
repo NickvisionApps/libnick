@@ -1,6 +1,8 @@
 #include "aura.h"
 #include <cstdlib>
 #include <stdexcept>
+#include "localization/gettext.h"
+#include "helpers/stringhelpers.h"
 #ifdef __linux__
 #include <stdlib.h>
 #endif
@@ -9,10 +11,16 @@ namespace Nickvision::Aura
 {
 	std::unique_ptr<Aura> Aura::m_instance = nullptr;
 
-	Aura::Aura(const std::string& id, const std::string& name)
+	Aura::Aura(const std::string& id, const std::string& name, const std::string& englishShortName)
 	{
 		m_appInfo.setId(id);
 		m_appInfo.setName(name);
+		m_appInfo.setEnglishShortName(englishShortName);
+		std::string domainName{ StringHelpers::toLower(StringHelpers::replace(m_appInfo.getEnglishShortName(), " ", "")) };
+		if (!Localization::Gettext::init(domainName))
+		{
+			throw std::runtime_error("Unable to initialize gettext.");
+		}
 	}
 
 	AppInfo& Aura::getAppInfo()
@@ -20,11 +28,11 @@ namespace Nickvision::Aura
 		return m_appInfo;
 	}
 
-	Aura& Aura::init(const std::string& id, const std::string& name)
+	Aura& Aura::init(const std::string& id, const std::string& name, const std::string& englishShortName)
 	{
 		if (!m_instance)
 		{
-			m_instance = std::unique_ptr<Aura>(new Aura(id, name));
+			m_instance = std::unique_ptr<Aura>(new Aura(id, name, englishShortName));
 		}
 		return *m_instance;
 	}

@@ -31,27 +31,23 @@ public:
 	}
 };
 
-class AuraTest : public testing::Test
+TEST(AuraTests, InitAura)
 {
-public:
-	static void SetUpTestSuite()
-	{
-		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests");
-	}
-};
+	ASSERT_NO_THROW(Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests"));
+}
 
-TEST_F(AuraTest, EnsureAura)
+TEST(AuraTests, EnsureAura)
 {
 	ASSERT_NO_THROW(Aura::getActive());
 }
 
-TEST_F(AuraTest, EnsureDefaultAppConfig)
+TEST(AuraTests, EnsureDefaultAppConfig)
 {
 	AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
 	ASSERT_EQ(config.getTheme(), Theme::System);
 }
 
-TEST_F(AuraTest, ChangeAppConfig)
+TEST(AuraTests, ChangeAppConfig)
 {
 	AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
 	config.setTheme(Theme::Light);
@@ -59,18 +55,18 @@ TEST_F(AuraTest, ChangeAppConfig)
 	ASSERT_EQ(config.getTheme(), Theme::Light);
 }
 
-TEST_F(AuraTest, EnsureChangeInAppConfig)
+TEST(AuraTests, EnsureChangeInAppConfig)
 {
 	AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
 	ASSERT_EQ(config.getTheme(), Theme::Light);
 }
 
-TEST_F(AuraTest, ResetAppConfig)
+TEST(AuraTests, ResetAppConfig)
 {
 	ASSERT_TRUE(std::filesystem::remove(UserDirectories::getApplicationConfig() / ("config.json")));
 }
 
-TEST_F(AuraTest, DependencyCheck)
+TEST(AuraTests, DependencyCheck)
 {
 #ifdef _WIN32
 	std::filesystem::path dependency{ DependencyLocator::find("cmd") };

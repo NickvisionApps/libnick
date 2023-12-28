@@ -1,21 +1,19 @@
 #include "localization/gettext.h"
 #include <filesystem>
-#include "aura.h"
-#include "helpers/stringhelpers.h"
 
 namespace Nickvision::Aura::Localization
 {
-	bool Gettext::init()
+	bool Gettext::init(const std::string& domainName)
 	{
 		bool res{ true };
-		std::string name{ StringHelpers::toLower(StringHelpers::replace(Aura::getActive().getAppInfo().getEnglishShortName(), " ", "")) };
-		if (name.empty())
-		{
-			name = StringHelpers::toLower(StringHelpers::replace(Aura::getActive().getAppInfo().getName(), " ", ""));
-		}
-		res &= bindtextdomain(name.c_str(), std::filesystem::current_path().string().c_str()) != nullptr;
-		res &= bind_textdomain_codeset(name.c_str(), "UTF-8") != nullptr;
-		res &= textdomain(name.c_str()) != nullptr;
+		setlocale(LC_ALL, "");
+#ifdef _WIN32
+		res &= (wbindtextdomain(domainName.c_str(), std::filesystem::current_path().c_str()) != nullptr);
+#elif defined(__linux__)
+		res &= (bindtextdomain(domainName.c_str(), std::filesystem::current_path().c_str()) != nullptr);
+#endif
+		res &= (bind_textdomain_codeset(domainName.c_str(), "UTF-8") != nullptr);
+		res &= (textdomain(domainName.c_str()) != nullptr);
 		return res;
 	}
 
