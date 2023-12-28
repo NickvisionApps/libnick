@@ -68,7 +68,7 @@ TEST_F(FileWatcherTest, AddFileC)
 TEST_F(FileWatcherTest, CheckResults)
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
-	ASSERT_TRUE(getModifications() > 0 || Aura::getEnvVar("GITHUB_ACTIONS") == "true");
+	ASSERT_TRUE(getModifications() > 0);
 }
 
 TEST_F(FileWatcherTest, Cleanup)

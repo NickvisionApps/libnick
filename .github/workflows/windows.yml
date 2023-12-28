@@ -45,7 +45,7 @@ jobs:
         run: cmake --install . --prefix "${{github.workspace}}/install"
       - name: "CMake Test"
         working-directory: ${{github.workspace}}/build/Release
-        run: libaura_test.exe
+        run: ${{github.workspace}}/build/Release/libaura_test.exe
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
