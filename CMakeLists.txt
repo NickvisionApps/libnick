@@ -86,7 +86,6 @@ install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROO
 #libaura_test
 if(NOT SKIP_TESTS)
 	#libaura_test Setup
-	enable_testing()
 	add_executable(${PROJECT_NAME}_test
 		tests/auratests.cpp
 		tests/eventtests.cpp
@@ -107,8 +106,4 @@ if(NOT SKIP_TESTS)
 	#libaura_test Packages
 	find_package(GTest REQUIRED)
 	target_link_libraries(${PROJECT_NAME}_test PUBLIC libaura GTest::gtest_main GTest::gmock_main)
-
-	#libaura_test Tests
-	include(GoogleTest)
-	gtest_discover_tests(${PROJECT_NAME}_test)
 endif()
