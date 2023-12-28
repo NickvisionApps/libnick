@@ -18,4 +18,24 @@ namespace Nickvision::Aura
 		res &= textdomain(name.c_str()) != nullptr;
 		return res;
 	}
+
+	const char* Localization::pgettext(const char* context, const char* msg)
+	{
+		const char* translation{ dcgettext(nullptr, context, LC_MESSAGES) };
+		if (translation == context)
+		{
+			return msg;
+		}
+		return translation;
+	}
+
+	const char* Localization::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n)
+	{
+		const char* translation{ dcngettext(nullptr, context, msgPlural, n, LC_MESSAGES) };
+		if (translation == context || translation == msgPlural)
+		{
+			return n == 1 ? msg : msgPlural;
+		}
+		return translation;
+	}
 }
