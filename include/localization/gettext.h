@@ -9,7 +9,7 @@
 #define _p(Context, String) ::Nickvision::Aura::Localization::pgettext(Context GETTEXT_CONTEXT_SEPARATOR String, String)
 #define _pn(Context, String, StringPlural, N) ::Nickvision::Aura::Localization::pngettext(Context GETTEXT_CONTEXT_SEPARATOR String, String, StringPlural, N)
 
-namespace Nickvision::Aura::Localization
+namespace Nickvision::Aura::Localization::Gettext
 {
 	bool init();
 	const char* pgettext(const char* context, const char* msg);

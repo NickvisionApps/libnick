@@ -3,9 +3,9 @@
 #include "aura.h"
 #include "helpers/stringhelpers.h"
 
-namespace Nickvision::Aura
+namespace Nickvision::Aura::Localization
 {
-	bool Localization::init()
+	bool Gettext::init()
 	{
 		bool res{ true };
 		std::string name{ StringHelpers::toLower(StringHelpers::replace(Aura::getActive().getAppInfo().getEnglishShortName(), " ", "")) };
@@ -19,7 +19,7 @@ namespace Nickvision::Aura
 		return res;
 	}
 
-	const char* Localization::pgettext(const char* context, const char* msg)
+	const char* Gettext::pgettext(const char* context, const char* msg)
 	{
 		const char* translation{ dcgettext(nullptr, context, LC_MESSAGES) };
 		if (translation == context)
@@ -29,7 +29,7 @@ namespace Nickvision::Aura
 		return translation;
 	}
 
-	const char* Localization::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n)
+	const char* Gettext::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n)
 	{
 		const char* translation{ dcngettext(nullptr, context, msgPlural, n, LC_MESSAGES) };
 		if (translation == context || translation == msgPlural)
