@@ -37,6 +37,11 @@ jobs:
           xdg-user-dirs-update
       - name: "Setup Keyring"
         uses: t1m0thyj/unlock-keyring@v1
+      - name: "Set en_US Locale"
+        run: |
+          sudo apt-get install gettext tzdata locales -y
+          sudo locale-gen en_US.UTF-8
+          sudo update-locale LANG=en_US.UTF-8
       - name: "Get Conan"
         uses: turtlebrowser/get-conan@main
       - name: "Setup Conan Settings"
@@ -58,7 +63,7 @@ jobs:
         run: cmake --install . --prefix "${{github.workspace}}/install"
       - name: "CMake Test"
         working-directory: ${{github.workspace}}/build
-        run: ctest --output-on-failure
+        run: ${{github.workspace}}/build/libaura_test
       - name: Upload
         uses: actions/upload-artifact@v3
         with:

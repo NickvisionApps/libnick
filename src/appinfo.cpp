@@ -133,6 +133,16 @@ namespace Nickvision::Aura
 		m_supportUrl = supportUrl;
 	}
 
+	const std::string& AppInfo::getHtmlDocsStore() const
+	{
+		return m_htmlDocsStore;
+	}
+
+	void AppInfo::setHtmlDocsStore(const std::string& htmlDocsStore)
+	{
+		m_htmlDocsStore = htmlDocsStore;
+	}
+
 	std::map<std::string, std::string>& AppInfo::getExtraLinks()
 	{
 		return m_extraLinks;
