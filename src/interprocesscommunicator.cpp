@@ -1,7 +1,6 @@
 #include "interprocesscommunicator.h"
 #include <stdexcept>
 #include "aura.h"
-#include "helpers/stringhelpers.h"
 #ifdef __linux__
 #include <unistd.h>
 #include <sys/socket.h>
@@ -31,7 +30,7 @@ namespace Nickvision::Aura
 		m_path = "/tmp/" + Aura::getActive().getAppInfo().getId() + ".fifo";
 		if (m_path.size() >= 108)
 		{
-			m_path = "/tmp/" + StringHelpers::newGuid() + ".fifo";
+			throw std::runtime_error("Unable to create IPC server. Application ID is too long. Must be < 98 characters.");
 		}
 		memset(&m_sockaddr, 0, sizeof(m_sockaddr));
 		m_sockaddr.sun_family = AF_UNIX;
