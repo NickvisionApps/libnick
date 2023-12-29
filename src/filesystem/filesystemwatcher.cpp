@@ -62,9 +62,13 @@ namespace Nickvision::Aura::Filesystem
 		return m_changed;
 	}
 
-	bool FileSystemWatcher::containsExtension(const std::filesystem::path& extension)
+	bool FileSystemWatcher::isExtensionWatched(const std::filesystem::path& extension)
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
+		if (m_extensionFilters.size() == 0)
+		{
+			return true;
+		}
 		return std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) != m_extensionFilters.end();
 	}
 
@@ -134,7 +138,7 @@ namespace Nickvision::Aura::Filesystem
 					if (info->Action != FILE_ACTION_RENAMED_NEW_NAME)
 					{
 						std::filesystem::path changed{ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])) };
-						if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
+						if (isExtensionWatched(changed.extension()))
 						{
 							m_changed.invoke({ changed , static_cast<FileAction>(info->Action) });
 						}
@@ -214,7 +218,7 @@ namespace Nickvision::Aura::Filesystem
 				if (event->len)
 				{
 					std::filesystem::path changed{ m_path / event->name };
-					if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
+					if (isExtensionWatched(changed.extension()))
 					{
 						if (event->mask & IN_CREATE)
 						{

@@ -53,11 +53,12 @@ namespace Nickvision::Aura::Filesystem
 		 */
 		Events::Event<FileSystemChangedEventArgs>& changed();
 		/**
-		 * @brief Gets whether or not the file extension is being watched.
+		 * @brief Gets whether or not a file extension is being watched.
 		 * @param extension The file extension to check
-		 * @return True if watched, else false
+		 * @return True if extension is being watched, else false
+		 * @return True if list of extension filters is empty
 		 */
-		bool containsExtension(const std::filesystem::path& extension);
+		bool isExtensionWatched(const std::filesystem::path& extension);
 		/**
 		 * @brief Adds an extension of a file to watch for changes in the folder.
 		 * @param extension The file extension to add
@@ -71,7 +72,7 @@ namespace Nickvision::Aura::Filesystem
 		 */
 		bool removeExtensionFilter(const std::filesystem::path& extension);
 		/**
-		 * @brief Clears all extensions to watch. 
+		 * @brief Clears all watched extension filters. This will cause all extensions to be implicitly watched.
 		 * @return True if successful, else false
 		 */
 		bool clearExtensionFilters();
