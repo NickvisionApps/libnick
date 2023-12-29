@@ -7,6 +7,8 @@ This module contains various helper namespaces that making working with C++ a bi
 - [WebHelpers](#webhelpers)
 
 ## StringHelpers
+Description: Helper functions for working with std::string
+
 Interface: [stringhelpers.h](/include/helpers/stringhelpers.h)
 
 Type: `namespace`
@@ -86,6 +88,8 @@ Path: `Nickvision::Aura::StringHelpers`
     - Ex: `StringHelpers::toWstring("abc")` will return `L"abc"`.
 
 ## WebHelpers
+Description: Helper functions for working with websites
+
 Interface: [webhelpers.h](/include/helpers/webhelpers.h)
 
 Type: `namespace`
