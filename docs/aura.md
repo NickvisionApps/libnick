@@ -265,7 +265,7 @@ int main()
 ```
 
 ## DependencyLocator
-Description: Functions for working with dependencies
+Description: Functions for working with dependencies.
 
 Interface: [dependencylocator.h](/include/dependencylocator.h)
 
@@ -284,7 +284,7 @@ Path: `Nickvision::Aura::DependencyLocator`
     - Ex: `DependencyLocator::find("bash")` on Linux will return `/usr/bin/bash`.
 
 ## EnumFlags
-Description: Macros for working with enums to be used as flags
+Description: Macros for working with enums to be used as flags.
 
 Interface: [enumflags.h](/include/enumflags.h)
 
@@ -335,13 +335,13 @@ Path: `Nickvision::Aura::InterProcessCommunicator`
     - Throws: `std::logic_error` if Aura::init() was not called yet.
     - Throws: `std::runtime_error` if the client or server IPC cannot be created.
 - ```cpp
-  ~InterProcessCommunicator
+  ~InterProcessCommunicator()
   ```
     - Destructs an InterProcessCommunicator.
 - ```cpp
   bool communicate(const std::vector<std::string>& args, bool exitIfClient = false)
   ```
-    - Accepts: A command separated by args, args and a boolean on whether or not to exit the process if this instance is an IPC client, exitIfClient.
+    - Accepts: A command separated by args, args, and a boolean on whether or not to exit the process if this instance is an IPC client, exitIfClient.
     - Returns: `true` if command-line arguments were sent to a server instance.
     - Returns: `false` on failure to send arguments to a server instance
     - Note: If this instance is the running server and communicate was called on said instance, `CommandReceived` will still be triggered with the passed args.
@@ -378,3 +378,221 @@ If this program is ran for the first time, ipc will be the server instance. `han
 If this program is ran not for the first time, its arguments will be sent to the first instance and this instance itself will close. The first instance's `handleArguments` function will be called as a result of `CommandReceived` being invoked by the ipc server receiving the command. 
 
 ## SystemDirectories
+Description: Functions for working with system directories.
+
+Interface: [systemdirectories.h](/include/systemdirectories.h)
+
+Type: `namespace`
+
+Path: `Nickvision::Aura::SystemDirectories`
+
+### Functions
+- ```cpp
+  std::vector<std::filesystem::path> getPath()
+  ```
+    - Returns: The list of directory paths found in the system's PATH variable.
+- ```cpp
+  std::vector<std::filesystem::path> getConfig()
+  ```
+    - Returns: The list of directory paths found in the system's XDG_CONFIG_DIRS variable.
+- ```cpp
+  std::vector<std::filesystem::path> getData()
+  ```
+    - Returns: The list of directory paths found in the system's XDG_DATA_DIRS varibale.
+
+## UserDirectories
+Description: Functions for working with user directories.
+
+Interface: [userdirectories.h](/include/userdirectories.h)
+
+Type: `namespace`
+
+Path: `Nickvision::Aura::UserDirectories`
+
+### Functions
+- ```cpp
+  std::filesystem::path getHome()
+  ```
+    - Returns: The path to the user's home directory.
+    - Returns: `FOLDERID_Profile` on Windows, `$HOME` on Linux.
+- ```cpp
+  std::filesystem::path getConfig()
+  ```
+    - Returns: The path to the user's config directory.
+    - Returns: `FOLDERID_RoamingAppData` on Windows, `XDG_CONFIG_HOME` on Linux.
+- ```cpp
+  std::filesystem::path getApplicationConfig()
+  ```
+    - Returns: The path to the application's config directory.
+    - Returns: `getConfig() + Aura::getActive().getAppInfo().getName()`
+- ```cpp
+  std::filesystem::path getCache()
+  ```
+    - Returns: The path to the user's cache directory.
+    - Returns: `FOLDERID_LocalAppData` on Windows, `XDG_CACHE_HOME` on Linux.
+- ```cpp
+  std::filesystem::path getApplicationCache()
+  ```
+    - Returns: The path to the application's cache directory.
+    - Returns: `getCache() + Aura::getActive().getAppInfo().getName()`
+- ```cpp
+  std::filesystem::path getLocalData()
+  ```
+    - Returns: The path to the user's local data directory.
+    - Returns: `FOLDERID_RoamingAppData` on Windows, `XDG_DATA_HOME` on Linux.
+- ```cpp
+  std::filesystem::path getApplicationLocalData()
+  ```
+    - Returns: The path to the application's local data directory.
+    - Returns: `getLocalData() + Aura::getActive().getAppInfo().getName()`
+- ```cpp
+  std::filesystem::path getRuntime()
+  ```
+    - Returns: The path to the user's runtime directory.
+    - Returns: Empty path on Windows, `XDG_RUNTIME_DIR` on Linux.
+- ```cpp
+  std::filesystem::path getDesktop()
+  ```
+    - Returns: The path to the user's desktop directory.
+    - Returns: `FOLDERID_Desktop` on Windows, `XDG_DESKTOP_DIR` on Linux.
+- ```cpp
+  std::filesystem::path getDocuments()
+  ```
+    - Returns: The path to the user's documents directory.
+    - Returns: `FOLDERID_Documents` on Windows, `XDG_DOCUMENTS_DIR` on Linux.
+- ```cpp
+  std::filesystem::path getDownloads()
+  ```
+    - Returns: The path to the user's downloads directory.
+    - Returns: `FOLDERID_Downloads` on Windows, `XDG_DOWNLOAD_DIR` on Linux.
+- ```cpp
+  std::filesystem::path getMusic()
+  ```
+    - Returns: The path to the user's music directory.
+    - Returns: `FOLDERID_Music` on Windows, `XDG_MUSIC_DIR` on Linux.
+- ```cpp
+  std::filesystem::path getPictures()
+  ```
+    - Returns: The path to the user's pictures directory.
+    - Returns: `FOLDERID_Pictures` on Windows, `XDG_PICTURES_DIR` on Linux.
+- ```cpp
+  std::filesystem::path getPublicShare()
+  ```
+    - Returns: The path to the user's pictures directory.
+    - Returns: Empty path on Windows, `XDG_PUBLICSHARE_DIR` on Linux.
+- ```cpp
+  std::filesystem::path getTemplates()
+  ```
+    - Returns: The path to the user's pictures directory.
+    - Returns: `FOLDERID_Templates` on Windows, `XDG_TEMPLATES_DIR` on Linux.
+- ```cpp
+  std::filesystem::path getVideos()
+  ```
+    - Returns: The path to the user's pictures directory.
+    - Returns: `FOLDERID_Videos` on Windows, `XDG_VIDEOS_DIR` on Linux.
+
+## Version
+Description: A model for a version number. Formatted in "major.minor.build-dev".
+
+Interface: [version.h](/include/version.h)
+
+Type: `class`
+
+Path: `Nickvision::Aura::Version`
+
+### Member Variables
+- ```
+  Nickvision::Aura::VersionType VersionType: get
+  ```
+    - The type of the version
+
+### Functions
+- ```cpp
+  Version()
+  ```
+    - Constructs a blank Version.
+- ```cpp
+  Version(int major, int minor, int build)
+  ```
+    - Constructs a Version.
+    - Accepts: The major version number, major, the minor version number, minor, and the build version number, build.
+- ```cpp
+  Version(int major, int minor, int build, const std::string& dev)
+  ```
+    - Constructs a Version.
+    - Accepts: The major version number, major, the minor version number, minor, the build version number, build, and the dev version string, dev.
+- ```cpp
+  Version(const std::string& version)
+  ```
+    - Constructs a Version.
+    - Accepts: The version as a string to parse, version.
+    - Note: version must be in the format of `"major.minor.build-dev"`.
+- ```cpp
+  const std::string& toString() const
+  ```
+    - Returns: The string representation of the Version
+- ```cpp
+  bool empty() const
+  ```
+    - Returns: `true` if the Version object is empty
+    - Returns: `false` if the Version object is not empty
+- ```cpp
+  bool operator<(const Version& compare) const
+  ```
+    - Accepts: The version object to compare to this object, compare.
+    - Returns: `true` if this < compare.
+    - Returns: `false` if this >= compare.
+- ```cpp
+  bool operator<=(const Version& compare) const
+  ```
+    - Accepts: The version object to compare to this object, compare.
+    - Returns: `true` if this <= compare.
+    - Returns: `false` if this > compare.
+- ```cpp
+  bool operator>(const Version& compare) const
+  ```
+    - Accepts: The version object to compare to this object, compare.
+    - Returns: `true` if this > compare.
+    - Returns: `false` if this <= compare.
+- ```cpp
+  bool operator>=(const Version& compare) const
+  ```
+    - Accepts: The version object to compare to this object, compare.
+    - Returns: `true` if this >= compare.
+    - Returns: `false` if this < compare.
+- ```cpp
+  bool operator==(const Version& compare) const
+  ```
+    - Accepts: The version object to compare to this object, compare.
+    - Returns: `true` if this == compare.
+    - Returns: `false` if this != compare.
+- ```cpp
+  bool operator!=(const Version& compare) const
+  ```
+    - Accepts: The version object to compare to this object, compare.
+    - Returns: `true` if this != compare.
+    - Returns: `false` if this == compare.
+- ```cpp
+  friend std::ostream& operator<<(std::ostream& os, const Version& version)
+  ```
+    - Accepts: The ostream to output the version to, os, and the Version object to output, version.
+    - Returns: A reference to the ostream object accepted by the function.
+
+## VersionType
+Description: Types of a version
+
+Interface: [versiontype.h](/include/versiontype.h)
+
+Type: `enum class`
+
+Path: `Nickvision::Aura::VersionType`
+
+### Values
+- ```cpp
+  Stable = 0
+  ```
+    - Represents a stable version
+- ```cpp
+  Preview = 1
+  ```
+    - Represents a preview (dev) version
