@@ -309,12 +309,72 @@ Type: `class`
 Path: `Nickvision::Aura::InterProcessCommunicator`
 
 ### Member Variables
--
+- ```
+  bool isServer: get
+  ```
+    - Whether or not this instance is an IPC server.
+- ```
+  bool isClient: get
+  ```
+    - Whether or not this instance is an IPC client.
 
 ### Events
--
+- ```
+  Event<Nickvision::Aura::Events::ParamEventArgs<std::vector<std::string>>> CommandReceived
+  ```
+    - Invoked when this IPC server instance received a command from a client instance.
+    - Note: If `isClient()` is true, this event will never be invoked for that instance.
 
 ### Methods
--
+- ```cpp
+  InterProcessCommunicator()
+  ```
+    - Constructs an InterProcessCommunicator.
+    - Note: If this is the first IPC instance for all processes of this AppInfo::id, this instance will become an IPC server.
+    - Note: If this is not the first IPC instance, this instance will become an IPC client. 
+    - Throws: `std::logic_error` if Aura::init() was not called yet.
+    - Throws: `std::runtime_error` if the client or server IPC cannot be created.
+- ```cpp
+  ~InterProcessCommunicator
+  ```
+    - Destructs an InterProcessCommunicator.
+- ```cpp
+  bool communicate(const std::vector<std::string>& args, bool exitIfClient = false)
+  ```
+    - Accepts: A command separated by args, args and a boolean on whether or not to exit the process if this instance is an IPC client, exitIfClient.
+    - Returns: `true` if command-line arguments were sent to a server instance.
+    - Returns: `false` on failure to send arguments to a server instance
+    - Note: If this instance is the running server and communicate was called on said instance, `CommandReceived` will still be triggered with the passed args.
 
 ### Preforming Inter-Process Communication
+libaura uses named-pipes on Windows and Unix Domain Sockets on Linux to establish inter process server and client communicators, while abstracting all of that away from the consumer in the easy to use `InterProcessCommunicator` API.
+
+Upon creating an `InterProcessCommunicator` object, either `isServer()` or `isClient()` will return true depending on whether or not this instance is a server or client respectively. Server instances should register a callback to the `CommandReceived` event to be invoked when clients send commands to the server.
+
+NOTE: Whether or not `InterProcessCommunicator` is a client or server, its object should be kept alive for the entire running of an application to avoid accidentally removing a process as the server instance if the object is destroyed midway of an application running.
+
+Let's consider an example scenario for using the `InterProcessCommunicator`. Assume we have an application where we want the first instance to be considered the main, running instance. Assume that if other instances of said application are started, we want its arguments to be passed to the main instance and then have said other instances be closed. This will allow, for example, a GUI main instance to be manipulated via secondary CLI instances. 
+
+Here's the code for this:
+```cpp
+int main(int argc, char*[] argv)
+{
+    Aura::init(...); //ensures AppInfo::id
+    std::vector<std::string> modernArgs;
+    for(int i = 0; i < argc; i++)
+    {
+        if(argv[i])
+        {
+            modernArgs.push_back({ argv[i] });
+        }
+    }
+    InterProcessCommunicator ipc;
+    ipc.commandReceived() += handleArguments; //handleArguments definition excluded
+    ipc.communicate(modernArgs, true);
+}
+```
+If this program is ran for the first time, ipc will be the server instance. `handleArguments` will be invoked after `communicate` with its own arguments, as `communicate` still invokes `CommandReceived` even if ipc is the server instance. 
+
+If this program is ran not for the first time, its arguments will be sent to the first instance and this instance itself will close. The first instance's `handleArguments` function will be called as a result of `CommandReceived` being invoked by the ipc server receiving the command. 
+
+## SystemDirectories
