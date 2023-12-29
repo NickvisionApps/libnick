@@ -41,11 +41,11 @@ namespace Nickvision::Aura
 
 	protected:
 		Json::Value m_json;
-		std::string m_key;
-		Events::Event<Events::EventArgs> m_saved;
 
 	private:
+		std::string m_key;
 		std::filesystem::path m_path;
+		Events::Event<Events::EventArgs> m_saved;
 	};
 }
 

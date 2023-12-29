@@ -140,39 +140,181 @@ Path: `Nickvision::Aura::Aura`
 - ```
   Nickvision::Aura::AppInfo& AppInfo: get
   ```
-  - The AppInfo object for the application
+    - The AppInfo object for the application
 
 ### Methods
 - ```cpp
   T& getConfig<T>(const std::string& key)
   ```
-  - Accepts: The string key of the config file, key.
-  - Returns: A reference to the configuration object of type T with key key.
-  - Note: T must be a type that derives from `Nickvision::Aura::ConfigurationBase`
-  - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
+    - Accepts: The string key of the config file, key.
+    - Returns: A reference to the configuration object of type T with key key.
+    - Note: T must be a type that derives from `Nickvision::Aura::ConfigurationBase`
+    - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
 
 ### Static Functions
 - ```cpp
   Nickvision::Aura::Aura& init(const std::string& id, const std::string& name, const std::string& englishShortName)
   ```
-  - Accepts: An application id, id, an application name, name, and an application english short name, englishShortName.
-  - Returns: A reference to the newly initialized singleton `Aura` object.
-  - Throws: `std::runtime_error` if creation of Aura object fails.
+    - Accepts: An application id, id, an application name, name, and an application english short name, englishShortName.
+    - Returns: A reference to the newly initialized singleton `Aura` object.
+    - Throws: `std::runtime_error` if creation of Aura object fails.
 - ```cpp
   Nickvision::Aura::Aura& getActive()
   ```
-  - Returns: The reference to the singleton `Aura` object.
-  - Throws: `std::logic_error` if `Aura::init()` was not yet called.
+    - Returns: The reference to the singleton `Aura` object.
+    - Throws: `std::logic_error` if `Aura::init()` was not yet called.
 - ```cpp
   std::string getEnvVar(const std::string& key)
   ```
-  - Accepts: The name of the environment variable, key.
-  - Returns: The value of the environment variable with name key.
-  - Returns: An empty string if no environment variable with the name key was found.
-  - Ex: `Aura::getEnvVar("PATH")` will return the value of the system's path variable.
+    - Accepts: The name of the environment variable, key.
+    - Returns: The value of the environment variable with name key.
+    - Returns: An empty string if no environment variable with the name key was found.
+    - Ex: `Aura::getEnvVar("PATH")` will return the value of the system's path variable.
 - ```cpp
   bool setEnvVar(const std::string& key, const std::string& value)
   ```
-  - Accepts: The name of the environment variable, key, and the value to set said variable to, value.
-  - Returns: `true` if the environment variable of name key was set to value.
-  - Returns: `false` if setting the environment variable failed.
+    - Accepts: The name of the environment variable, key, and the value to set said variable to, value.
+    - Returns: `true` if the environment variable of name key was set to value.
+    - Returns: `false` if setting the environment variable failed.
+    - Ex: `Aura::setEnvVar("AURA", "true")` will set `"$AURA:true"`.
+
+## ConfigurationBase
+Description: A base class for configuration files.
+
+Interface: [configurationbase.h](/include/configurationbase.h)
+
+Type: `class`
+
+Path: `Nickvision::Aura::ConfigurationBase`
+
+### Member Variables
+- ```
+  std::string Key: get
+  ```
+    - The key of the configuration file.
+
+### Events
+- ```
+  Event<Nickvision::Aura::Events::EventArgs> Saved
+  ```
+    - Invoked when the configuration file is saved to disk
+
+### Methods
+- ```cpp
+  ConfigurationBase(const std::string& key)
+  ```
+    - Constructs the ConfigurationBase, loading the file from disk
+    - Accepts: The key of the configuration file, key
+- ```cpp
+  bool save()
+  ```
+    - Returns: `true` if the configuration file was saved to disk
+    - Returns: `false` if saving to disk failed
+
+### Creating Your Own Configuration Files
+The purpose of `ConfigurationBase` is to act as a base when defining your own configuration objects that you would like to be saved and retrieved from disk.
+
+Here are some key points when defining your own configuration objects:
+- Your configuration object's constructor must take a `const std::string& key` parameter and pass it to `ConfigurationBase`'s constructor. 
+    - Although you will not use key in your own implementation, it is required for `ConfigurationBase`'s functionality and will be filled-in by the `Aura::getConfig()` method.
+- `ConfigurationBase` exposes a protected `m_json` object which you must use in your implementation of getting and storing variables of your configuration object. 
+    - If this `m_json` object is not used, your configuration object will not be stored to disk correctly.
+- You must explicitly call the `save` method on your configuration object when you want to save the configuration to disk. Writing to the `m_json` object is not enough to trigger saving the file on disk
+
+Here is an example of a custom configuration object using `ConfigurationBase`:
+```cpp
+class AppConfig : public ConfigurationBase
+{
+public:
+	AppConfig(const std::string& key) : ConfigurationBase(key) 
+	{ 
+
+	}
+
+	int getPreviousCount() const
+	{
+        //0 is the default value of PreviousCount (i.e. if it does not exist in the file)
+		return m_json.get("PreviousCount", 0).asInt();
+	}
+
+	void setPreviousCount(int count)
+	{
+		m_json["PreviousCount"] = count;
+	}
+};
+```
+This object can now be used by an Aura-based application:
+```cpp
+void onConfigSaved(const Nickvision::Aura::Events::EventArgs& e)
+{
+    std::cout << "Config saved to disk." << std::endl;
+}
+
+int main()
+{
+    Aura::init(...);
+    AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
+    config.saved() += onConfigSaved;
+    if(config.getPreviousCount() > 0)
+    {
+        std::cout << config.getPreviousCount() << std::endl;
+    }
+    config.setPreviousCount(6);
+    config.save(); //onConfigSaved will be invoked on success
+}
+```
+
+## DependencyLocator
+Description: Functions for working with dependencies
+
+Interface: [dependencylocator.h](/include/dependencylocator.h)
+
+Type: `namespace`
+
+Path: `Nickvision::Aura::DependencyLocator`
+
+### Functions
+- ```cpp
+  const std::filesystem::path& find(std::string dependency)
+  ```
+    - Accepts: The name of a dependency to find, dependency.
+    - Returns: The path of the dependency on disk if found.
+    - Returns: An empty path if the dependency was not found on disk.
+    - Ex: `DependencyLocator::find("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
+    - Ex: `DependencyLocator::find("bash")` on Linux will return `/usr/bin/bash`.
+
+## EnumFlags
+Description: Macros for working with enums to be used as flags
+
+Interface: [enumflags.h](/include/enumflags.h)
+
+Type: `macro`
+
+### Definitions
+- ```cpp
+  #define DEFINE_ENUM_FLAG_OPERATORS(T)
+  ```
+    - Accepts: The type name of an `enum class` to be used as flags, T.
+    - Defines: Operators `~`, `|`, `&`, `^`, `|=`, `&=`, `^=` for T.
+    - Note: T must be of type `enum class`.
+    - Note: T's values must be separate by bits, i.e. values must be 1, 2, 4, 8, 16, and so on.
+ 
+## InterProcessCommunicator
+Description: An inter process communicator (server/client).
+
+Interface: [interprocesscommunicator.h](/include/interprocesscommunicator.h)
+
+Type: `class`
+
+Path: `Nickvision::Aura::InterProcessCommunicator`
+
+### Member Variables
+-
+
+### Events
+-
+
+### Methods
+-
+
+### Preforming Inter-Process Communication

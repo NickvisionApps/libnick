@@ -15,6 +15,13 @@ This means that the class provides the following methods for `m_var`: `std::stri
 
 If a member variable is get or set only, we will document this as `std::string Var: get` and `std::string Var: set` respectively. 
 
+### Events
+libaura provides a C#-inspired event system module under the Nickvision::Aura::Events namespace. This module contains a class `Event<T>` that handles registering and calling callbacks when said event is invoked.
+
+For example, assume a class has an event defined as `Nickvision::Aura::Events::Event<Nickvision::Aura::Events::EventArgs> m_saved`. We will document exposure of this event as `Event<Nickvision::Aura::Events::EventArgs> Saved`.
+
+This means that the class provides the following method, allowing consumers to register callbacks to the event using the `+=` operator: `Nickvision::Aura::Events::Event<Nickvision::Aura::Events::EventArgs>& saved()`.
+
 ## Modules
 - [Nickvision::Aura](aura.md)
 - [Nickvision::Aura::Events](events.md)
