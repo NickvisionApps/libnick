@@ -187,7 +187,18 @@ namespace Nickvision::Aura::Filesystem
 			mask |= IN_ACCESS;
 			mask |= IN_OPEN;
 		}
-		int watch{ inotify_add_watch(m_notify, m_path.c_str(), mask) };
+		std::vector<int> watches;
+		watches.push_back(inotify_add_watch(m_notify, m_path.c_str(), mask));
+		if (m_includeSubdirectories)
+		{
+			for (const std::filesystem::directory_entry& e : std::filesystem::recursive_directory_iterator(m_path))
+			{
+				if (e.is_directory())
+				{
+					watches.push_back(inotify_add_watch(m_notify, e.path().string().c_str(), mask));
+				}
+			}
+		}
 		while (m_watching)
 		{
 			std::vector<char> buf(1024 * (sizeof(struct inotify_event) + 16));
@@ -225,7 +236,10 @@ namespace Nickvision::Aura::Filesystem
 				}
 			}
 		}
-		inotify_rm_watch(m_notify, watch);
+		for (int watch : watches)
+		{
+			inotify_rm_watch(m_notify, watch);
+		}
 #endif
 	}
 }

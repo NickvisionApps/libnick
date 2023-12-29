@@ -33,12 +33,12 @@ namespace Nickvision::Aura::Filesystem
 		 */
 		~FileSystemWatcher();
 		/**
-		 * @brief Gets the path of the file system object being watched.
+		 * @brief Gets the path of the folder being watched.
 		 * @return The path of the folder being watched
 		 */
 		const std::filesystem::path& getPath() const;
 		/**
-		 * @brief Gets the flags of what to watch changed for.
+		 * @brief Gets the flags of what to watch changes for.
 		 * @return The flags of watched properties
 		 */
 		WatcherFlags getWatcherFlags() const;
@@ -48,7 +48,7 @@ namespace Nickvision::Aura::Filesystem
 		 */
 		bool getIncludeSubdirectories() const;
 		/**
-		 * @brief Gets the event for when the watched file system object is changed.
+		 * @brief Gets the event for when a watched flag of the folder is changed.
 		 * @return The changed event
 		 */
 		Events::Event<FileSystemChangedEventArgs>& changed();
