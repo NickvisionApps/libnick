@@ -6,4 +6,4 @@ libaura provides Nickvision apps with a common set of cross-platform (Windows an
 
 ## Documentation
 
-Documentation for this library and its modules can be found [here](/docs/readme.md).
+Documentation for this library and its modules can be found [here](/docs).
