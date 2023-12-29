@@ -188,12 +188,6 @@ namespace Nickvision::Aura
 		 * @return The application translator credits
 		 */
 		std::vector<std::string> getTranslatorNames() const;
-		/**
-		 * @brief Converts a map of URLs to a vector
-		 * @param urls The map of URLs
-		 * @return The vector of URLs
-		 */
-		static std::vector<std::string> convertUrlMapToVector(const std::map<std::string, std::string>& urls);
 
 	private:
 		std::string m_id;
@@ -213,6 +207,14 @@ namespace Nickvision::Aura
 		std::map<std::string, std::string> m_designers;
 		std::map<std::string, std::string> m_artists;
 		std::string m_translatorCredits;
+
+	public:
+		/**
+		 * @brief Converts a map of URLs to a vector
+		 * @param urls The map of URLs
+		 * @return The vector of URLs
+		 */
+		static std::vector<std::string> convertUrlMapToVector(const std::map<std::string, std::string>& urls);
 	};
 }
 

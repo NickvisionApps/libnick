@@ -113,13 +113,15 @@ Path: `Nickvision::Aura::AppInfo`
   ```
     - The application translator credits
 
-### Functions
+### Methods
 - ```cpp
   std::vector<std::string> getTranslatorNames() const
   ```
     - Returns: The list of names of translators of the application
+
+### Static Functions
 - ```cpp
-  static std::vector<<std::string> convertUrlMapToVector(const std::map<std::string, std::string>& urls)
+  std::vector<<std::string> convertUrlMapToVector(const std::map<std::string, std::string>& urls)
   ```
     - Accepts: A map with keys of type string and values of type string, urls.
     - Returns: A list of entries in the following format: `"{key} {value}"`.
@@ -134,3 +136,43 @@ Type: `class`
 
 Path: `Nickvision::Aura::Aura`
 
+### Member Variables
+- ```
+  Nickvision::Aura::AppInfo& AppInfo: get
+  ```
+  - The AppInfo object for the application
+
+### Methods
+- ```cpp
+  T& getConfig<T>(const std::string& key)
+  ```
+  - Accepts: The string key of the config file, key.
+  - Returns: A reference to the configuration object of type T with key key.
+  - Note: T must be a type that derives from `Nickvision::Aura::ConfigurationBase`
+  - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
+
+### Static Functions
+- ```cpp
+  Nickvision::Aura::Aura& init(const std::string& id, const std::string& name, const std::string& englishShortName)
+  ```
+  - Accepts: An application id, id, an application name, name, and an application english short name, englishShortName.
+  - Returns: A reference to the newly initialized singleton `Aura` object.
+  - Throws: `std::runtime_error` if creation of Aura object fails.
+- ```cpp
+  Nickvision::Aura::Aura& getActive()
+  ```
+  - Returns: The reference to the singleton `Aura` object.
+  - Throws: `std::logic_error` if `Aura::init()` was not yet called.
+- ```cpp
+  std::string getEnvVar(const std::string& key)
+  ```
+  - Accepts: The name of the environment variable, key.
+  - Returns: The value of the environment variable with name key.
+  - Returns: An empty string if no environment variable with the name key was found.
+  - Ex: `Aura::getEnvVar("PATH")` will return the value of the system's path variable.
+- ```cpp
+  bool setEnvVar(const std::string& key, const std::string& value)
+  ```
+  - Accepts: The name of the environment variable, key, and the value to set said variable to, value.
+  - Returns: `true` if the environment variable of name key was set to value.
+  - Returns: `false` if setting the environment variable failed.
