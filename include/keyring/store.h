@@ -19,9 +19,10 @@ namespace Nickvision::Aura::Keyring
 	{
 	public:
 		/**
-		 * @brief Constructs a Store object. The isValid() function should be called to ensure that the store was loaded successfully.
+		 * @brief Constructs a Store object.
 		 * @param name The name of the store
 		 * @param password The password of the store
+		 * @throw std::runtime_error Thrown if the store is unable to be created
 		 */
 		Store(const std::string& name, const std::string& password);
 		/**
@@ -34,11 +35,6 @@ namespace Nickvision::Aura::Keyring
 		 * @param store The object to move
 		 */
 		Store(Store&& store) noexcept;
-		/**
-		 * @brief Gets whether or not the store object is valid.
-		 * @return True if valid, else false
-		 */
-		bool isValid() const;
 		/**
 		 * @brief Gets the name of the store.
 		 * @return The name of the store

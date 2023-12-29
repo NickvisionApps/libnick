@@ -1,5 +1,5 @@
 #include "keyring/store.h"
-#include <iostream>
+#include <stdexcept>
 #include "userdirectories.h"
 
 namespace Nickvision::Aura::Keyring
@@ -40,19 +40,19 @@ namespace Nickvision::Aura::Keyring
 				}
 				else
 				{
-					std::cerr << "[STORE] Unable to exec create table command. Key may be invalid. " << std::string(err ? err : "") << std::endl;
+					throw std::runtime_error("Unable to exec create table command. Key may be invalid. " + std::string(err ? err : ""));
 					sqlite3_free(err);
 				}
 			}
 			else
 			{
-				std::cerr << "[STORE] Unable to key the database." << std::endl;
+				throw std::runtime_error("Unable to key the database.");
 			}
 			sqlite3_close(database);
 		}
 		else
 		{
-			std::cerr << "[STORE] Unable to open the database." << std::endl;
+			throw std::runtime_error("Unable to open the database.");
 		}
 	}
 
@@ -72,12 +72,6 @@ namespace Nickvision::Aura::Keyring
 		m_password = std::move(store.m_password);
 		m_database = std::move(store.m_database);
 		m_path = std::move(store.m_path);
-	}
-
-	bool Store::isValid() const
-	{
-		std::lock_guard<std::mutex> lock{ m_mutex };
-		return m_database ? true : false;
 	}
 
 	const std::string& Store::getName() const

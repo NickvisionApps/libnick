@@ -73,12 +73,11 @@ namespace Nickvision::Aura::Keyring
 		//If password not empty (a.k.a user-provided or system-provided), get store
 		if (!password.empty())
 		{
-			Store store{ name, password };
-			if (store.isValid())
+			try
 			{
-				return { { store } };
+				return { { { name, password } } };
 			}
-			else
+			catch (...)
 			{
 				return std::nullopt;
 			}
