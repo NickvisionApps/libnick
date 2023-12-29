@@ -4,7 +4,7 @@ This folder contains all of the necessary documentation for using libaura and it
 
 Each module (separated by namespace) contains its own documentation file that can be found within this folder or via one of the links below.
 
-## Table of Contents
+## Modules
 - [Nickvision::Aura](aura.md)
 - [Nickvision::Aura::Events](events.md)
 - [Nickvision::Aura::Filesystem](filesystem.md)
