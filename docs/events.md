@@ -12,7 +12,7 @@ Consumers can register callbacks with an event which will be invoked when the ev
 ## Event
 Description: An event that can have handlers subscribe to it, which in turn will be called when the event is invoked.
 
-Interface: [event.h](/include/event.h)
+Interface: [event.h](/include/events/event.h)
 
 Type: `template<DerivedEventArgs T> class`
 - The typename T must derive from `Nickvision::Aura::Events::EventArgs`
@@ -111,7 +111,7 @@ This program will print "Config saved." as a result of the event being invoke on
 ## EventArgs
 Description: A base class for event arguments.
 
-Interface: [eventargs.h](/include/eventargs.h)
+Interface: [eventargs.h](/include/events/eventargs.h)
 
 Type: `class`
 
@@ -129,7 +129,7 @@ This class should be the base class of all objects used as a parameter for a lib
 ## ParamEventArgs
 Description: An event argument that contains a single parameter.
 
-Interface: [parameventargs.h](/include/parameventargs.h)
+Interface: [parameventargs.h](/include/events/parameventargs.h)
 
 Type: `template<typename T> class`
 
