@@ -20,7 +20,7 @@ namespace Nickvision::Aura::Network
 	public:
 		/**
 		 * @brief Constructs a NetworkMonitor. This method will call checkConnectionState() to get the initial system network state.
-		 * @throw std::runtime_error Thrown if unable to create the NetworkMonitor.
+		 * @throw std::runtime_error Thrown if unable to create the NetworkMonitor
 		 */
 		NetworkMonitor();
 		/**
@@ -47,9 +47,18 @@ namespace Nickvision::Aura::Network
 		Events::Event<NetworkStateChangedEventArgs> m_stateChanged;
 		NetworkState m_connectionState;
 #ifdef _WIN32
+		void* m_netListManagerEvents;
 		CComPtr<INetworkListManager> m_netListManager;
+		CComPtr<IConnectionPointContainer> m_connectionPointContainer;
+		CComPtr<IConnectionPoint> m_connectionPoint;
+		CComPtr<IUnknown> m_sink;
+		DWORD m_cookie;
 #elif defined(__linux__)
 		unsigned long m_networkChangedHandlerId;
+#endif
+
+#ifdef _WIN32
+		friend class NetworkListManagerEvents;
 #endif
 	};
 }
