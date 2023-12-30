@@ -288,9 +288,9 @@ Description: Macros for working with enums to be used as flags.
 
 Interface: [enumflags.h](/include/enumflags.h)
 
-Type: `macro`
+Type: `namespace`
 
-### Definitions
+### Macros
 - ```cpp
   #define DEFINE_ENUM_FLAG_OPERATORS(T)
   ```
