@@ -23,7 +23,7 @@ namespace Nickvision::Aura::Keyring
      * @param password The password to measure the strength of
      * @return The strength of the password
      */
-    PasswordStrength getPasswordStrength(const std::string& password);
+    PasswordStrength getPasswordStrength(const std::string& password) noexcept;
 }
 
 #endif //PASSWORDSTRENGTH_H

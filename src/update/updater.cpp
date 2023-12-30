@@ -38,18 +38,18 @@ namespace Nickvision::Aura::Update
 		}
 	}
 
-	Version Updater::fetchCurrentStableVersion()
+	Version Updater::fetchCurrentStableVersion() noexcept
 	{
 		return fetchCurrentVersion(VersionType::Stable);
 	}
 
-	Version Updater::fetchCurrentPreviewVersion()
+	Version Updater::fetchCurrentPreviewVersion() noexcept
 	{
 		return fetchCurrentVersion(VersionType::Preview);
 	}
 
 #ifdef _WIN32
-	bool Updater::windowsUpdate(VersionType versionType)
+	bool Updater::windowsUpdate(VersionType versionType) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
@@ -87,7 +87,7 @@ namespace Nickvision::Aura::Update
 	}
 #endif
 
-	Version Updater::fetchCurrentVersion(VersionType versionType)
+	Version Updater::fetchCurrentVersion(VersionType versionType) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		std::string releases = WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases");

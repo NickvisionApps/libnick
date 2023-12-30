@@ -2,7 +2,7 @@
 
 namespace Nickvision::Aura::Keyring
 {
-	PasswordStrength getPasswordStrength(const std::string& password)
+	PasswordStrength getPasswordStrength(const std::string& password) noexcept
 	{
 		if (password.empty())
 		{

@@ -5,7 +5,7 @@
 
 namespace Nickvision::Aura::Localization::Documentation
 {
-	std::string getHelpUrl(const std::string& pageName);
+	std::string getHelpUrl(const std::string& pageName) noexcept;
 }
 
 #endif //DOCUMENTATION

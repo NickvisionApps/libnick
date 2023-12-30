@@ -61,7 +61,7 @@ namespace Nickvision::Aura
 		}
 	}
 
-	InterProcessCommunicator::~InterProcessCommunicator()
+	InterProcessCommunicator::~InterProcessCommunicator() noexcept
 	{
 		m_serverRunning = false;
 #ifdef _WIN32
@@ -82,22 +82,22 @@ namespace Nickvision::Aura
 #endif
 	}
 
-	Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& InterProcessCommunicator::commandReceived()
+	Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& InterProcessCommunicator::commandReceived() noexcept
 	{
 		return m_commandReceived;
 	}
 
-	bool InterProcessCommunicator::isServer() const
+	bool InterProcessCommunicator::isServer() const noexcept
 	{
 		return m_serverRunning;
 	}
 
-	bool InterProcessCommunicator::isClient() const
+	bool InterProcessCommunicator::isClient() const noexcept
 	{
 		return !m_serverRunning;
 	}
 
-	bool InterProcessCommunicator::communicate(const std::vector<std::string>& args, bool exitIfClient)
+	bool InterProcessCommunicator::communicate(const std::vector<std::string>& args, bool exitIfClient) noexcept
 	{
 		if (m_serverRunning)
 		{
@@ -140,7 +140,7 @@ namespace Nickvision::Aura
 		return true;
 	}
 
-	void InterProcessCommunicator::runServer()
+	void InterProcessCommunicator::runServer() noexcept
 	{
 		std::vector<char> buffer(1024);
 		while (m_serverRunning)
@@ -165,19 +165,18 @@ namespace Nickvision::Aura
 			{
 				break;
 			}
-			if (clientSocket == -1)
+			if (clientSocket != -1)
 			{
-				throw std::runtime_error("Unable to accept on IPC socket.");
+				ssize_t r{ read(clientSocket, &buffer[0], buffer.size()) };
+				std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) }));
+				for (size_t i = 0; i < args.size(); i++)
+				{
+					r = read(clientSocket, &buffer[0], buffer.size());
+					args[i] = { &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) };
+				}
+				m_commandReceived.invoke({ args });
+				close(clientSocket);
 			}
-			ssize_t r{ read(clientSocket, &buffer[0], buffer.size()) };
-			std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) }));
-			for (size_t i = 0; i < args.size(); i++)
-			{
-				r = read(clientSocket, &buffer[0], buffer.size());
-				args[i] = { &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) };
-			}
-			m_commandReceived.invoke({ args });
-			close(clientSocket);
 #endif
 		}
 	}

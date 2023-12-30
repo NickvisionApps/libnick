@@ -12,7 +12,7 @@
 
 namespace Nickvision::Aura::Network
 {
-	NetworkMonitor::NetworkMonitor()
+	NetworkMonitor::NetworkMonitor() noexcept
 		: m_connectionState{ false }
 	{
 #ifdef _WIN32
@@ -25,24 +25,24 @@ namespace Nickvision::Aura::Network
 #endif
 	}
 
-	NetworkMonitor::~NetworkMonitor()
+	NetworkMonitor::~NetworkMonitor() noexcept
 	{
 #ifdef __linux__
 		g_signal_handler_disconnect(G_OBJECT(g_network_monitor_get_default()), m_networkChangedHandlerId);
 #endif
 	}
 
-	Events::Event<NetworkStateChangedEventArgs>& NetworkMonitor::stateChanged()
+	Events::Event<NetworkStateChangedEventArgs>& NetworkMonitor::stateChanged() noexcept
 	{
 		return m_stateChanged;
 	}
 
-	NetworkState NetworkMonitor::getConnectionState() const
+	NetworkState NetworkMonitor::getConnectionState() const noexcept
 	{
 		return m_connectionState;
 	}
 
-	void NetworkMonitor::checkConnectionState()
+	void NetworkMonitor::checkConnectionState() noexcept
 	{
 		NetworkState newState{ NetworkState::Disconnected };
 		std::string noNetCheck{ StringHelpers::toLower(Aura::getEnvVar("AURA_DISABLE_NETCHECK")) };

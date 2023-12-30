@@ -5,7 +5,7 @@
 
 namespace Nickvision::Aura
 {
-	const std::filesystem::path& DependencyLocator::find(std::string dependency)
+	const std::filesystem::path& DependencyLocator::find(std::string dependency) noexcept
 	{
 		static std::map<std::string, std::filesystem::path> locations;
 		static std::mutex mutex;
@@ -25,16 +25,16 @@ namespace Nickvision::Aura
 			}
 		}
 		locations[dependency] = std::filesystem::path();
-		std::filesystem::path current{ std::filesystem::current_path() / dependency };
-		if (std::filesystem::exists(current))
+		std::filesystem::path path{ std::filesystem::current_path() / dependency };
+		if (std::filesystem::exists(path))
 		{
-			locations[dependency] = current;
+			locations[dependency] = path;
 		}
 		else
 		{
 			for (const std::filesystem::path& dir : SystemDirectories::getPath())
 			{
-				std::filesystem::path path{ dir / dependency };
+				path = { dir / dependency };
 				if (std::filesystem::exists(path) && dir.string().find("AppData\\Local\\Microsoft\\WindowsApps") == std::string::npos)
 				{
 					locations[dependency] = path;

@@ -31,7 +31,7 @@ namespace Nickvision::Aura::Filesystem
 		m_watchThread = std::jthread(&FileSystemWatcher::watch, this);
 	}
 
-	FileSystemWatcher::~FileSystemWatcher()
+	FileSystemWatcher::~FileSystemWatcher() noexcept
 	{
 		m_watching = false;
 #ifdef _WIN32
@@ -42,27 +42,27 @@ namespace Nickvision::Aura::Filesystem
 #endif
 	}
 
-	const std::filesystem::path& FileSystemWatcher::getPath() const
+	const std::filesystem::path& FileSystemWatcher::getPath() const noexcept
 	{
 		return m_path;
 	}
 
-	WatcherFlags FileSystemWatcher::getWatcherFlags() const
+	WatcherFlags FileSystemWatcher::getWatcherFlags() const noexcept
 	{
 		return m_watcherFlags;
 	}
 
-	bool FileSystemWatcher::getIncludeSubdirectories() const
+	bool FileSystemWatcher::getIncludeSubdirectories() const noexcept
 	{
 		return m_includeSubdirectories;
 	}
 
-	Events::Event<FileSystemChangedEventArgs>& FileSystemWatcher::changed()
+	Events::Event<FileSystemChangedEventArgs>& FileSystemWatcher::changed() noexcept
 	{
 		return m_changed;
 	}
 
-	bool FileSystemWatcher::isExtensionWatched(const std::filesystem::path& extension)
+	bool FileSystemWatcher::isExtensionWatched(const std::filesystem::path& extension) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (m_extensionFilters.size() == 0)
@@ -72,7 +72,7 @@ namespace Nickvision::Aura::Filesystem
 		return std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) != m_extensionFilters.end();
 	}
 
-	bool FileSystemWatcher::addExtensionFilter(const std::filesystem::path& extension)
+	bool FileSystemWatcher::addExtensionFilter(const std::filesystem::path& extension) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) == m_extensionFilters.end())
@@ -83,7 +83,7 @@ namespace Nickvision::Aura::Filesystem
 		return false;
 	}
 
-	bool FileSystemWatcher::removeExtensionFilter(const std::filesystem::path& extension)
+	bool FileSystemWatcher::removeExtensionFilter(const std::filesystem::path& extension) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		auto find{ std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) };
@@ -95,14 +95,14 @@ namespace Nickvision::Aura::Filesystem
 		return false;
 	}
 
-	bool FileSystemWatcher::clearExtensionFilters()
+	bool FileSystemWatcher::clearExtensionFilters() noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_extensionFilters.clear();
 		return true;
 	}
 
-	void FileSystemWatcher::watch()
+	void FileSystemWatcher::watch() noexcept
 	{
 #ifdef _WIN32
 		HANDLE folder{ CreateFileW(m_path.c_str(), FILE_LIST_DIRECTORY, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, nullptr) };

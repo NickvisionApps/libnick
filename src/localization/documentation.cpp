@@ -5,7 +5,7 @@
 
 namespace Nickvision::Aura::Localization
 {
-	std::string Documentation::getHelpUrl(const std::string& pageName)
+	std::string Documentation::getHelpUrl(const std::string& pageName) noexcept
 	{
 #ifdef __linux__
 		if (Aura::getEnvVar("SNAP").empty())

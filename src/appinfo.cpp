@@ -6,77 +6,72 @@
 
 namespace Nickvision::Aura
 {
-	AppInfo::AppInfo()
-	{
-
-	}
-
-	const std::string& AppInfo::getId() const
+	const std::string& AppInfo::getId() const noexcept
 	{
 		return m_id;
 	}
 
-	void AppInfo::setId(const std::string& id)
+	void AppInfo::setId(const std::string& id) noexcept
 	{
 		m_id = id;
 	}
 
-	const std::string& AppInfo::getName() const
+	const std::string& AppInfo::getName() const noexcept
 	{
 		return m_name;
 	}
 
-	void AppInfo::setName(const std::string& name)
+	void AppInfo::setName(const std::string& name) noexcept
 	{
 		m_name = name;
 	}
 
-	const std::string& AppInfo::getShortName() const
+	const std::string& AppInfo::getShortName() const noexcept
 	{
 		return m_shortName;
 	}
 
-	void AppInfo::setShortName(const std::string& shortName)
+	void AppInfo::setShortName(const std::string& shortName) noexcept
 	{
 		m_shortName = shortName;
 	}
 
-	const std::string& AppInfo::getEnglishShortName() const
+	const std::string& AppInfo::getEnglishShortName() const noexcept
 	{
 		return m_englishShortName;
 	}
 
-	void AppInfo::setEnglishShortName(const std::string& englishShortName)
+	void AppInfo::setEnglishShortName(const std::string& englishShortName) noexcept
 	{
 		m_englishShortName = englishShortName;
 	}
 
-	const std::string& AppInfo::getDescription() const
+	const std::string& AppInfo::getDescription() const noexcept
 	{
 		return m_description;
 	}
 
-	void AppInfo::setDescription(const std::string& description)
+	void AppInfo::setDescription(const std::string& description) noexcept
 	{
 		m_description = description;
 	}
 
-	const Version& AppInfo::getVersion() const
+	const Version& AppInfo::getVersion() const noexcept
 	{
 		return m_version;
 	}
 
-	void AppInfo::setVersion(const Version& version)
+	void AppInfo::setVersion(const Version& version) noexcept
 	{
 		m_version = version;
 	}
 
-	const std::string& AppInfo::getChangelog() const
+	const std::string& AppInfo::getChangelog() const noexcept
 	{
 		return m_changelog;
 	}
 
-	void AppInfo::setChangelog(const std::string& changelog)
+	void AppInfo::setChangelog(const std::string& changelog) noexcept
 	{
 		m_changelog = changelog;
 		if (m_changelog.empty())
@@ -98,102 +93,102 @@ namespace Nickvision::Aura
 		m_htmlChangelog = parser->Parse(markdown);
 	}
 
-	const std::string& AppInfo::getHtmlChangelog() const
+	const std::string& AppInfo::getHtmlChangelog() const noexcept
 	{
 		return m_htmlChangelog;
 	}
 
-	const std::string& AppInfo::getSourceRepo() const
+	const std::string& AppInfo::getSourceRepo() const noexcept
 	{
 		return m_sourceRepo;
 	}
 
-	void AppInfo::setSourceRepo(const std::string& sourceRepo)
+	void AppInfo::setSourceRepo(const std::string& sourceRepo) noexcept
 	{
 		m_sourceRepo = sourceRepo;
 	}
 
-	const std::string& AppInfo::getIssueTracker() const
+	const std::string& AppInfo::getIssueTracker() const noexcept
 	{
 		return m_issueTracker;
 	}
 
-	void AppInfo::setIssueTracker(const std::string& issueTracker)
+	void AppInfo::setIssueTracker(const std::string& issueTracker) noexcept
 	{
 		m_issueTracker = issueTracker;
 	}
 
-	const std::string& AppInfo::getSupportUrl() const
+	const std::string& AppInfo::getSupportUrl() const noexcept
 	{
 		return m_supportUrl;
 	}
 
-	void AppInfo::setSupportUrl(const std::string& supportUrl)
+	void AppInfo::setSupportUrl(const std::string& supportUrl) noexcept
 	{
 		m_supportUrl = supportUrl;
 	}
 
-	const std::string& AppInfo::getHtmlDocsStore() const
+	const std::string& AppInfo::getHtmlDocsStore() const noexcept
 	{
 		return m_htmlDocsStore;
 	}
 
-	void AppInfo::setHtmlDocsStore(const std::string& htmlDocsStore)
+	void AppInfo::setHtmlDocsStore(const std::string& htmlDocsStore) noexcept
 	{
 		m_htmlDocsStore = htmlDocsStore;
 	}
 
-	std::map<std::string, std::string>& AppInfo::getExtraLinks()
+	std::map<std::string, std::string>& AppInfo::getExtraLinks() noexcept
 	{
 		return m_extraLinks;
 	}
 
-	const std::map<std::string, std::string>& AppInfo::getExtraLinks() const
+	const std::map<std::string, std::string>& AppInfo::getExtraLinks() const noexcept
 	{
 		return m_extraLinks;
 	}
 
-	std::map<std::string, std::string>& AppInfo::getDevelopers()
+	std::map<std::string, std::string>& AppInfo::getDevelopers() noexcept
 	{
 		return m_developers;
 	}
 
-	const std::map<std::string, std::string>& AppInfo::getDevelopers() const
+	const std::map<std::string, std::string>& AppInfo::getDevelopers() const noexcept
 	{
 		return m_developers;
 	}
 
-	std::map<std::string, std::string>& AppInfo::getDesigners()
+	std::map<std::string, std::string>& AppInfo::getDesigners() noexcept
 	{
 		return m_designers;
 	}
 
-	const std::map<std::string, std::string>& AppInfo::getDesigners() const
+	const std::map<std::string, std::string>& AppInfo::getDesigners() const noexcept
 	{
 		return m_designers;
 	}
 
-	std::map<std::string, std::string>& AppInfo::getArtists()
+	std::map<std::string, std::string>& AppInfo::getArtists() noexcept
 	{
 		return m_artists;
 	}
 
-	const std::map<std::string, std::string>& AppInfo::getArtists() const
+	const std::map<std::string, std::string>& AppInfo::getArtists() const noexcept
 	{
 		return m_artists;
 	}
 
-	const std::string& AppInfo::getTranslatorCredits() const
+	const std::string& AppInfo::getTranslatorCredits() const noexcept
 	{
 		return m_translatorCredits;
 	}
 
-	void AppInfo::setTranslatorCredits(const std::string& translatorCredits)
+	void AppInfo::setTranslatorCredits(const std::string& translatorCredits) noexcept
 	{
 		m_translatorCredits = translatorCredits;
 	}
 
-	std::vector<std::string> AppInfo::getTranslatorNames() const
+	std::vector<std::string> AppInfo::getTranslatorNames() const noexcept
 	{
 		if (m_translatorCredits.empty())
 		{
@@ -219,7 +214,7 @@ namespace Nickvision::Aura
 		return vec;
 	}
 
-	std::vector<std::string> AppInfo::convertUrlMapToVector(const std::map<std::string, std::string>& urls)
+	std::vector<std::string> AppInfo::convertUrlMapToVector(const std::map<std::string, std::string>& urls) noexcept
 	{
 		std::vector<std::string> vec;
 		for (const std::pair<const std::string, std::string>& pair : urls)

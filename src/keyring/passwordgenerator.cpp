@@ -9,18 +9,18 @@ namespace Nickvision::Aura::Keyring
 	std::vector<char> PasswordGenerator::m_lowerChars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 	std::vector<char> PasswordGenerator::m_specialChars = { '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~' };
 
-	PasswordGenerator::PasswordGenerator(PasswordContent contentFlags)
+	PasswordGenerator::PasswordGenerator(PasswordContent contentFlags) noexcept
 	{
 		srand((unsigned)time(0));
 		setContentFlags(contentFlags);
 	}
 
-	PasswordContent PasswordGenerator::getContentFlags() const
+	PasswordContent PasswordGenerator::getContentFlags() const noexcept
 	{
 		return m_contentFlags;
 	}
 
-	void PasswordGenerator::setContentFlags(PasswordContent contentFlags)
+	void PasswordGenerator::setContentFlags(PasswordContent contentFlags) noexcept
 	{
 		m_contentFlags = contentFlags;
 		m_chars.clear();
@@ -42,7 +42,7 @@ namespace Nickvision::Aura::Keyring
 		}
 	}
 
-	std::string PasswordGenerator::next(size_t length)
+	std::string PasswordGenerator::next(size_t length) noexcept
 	{
 		std::string pass;
 		while (pass.size() < length)

@@ -15,25 +15,25 @@ namespace Nickvision::Aura::Network
 		/**
 		 * @brief Constructs a NetworkMonitor. 
 		 */
-		NetworkMonitor();
+		NetworkMonitor() noexcept;
 		/**
 		 * @brief Destructs a NetworkMonitor. 
 		 */
-		~NetworkMonitor();
+		~NetworkMonitor() noexcept;
 		/**
 		 * @brief Gets the StateChanged event. This event is invoked whenever the state of the network connection changes.
 		 * @return The StateChanged event
 		 */
-		Events::Event<NetworkStateChangedEventArgs>& stateChanged();
+		Events::Event<NetworkStateChangedEventArgs>& stateChanged() noexcept;
 		/**
 		 * @brief Gets the state of the network connection.
 		 * @return NetworkState
 		 */
-		NetworkState getConnectionState() const;
+		NetworkState getConnectionState() const noexcept;
 		/**
 		 * @brief Manually checks for the state of the system's network connection. If a change is detected, the StateChanged even will be invoked.
 		 */
-		void checkConnectionState();
+		void checkConnectionState() noexcept;
 
 	private:
 		Events::Event<NetworkStateChangedEventArgs> m_stateChanged;

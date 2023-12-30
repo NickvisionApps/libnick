@@ -25,7 +25,7 @@ namespace Nickvision::Aura
 		/**
 		 * @brief Gets the AppInfo object for the application.
 		 */
-		AppInfo& getAppInfo();
+		AppInfo& getAppInfo() noexcept;
 		/**
 		 * @brief Gets a config object.
 		 * @tparam T Derived type of ConfigurationBase
@@ -33,7 +33,7 @@ namespace Nickvision::Aura
 		 * @return The config object
 		 */
 		template<DerivedConfigurationBase T>
-		T& getConfig(const std::string& key)
+		T& getConfig(const std::string& key) noexcept
 		{
 			if (!m_configFiles.contains(key))
 			{
@@ -77,14 +77,14 @@ namespace Nickvision::Aura
 		 * @param key The environment variable to get
 		 * @return The environment variable if found, else empty string
 		 */
-		static std::string getEnvVar(const std::string& key);
+		static std::string getEnvVar(const std::string& key) noexcept;
 		/**
 		 * @brief Sets a system environment variable.
 		 * @param key The environment variable to set
 		 * @param value The value for the environment variable
 		 * @return True if set, else false
 		 */
-		static bool setEnvVar(const std::string& key, const std::string& value);
+		static bool setEnvVar(const std::string& key, const std::string& value) noexcept;
 
 	private:
 		static std::unique_ptr<Aura> m_instance;

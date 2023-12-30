@@ -5,7 +5,7 @@
 
 namespace Nickvision::Aura
 {
-	ConfigurationBase::ConfigurationBase(const std::string& key)
+	ConfigurationBase::ConfigurationBase(const std::string& key) noexcept
 		: m_key{ key },
 		m_path{ UserDirectories::getApplicationConfig() / (key + ".json") }
 	{
@@ -16,17 +16,17 @@ namespace Nickvision::Aura
 		}
 	}
 
-	const std::string& ConfigurationBase::getKey() const
+	const std::string& ConfigurationBase::getKey() const noexcept
 	{
 		return m_key;
 	}
 
-	Events::Event<Events::EventArgs>& ConfigurationBase::saved()
+	Events::Event<Events::EventArgs>& ConfigurationBase::saved() noexcept
 	{
 		return m_saved;
 	}
 
-	bool ConfigurationBase::save()
+	bool ConfigurationBase::save() noexcept
 	{
 		if (m_key.empty())
 		{

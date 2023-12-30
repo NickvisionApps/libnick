@@ -15,7 +15,7 @@
 namespace Nickvision::Aura
 {
 #ifdef __linux__
-	static std::filesystem::path getXDGDir(const std::string& key)
+	static std::filesystem::path getXDGDir(const std::string& key) noexcept
 	{
 		std::string var{ Aura::getEnvVar(key) };
 		if (!var.empty())
@@ -49,7 +49,7 @@ namespace Nickvision::Aura
 	}
 #endif
 
-	std::filesystem::path UserDirectories::getHome()
+	std::filesystem::path UserDirectories::getHome() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -66,7 +66,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getConfig()
+	std::filesystem::path UserDirectories::getConfig() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -84,14 +84,14 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getApplicationConfig()
+	std::filesystem::path UserDirectories::getApplicationConfig() noexcept
 	{
 		std::filesystem::path result = getConfig() / Aura::getActive().getAppInfo().getName();
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getCache()
+	std::filesystem::path UserDirectories::getCache() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -109,14 +109,14 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getApplicationCache()
+	std::filesystem::path UserDirectories::getApplicationCache() noexcept
 	{
 		std::filesystem::path result = getCache() / Aura::getActive().getAppInfo().getName();
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getLocalData()
+	std::filesystem::path UserDirectories::getLocalData() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -129,14 +129,14 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getApplicationLocalData()
+	std::filesystem::path UserDirectories::getApplicationLocalData() noexcept
 	{
 		std::filesystem::path result = getLocalData() / Aura::getActive().getAppInfo().getName();
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getRuntime()
+	std::filesystem::path UserDirectories::getRuntime() noexcept
 	{
 		std::filesystem::path result;
 #ifdef __linux__
@@ -146,7 +146,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getDesktop()
+	std::filesystem::path UserDirectories::getDesktop() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -164,7 +164,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getDocuments()
+	std::filesystem::path UserDirectories::getDocuments() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -182,7 +182,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getDownloads()
+	std::filesystem::path UserDirectories::getDownloads() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -200,7 +200,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getMusic()
+	std::filesystem::path UserDirectories::getMusic() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -218,7 +218,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getPictures()
+	std::filesystem::path UserDirectories::getPictures() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -236,7 +236,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getPublicShare()
+	std::filesystem::path UserDirectories::getPublicShare() noexcept
 	{
 		std::filesystem::path result;
 #ifdef __linux__
@@ -245,7 +245,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getTemplates()
+	std::filesystem::path UserDirectories::getTemplates() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -263,7 +263,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getVideos()
+	std::filesystem::path UserDirectories::getVideos() noexcept
 	{
 		std::filesystem::path result;
 #ifdef _WIN32

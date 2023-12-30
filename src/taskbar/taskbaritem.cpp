@@ -11,7 +11,7 @@ using namespace Gdiplus;
 
 namespace Nickvision::Aura::Taskbar
 {
-	TaskbarItem::TaskbarItem()
+	TaskbarItem::TaskbarItem() noexcept
 		: m_progressState{ ProgressState::NoProgress },
 		m_progress{ 0.0 },
 		m_urgent{ false },
@@ -31,7 +31,7 @@ namespace Nickvision::Aura::Taskbar
 #endif
 	}
 
-	TaskbarItem::~TaskbarItem()
+	TaskbarItem::~TaskbarItem() noexcept
 	{
 		setProgressState(ProgressState::NoProgress);
 		setUrgent(false);
@@ -41,12 +41,12 @@ namespace Nickvision::Aura::Taskbar
 #endif
 	}
 
-	ProgressState TaskbarItem::getProgressState() const
+	ProgressState TaskbarItem::getProgressState() const noexcept
 	{
 		return m_progressState;
 	}
 
-	void TaskbarItem::setProgressState(ProgressState state)
+	void TaskbarItem::setProgressState(ProgressState state) noexcept
 	{
 		m_progressState = state;
 #ifdef _WIN32
@@ -68,12 +68,12 @@ namespace Nickvision::Aura::Taskbar
 #endif
 	}
 
-	double TaskbarItem::getProgress() const
+	double TaskbarItem::getProgress() const noexcept
 	{
 		return m_progress;
 	}
 
-	void TaskbarItem::setProgress(double progress)
+	void TaskbarItem::setProgress(double progress) noexcept
 	{
 		m_progress = progress;
 #ifdef _WIN32
@@ -96,12 +96,12 @@ namespace Nickvision::Aura::Taskbar
 		setProgressState(ProgressState::Normal);
 	}
 
-	bool TaskbarItem::getUrgent() const
+	bool TaskbarItem::getUrgent() const noexcept
 	{
 		return m_urgent;
 	}
 
-	void TaskbarItem::setUrgent(bool urgent)
+	void TaskbarItem::setUrgent(bool urgent) noexcept
 	{
 		m_urgent = urgent;
 #ifdef _WIN32
@@ -129,12 +129,12 @@ namespace Nickvision::Aura::Taskbar
 #endif
 	}
 
-	bool TaskbarItem::getCountVisible() const
+	bool TaskbarItem::getCountVisible() const noexcept
 	{
 		return m_countVisible;
 	}
 
-	void TaskbarItem::setCountVisible(bool countVisible)
+	void TaskbarItem::setCountVisible(bool countVisible) noexcept
 	{
 		m_countVisible = countVisible;
 #ifdef _WIN32
@@ -180,12 +180,12 @@ namespace Nickvision::Aura::Taskbar
 #endif
 	}
 
-	long TaskbarItem::getCount() const
+	long TaskbarItem::getCount() const noexcept
 	{
 		return m_count;
 	}
 
-	void TaskbarItem::setCount(long count)
+	void TaskbarItem::setCount(long count) noexcept
 	{
 		m_count = count;
 #ifdef __linux__
@@ -204,7 +204,7 @@ namespace Nickvision::Aura::Taskbar
 	}
 
 #ifdef _WIN32
-	bool TaskbarItem::connect(HWND hwnd)
+	bool TaskbarItem::connect(HWND hwnd) noexcept
 	{
 		if (!hwnd)
 		{
@@ -218,7 +218,7 @@ namespace Nickvision::Aura::Taskbar
 		return false;
 	}
 #elif defined(__linux__)
-	bool TaskbarItem::connect(const std::string& desktopFile)
+	bool TaskbarItem::connect(const std::string& desktopFile) noexcept
 	{
 		if (desktopFile.empty())
 		{

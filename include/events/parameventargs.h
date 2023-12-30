@@ -16,7 +16,7 @@ namespace Nickvision::Aura::Events
 		 * @brief Constructs a ParamEventArgs.
 		 * @param param The parameter to store in the event args
 		 */
-		ParamEventArgs(const T& param)
+		ParamEventArgs(const T& param) noexcept
 			: m_param{ param }
 		{
 
@@ -26,7 +26,7 @@ namespace Nickvision::Aura::Events
 		 * @brief Gets the param stored in the event args.
 		 * @return The param stored
 		 */
-		const T& getParam() const
+		const T& getParam() const noexcept
 		{
 			return m_param;
 		}

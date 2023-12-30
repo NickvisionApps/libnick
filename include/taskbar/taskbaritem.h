@@ -26,75 +26,75 @@ namespace Nickvision::Aura::Taskbar
 		/**
 		 * @brief Constructs a TaskbarItem. 
 		 */
-		TaskbarItem();
+		TaskbarItem() noexcept;
 		/**
 		 * @brief Deconstructs a TaskbarItem.
 		 */
-		~TaskbarItem();
+		~TaskbarItem() noexcept;
 		/**
 		 * @brieg Gets the state of the progress.
 		 * @return ProgressState
 		 */
-		ProgressState getProgressState() const;
+		ProgressState getProgressState() const noexcept;
 		/**
 		 * @brief Sets the state of the progress.
 		 * @param state The new ProgressState
 		 */
-		void setProgressState(ProgressState state);
+		void setProgressState(ProgressState state) noexcept;
 		/**
 		 * @brief Gets the value of the progress.
 		 * @return The progress value
 		 */
-		double getProgress() const;
+		double getProgress() const noexcept;
 		/**
 		 * @brief Sets the value of the progress. Settings the progress value will set the progress state to normal.
 		 * @param progress The new progress value
 		 */
-		void setProgress(double progress);
+		void setProgress(double progress) noexcept;
 		/**
 		 * @brief Gets whether or not the taskbar item is shown in an urgent state.
 		 * @return True if in urgent state, else false
 		 */
-		bool getUrgent() const;
+		bool getUrgent() const noexcept;
 		/**
 		 * @brief Sets whether or not the taskbar item is shown in an urgent state.
 		 * @param urgent True for urgent state, else false
 		 */
-		void setUrgent(bool urgent);
+		void setUrgent(bool urgent) noexcept;
 		/**
 		 * @brief Gets whether or not the count is visible on the taskbar item.
 		 * @return True if count visible, else false
 		 */
-		bool getCountVisible() const;
+		bool getCountVisible() const noexcept;
 		/**
 		 * @brief Sets whether or not the count is visible on the taskbar item.
 		 * @param countVisible True for visible count, else false
 		 */
-		void setCountVisible(bool countVisible);
+		void setCountVisible(bool countVisible) noexcept;
 		/**
 		 * @brief Gets the count shown on the taskbar item.
 		 * @return The count value
 		 */
-		long getCount() const;
+		long getCount() const noexcept;
 		/**
 		 * @brief Sets the count shown on the taskbar item.
 		 * @param count The new count value
 		 */
-		void setCount(long count);
+		void setCount(long count) noexcept;
 #ifdef _WIN32
 		/**
 		 * @brief Connects a taskbar item to the application.
 		 * @param hwnd The HWND of the application
 		 * @return True if connection successful, else false
 		 */
-		bool connect(HWND hwnd);
+		bool connect(HWND hwnd) noexcept;
 #elif defined(__linux__)
 		/**
 		 * @brief Connects a taskbar item to the application.
 		 * @param desktopFile Desktop file name with extension
 		 * @return True if connection successful, else false
 		 */
-		bool connect(const std::string& desktopFile);
+		bool connect(const std::string& desktopFile) noexcept;
 #endif
 
 	private:

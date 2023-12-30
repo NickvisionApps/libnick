@@ -23,7 +23,7 @@ namespace Nickvision::Aura
 		}
 	}
 
-	AppInfo& Aura::getAppInfo()
+	AppInfo& Aura::getAppInfo() noexcept
 	{
 		return m_appInfo;
 	}
@@ -49,7 +49,7 @@ namespace Nickvision::Aura
 		return *m_instance;
 	}
 
-	std::string Aura::getEnvVar(const std::string& key)
+	std::string Aura::getEnvVar(const std::string& key) noexcept
 	{
 		char* var = std::getenv(key.c_str());
 		if (var)
@@ -59,11 +59,10 @@ namespace Nickvision::Aura
 		return "";
 	}
 
-	bool Aura::setEnvVar(const std::string& key, const std::string& value)
+	bool Aura::setEnvVar(const std::string& key, const std::string& value) noexcept
 	{
 #ifdef _WIN32
-		std::string var{ key + "=" + value };
-		return _putenv(var.c_str()) == 0;
+		return _putenv_s(key.c_str(), value.c_str()) == 0;
 #elif defined(__linux__)
 		return setenv(key.c_str(), value.c_str(), true) == 0;
 #endif

@@ -20,27 +20,27 @@ namespace Nickvision::Aura::Notifications
 		 * @param action An additional action for the notification
 		 * @param actionParam The parameter of the additional action
 		 */
-		NotificationSentEventArgs(const std::string& message, NotificationSeverity severity, const std::string& action = "", const std::string& actionParam = "");
+		NotificationSentEventArgs(const std::string& message, NotificationSeverity severity, const std::string& action = "", const std::string& actionParam = "") noexcept;
 		/**
 		 * @brief Gets the message of the notification.
 		 * @return The message of the notification
 		 */
-		const std::string& getMessage() const;
+		const std::string& getMessage() const noexcept;
 		/**
 		 * @brief Gets the severity of the notification.
 		 * @return The severity of the notification
 		 */
-		NotificationSeverity getSeverity() const;
+		NotificationSeverity getSeverity() const noexcept;
 		/**
 		 * @brief Gets the addition action of the notification.
 		 * @return The additional action of the notification
 		 */
-		const std::string& getAction() const;
+		const std::string& getAction() const noexcept;
 		/**
 		 * @brief Gets the parameter of the additional action.
 		 * @return The parameter of the additional action
 		 */
-		const std::string& getActionParam() const;
+		const std::string& getActionParam() const noexcept;
 
 	protected:
 		std::string m_message;

@@ -4,7 +4,7 @@
 
 namespace Nickvision::Aura::Localization
 {
-	bool Gettext::init(const std::string& domainName)
+	bool Gettext::init(const std::string& domainName) noexcept
 	{
 		bool res{ true };
 		setlocale(LC_ALL, "");
@@ -18,7 +18,7 @@ namespace Nickvision::Aura::Localization
 		return res;
 	}
 
-	const char* Gettext::pgettext(const char* context, const char* msg)
+	const char* Gettext::pgettext(const char* context, const char* msg) noexcept
 	{
 		const char* translation{ dcgettext(nullptr, context, LC_MESSAGES) };
 		if (translation == context)
@@ -28,7 +28,7 @@ namespace Nickvision::Aura::Localization
 		return translation;
 	}
 
-	const char* Gettext::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n)
+	const char* Gettext::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n) noexcept
 	{
 		const char* translation{ dcngettext(nullptr, context, msgPlural, n, LC_MESSAGES) };
 		if (translation == context || translation == msgPlural)

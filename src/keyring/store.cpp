@@ -4,14 +4,14 @@
 
 namespace Nickvision::Aura::Keyring
 {
-	static std::string sqlite3_column_string(sqlite3_stmt* statement, int index)
+	static std::string sqlite3_column_string(sqlite3_stmt* statement, int index) noexcept
 	{
 		sqlite3_column_bytes(statement, index);
 		const char* data{ static_cast<const char*>(sqlite3_column_blob(statement, index)) };
 		return { data, static_cast<size_t>(sqlite3_column_bytes(statement, index)) };
 	}
 
-	static std::filesystem::path getPathFromName(const std::string& name)
+	static std::filesystem::path getPathFromName(const std::string& name) noexcept
 	{
 		std::filesystem::path dir{ UserDirectories::getConfig() / "Nickvision" / "Keyring" };
 		std::filesystem::create_directories(dir);
@@ -56,7 +56,7 @@ namespace Nickvision::Aura::Keyring
 		}
 	}
 
-	Store::Store(const Store& store)
+	Store::Store(const Store& store) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ store.m_mutex };
 		m_name = store.m_name;
@@ -74,19 +74,19 @@ namespace Nickvision::Aura::Keyring
 		m_path = std::move(store.m_path);
 	}
 
-	const std::string& Store::getName() const
+	const std::string& Store::getName() const noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_name;
 	}
 
-	const std::filesystem::path& Store::getPath() const
+	const std::filesystem::path& Store::getPath() const noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_path;
 	}
 
-	std::vector<Credential> Store::getAllCredentials() const
+	std::vector<Credential> Store::getAllCredentials() const noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		std::vector<Credential> creds;
@@ -105,7 +105,7 @@ namespace Nickvision::Aura::Keyring
 		return creds;
 	}
 
-	std::optional<Credential> Store::getCredential(int id) const
+	std::optional<Credential> Store::getCredential(int id) const noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		std::optional<Credential> cred{ std::nullopt };
@@ -127,7 +127,7 @@ namespace Nickvision::Aura::Keyring
 		return cred;
 	}
 
-	std::vector<Credential> Store::getCredentials(const std::string& name) const
+	std::vector<Credential> Store::getCredentials(const std::string& name) const noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		std::vector<Credential> creds;
@@ -149,7 +149,7 @@ namespace Nickvision::Aura::Keyring
 		return creds;
 	}
 
-	bool Store::addCredential(const Credential& credential)
+	bool Store::addCredential(const Credential& credential) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		bool res{ false };
@@ -180,7 +180,7 @@ namespace Nickvision::Aura::Keyring
 		return res;
 	}
 
-	bool Store::updateCredential(const Credential& credential)
+	bool Store::updateCredential(const Credential& credential) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		bool res{ false };
@@ -211,7 +211,7 @@ namespace Nickvision::Aura::Keyring
 		return res;
 	}
 
-	bool Store::deleteCredential(int id)
+	bool Store::deleteCredential(int id) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		bool res{ false };
@@ -230,7 +230,7 @@ namespace Nickvision::Aura::Keyring
 		return res;
 	}
 
-	bool Store::destroy()
+	bool Store::destroy() noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (m_database)
@@ -241,7 +241,7 @@ namespace Nickvision::Aura::Keyring
 		return std::filesystem::exists(m_path) ? std::filesystem::remove(m_path) : true;
 	}
 
-	Store& Store::operator=(const Store& store)
+	Store& Store::operator=(const Store& store) noexcept
 	{
 		if (this != &store)
 		{
@@ -269,12 +269,12 @@ namespace Nickvision::Aura::Keyring
 		return *this;
 	}
 
-	bool Store::exists(const std::string& name)
+	bool Store::exists(const std::string& name) noexcept
 	{
 		return std::filesystem::exists(getPathFromName(name));
 	}
 
-	bool Store::destroy(const std::string& name)
+	bool Store::destroy(const std::string& name) noexcept
 	{
 		std::filesystem::path path{ getPathFromName(name) };
 		if (std::filesystem::exists(path))

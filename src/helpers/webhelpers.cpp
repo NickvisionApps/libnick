@@ -3,7 +3,7 @@
 
 namespace Nickvision::Aura
 {
-	bool WebHelpers::isValidWebsite(const std::string& url)
+	bool WebHelpers::isValidWebsite(const std::string& url) noexcept
 	{
 		if (url.empty())
 		{
@@ -29,7 +29,7 @@ namespace Nickvision::Aura
 		return code == CURLE_OK;
 	}
 
-	bool WebHelpers::downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress, bool overwrite)
+	bool WebHelpers::downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress, bool overwrite) noexcept
 	{
 		if (url.empty())
 		{
@@ -75,7 +75,7 @@ namespace Nickvision::Aura
 		return code == CURLE_OK;
 	}
 
-	std::string WebHelpers::fetchJsonString(const std::string& url)
+	std::string WebHelpers::fetchJsonString(const std::string& url) noexcept
 	{
 		if (url.empty())
 		{
