@@ -8,7 +8,7 @@
 namespace Nickvision::Aura::Keyring
 {
 	/**
-	 * @brief A random number generator. 
+	 * @brief A random password generator. 
 	 */
 	class PasswordGenerator
 	{

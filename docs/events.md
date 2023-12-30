@@ -19,7 +19,7 @@ Type: `template<DerivedEventArgs T> class`
 
 Path: `Nickvision::Aura::Events::Event`
 
-### Functions
+### Methods
 - ```cpp
   Event()
   ```
@@ -117,7 +117,7 @@ Type: `class`
 
 Path: `Nickvision::Aura::Events::EventArgs`
 
-### Functions
+### Methods
 - ```cpp
   EventArgs() = default
   ```
@@ -141,7 +141,7 @@ Path: `Nickvision::Aura::Events::ParamEventArgs`
   ```
     - The parameter stored in the event args.
 
-### Functions
+### Methods
 - ```cpp
   ParamEventArgs(const T& param)
   ```

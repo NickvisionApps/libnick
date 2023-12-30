@@ -506,7 +506,7 @@ Path: `Nickvision::Aura::Version`
   ```
     - The type of the version
 
-### Functions
+### Methods
 - ```cpp
   Version()
   ```

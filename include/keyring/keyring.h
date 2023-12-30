@@ -71,7 +71,7 @@ namespace Nickvision::Aura::Keyring
 
 	public:
 		/**
-		 * @brief Accesses a Keyring. The Keyring will first attempt to load the Store. If the Store doesn't exist, it will create a new Store.
+		 * @brief Accesses a Keyring. The Keyring will first attempt to load an existing Store. If the Store doesn't exist, it will create a new Store.
 		 * @param name The name of the store
 		 * @param password The password to use for the store. If empty, the password will be fetched/created from the system's credential store
 		 * @return The newly accessed keyring, std::nullopt if accessing failed
