@@ -2,6 +2,7 @@
 #define TASKBARITEM_H
 
 #include <memory>
+#include <mutex>
 #include <string>
 #include "progressstate.h"
 #ifdef _WIN32
@@ -98,6 +99,7 @@ namespace Nickvision::Aura::Taskbar
 #endif
 
 	private:
+		mutable std::mutex m_mutex;
 		ProgressState m_progressState;
 		double m_progress;
 		bool m_urgent;
