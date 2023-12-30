@@ -4,6 +4,11 @@
 #include <mutex>
 #include "networkstatechangedeventargs.h"
 #include "events/event.h"
+#ifdef _WIN32
+#include <windows.h>
+#include <atlbase.h>
+#include <netlistmgr.h>
+#endif
 
 namespace Nickvision::Aura::Network
 {
@@ -15,8 +20,9 @@ namespace Nickvision::Aura::Network
 	public:
 		/**
 		 * @brief Constructs a NetworkMonitor. This method will call checkConnectionState() to get the initial system network state.
+		 * @throw std::runtime_error Thrown if unable to create the NetworkMonitor.
 		 */
-		NetworkMonitor() noexcept;
+		NetworkMonitor();
 		/**
 		 * @brief Destructs a NetworkMonitor. 
 		 */
@@ -31,16 +37,18 @@ namespace Nickvision::Aura::Network
 		 * @return NetworkState
 		 */
 		NetworkState getConnectionState() const noexcept;
+
+	private:
 		/**
 		 * @brief Manually checks the state of the system's network connection. If a change is detected, the StateChanged event will be invoked.
 		 */
 		void checkConnectionState() noexcept;
-
-	private:
 		mutable std::mutex m_mutex;
 		Events::Event<NetworkStateChangedEventArgs> m_stateChanged;
 		NetworkState m_connectionState;
-#ifdef __linux__
+#ifdef _WIN32
+		CComPtr<INetworkListManager> m_netListManager;
+#elif defined(__linux__)
 		unsigned long m_networkChangedHandlerId;
 #endif
 	};

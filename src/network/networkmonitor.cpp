@@ -1,27 +1,33 @@
 #include "network/networkmonitor.h"
+#include <stdexcept>
 #include "aura.h"
 #include "helpers/stringhelpers.h"
-#ifdef _WIN32
-#include <windows.h>
-#include <atlbase.h>
-#include <netlistmgr.h>
-#elif defined(__linux__)
+#ifdef __linux__
 #include <glib.h>
 #include <gio/gio.h>
 #endif
 
 namespace Nickvision::Aura::Network
 {
-	NetworkMonitor::NetworkMonitor() noexcept
+	NetworkMonitor::NetworkMonitor()
 		: m_connectionState{ NetworkState::Disconnected }
 	{
 #ifdef _WIN32
 		CoInitialize(nullptr);
+		if (CoCreateInstance(CLSID_NetworkListManager, nullptr, CLSCTX_ALL, __uuidof(INetworkListManager), (LPVOID*)&m_netListManager) != S_OK)
+		{
+			throw std::runtime_error("Unable to create network list manager.");
+		}
+		//TODO:: Watch for changes on Windows
 #elif defined(__linux__)
 		m_networkChangedHandlerId = g_signal_connect_data(G_OBJECT(g_network_monitor_get_default()), "network-changed", G_CALLBACK((void(*)(GNetworkMonitor*, bool, void*))([](GNetworkMonitor*, bool, void* data)
 		{
 			static_cast<NetworkMonitor*>(data)->checkConnectionState();
 		})), this, nullptr, G_CONNECT_DEFAULT);
+		if (m_networkChangedHandlerId <= 0)
+		{
+			throw std::runtime_error("Unable to connect to network monitor signal.");
+		}
 #endif
 		checkConnectionState();
 	}
@@ -56,40 +62,35 @@ namespace Nickvision::Aura::Network
 		else
 		{
 #ifdef _WIN32
-			CComPtr<INetworkListManager> pNLM;
-			if (CoCreateInstance(CLSID_NetworkListManager, nullptr, CLSCTX_ALL, __uuidof(INetworkListManager), (LPVOID*)&pNLM) == S_OK)
+			NLM_CONNECTIVITY connection{ NLM_CONNECTIVITY_DISCONNECTED };
+			if (m_netListManager->GetConnectivity(&connection) == S_OK)
 			{
-				NLM_CONNECTIVITY connection{ NLM_CONNECTIVITY_DISCONNECTED };
-				if (pNLM->GetConnectivity(&connection) == S_OK)
+				if (connection == NLM_CONNECTIVITY_DISCONNECTED)
 				{
-					if (connection & NLM_CONNECTIVITY_DISCONNECTED)
-					{
-						newState = NetworkState::Disconnected;
-					}
-					else if (connection & NLM_CONNECTIVITY_IPV4_INTERNET || connection & NLM_CONNECTIVITY_IPV6_INTERNET)
-					{
-						newState = NetworkState::ConnectedGlobal;
-					}
-					else
-					{
-						newState = NetworkState::ConnectedLocal;
-					}
+					newState = NetworkState::Disconnected;
+				}
+				else if (connection & NLM_CONNECTIVITY_IPV4_INTERNET || connection & NLM_CONNECTIVITY_IPV6_INTERNET)
+				{
+					newState = NetworkState::ConnectedGlobal;
+				}
+				else
+				{
+					newState = NetworkState::ConnectedLocal;
 				}
 			}
 #elif defined(__linux__)
-			GNetworkMonitor* netMon{ g_network_monitor_get_default() };
-			GNetworkConnectivity connection{ g_network_monitor_get_connectivity(netMon) };
-			switch (connection)
+			GNetworkConnectivity connection{ g_network_monitor_get_connectivity(g_network_monitor_get_default()) };
+			if (connection == G_NETWORK_CONNECTIVITY_LOCAL)
 			{
-			case G_NETWORK_CONNECTIVITY_LOCAL:
 				newState = NetworkState::Disconnected;
-				break;
-			case G_NETWORK_CONNECTIVITY_FULL:
+			}
+			else if (connection == G_NETWORK_CONNECTIVITY_FULL)
+			{
 				newState = NetworkState::ConnectedGlobal;
-				break;
-			default:
+			}
+			else
+			{
 				newState = NetworkState::ConnectedLocal;
-				break;
 			}
 #endif
 		}

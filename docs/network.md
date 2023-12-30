@@ -37,11 +37,6 @@ Path: `Nickvision::Aura::Network::NetworkMonitor`
   ~NetworkMonitor()
   ```
     - Destructs a NetworkMonitor.
-- ```cpp
-  void checkConnectionState()
-  ```
-    - Manually checks the state of the system's network connection. 
-    - Note: If a change is detected, the StateChanged event will be invoked.
 
 ### Monitoring Network Connectivity
 The `NetworkMonitor` provides an easy to use API to monitor for changes in the system's network connectivity.
