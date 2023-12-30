@@ -1,6 +1,7 @@
 #ifndef NETWORKMONITOR_H
 #define NETWORKMONITOR_H
 
+#include <mutex>
 #include "networkstatechangedeventargs.h"
 #include "events/event.h"
 
@@ -13,7 +14,7 @@ namespace Nickvision::Aura::Network
 	{
 	public:
 		/**
-		 * @brief Constructs a NetworkMonitor. 
+		 * @brief Constructs a NetworkMonitor. This method will call checkConnectionState() to get the initial system network state.
 		 */
 		NetworkMonitor() noexcept;
 		/**
@@ -31,11 +32,12 @@ namespace Nickvision::Aura::Network
 		 */
 		NetworkState getConnectionState() const noexcept;
 		/**
-		 * @brief Manually checks for the state of the system's network connection. If a change is detected, the StateChanged even will be invoked.
+		 * @brief Manually checks the state of the system's network connection. If a change is detected, the StateChanged event will be invoked.
 		 */
 		void checkConnectionState() noexcept;
 
 	private:
+		mutable std::mutex m_mutex;
 		Events::Event<NetworkStateChangedEventArgs> m_stateChanged;
 		NetworkState m_connectionState;
 #ifdef __linux__

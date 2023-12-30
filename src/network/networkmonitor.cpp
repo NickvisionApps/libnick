@@ -13,7 +13,7 @@
 namespace Nickvision::Aura::Network
 {
 	NetworkMonitor::NetworkMonitor() noexcept
-		: m_connectionState{ false }
+		: m_connectionState{ NetworkState::Disconnected }
 	{
 #ifdef _WIN32
 		CoInitialize(nullptr);
@@ -23,6 +23,7 @@ namespace Nickvision::Aura::Network
 			static_cast<NetworkMonitor*>(data)->checkConnectionState();
 		})), this, nullptr, G_CONNECT_DEFAULT);
 #endif
+		checkConnectionState();
 	}
 
 	NetworkMonitor::~NetworkMonitor() noexcept
@@ -39,11 +40,13 @@ namespace Nickvision::Aura::Network
 
 	NetworkState NetworkMonitor::getConnectionState() const noexcept
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_connectionState;
 	}
 
 	void NetworkMonitor::checkConnectionState() noexcept
 	{
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		NetworkState newState{ NetworkState::Disconnected };
 		std::string noNetCheck{ StringHelpers::toLower(Aura::getEnvVar("AURA_DISABLE_NETCHECK")) };
 		if (!noNetCheck.empty() && (noNetCheck == "true" || noNetCheck == "t" || noNetCheck == "yes" || noNetCheck == "y" || noNetCheck == "1"))
@@ -56,14 +59,14 @@ namespace Nickvision::Aura::Network
 			CComPtr<INetworkListManager> pNLM;
 			if (CoCreateInstance(CLSID_NetworkListManager, nullptr, CLSCTX_ALL, __uuidof(INetworkListManager), (LPVOID*)&pNLM) == S_OK)
 			{
-				NLM_CONNECTIVITY connection;
+				NLM_CONNECTIVITY connection{ NLM_CONNECTIVITY_DISCONNECTED };
 				if (pNLM->GetConnectivity(&connection) == S_OK)
 				{
-					if ((connection & NLM_CONNECTIVITY_DISCONNECTED) == NLM_CONNECTIVITY_DISCONNECTED)
+					if (connection & NLM_CONNECTIVITY_DISCONNECTED)
 					{
 						newState = NetworkState::Disconnected;
 					}
-					else if ((connection & NLM_CONNECTIVITY_IPV4_INTERNET) == NLM_CONNECTIVITY_IPV4_INTERNET || (connection & NLM_CONNECTIVITY_IPV6_INTERNET) == NLM_CONNECTIVITY_IPV6_INTERNET)
+					else if (connection & NLM_CONNECTIVITY_IPV4_INTERNET || connection & NLM_CONNECTIVITY_IPV6_INTERNET)
 					{
 						newState = NetworkState::ConnectedGlobal;
 					}
