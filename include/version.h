@@ -30,13 +30,15 @@ namespace Nickvision::Aura
 		 * @param minor The minor number
 		 * @param build The build number
 		 * @param dev The dev string
+		 * @throw std::invalid_argument Thrown when the dev vesion does not contain a "-"
 		 */
-		Version(int major, int minor, int build, const std::string& dev) noexcept;
+		Version(int major, int minor, int build, const std::string& dev);
 		/**
 		 * @brief Constructs a Version.
 		 * @param version A version string to parse
+		 * @throw std::invalid_argument Thrown when the version string is not formatted correctly
 		 */
-		Version(const std::string& version) noexcept;
+		Version(const std::string& version);
 		/**
 		 * @brief Gets the type of the version.
 		 * @return VersionType

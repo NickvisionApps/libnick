@@ -22,7 +22,7 @@ namespace Nickvision::Aura
 
 	}
 
-	Version::Version(int major, int minor, int build, const std::string& dev) noexcept
+	Version::Version(int major, int minor, int build, const std::string& dev)
 		: m_major{ major },
 		m_minor{ minor },
 		m_build{ build },
@@ -35,7 +35,7 @@ namespace Nickvision::Aura
 		}
 	}
 
-	Version::Version(const std::string& version) noexcept
+	Version::Version(const std::string& version)
 		: m_major{ 0 },
 		m_minor{ 0 },
 		m_build{ 0 }
