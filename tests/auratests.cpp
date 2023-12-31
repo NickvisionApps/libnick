@@ -2,6 +2,7 @@
 #include "aura.h"
 #include "dependencylocator.h"
 #include "userdirectories.h"
+#include "notifications/shellnotification.h"
 
 using namespace Nickvision::Aura;
 
@@ -79,4 +80,13 @@ TEST_F(AuraTest, DependencyCheck)
 #endif
 	ASSERT_TRUE(!dependency.empty());
 	ASSERT_TRUE(std::filesystem::exists(dependency));
+}
+
+TEST_F(AuraTest, ShellNotification)
+{
+#ifdef _WIN32
+	ASSERT_NO_THROW(Notifications::ShellNotification::show({ "Test", "Hello from Notifications::ShellNotification::show()!", Notifications::NotificationSeverity::Informational }, GetConsoleWindow()));
+#elif defined(__linux__)
+	ASSERT_NO_THROW(Notifications::ShellNotification::show({ "Test", "Hello from Notifications::ShellNotification::show()!", Notifications::NotificationSeverity::Success }));
+#endif
 }

@@ -35,6 +35,8 @@ add_library (${PROJECT_NAME}
 	src/network/networkmonitor.cpp
 	src/network/networkstatechangedeventargs.cpp
 	src/notifications/notificationsenteventargs.cpp
+	src/notifications/notifyicon.cpp
+	src/notifications/shellnotification.cpp
 	src/notifications/shellnotificationsenteventargs.cpp
 	src/taskbar/taskbaritem.cpp
 	src/update/updater.cpp
@@ -94,6 +96,7 @@ if(NOT SKIP_TESTS)
 		tests/keyringtests.cpp
 		tests/main.cpp
 		tests/networktests.cpp
+		tests/notifyicontests.cpp
 		tests/passwordtests.cpp
 		tests/storetests.cpp
 		tests/stringtests.cpp

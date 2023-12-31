@@ -5,6 +5,8 @@ This module contains objects for sending notifications within Nickvision applica
 ## Table of Contents
 - [NotificationSentEventArgs](#notificationsenteventargs)
 - [NotificationSeverity](#notificationseverity)
+- [NotifyIcon](#notifyicon)
+- [ShellNotification](#shellnotification)
 - [ShellNotificationSentEventArgs](#shellnotificationsenteventargs)
 
 ## NotificationSentEventArgs
@@ -67,6 +69,54 @@ Path: `Nickvision::Aura::Notifications::NotificationSeverity`
   Error = 3
   ``` 
     - Represents an error notification
+
+## NotifyIcon
+Description: An icon for the system tray.
+
+Note: This API is only available on the Windows platform.
+
+Interface: [notifyicon.h](/include/notifications/notifyicon.h)
+
+Type: `class`
+
+Path: `Nickvision::Aura::Notifications::NotifyIcon`
+
+### Methods
+- ```cpp
+  NotifyIcon(HWND hwnd)
+  ``` 
+    - Constructs a NotifyIcon.
+    - Accepts: The `HWND` handle for the main application window, hwnd.
+- ```cpp
+  ~NotifyIcon()
+  ``` 
+    - Destructs a NotifyIcon.
+- ```cpp
+  void showShellNotification(const ShellNotificationSentEventArgs& e)
+  ``` 
+    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show on the NotifyIcon, e.
+
+## ShellNotification
+Description: Functions for working with shell (desktop) notifications.
+
+Interface: [shellnotification.h](/include/notifications/shellnotification.h)
+
+Type: `namespace`
+
+Path: `Nickvision::Aura::Notifications::ShellNotification`
+
+### Functions
+- ```cpp
+  void show(const ShellNotificationSentEventArgs& e, HWND hwnd)
+  ``` 
+    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the `HWND` handle for the main application window, hwnd.
+    - Note: This function is only available on the Windows platform.
+- ```cpp
+  void show(const ShellNotificationSentEventArgs& e)
+  ``` 
+    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e.
+    - Note: This function is only available on the Linux platform.
+    - Note: This function supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event.
 
 ## ShellNotificationSentEventArgs
 Description: Event args for when a shell notification is sent.
