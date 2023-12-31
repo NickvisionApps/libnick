@@ -98,7 +98,7 @@ namespace Nickvision::Aura::Taskbar
 		}
 #endif
 		lock.unlock();
-		setProgressState(ProgressState::Normal);
+		setProgressState(progress == 0 ? ProgressState::NoProgress : ProgressState::Normal);
 	}
 
 	bool TaskbarItem::getUrgent() const noexcept
@@ -212,7 +212,7 @@ namespace Nickvision::Aura::Taskbar
 		}
 #endif
 		lock.unlock();
-		setCountVisible(count >= 0);
+		setCountVisible(count > 0);
 	}
 
 #ifdef _WIN32

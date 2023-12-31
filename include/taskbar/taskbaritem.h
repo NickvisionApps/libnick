@@ -48,7 +48,8 @@ namespace Nickvision::Aura::Taskbar
 		 */
 		double getProgress() const noexcept;
 		/**
-		 * @brief Sets the value of the progress. Settings the progress value will set the progress state to normal.
+		 * @brief Sets the value of the progress. Setting the progress value will set the progress state to Normal if progress > 0, else will set progress state to NoProgress.
+		 * @brief Should be a value between 0 and 1.
 		 * @param progress The new progress value
 		 */
 		void setProgress(double progress) noexcept;
@@ -78,21 +79,21 @@ namespace Nickvision::Aura::Taskbar
 		 */
 		long getCount() const noexcept;
 		/**
-		 * @brief Sets the count shown on the taskbar item.
+		 * @brief Sets the count shown on the taskbar item. Setting the count will set the count visible to true if count > 0, else will set count visible to false.
 		 * @param count The new count value
 		 */
 		void setCount(long count) noexcept;
 #ifdef _WIN32
 		/**
 		 * @brief Connects a taskbar item to the application.
-		 * @param hwnd The HWND of the application
+		 * @param hwnd The HWND of the main application window
 		 * @return True if connection successful, else false
 		 */
 		bool connect(HWND hwnd) noexcept;
 #elif defined(__linux__)
 		/**
 		 * @brief Connects a taskbar item to the application.
-		 * @param desktopFile Desktop file name with extension
+		 * @param desktopFile The desktop file name with the file extension of the running application
 		 * @return True if connection successful, else false
 		 */
 		bool connect(const std::string& desktopFile) noexcept;
