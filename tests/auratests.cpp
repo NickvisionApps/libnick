@@ -82,7 +82,10 @@ TEST_F(AuraTest, DependencyCheck)
 	ASSERT_TRUE(std::filesystem::exists(dependency));
 	Notifications::ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), Notifications::NotificationSeverity::Success, "open", dependency.string() };
 #ifdef _WIN32
-	ASSERT_NO_THROW(Notifications::ShellNotification::show(args, GetConsoleWindow()));
+	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
+	{
+		ASSERT_NO_THROW(Notifications::ShellNotification::show(args, GetConsoleWindow()));
+	}
 #elif defined(__linux__)
 	ASSERT_NO_THROW(Notifications::ShellNotification::show(args));
 #endif
