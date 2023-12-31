@@ -346,7 +346,7 @@ Path: `Nickvision::Aura::InterProcessCommunicator`
     - Returns: `false` on failure to send arguments to a server instance
     - Note: If this instance is the running server and communicate was called on said instance, `CommandReceived` will still be triggered with the passed args.
 
-### Preforming Inter-Process Communication
+### Performing Inter-Process Communication
 libaura uses named-pipes on Windows and Unix Domain Sockets on Linux to establish inter process server and client communicators, while abstracting all of that away from the consumer in the easy to use `InterProcessCommunicator` API.
 
 Upon creating an `InterProcessCommunicator` object, either `isServer()` or `isClient()` will return true depending on whether or not this instance is a server or client respectively. Server instances should register a callback to the `CommandReceived` event to be invoked when clients send commands to the server.
@@ -398,7 +398,7 @@ Path: `Nickvision::Aura::SystemDirectories`
 - ```cpp
   std::vector<std::filesystem::path> getData()
   ```
-    - Returns: The list of directory paths found in the system's XDG_DATA_DIRS varibale.
+    - Returns: The list of directory paths found in the system's XDG_DATA_DIRS variable.
 
 ## UserDirectories
 Description: Functions for working with user directories.

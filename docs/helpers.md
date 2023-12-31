@@ -41,7 +41,7 @@ Path: `Nickvision::Aura::StringHelpers`
     - Returns: A new string with delimiter removed from the beginning and the end of s.
     - Ex: `StringHelpers::trim("---bye-", '-')` will return `"bye"`.
 - ```cpp
-  std::vecotr<T> split<T>(std::string s, const std::string& delimiter)
+  std::vector<T> split<T>(std::string s, const std::string& delimiter)
   ```
     - Accepts: A string parameter, s, and a string delimiter, delimiter.
     - Returns: A list of the splits of s on delimiter and casted to type T. 

@@ -164,7 +164,7 @@ Path: `Nickvision::Aura::Keyring::Keyring`
 - ```cpp
   static std::optional<Keyring> access(const std::string& name, std::string password = "")
   ```
-    - Accepts: The name of the keyring to access, name, and the password of the keyring, password, if known. If password is not known, it will be retrived from the system's credential store.
+    - Accepts: The name of the keyring to access, name, and the password of the keyring, password, if known. If password is not known, it will be retrieved from the system's credential store.
     - Returns: The `Keyring` object of the successfully loaded keyring.
     - Returns: `std::nullopt` if accessing the keyring failed.
     - Note: The Keyring will first attempt to load an existing Store. If the Store doesn't exist, it will create a new Store.
@@ -208,7 +208,7 @@ Path: `Nickvision::Aura::Keyring::KeyringDialogController`
 - ```cpp
   bool enableKeyring(const std::string& password = "")
   ``` 
-    - Accepts: The password of the keyring, password, if known. If password is not known, it will be retrived from the system's credential store.
+    - Accepts: The password of the keyring, password, if known. If password is not known, it will be retrieved from the system's credential store.
     - Returns: `true` if the keyring was enabled.
     - Returns: `false` if the keyring was not enabled.
 - ```cpp
@@ -456,7 +456,7 @@ Path: `Nickvision::Aura::Keyring::SystemCredentials`
 - ```cpp
   std::optional<Credential> getCredential(const std::string& name)
   ```
-    - Accepts: The name of a credential to retrive from the store, name.
+    - Accepts: The name of a credential to retrieve from the store, name.
     - Returns: The `Credential` object for the credential matching name.
     - Returns: `std::nullopt` if no matching credential was found.
 - ```cpp
