@@ -6,7 +6,7 @@
 namespace Nickvision::Aura::Notifications
 {
 	/**
-	 * @brief Event args for when a shell notification is sent
+	 * @brief Event args for when a shell notification is sent.
 	 */
 	class ShellNotificationSentEventArgs : public NotificationSentEventArgs
 	{

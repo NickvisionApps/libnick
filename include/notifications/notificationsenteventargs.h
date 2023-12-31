@@ -8,7 +8,7 @@
 namespace Nickvision::Aura::Notifications
 {
 	/**
-	 * @brief Event args for when a notification is sent
+	 * @brief Event args for when a notification is sent.
 	 */
 	class NotificationSentEventArgs : public Events::EventArgs
 	{
@@ -32,13 +32,13 @@ namespace Nickvision::Aura::Notifications
 		 */
 		NotificationSeverity getSeverity() const noexcept;
 		/**
-		 * @brief Gets the addition action of the notification.
-		 * @return The additional action of the notification
+		 * @brief Gets the optional action of the notification.
+		 * @return The optional action of the notification
 		 */
 		const std::string& getAction() const noexcept;
 		/**
-		 * @brief Gets the parameter of the additional action.
-		 * @return The parameter of the additional action
+		 * @brief Gets the parameter of the optional action.
+		 * @return The parameter of the optional action
 		 */
 		const std::string& getActionParam() const noexcept;
 
