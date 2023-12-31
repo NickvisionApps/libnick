@@ -80,13 +80,10 @@ TEST_F(AuraTest, DependencyCheck)
 #endif
 	ASSERT_TRUE(!dependency.empty());
 	ASSERT_TRUE(std::filesystem::exists(dependency));
-}
-
-TEST_F(AuraTest, ShellNotification)
-{
+	Notifications::ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), Notifications::NotificationSeverity::Success, "open", dependency.string() };
 #ifdef _WIN32
-	ASSERT_NO_THROW(Notifications::ShellNotification::show({ "Test", "Hello from Notifications::ShellNotification::show()!", Notifications::NotificationSeverity::Informational }, GetConsoleWindow()));
+	ASSERT_NO_THROW(Notifications::ShellNotification::show(args, GetConsoleWindow()));
 #elif defined(__linux__)
-	ASSERT_NO_THROW(Notifications::ShellNotification::show({ "Test", "Hello from Notifications::ShellNotification::show()!", Notifications::NotificationSeverity::Success }));
+	ASSERT_NO_THROW(Notifications::ShellNotification::show(args));
 #endif
 }

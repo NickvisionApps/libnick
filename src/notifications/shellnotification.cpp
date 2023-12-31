@@ -1,5 +1,6 @@
 #include "notifications/shellnotification.h"
 #include <filesystem>
+#include <memory>
 #include <string>
 #include "aura.h"
 #include "localization/gettext.h"
@@ -15,8 +16,10 @@ namespace Nickvision::Aura::Notifications
 #ifdef _WIN32
 	void ShellNotification::show(const ShellNotificationSentEventArgs& e, HWND hwnd)
 	{
-		NotifyIcon icon{ hwnd };
-		icon.showShellNotification(e);
+		static std::shared_ptr<NotifyIcon> notifyIcon{ std::make_shared<NotifyIcon>(hwnd) };
+		notifyIcon->show();
+		notifyIcon->showShellNotification(e);
+		notifyIcon->hide();
 	}
 #elif defined(__linux__)
 	void ShellNotification::show(const ShellNotificationSentEventArgs& e)

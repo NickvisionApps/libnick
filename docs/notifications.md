@@ -85,16 +85,27 @@ Path: `Nickvision::Aura::Notifications::NotifyIcon`
 - ```cpp
   NotifyIcon(HWND hwnd)
   ``` 
-    - Constructs a NotifyIcon.
+    - Constructs a NotifyIcon. The NotifyIcon is shown by default.
     - Accepts: The `HWND` handle for the main application window, hwnd.
+    - Throws: std::logic_error if Aura::init() was not called yet 
+    - Throws: std::runtime_error if unable to create the NotifyIcon
 - ```cpp
   ~NotifyIcon()
   ``` 
     - Destructs a NotifyIcon.
 - ```cpp
+  void hide()
+  ``` 
+    - Hides the NotifyIcon.
+- ```cpp
+  void show()
+  ``` 
+    - Shows the NotifyIcon.
+- ```cpp
   void showShellNotification(const ShellNotificationSentEventArgs& e)
   ``` 
     - Accepts: The `ShellNotificationSentEventArgs` containing the information to show on the NotifyIcon, e.
+    - Note: Supports the action "open" with action param being a path of a file or folder to open.
 
 ## ShellNotification
 Description: Functions for working with shell (desktop) notifications.
@@ -109,14 +120,17 @@ Path: `Nickvision::Aura::Notifications::ShellNotification`
 - ```cpp
   void show(const ShellNotificationSentEventArgs& e, HWND hwnd)
   ``` 
-    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the `HWND` handle for the main application window, hwnd.
-    - Note: This function is only available on the Windows platform.
+    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the `HWND` handle for the main application window, hwnd. The hwnd parameter is only used once on the initial creation of the static `NotifyIcon` and then is ignored on future calls.
+    - Note: This function is only available on the Windows platform. It uses `Nickvision::Aura::Notifications::NotifyIcon`.
+    - Note: This function supports the action "open" with action param being a path of a file or folder to open.
+    - Throws: std::logic_error if Aura::init() was not called yet 
 - ```cpp
   void show(const ShellNotificationSentEventArgs& e)
   ``` 
     - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e.
     - Note: This function is only available on the Linux platform.
     - Note: This function supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event.
+    - Throws: std::logic_error if Aura::init() was not called yet 
 
 ## ShellNotificationSentEventArgs
 Description: Event args for when a shell notification is sent.
