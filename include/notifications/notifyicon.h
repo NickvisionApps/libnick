@@ -5,10 +5,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define WM_NOTIFYICON_EVENT (WM_APP + 100)
 
+#include <filesystem>
 #include <map>
-#include <optional>
 #include <windows.h>
 #include <shellapi.h>
+#include "notifyiconmenu.h"
 #include "shellnotificationsenteventargs.h"
 
 namespace Nickvision::Aura::Notifications
@@ -24,10 +25,11 @@ namespace Nickvision::Aura::Notifications
 		 * @brief Constructs a NotifyIcon.
 		 * @brief The NotifyIcon will be shown by default.
 		 * @param hwnd The HWND handle of the main application window
+		 * @param menu The model for the context menu of the NotifyIcon
 		 * @throw std::logic_error Thrown if Aura::init() was not called yet 
 		 * @throw std::runtime_error Thrown if unable to create the NotifyIcon
 		 */
-		NotifyIcon(HWND hwnd);
+		NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu = { });
 		/**
 		 * @brief Destructs a NotifyIcon. 
 		 */
@@ -57,12 +59,15 @@ namespace Nickvision::Aura::Notifications
 		 * @brief Handles a WM_NOTIFYICON_EVENT message.
 		 * @param wParam WPARAM
 		 * @param lParam LPARAM
+		 * @return LRESULT
 		 */
-		void handleMessage(WPARAM wParam, LPARAM lParam) noexcept;
+		LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 		std::string m_className;
+		bool m_isHidden;
 		HWND m_hwnd;
 		GUID m_guid;
-		std::optional<ShellNotificationSentEventArgs> m_lastArgs;
+		NotifyIconMenu m_contextMenu;
+		std::filesystem::path m_openPath;
 
 	private:
 		static std::map<HWND, NotifyIcon*> m_icons;

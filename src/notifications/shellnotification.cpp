@@ -17,9 +17,8 @@ namespace Nickvision::Aura::Notifications
 	void ShellNotification::show(const ShellNotificationSentEventArgs& e, HWND hwnd)
 	{
 		static std::shared_ptr<NotifyIcon> notifyIcon{ std::make_shared<NotifyIcon>(hwnd) };
-		notifyIcon->show();
-		notifyIcon->showShellNotification(e);
 		notifyIcon->hide();
+		notifyIcon->showShellNotification(e);
 	}
 #elif defined(__linux__)
 	void ShellNotification::show(const ShellNotificationSentEventArgs& e)

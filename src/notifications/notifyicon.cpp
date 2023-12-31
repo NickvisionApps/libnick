@@ -1,6 +1,5 @@
 #ifdef _WIN32
 #include "notifications/notifyicon.h"
-#include <filesystem>
 #include <stdexcept>
 #include <strsafe.h>
 #include "aura.h"
@@ -12,18 +11,18 @@ namespace Nickvision::Aura::Notifications
 
 	LRESULT NotifyIcon::notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 	{
-		if (uMsg == WM_NOTIFYICON_EVENT && m_icons.contains(hwnd))
+		if (m_icons.contains(hwnd))
 		{
-			m_icons[hwnd]->handleMessage(wParam, lParam);
-			return 0;
+			return m_icons[hwnd]->handleMessage(uMsg, wParam, lParam);
 		}
 		return DefWindowProcA(hwnd, uMsg, wParam, lParam);
 	}
 
-	NotifyIcon::NotifyIcon(HWND hwnd)
+	NotifyIcon::NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu)
 		: m_className{ StringHelpers::newGuid() },
+		m_isHidden{ false },
 		m_hwnd{ nullptr },
-		m_lastArgs{ std::nullopt }
+		m_contextMenu{ contextMenu }
 	{
 		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 		//Create a window for the NotifyIcon
@@ -66,6 +65,11 @@ namespace Nickvision::Aura::Notifications
 			throw std::runtime_error("Unable to create NotifyIcon: " + std::to_string(GetLastError()) + ".");
 		}
 		Shell_NotifyIconA(NIM_SETVERSION, &notify);
+		//Create context menu
+		if (!m_contextMenu.empty())
+		{
+
+		}
 	}
 
 	NotifyIcon::~NotifyIcon() noexcept
@@ -85,6 +89,7 @@ namespace Nickvision::Aura::Notifications
 		notify.uFlags |= NIF_STATE;
 		notify.dwState = NIS_HIDDEN;
 		Shell_NotifyIconA(NIM_MODIFY, &notify);
+		m_isHidden = true;
 	}
 
 	void NotifyIcon::show() noexcept
@@ -93,6 +98,7 @@ namespace Nickvision::Aura::Notifications
 		notify.uFlags |= NIF_STATE;
 		notify.dwState = 0;
 		Shell_NotifyIconA(NIM_MODIFY, &notify);
+		m_isHidden = false;
 	}
 
 	void NotifyIcon::showShellNotification(const ShellNotificationSentEventArgs& e) noexcept
@@ -114,7 +120,14 @@ namespace Nickvision::Aura::Notifications
 		{
 			notify.dwInfoFlags |= NIIF_USER;
 		}
-		m_lastArgs = e;
+		if (e.getAction() == "open" && std::filesystem::exists(e.getActionParam()))
+		{
+			m_openPath = e.getActionParam();
+		}
+		else
+		{
+			m_openPath = std::filesystem::path();
+		}
 		Shell_NotifyIconA(NIM_MODIFY, &notify);
 	}
 
@@ -129,26 +142,35 @@ namespace Nickvision::Aura::Notifications
 		return notify;
 	}
 
-	void NotifyIcon::handleMessage(WPARAM wParam, LPARAM lParam) noexcept
+	LRESULT NotifyIcon::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 	{
-		switch (LOWORD(lParam))
+		if (uMsg == WM_NOTIFYICON_EVENT)
 		{
-		case NIN_SELECT:
-			break;
-		case NIN_BALLOONTIMEOUT:
-			break;
-		case NIN_BALLOONUSERCLICK:
-			if (m_lastArgs)
+			if (LOWORD(lParam) == NIN_SELECT)
 			{
-				if (m_lastArgs->getAction() == "open" && std::filesystem::exists(m_lastArgs->getActionParam()))
+
+			}
+			else if (LOWORD(lParam) == NIN_BALLOONTIMEOUT)
+			{
+				if (m_isHidden)
 				{
-					ShellExecuteA(nullptr, "open", m_lastArgs->getActionParam().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
+					hide();
 				}
 			}
-			break;
-		case WM_CONTEXTMENU:
-			break;
+			else if (LOWORD(lParam) == NIN_BALLOONUSERCLICK)
+			{
+				if (!m_openPath.empty() && std::filesystem::exists(m_openPath))
+				{
+					ShellExecuteA(nullptr, "open", m_openPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
+				}
+			}
+			else if (LOWORD(lParam) == WM_CONTEXTMENU)
+			{
+
+			}
+			return 0;
 		}
+		return DefWindowProcA(m_hwnd, uMsg, wParam, lParam);
 	}
 }
 #endif
