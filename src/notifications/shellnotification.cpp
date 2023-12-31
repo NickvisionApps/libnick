@@ -5,7 +5,7 @@
 #ifdef _WIN32
 #include "notifications/notifyicon.h"
 #elif defined(__linux__)
-#include <glib/glib.h>
+#include <glib.h>
 #include <gio/gio.h>
 #endif
 
