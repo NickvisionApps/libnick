@@ -1,8 +1,10 @@
 #ifdef _WIN32
 #include <gtest/gtest.h>
+#include <cstdlib>
 #include <memory>
 #include "aura.h"
 #include "notifications/notifyicon.h"
+#include "notifications/notifyiconmenu.h"
 
 using namespace Nickvision::Aura;
 using namespace Nickvision::Aura::Notifications;
@@ -15,14 +17,25 @@ public:
 	static void SetUpTestSuite()
 	{
 		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
-		if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
-		{
-			m_notifyIcon = std::make_unique<NotifyIcon>(GetConsoleWindow());
-		}
+
 	}
 };
 
 std::unique_ptr<NotifyIcon> NotifyIconTest::m_notifyIcon = nullptr;
+
+TEST_F(NotifyIconTest, CreateIcon)
+{
+	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
+	{
+		NotifyIconMenu contextMenu;
+		contextMenu.addSeparator();
+		contextMenu.addAction("Exit", []()
+		{
+			std::exit(0);
+		});
+		ASSERT_NO_THROW(m_notifyIcon = std::make_unique<NotifyIcon>(GetConsoleWindow(), contextMenu));
+	}
+}
 
 TEST_F(NotifyIconTest, ShowShellNotification)
 {
