@@ -31,56 +31,57 @@ namespace Nickvision::Aura::Filesystem
 		/**
 		 * @brief Deconstructs a FileSystemWatcher. 
 		 */
-		~FileSystemWatcher();
+		~FileSystemWatcher() noexcept;
 		/**
-		 * @brief Gets the path of the file system object being watched.
+		 * @brief Gets the path of the folder being watched.
 		 * @return The path of the folder being watched
 		 */
-		const std::filesystem::path& getPath() const;
+		const std::filesystem::path& getPath() const noexcept;
 		/**
-		 * @brief Gets the flags of what to watch changed for.
+		 * @brief Gets the flags of what to watch changes for.
 		 * @return The flags of watched properties
 		 */
-		WatcherFlags getWatcherFlags() const;
+		WatcherFlags getWatcherFlags() const noexcept;
 		/**
 		 * @brief Gets whether or not subdirectories of the folder are watched.
 		 * @return True if subdirectories watched, else false
 		 */
-		bool getIncludeSubdirectories() const;
+		bool getIncludeSubdirectories() const noexcept;
 		/**
-		 * @brief Gets the event for when the watched file system object is changed.
+		 * @brief Gets the event for when a watched flag of the folder is changed.
 		 * @return The changed event
 		 */
-		Events::Event<FileSystemChangedEventArgs>& changed();
+		Events::Event<FileSystemChangedEventArgs>& changed() noexcept;
 		/**
-		 * @brief Gets whether or not the file extension is being watched.
+		 * @brief Gets whether or not a file extension is being watched.
 		 * @param extension The file extension to check
-		 * @return True if watched, else false
+		 * @return True if extension is being watched, else false
+		 * @return True if list of extension filters is empty
 		 */
-		bool containsExtension(const std::filesystem::path& extension);
+		bool isExtensionWatched(const std::filesystem::path& extension) noexcept;
 		/**
 		 * @brief Adds an extension of a file to watch for changes in the folder.
 		 * @param extension The file extension to add
 		 * @return True if successful, else false
 		 */
-		bool addExtensionFilter(const std::filesystem::path& extension);
+		bool addExtensionFilter(const std::filesystem::path& extension) noexcept;
 		/**
 		 * @brief Removes an extension of a file to watch for changes in the folder.
 		 * @param extension The file extension to remove
 		 * @return True if successful, else false
 		 */
-		bool removeExtensionFilter(const std::filesystem::path& extension);
+		bool removeExtensionFilter(const std::filesystem::path& extension) noexcept;
 		/**
-		 * @brief Clears all extensions to watch. 
+		 * @brief Clears all watched extension filters. This will cause all extensions to be implicitly watched.
 		 * @return True if successful, else false
 		 */
-		bool clearExtensionFilters();
+		bool clearExtensionFilters() noexcept;
 
 	private:
 		/**
 		 * @brief Runs the loop to watch a folder for changes.
 		 */
-		void watch();
+		void watch() noexcept;
 		mutable std::mutex m_mutex;
 		std::filesystem::path m_path;
 		bool m_includeSubdirectories;

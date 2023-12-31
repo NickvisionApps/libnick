@@ -12,21 +12,19 @@ public:
 	static void SetUpTestSuite()
 	{
 		Store::destroy("org.nickvision.aura.test");
-		PasswordGenerator passGen;
-		m_store = std::make_unique<Store>("org.nickvision.aura.test", passGen.next());
 	}
 };
 
 std::unique_ptr<Store> StoreTest::m_store = nullptr;
 
-TEST_F(StoreTest, CheckValidStore)
+TEST_F(StoreTest, CreateStore)
 {
-	ASSERT_TRUE(m_store->isValid());
+	PasswordGenerator passGen;
+	ASSERT_NO_THROW(m_store = std::make_unique<Store>("org.nickvision.aura.test", passGen.next()));
 }
 
 TEST_F(StoreTest, AddCredentials)
 {
-	ASSERT_TRUE(m_store->isValid());
 	ASSERT_TRUE(m_store->addCredential({ "YT", "https://youtube.com", "theawesomeguy", "abc123!" }));
 	ASSERT_TRUE(m_store->addCredential({ "Google", "https://google.com", "me@gmail.com", "abc12345!" }));
 	ASSERT_TRUE(m_store->getAllCredentials().size() == 2);
@@ -40,6 +38,5 @@ TEST_F(StoreTest, AddCredentials)
 
 TEST_F(StoreTest, DestroyStore)
 {
-	ASSERT_TRUE(m_store->isValid());
 	ASSERT_TRUE(m_store->destroy());
 }

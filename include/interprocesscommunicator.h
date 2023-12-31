@@ -30,23 +30,23 @@ namespace Nickvision::Aura
 		/**
 		 * @brief Destructs an InterProcessCommunicator. 
 		 */
-		~InterProcessCommunicator();
+		~InterProcessCommunicator() noexcept;
 		/**
 		 * @brief Gets the event for when a command is received. 
 		 * @brief This event is only triggered on IPC server instances.
 		 * @return The command received event
 		 */
-		Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& commandReceived();
+		Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& commandReceived() noexcept;
 		/**
 		 * @brief Gets whether or not this instance is an IPC server.
 		 * @return True if this instance is an IPC server, else false.
 		 */
-		bool isServer() const;
+		bool isServer() const noexcept;
 		/**
 		 * @brief Gets whether or not this instance is an IPC client.
 		 * @return True if this instance is an IPC client, else false.
 		 */
-		bool isClient() const;
+		bool isClient() const noexcept;
 		/**
 		 * @brief Communicates to the IPC server instance. 
 		 * @brief If this instance is the running server, commandReceived will be triggered with the passed arguments.
@@ -54,13 +54,13 @@ namespace Nickvision::Aura
 		 * @param exitIfClient Whether or not to exit this process if it is an IPC client
 		 * @return True if command-line arguments were sent to a server instance
 		 */
-		bool communicate(const std::vector<std::string>& args, bool exitIfClient = false);
+		bool communicate(const std::vector<std::string>& args, bool exitIfClient = false) noexcept;
 
 	private:
 		/**
 		 * @brief Runs the IPC server loop.
 		 */
-		void runServer();
+		void runServer() noexcept;
 		bool m_serverRunning;
 		Events::Event<Events::ParamEventArgs<std::vector<std::string>>> m_commandReceived;
 		std::jthread m_server;

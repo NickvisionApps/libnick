@@ -16,82 +16,84 @@ namespace Nickvision::Aura
 		/**
 		 * @brief Constructs a Version. 
 		 */
-		Version();
+		Version() noexcept;
 		/**
 		 * @brief Constructs a Version.
 		 * @param major The major number
 		 * @param minor The minor number
 		 * @param build The build number
 		 */
-		Version(int major, int minor, int build);
+		Version(int major, int minor, int build) noexcept;
 		/**
 		 * @brief Constructs a Version.
 		 * @param major The major number
 		 * @param minor The minor number
 		 * @param build The build number
 		 * @param dev The dev string
+		 * @throw std::invalid_argument Thrown when the dev version does not contain a "-"
 		 */
 		Version(int major, int minor, int build, const std::string& dev);
 		/**
 		 * @brief Constructs a Version.
 		 * @param version A version string to parse
+		 * @throw std::invalid_argument Thrown when the version string is not formatted correctly
 		 */
 		Version(const std::string& version);
 		/**
 		 * @brief Gets the type of the version.
 		 * @return VersionType
 		 */
-		VersionType getVersionType() const;
+		VersionType getVersionType() const noexcept;
 		/**
 		 * @brief Gets a string representation of the Version.
 		 * @return The string representation of the Version
 		 */
-		const std::string& toString() const;
+		const std::string& toString() const noexcept;
 		/**
 		 * @brief Gets whether or not the Version object is empty
 		 * @return True if empty, else false
 		 */
-		bool empty() const;
+		bool empty() const noexcept;
 		/**
 		 * @brief Compares Version objects via < operator
 		 * @param compare The Version object to compare too
 		 * @return True if this < compare
 		 */
-		bool operator<(const Version& compare) const;
+		bool operator<(const Version& compare) const noexcept;
 		/**
 		 * @brief Compares Version objects via <= operator
 		 * @param compare The Version object to compare too
 		 * @return True if this <= compare
 		 */
-		bool operator<=(const Version& compare) const;
+		bool operator<=(const Version& compare) const noexcept;
 		/**
 		 * @brief Compares Version objects via > operator
 		 * @param compare The Version object to compare too
 		 * @return True if this > compare
 		 */
-		bool operator>(const Version& compare) const;
+		bool operator>(const Version& compare) const noexcept;
 		/**
 		 * @brief Compares Version objects via >= operator
 		 * @param compare The Version object to compare too
 		 * @return True if this >= compare
 		 */
-		bool operator>=(const Version& compare) const;
+		bool operator>=(const Version& compare) const noexcept;
 		/**
 		 * @brief Compares Version objects via == operator
 		 * @param compare The Version object to compare too
 		 * @return True if this == compare
 		 */
-		bool operator==(const Version& compare) const;
+		bool operator==(const Version& compare) const noexcept;
 		/**
 		 * @brief Compares Version objects via != operator
 		 * @param compare The Version object to compare too
 		 * @return True if this != compare
 		 */
-		bool operator!=(const Version& compare) const;
+		bool operator!=(const Version& compare) const noexcept;
 		/**
 		 * @brief Outputs the Version object 
 		 */
-		friend std::ostream& operator<<(std::ostream& os, const Version& version);
+		friend std::ostream& operator<<(std::ostream& os, const Version& version) noexcept;
 
 	private:
 		int m_major;

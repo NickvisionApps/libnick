@@ -18,7 +18,7 @@ namespace Nickvision::Aura
 		 * @brief Constructs a ConfigurationBase, loading the file from disk.
 		 * @param key The key of the config file
 		 */
-		ConfigurationBase(const std::string& key);
+		ConfigurationBase(const std::string& key) noexcept;
 		/**
 		 * @brief Deconstructs a ConfigurationBase. 
 		 */
@@ -27,25 +27,25 @@ namespace Nickvision::Aura
 		 * Gets the key of the config file.
 		 * @return The key of the config file
 		 */
-		const std::string& getKey() const;
+		const std::string& getKey() const noexcept;
 		/**
 		 * @brief Gets the Saved event.
 		 * @return The Saved event
 		 */
-		Events::Event<Events::EventArgs>& saved();
+		Events::Event<Events::EventArgs>& saved() noexcept;
 		/**
 		 * @brief Saves the config file to disk. 
 		 * @return True if saved to disk, else false
 		 */
-		bool save();
+		bool save() noexcept;
 
 	protected:
 		Json::Value m_json;
-		std::string m_key;
-		Events::Event<Events::EventArgs> m_saved;
 
 	private:
+		std::string m_key;
 		std::filesystem::path m_path;
+		Events::Event<Events::EventArgs> m_saved;
 	};
 }
 

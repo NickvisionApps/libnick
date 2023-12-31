@@ -2,13 +2,13 @@
 
 namespace Nickvision::Aura::Network
 {
-	NetworkStateChangedEventArgs::NetworkStateChangedEventArgs(NetworkState state)
+	NetworkStateChangedEventArgs::NetworkStateChangedEventArgs(NetworkState state) noexcept
 		: m_state{ state }
 	{
 
 	}
 
-	NetworkState NetworkStateChangedEventArgs::getState() const
+	NetworkState NetworkStateChangedEventArgs::getState() const noexcept
 	{
 		return m_state;
 	}

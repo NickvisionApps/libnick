@@ -4,7 +4,7 @@
 
 namespace Nickvision::Aura
 {
-	Version::Version()
+	Version::Version() noexcept
 		: m_major{ 0 },
 		m_minor{ 0 },
 		m_build{ 0 },
@@ -13,7 +13,7 @@ namespace Nickvision::Aura
 
 	}
 
-	Version::Version(int major, int minor, int build)
+	Version::Version(int major, int minor, int build) noexcept
 		: m_major{ major },
 		m_minor{ minor },
 		m_build{ build },
@@ -75,22 +75,22 @@ namespace Nickvision::Aura
 		m_str = std::to_string(m_major) + "." + std::to_string(m_minor) + "." + std::to_string(m_build) + m_dev;
 	}
 
-	VersionType Version::getVersionType() const
+	VersionType Version::getVersionType() const noexcept
 	{
 		return m_dev.empty() ? VersionType::Stable : VersionType::Preview;
 	}
 
-	const std::string& Version::toString() const
+	const std::string& Version::toString() const noexcept
 	{
 		return m_str;
 	}
 
-	bool Version::empty() const
+	bool Version::empty() const noexcept
 	{
 		return m_major == 0 && m_minor == 0 && m_build == 0 && m_dev.empty();
 	}
 
-	bool Version::operator<(const Version& compare) const
+	bool Version::operator<(const Version& compare) const noexcept
 	{
 		if (m_major < compare.m_major)
 		{
@@ -120,12 +120,12 @@ namespace Nickvision::Aura
 		return false;
 	}
 
-	bool Version::operator<=(const Version& compare) const
+	bool Version::operator<=(const Version& compare) const noexcept
 	{
 		return operator>(compare) || operator==(compare);
 	}
 
-	bool Version::operator>(const Version& compare) const
+	bool Version::operator>(const Version& compare) const noexcept
 	{
 		if (m_major > compare.m_major)
 		{
@@ -155,22 +155,22 @@ namespace Nickvision::Aura
 		return false;
 	}
 
-	bool Version::operator>=(const Version& compare) const
+	bool Version::operator>=(const Version& compare) const noexcept
 	{
 		return operator<(compare) || operator==(compare);
 	}
 
-	bool Version::operator==(const Version& compare) const
+	bool Version::operator==(const Version& compare) const noexcept
 	{
 		return m_major == compare.m_major && m_minor == compare.m_minor && m_build == compare.m_build && m_dev == compare.m_dev;
 	}
 
-	bool Version::operator!=(const Version& compare) const
+	bool Version::operator!=(const Version& compare) const noexcept
 	{
 		return !(operator==(compare));
 	}
 
-	std::ostream& operator<<(std::ostream& os, const Version& version)
+	std::ostream& operator<<(std::ostream& os, const Version& version) noexcept
 	{
 		os << version.toString();
 		return os;

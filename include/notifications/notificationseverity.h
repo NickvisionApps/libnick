@@ -4,7 +4,7 @@
 namespace Nickvision::Aura::Notifications
 {
 	/**
-	 * @brief Severities for a notification 
+	 * @brief Severities for a notification.
 	 */
 	enum class NotificationSeverity
 	{

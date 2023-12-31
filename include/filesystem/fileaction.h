@@ -4,7 +4,7 @@
 namespace Nickvision::Aura::Filesystem
 {
 	/**
-	 * @brief Actions that cause a file to change. 
+	 * @brief Actions that cause a file system object to change. 
 	 */
 	enum class FileAction
 	{

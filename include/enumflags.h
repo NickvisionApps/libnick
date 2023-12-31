@@ -1,32 +1,35 @@
 #ifndef ENUMFLAGS_H
 #define ENUMFLAGS_H
 
+#include <type_traits>
+
 #define DEFINE_ENUM_FLAG_OPERATORS(T) \
-inline T operator~(T a) \
+static_assert(std::is_enum_v<T> == true); \
+inline T operator~(T a) noexcept \
 { \
 	return (T)~(int)a; \
 } \
-inline T operator|(T a, T b) \
+inline T operator|(T a, T b) noexcept \
 { \
 	return (T)((int)a | (int)b); \
 } \
-inline T operator&(T a, T b) \
+inline T operator&(T a, T b) noexcept \
 { \
 	return (T)((int)a & (int)b); \
 } \
-inline T operator^(T a, T b) \
+inline T operator^(T a, T b) noexcept \
 { \
 	return (T)((int)a ^ (int)b); \
 } \
-inline T& operator|=(T& a, T b) \
+inline T& operator|=(T& a, T b) noexcept \
 { \
 	return (T&)((int&)a |= (int)b); \
 } \
-inline T& operator&=(T& a, T b) \
+inline T& operator&=(T& a, T b) noexcept \
 { \
 	return (T&)((int&)a &= (int)b); \
 } \
-inline T& operator^=(T& a, T b) \
+inline T& operator^=(T& a, T b) noexcept \
 { \
 	return (T&)((int&)a ^= (int)b); \
 } \

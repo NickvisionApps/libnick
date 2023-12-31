@@ -8,7 +8,7 @@
 namespace Nickvision::Aura::Keyring
 {
 	/**
-	 * @brief A random number generator. 
+	 * @brief A random password generator. 
 	 */
 	class PasswordGenerator
 	{
@@ -17,23 +17,23 @@ namespace Nickvision::Aura::Keyring
 		 * @brief Constructs a PasswordGenerator.
 		 * @param contentFlags Flags of possible characters in a generated password
 		 */
-		PasswordGenerator(PasswordContent contentFlags = PasswordContent::Numeric | PasswordContent::Uppercase | PasswordContent::Lowercase | PasswordContent::Special);
+		PasswordGenerator(PasswordContent contentFlags = PasswordContent::Numeric | PasswordContent::Uppercase | PasswordContent::Lowercase | PasswordContent::Special) noexcept;
 		/**
 		 * @brief Gets the flags of possible characters in a generated password.
 		 * @return The flags of possible characters in a generated password
 		 */
-		PasswordContent getContentFlags() const;
+		PasswordContent getContentFlags() const noexcept;
 		/**
 		 * @brief Sets the flags of possible characters in a generated password.
 		 * @param contentFlags Flags of possible characters in a generated password
 	 	 */
-		void setContentFlags(PasswordContent contentFlags);
+		void setContentFlags(PasswordContent contentFlags) noexcept;
 		/**
 		 * @brief Generates a new password
 		 * @param length The length of the generated password
 		 * @return The generated password
 		 */
-		std::string next(size_t length = 16);
+		std::string next(size_t length = 16) noexcept;
 
 	private:
 		std::vector<char> m_chars;

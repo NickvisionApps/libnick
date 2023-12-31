@@ -11,7 +11,7 @@ namespace Nickvision::Aura::DependencyLocator
 	 * @param dependency The name of the dependency to find
 	 * @return The path of the dependency if found, else empty path
 	 */
-	const std::filesystem::path& find(std::string dependency);
+	const std::filesystem::path& find(std::string dependency) noexcept;
 }
 
 #endif //DEPENDENCYLOCATOR_H

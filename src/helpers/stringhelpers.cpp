@@ -16,19 +16,19 @@
 
 namespace Nickvision::Aura
 {
-	std::string StringHelpers::toLower(std::string s)
+	std::string StringHelpers::toLower(std::string s) noexcept
 	{
 		std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
 		return s;
 	}
 
-	std::string StringHelpers::toUpper(std::string s)
+	std::string StringHelpers::toUpper(std::string s) noexcept
 	{
 		std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::toupper(c); });
 		return s;
 	}
 
-	std::string StringHelpers::trim(const std::string& s)
+	std::string StringHelpers::trim(const std::string& s) noexcept
 	{
 		std::string result{ s };
 		result.erase(std::find_if(result.rbegin(), result.rend(), [](unsigned char ch) 
@@ -42,7 +42,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::string StringHelpers::trim(const std::string& s, char delimiter)
+	std::string StringHelpers::trim(const std::string& s, char delimiter) noexcept
 	{
 		std::string result{ s };
 		result.erase(std::find_if(result.rbegin(), result.rend(), [delimiter](char ch)
@@ -56,7 +56,7 @@ namespace Nickvision::Aura
 		return result;
 	}
 
-	std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace)
+	std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace) noexcept
 	{
 		if (s.empty() || toReplace.empty())
 		{
@@ -70,17 +70,24 @@ namespace Nickvision::Aura
 		return s.replace(r, toReplace.size(), replace);
 	}
 
-	unsigned int StringHelpers::stoui(const std::string& s, size_t* idx, int base)
+	unsigned int StringHelpers::stoui(const std::string& s, size_t* idx, int base) noexcept
 	{
-		unsigned long ul{ std::stoul(s, idx, base) };
-		if (ul > (std::numeric_limits<unsigned>::max)())
+		try
 		{
-			return (std::numeric_limits<unsigned>::max)();
+			unsigned long ul{ std::stoul(s, idx, base) };
+			if (ul > (std::numeric_limits<unsigned>::max)())
+			{
+				return (std::numeric_limits<unsigned>::max)();
+			}
+			return static_cast<unsigned int>(ul);
 		}
-		return static_cast<unsigned int>(ul);
+		catch (...)
+		{
+			return 0;
+		}
 	}
 
-	std::string StringHelpers::newGuid()
+	std::string StringHelpers::newGuid() noexcept
 	{
 		std::array<unsigned char, 16> guid;
 #ifdef _WIN32
@@ -137,7 +144,7 @@ namespace Nickvision::Aura
 		return out.str();
 	}
 
-	bool StringHelpers::isValidUrl(const std::string& s)
+	bool StringHelpers::isValidUrl(const std::string& s) noexcept
 	{
 		if (s.empty())
 		{
@@ -149,13 +156,13 @@ namespace Nickvision::Aura
 		return res == CURLUE_OK;
 	}
 
-	std::string StringHelpers::toString(const std::wstring& s)
+	std::string StringHelpers::toString(const std::wstring& s) noexcept
 	{
 		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 		return converter.to_bytes(s);
 	}
 
-	std::wstring StringHelpers::toWstring(const std::string& s)
+	std::wstring StringHelpers::toWstring(const std::string& s) noexcept
 	{
 		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 		return converter.from_bytes(s);

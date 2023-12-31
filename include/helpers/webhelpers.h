@@ -15,7 +15,7 @@ namespace Nickvision::Aura::WebHelpers
 	 * @param url The url to check
 	 * @return True if valid website, else false
 	 */
-	bool isValidWebsite(const std::string& url);
+	bool isValidWebsite(const std::string& url) noexcept;
 	/**
 	 * @brief Downloads a file to disk.
 	 * @param url The url of the file to download
@@ -28,13 +28,13 @@ namespace Nickvision::Aura::WebHelpers
 	 *	ulnow   - The total number of bytes currently uploaded (will always be 0) \n 
 	 * @param overwrite Whether or not to overwrite existing files on disk
 	 */
-	bool downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress = {}, bool overwrite = true);
+	bool downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress = {}, bool overwrite = true) noexcept;
 	/**
 	 * @brief Fetches a json string from a url.
 	 * @param url The url of the json string
 	 * @return The fetched json string
 	 */
-	std::string fetchJsonString(const std::string& url);
+	std::string fetchJsonString(const std::string& url) noexcept;
 }
 
 #endif //WEBHELPERS_H

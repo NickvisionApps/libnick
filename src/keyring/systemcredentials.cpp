@@ -14,7 +14,7 @@ namespace Nickvision::Aura::Keyring
 	static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
 #endif
 
-	std::optional<Credential> SystemCredentials::getCredential(const std::string& name)
+	std::optional<Credential> SystemCredentials::getCredential(const std::string& name) noexcept
 	{
 #ifdef _WIN32
 		CREDENTIALA* cred{ nullptr };
@@ -47,7 +47,7 @@ namespace Nickvision::Aura::Keyring
 		return std::nullopt;
 	}
 
-	std::optional<Credential> SystemCredentials::addCredential(const std::string& name)
+	std::optional<Credential> SystemCredentials::addCredential(const std::string& name) noexcept
 	{
 		PasswordGenerator passGen;
 		Credential c{ name, "", "default", passGen.next() };
@@ -58,7 +58,7 @@ namespace Nickvision::Aura::Keyring
 		return std::nullopt;
 	}
 
-	bool SystemCredentials::addCredential(const Credential& credential)
+	bool SystemCredentials::addCredential(const Credential& credential) noexcept
 	{
 #ifdef _WIN32
 		CREDENTIALA* cred{ new CREDENTIALA() };
@@ -86,7 +86,7 @@ namespace Nickvision::Aura::Keyring
 #endif
 	}
 
-	bool SystemCredentials::updateCredential(const Credential& credential)
+	bool SystemCredentials::updateCredential(const Credential& credential) noexcept
 	{
 #ifdef _WIN32
 		CREDENTIALA* cred{ nullptr };
@@ -126,8 +126,8 @@ namespace Nickvision::Aura::Keyring
 #endif
 		return false;
 	}
-
-	bool SystemCredentials::deleteCredential(const std::string& name)
+	 
+	bool SystemCredentials::deleteCredential(const std::string& name) noexcept
 	{
 #ifdef _WIN32
 		return CredDeleteA(name.c_str(), CRED_TYPE_GENERIC, 0);

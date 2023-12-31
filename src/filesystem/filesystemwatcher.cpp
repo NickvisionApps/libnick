@@ -31,7 +31,7 @@ namespace Nickvision::Aura::Filesystem
 		m_watchThread = std::jthread(&FileSystemWatcher::watch, this);
 	}
 
-	FileSystemWatcher::~FileSystemWatcher()
+	FileSystemWatcher::~FileSystemWatcher() noexcept
 	{
 		m_watching = false;
 #ifdef _WIN32
@@ -42,33 +42,37 @@ namespace Nickvision::Aura::Filesystem
 #endif
 	}
 
-	const std::filesystem::path& FileSystemWatcher::getPath() const
+	const std::filesystem::path& FileSystemWatcher::getPath() const noexcept
 	{
 		return m_path;
 	}
 
-	WatcherFlags FileSystemWatcher::getWatcherFlags() const
+	WatcherFlags FileSystemWatcher::getWatcherFlags() const noexcept
 	{
 		return m_watcherFlags;
 	}
 
-	bool FileSystemWatcher::getIncludeSubdirectories() const
+	bool FileSystemWatcher::getIncludeSubdirectories() const noexcept
 	{
 		return m_includeSubdirectories;
 	}
 
-	Events::Event<FileSystemChangedEventArgs>& FileSystemWatcher::changed()
+	Events::Event<FileSystemChangedEventArgs>& FileSystemWatcher::changed() noexcept
 	{
 		return m_changed;
 	}
 
-	bool FileSystemWatcher::containsExtension(const std::filesystem::path& extension)
+	bool FileSystemWatcher::isExtensionWatched(const std::filesystem::path& extension) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
+		if (m_extensionFilters.size() == 0)
+		{
+			return true;
+		}
 		return std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) != m_extensionFilters.end();
 	}
 
-	bool FileSystemWatcher::addExtensionFilter(const std::filesystem::path& extension)
+	bool FileSystemWatcher::addExtensionFilter(const std::filesystem::path& extension) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) == m_extensionFilters.end())
@@ -79,7 +83,7 @@ namespace Nickvision::Aura::Filesystem
 		return false;
 	}
 
-	bool FileSystemWatcher::removeExtensionFilter(const std::filesystem::path& extension)
+	bool FileSystemWatcher::removeExtensionFilter(const std::filesystem::path& extension) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		auto find{ std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) };
@@ -91,14 +95,14 @@ namespace Nickvision::Aura::Filesystem
 		return false;
 	}
 
-	bool FileSystemWatcher::clearExtensionFilters()
+	bool FileSystemWatcher::clearExtensionFilters() noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_extensionFilters.clear();
 		return true;
 	}
 
-	void FileSystemWatcher::watch()
+	void FileSystemWatcher::watch() noexcept
 	{
 #ifdef _WIN32
 		HANDLE folder{ CreateFileW(m_path.c_str(), FILE_LIST_DIRECTORY, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, nullptr) };
@@ -134,7 +138,7 @@ namespace Nickvision::Aura::Filesystem
 					if (info->Action != FILE_ACTION_RENAMED_NEW_NAME)
 					{
 						std::filesystem::path changed{ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])) };
-						if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
+						if (isExtensionWatched(changed.extension()))
 						{
 							m_changed.invoke({ changed , static_cast<FileAction>(info->Action) });
 						}
@@ -187,7 +191,18 @@ namespace Nickvision::Aura::Filesystem
 			mask |= IN_ACCESS;
 			mask |= IN_OPEN;
 		}
-		int watch{ inotify_add_watch(m_notify, m_path.c_str(), mask) };
+		std::vector<int> watches;
+		watches.push_back(inotify_add_watch(m_notify, m_path.c_str(), mask));
+		if (m_includeSubdirectories)
+		{
+			for (const std::filesystem::directory_entry& e : std::filesystem::recursive_directory_iterator(m_path))
+			{
+				if (e.is_directory())
+				{
+					watches.push_back(inotify_add_watch(m_notify, e.path().string().c_str(), mask));
+				}
+			}
+		}
 		while (m_watching)
 		{
 			std::vector<char> buf(1024 * (sizeof(struct inotify_event) + 16));
@@ -203,7 +218,7 @@ namespace Nickvision::Aura::Filesystem
 				if (event->len)
 				{
 					std::filesystem::path changed{ m_path / event->name };
-					if (m_extensionFilters.size() == 0 || containsExtension(changed.extension()))
+					if (isExtensionWatched(changed.extension()))
 					{
 						if (event->mask & IN_CREATE)
 						{
@@ -225,7 +240,10 @@ namespace Nickvision::Aura::Filesystem
 				}
 			}
 		}
-		inotify_rm_watch(m_notify, watch);
+		for (int watch : watches)
+		{
+			inotify_rm_watch(m_notify, watch);
+		}
 #endif
 	}
 }

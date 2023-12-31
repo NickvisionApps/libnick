@@ -16,19 +16,19 @@ namespace Nickvision::Aura::Filesystem
 		/**
 		 * @brief Constructs a FileSystemChangedEventArgs.
 		 * @param path The path of the file/folder that changed
-		 * @param why The action that caused the file to change
+		 * @param why The action that caused the file system object to change
 		 */
-		FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why);
+		FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why) noexcept;
 		/**
-		 * @brief Gets the path of the changed file system object.
+		 * @brief Gets the path of the changed file system object system object.
 		 * @return The path of the changed file/folder
 		 */
-		const std::filesystem::path& getPath() const;
+		const std::filesystem::path& getPath() const noexcept;
 		/**
-		 * @brief Gets the action that caused the file to change.
-		 * @return The action that caused the file to change
+		 * @brief Gets the action that caused the file system object to change.
+		 * @return The action that caused the file system object to change
 		 */
-		FileAction getWhy() const;
+		FileAction getWhy() const noexcept;
 
 	private:
 		std::filesystem::path m_path;

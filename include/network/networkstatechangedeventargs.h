@@ -16,12 +16,12 @@ namespace Nickvision::Aura::Network
 		 * @brief Constructs a NetworkStateChangedEventArgs.
 		 * @param state NetworkStae
 		 */
-		NetworkStateChangedEventArgs(NetworkState state);
+		NetworkStateChangedEventArgs(NetworkState state) noexcept;
 		/**
 		 * @brief Gets the network state.
 		 * @return NetworkState
 		 */
-		NetworkState getState() const;
+		NetworkState getState() const noexcept;
 
 	private:
 		NetworkState m_state;
