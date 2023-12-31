@@ -16,7 +16,7 @@ namespace Nickvision::Aura::Update
 		/**
 		 * @brief Constructs an Updater.
 		 * @param githubRepoUrl The url of the GitHub repo to fetch updates for. Must be a valid github url. If the url is invalid, Updater will attempt to get a repo url from Aura
-		 * @throw std::invalid_argument Thrown if no valid url can be determined
+		 * @throw std::invalid_argument Thrown if no valid GitHub url can be determined
 		 */
 		Updater(std::string githubRepoUrl = "");
 		/**

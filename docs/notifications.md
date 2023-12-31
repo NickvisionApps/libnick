@@ -38,6 +38,7 @@ Path: `Nickvision::Aura::Notifications::NotificationSentEventArgs`
 - ```cpp
   NotificationSentEventArgs(const std::string& message, NotificationSeverity severity, const std::string& action = "", const std::string& actionParam = "")
   ``` 
+    - Constructs a NotificationSentEventArgs.
     - Accepts: The notification message, message, the severity of the notification, severity, an optional action for the notification, action, and an optional action parameter for the action, actionParam.
 
 ## NotificationSeverity
@@ -102,4 +103,5 @@ Path: `Nickvision::Aura::Notifications::ShellNotificationSentEventArgs`
 - ```cpp
   ShellNotificationSentEventArgs(const std::string& title, const std::string& message, NotificationSeverity severity, const std::string& action = "", const std::string& actionParam = "")
   ``` 
+    - Constructs a ShellNotificationSentEventArgs.
     - Accepts: The notification title, title, the notification message, message, the severity of the notification, severity, an optional action for the notification, action, and an optional action parameter for the action, actionParam.
