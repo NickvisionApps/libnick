@@ -17,7 +17,6 @@ public:
 	static void SetUpTestSuite()
 	{
 		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
-
 	}
 };
 
@@ -35,6 +34,7 @@ TEST_F(NotifyIconTest, CreateIcon)
 		});
 		ASSERT_NO_THROW(m_notifyIcon = std::make_unique<NotifyIcon>(GetConsoleWindow(), contextMenu));
 	}
+	ASSERT_TRUE(true);
 }
 
 TEST_F(NotifyIconTest, ShowShellNotification)
