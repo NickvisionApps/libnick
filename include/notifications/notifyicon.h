@@ -21,6 +21,7 @@ namespace Nickvision::Aura::Notifications
 		 * @brief Constructs a NotifyIcon. 
 		 * @param hwnd The HWND handle of the main application window
 		 * @throw std::logic_error Thrown if Aura::init() was not called yet 
+		 * @throw std::runtime_error Thrown if guid is unable to be created
 		 */
 		NotifyIcon(HWND hwnd);
 		/**
@@ -40,7 +41,7 @@ namespace Nickvision::Aura::Notifications
 		 */
 		NOTIFYICONDATAA getBaseNotifyIconData() noexcept;
 		HWND m_hwnd;
-		unsigned int m_id;
+		GUID m_guid;
 	};
 }
 

@@ -92,6 +92,7 @@ namespace Nickvision::Aura
 		std::array<unsigned char, 16> guid;
 #ifdef _WIN32
 		GUID win;
+		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 		if (CoCreateGuid(&win) != S_OK)
 		{
 			return "";
