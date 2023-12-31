@@ -1,5 +1,6 @@
 #include "notifications/shellnotification.h"
 #include <filesystem>
+#include <string>
 #include "aura.h"
 #include "localization/gettext.h"
 #ifdef _WIN32
@@ -12,7 +13,7 @@
 namespace Nickvision::Aura::Notifications
 {
 #ifdef _WIN32
-	void ShellNotification::show(const ShellNotificationSentEventArgs& e, HWND hwnd) noexcept
+	void ShellNotification::show(const ShellNotificationSentEventArgs& e, HWND hwnd)
 	{
 		NotifyIcon icon{ hwnd };
 		icon.showShellNotification(e);
@@ -25,7 +26,7 @@ namespace Nickvision::Aura::Notifications
 			GNotification* notification{ g_notification_new(e.getTitle().c_str()) };
 			GIcon* icon{ nullptr };
 			GFile* fileIcon{ nullptr };
-			std::string appId{ Aura::getActive()::getAppInfo().getId() };
+			std::string appId{ Aura::getActive().getAppInfo().getId() };
 			if (Aura::getEnvVar("SNAP").empty())
 			{
 				std::string name{ appId + "-symbolic" };
