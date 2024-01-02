@@ -35,7 +35,7 @@ namespace Nickvision::Aura
 		 * @return The config object
 		 */
 		template<DerivedConfigurationBase T>
-		T& getConfig(const std::string& key) noexcept
+		T& getConfig(const std::string& key)
 		{
 			if (key.empty())
 			{

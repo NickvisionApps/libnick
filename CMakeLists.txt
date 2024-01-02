@@ -15,6 +15,7 @@ endif()
 
 project ("libaura" LANGUAGES CXX VERSION 2024.1.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(GNUInstallDirs)
+include(CTest)
 
 #libaura Library Setup
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -79,15 +80,9 @@ else()
   target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-#libaura Install
-configure_file(${PROJECT_SOURCE_DIR}/pkg-config/libaura.pc.in libaura.pc @ONLY)
-install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
-install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
-
-#libaura_test
-if(NOT SKIP_TESTS)
-	#libaura_test Setup
+#libaura Test
+if (NOT BUILD_TESTING STREQUAL OFF)
+    #libaura_test Setup
 	add_executable(${PROJECT_NAME}_test
 		tests/auratests.cpp
 		tests/eventtests.cpp
@@ -110,3 +105,9 @@ if(NOT SKIP_TESTS)
 	find_package(GTest REQUIRED)
 	target_link_libraries(${PROJECT_NAME}_test PUBLIC libaura GTest::gtest_main GTest::gmock_main)
 endif()
+
+#libaura Install
+configure_file(${PROJECT_SOURCE_DIR}/pkg-config/libaura.pc.in libaura.pc @ONLY)
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
