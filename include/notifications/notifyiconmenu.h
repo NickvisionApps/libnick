@@ -129,24 +129,24 @@ namespace Nickvision::Aura::Notifications
 		 */
 		bool removeSeparator(size_t index) noexcept;
 		/**
-		 * @brief Adds an action to the bottom of the menu.
+		 * @brief Adds an action item to the bottom of the menu.
 		 * @param label The label of the action
 		 * @param action The callback function of the action
-		 * @return The index at which the action was added
+		 * @return The index at which the action item was added
 		 */
 		size_t addAction(const std::string& label, const std::function<void()>& action) noexcept;
 		/**
-		 * @brief Inserts an action at a given index in the menu.
-		 * @param index The index at which to insert the action
+		 * @brief Inserts an action item at a given index in the menu.
+		 * @param index The index at which to insert the action item
 		 * @param label The label of the action
 		 * @param action The callback function of the action
-		 * @return True if the action was successfully inserted, else false
+		 * @return True if the action item was successfully inserted, else false
 		 */
 		bool insertAction(size_t index, const std::string& label, const std::function<void()>& action) noexcept;
 		/**
-		 * @brief Removes an action at a given index in the menu.
-		 * @param index The index at which to remove the action
-		 * @return True if the action was successfully removed, else false
+		 * @brief Removes an action item at a given index in the menu.
+		 * @param index The index at which to remove the action item
+		 * @return True if the action item was successfully removed, else false
 		 */
 		bool removeAction(size_t index) noexcept;
 

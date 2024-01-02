@@ -36,31 +36,31 @@ namespace Nickvision::Aura::Notifications
 		 */
 		~NotifyIcon() noexcept;
 		/**
-		 * @brief Hides the NotifyIcon.
-		 * @return True if NotifyIcon was updated, else false
+		 * @brief Hides the icon.
+		 * @return True if icon was hidden, else false
 		 */
 		bool hide() noexcept;
 		/**
-		 * @brief Shows the NotifyIcon.
-		 * @return True if NotifyIcon was updated, else false
+		 * @brief Shows the icon.
+		 * @return True if icon was shown, else false
 		 */
 		bool show() noexcept;
 		/**
-		 * @brief Gets the tooltip being shown by the NotifyIcon.
-		 * @return The tooltip being shown
+		 * @brief Gets the tooltip text of the icon.
+		 * @return The tooltip text
 		 */
 		const std::string& getTooltip() const noexcept;
 		/**
-		 * @brief Sets the tooltip of the NotifyIcon.
-		 * @param tooltip The toolip
-		 * @return True if NotifyIcon was updated, else false
+		 * @brief Sets the tooltip text of the icon.
+		 * @param tooltip The toolip text
+		 * @return True if the tooltip was updated, else false
 		 */
 		bool setTooltip(const std::string& tooltip) noexcept;
 		/**
-		 * @brief Shows a notification from the NotifyIcon.
+		 * @brief Shows a notification from the icon.
 		 * @brief Supports the action "open" with action param being a path of a file or folder to open.
 		 * @param e ShellNotificationSentEventArgs
-		 * @return True if NotifyIcon was updated, else false
+		 * @return True if notification was shown from the icon
 		 */
 		bool notify(const ShellNotificationSentEventArgs& e) noexcept;
 
