@@ -168,7 +168,7 @@ namespace Nickvision::Aura::Notifications
 
 	NOTIFYICONDATAA NotifyIcon::getBaseNotifyIconData() noexcept
 	{
-		NOTIFYICONDATAA notify;
+		NOTIFYICONDATAA notify{ 0 };
 		notify.cbSize = sizeof(notify);
 		notify.hWnd = m_hwnd;
 		notify.guidItem = m_guid;
@@ -221,7 +221,7 @@ namespace Nickvision::Aura::Notifications
 		else if (uMsg == WM_COMMAND)
 		{
 			int index{ LOWORD(wParam) - IDM_CONTEXT_MENU };
-			if (m_contextMenu.size() != 0 && index > 0 && index < m_contextMenu.size())
+			if (m_contextMenu.size() != 0 && index >= 0 && index < m_contextMenu.size())
 			{
 				const std::shared_ptr<NotifyIconMenuItem> item{ m_contextMenu.get(index) };
 				if (item->getType() == NotifyIconMenuItemType::Action)

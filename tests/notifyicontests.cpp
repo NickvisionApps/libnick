@@ -26,16 +26,15 @@ TEST_F(NotifyIconTest, CreateIcon)
 {
 	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
 	{
-		bool running{ true };
+		bool waiting{ true };
 		NotifyIconMenu contextMenu;
-		contextMenu.addSeparator();
-		contextMenu.addAction("Exit", [&running]()
+		contextMenu.addAction("Continue", [&waiting]()
 		{
-			running = false;
+				waiting = false;
 		});
 		ASSERT_NO_THROW(m_notifyIcon = std::make_unique<NotifyIcon>(GetConsoleWindow(), contextMenu));
-		std::cout << "Click \"Exit\" via the context menu of the NotifyIcon to continue..." << std::endl;
-		while (running)
+		std::cout << "Click \"Continue\" via the context menu of the NotifyIcon to continue..." << std::endl;
+		while (waiting)
 		{
 			MSG msg = { };
 			if(PeekMessageA(&msg, nullptr, 0, 0, PM_REMOVE) > 0)
