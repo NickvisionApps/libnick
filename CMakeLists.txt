@@ -13,7 +13,7 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("libaura" LANGUAGES CXX VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libaura" LANGUAGES CXX VERSION 2024.1.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(GNUInstallDirs)
 
 #libaura Library Setup
