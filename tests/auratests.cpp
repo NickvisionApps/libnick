@@ -84,9 +84,9 @@ TEST_F(AuraTest, DependencyCheck)
 #ifdef _WIN32
 	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
 	{
-		ASSERT_NO_THROW(Notifications::ShellNotification::show(args, GetConsoleWindow()));
+		ASSERT_NO_THROW(Notifications::ShellNotification::send(args, GetConsoleWindow()));
 	}
 #elif defined(__linux__)
-	ASSERT_NO_THROW(Notifications::ShellNotification::show(args));
+	ASSERT_NO_THROW(Notifications::ShellNotification::send(args));
 #endif
 }

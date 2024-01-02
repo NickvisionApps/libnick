@@ -15,14 +15,14 @@
 namespace Nickvision::Aura::Notifications
 {
 #ifdef _WIN32
-	void ShellNotification::show(const ShellNotificationSentEventArgs& e, HWND hwnd)
+	void ShellNotification::send(const ShellNotificationSentEventArgs& e, HWND hwnd)
 	{
 		static std::shared_ptr<NotifyIcon> notifyIcon{ std::make_shared<NotifyIcon>(hwnd, NotifyIconMenu(), true)};
 		notifyIcon->hide();
 		notifyIcon->notify(e);
 	}
 #elif defined(__linux__)
-	void ShellNotification::show(const ShellNotificationSentEventArgs& e)
+	void ShellNotification::send(const ShellNotificationSentEventArgs& e)
 	{
 		if (g_application_get_default())
 		{
