@@ -39,8 +39,8 @@ TEST(EventTests, Event1)
 			count--;
 		}
 	};
-	e.invoke(true);
-	e.invoke(false);
+	e(true);
+	e(false);
 	e.invoke(true);
 	ASSERT_EQ(count, 1);
 }

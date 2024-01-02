@@ -32,6 +32,6 @@ inline T& operator&=(T& a, T b) noexcept \
 inline T& operator^=(T& a, T b) noexcept \
 { \
 	return (T&)((int&)a ^= (int)b); \
-} \
+}
 
 #endif //ENUMFLAGS_H

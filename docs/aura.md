@@ -6,7 +6,6 @@ This module contains types and functions every Nickvision application utilizes.
 - [AppInfo](#appinfo)
 - [Aura](#aura)
 - [ConfigurationBase](#configurationbase)
-- [DependencyLocator](#dependencylocator)
 - [EnumFlags](#enumflags)
 - [InterProcessCommunicator](#interprocesscommunicator)
 - [SystemDirectories](#systemdirectories)
@@ -148,6 +147,7 @@ Path: `Nickvision::Aura::Aura`
   ```
     - Accepts: The string key of the config file, key.
     - Returns: A reference to the configuration object of type T with key key.
+    - Throws: `std::invalid_argument` if key is empty
     - Note: T must be a type that derives from `Nickvision::Aura::ConfigurationBase`
     - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
 
@@ -177,6 +177,14 @@ Path: `Nickvision::Aura::Aura`
     - Returns: `true` if the environment variable of name key was set to value.
     - Returns: `false` if setting the environment variable failed.
     - Ex: `Aura::setEnvVar("AURA", "true")` will set `"$AURA:true"`.
+- ```cpp
+  const std::filesystem::path& findDependency(std::string dependency)
+  ```
+    - Accepts: The name of a dependency to find, dependency.
+    - Returns: The path of the dependency on disk if found.
+    - Returns: An empty path if the dependency was not found on disk.
+    - Ex: `Aura::findDependency("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
+    - Ex: `Aura::findDependency("bash")` on Linux will return `/usr/bin/bash`.
 
 ## ConfigurationBase
 Description: A base class for configuration files.
@@ -205,6 +213,7 @@ Path: `Nickvision::Aura::ConfigurationBase`
   ```
     - Constructs the ConfigurationBase, loading the file from disk
     - Accepts: The key of the configuration file, key
+    - Throws: `std::invalid_argument` if key is empty
 - ```cpp
   bool save()
   ```
@@ -263,25 +272,6 @@ int main()
     config.save(); //onConfigSaved will be invoked on success
 }
 ```
-
-## DependencyLocator
-Description: Functions for working with dependencies.
-
-Interface: [dependencylocator.h](/include/dependencylocator.h)
-
-Type: `namespace`
-
-Path: `Nickvision::Aura::DependencyLocator`
-
-### Functions
-- ```cpp
-  const std::filesystem::path& find(std::string dependency)
-  ```
-    - Accepts: The name of a dependency to find, dependency.
-    - Returns: The path of the dependency on disk if found.
-    - Returns: An empty path if the dependency was not found on disk.
-    - Ex: `DependencyLocator::find("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
-    - Ex: `DependencyLocator::find("bash")` on Linux will return `/usr/bin/bash`.
 
 ## EnumFlags
 Description: Macros for working with enums to be used as flags.

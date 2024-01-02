@@ -194,7 +194,7 @@ Assume we want to create the following context menu for a `NotifyIcon`:
 Here is the code we could use to accomplish this:
 ```cpp
 ...
-bool m_running = true;
+bool m_running{ true };
 NotifyIconMenu contextMenu;
 contextMenu.addAction("Show Window", [&]()
 {

@@ -168,7 +168,7 @@ namespace Nickvision::Aura::Network
 		if (m_connectionState != newState)
 		{
 			m_connectionState = newState;
-			m_stateChanged.invoke({ m_connectionState });
+			m_stateChanged({ m_connectionState });
 		}
 	}
 }

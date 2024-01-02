@@ -34,7 +34,7 @@ namespace Nickvision::Aura::Update
 		}
 		catch (...)
 		{
-			throw std::invalid_argument("The url is not a valid github repo.");
+			throw std::invalid_argument("The url is not a valid GitHub repo.");
 		}
 	}
 

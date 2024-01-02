@@ -7,6 +7,7 @@
 
 #include <map>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include "appinfo.h"
 #include "configurationbase.h"
@@ -30,11 +31,16 @@ namespace Nickvision::Aura
 		 * @brief Gets a config object.
 		 * @tparam T Derived type of ConfigurationBase
 		 * @param key The key of the config file
+		 * @throw std::invalid_argument Thrown if key is empty
 		 * @return The config object
 		 */
 		template<DerivedConfigurationBase T>
 		T& getConfig(const std::string& key) noexcept
 		{
+			if (key.empty())
+			{
+				throw std::invalid_argument("Key must not be empty.");
+			}
 			if (!m_configFiles.contains(key))
 			{
 				m_configFiles[key] = std::make_unique<T>(key);
@@ -85,6 +91,12 @@ namespace Nickvision::Aura
 		 * @return True if set, else false
 		 */
 		static bool setEnvVar(const std::string& key, const std::string& value) noexcept;
+		/**
+		 * @brief Finds the path of a given dependency.
+		 * @param dependency The name of the dependency to find
+		 * @return The path of the dependency if found, else empty path
+		 */
+		static const std::filesystem::path& findDependency(std::string dependency) noexcept;
 
 	private:
 		static std::unique_ptr<Aura> m_instance;

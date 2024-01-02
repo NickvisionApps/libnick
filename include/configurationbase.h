@@ -17,10 +17,11 @@ namespace Nickvision::Aura
 		/**
 		 * @brief Constructs a ConfigurationBase, loading the file from disk.
 		 * @param key The key of the config file
+		 * @throw std::invalid_argument Thrown if key is empty
 		 */
-		ConfigurationBase(const std::string& key) noexcept;
+		ConfigurationBase(const std::string& key);
 		/**
-		 * @brief Deconstructs a ConfigurationBase. 
+		 * @brief Destructs a ConfigurationBase. 
 		 */
 		virtual ~ConfigurationBase() = default;
 		/**

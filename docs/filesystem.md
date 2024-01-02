@@ -86,6 +86,15 @@ Path: `Nickvision::Aura::Filesystem::FileSystemWatcher`
 
 ### Methods
 - ```cpp
+  FileSystemWatcher(const std::filesystem::path& path, bool includeSubdirectories, WatcherFlags watcherFlags = WatcherFlags::FileName | WatcherFlags::DirectoryName | WatcherFlags::Attributes | WatcherFlags::Size | WatcherFlags::LastWrite | WatcherFlags::LastAccess)
+  ```
+    - Constructs a FileSystemWatcher.
+    - Accepts: The path of the folder to watch, path, whether or not to watch subdirectories of said folder, includeSubdirectories, and the set of watcher flags, watcherFlags.
+- ```cpp
+  ~FileSystemWatcher()
+  ``` 
+    - Destructs a FileSystemWatcher.
+- ```cpp
   bool isExtensionWatched(const std::filesystem::path& extension)
   ```
     - Accepts: The extension to check for if it is being watched, extension.

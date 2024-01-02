@@ -21,7 +21,6 @@ namespace Nickvision::Aura::Events
 		{
 
 		}
-
 		/**
 		 * @brief Gets the param stored in the event args.
 		 * @return The param stored

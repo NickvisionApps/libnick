@@ -140,7 +140,7 @@ namespace Nickvision::Aura::Filesystem
 						std::filesystem::path changed{ std::wstring(info->FileName, info->FileNameLength / sizeof(info->FileName[0])) };
 						if (isExtensionWatched(changed.extension()))
 						{
-							m_changed.invoke({ changed , static_cast<FileAction>(info->Action) });
+							m_changed({ changed , static_cast<FileAction>(info->Action) });
 						}
 					}
 					if (info->NextEntryOffset == 0)
@@ -222,19 +222,19 @@ namespace Nickvision::Aura::Filesystem
 					{
 						if (event->mask & IN_CREATE)
 						{
-							m_changed.invoke({ changed , FileAction::Added });
+							m_changed({ changed , FileAction::Added });
 						}
 						else if ((event->mask & IN_DELETE) || (event->mask & IN_DELETE_SELF))
 						{
-							m_changed.invoke({ changed , FileAction::Removed });
+							m_changed({ changed , FileAction::Removed });
 						}
 						else if ((event->mask & IN_MOVED_FROM) || (event->mask & IN_MOVE_SELF))
 						{
-							m_changed.invoke({ changed , FileAction::Renamed });
+							m_changed({ changed , FileAction::Renamed });
 						}
 						else
 						{
-							m_changed.invoke({ changed , FileAction::Modified });
+							m_changed({ changed , FileAction::Modified });
 						}
 					}
 				}

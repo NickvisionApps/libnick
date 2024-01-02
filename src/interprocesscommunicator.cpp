@@ -101,7 +101,7 @@ namespace Nickvision::Aura
 	{
 		if (m_serverRunning)
 		{
-			m_commandReceived.invoke({ args });
+			m_commandReceived({ args });
 			return true;
 		}
 		if (!args.empty())
@@ -156,7 +156,7 @@ namespace Nickvision::Aura
 					ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
 					args[i] = { &buffer[0], read };
 				}
-				m_commandReceived.invoke({ args });
+				m_commandReceived({ args });
 				DisconnectNamedPipe(m_serverPipe);
 			}
 #elif defined(__linux__)
@@ -174,7 +174,7 @@ namespace Nickvision::Aura
 					r = read(clientSocket, &buffer[0], buffer.size());
 					args[i] = { &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) };
 				}
-				m_commandReceived.invoke({ args });
+				m_commandReceived({ args });
 				close(clientSocket);
 			}
 #endif

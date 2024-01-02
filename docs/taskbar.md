@@ -72,6 +72,14 @@ Path: `Nickvision::Aura::Taskbar::TaskbarItem`
 
 ### Methods
 - ```cpp
+  TaskbarItem()
+  ```
+    - Constructs a TaskbarItem.
+- ```cpp
+  ~TaskbarItem()
+  ``` 
+    - Destructs a TaskbarItem.
+- ```cpp
   bool connect(HWND hwnd)
   ``` 
     - Accepts: The HWND handle of the main application window, hwnd.

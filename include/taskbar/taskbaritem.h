@@ -29,7 +29,7 @@ namespace Nickvision::Aura::Taskbar
 		 */
 		TaskbarItem() noexcept;
 		/**
-		 * @brief Deconstructs a TaskbarItem.
+		 * @brief Destructs a TaskbarItem.
 		 */
 		~TaskbarItem() noexcept;
 		/**

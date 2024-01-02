@@ -44,7 +44,7 @@ namespace Nickvision::Aura::Events
 			m_handlers = std::move(e.m_handlers);
 		}
 		/**
-		 * @brief Subscribes a handler to the event
+		 * @brief Subscribes a handler to the event.
 		 * @param handler The handler function
 		 */
 		void subscribe(const std::function<void(const T&)>& handler) noexcept
@@ -53,7 +53,7 @@ namespace Nickvision::Aura::Events
 			m_handlers.push_back(handler);
 		}
 		/**
-		 * @brief Unsubscribes a handler from the event
+		 * @brief Unsubscribes a handler from the event.
 		 * @param handler The handler function
 		 */
 		void unsubscribe(const std::function<void(const T&)>& handler) noexcept
@@ -63,7 +63,7 @@ namespace Nickvision::Aura::Events
 			{
 				return;
 			}
-			auto it = std::find(m_handlers.begin(), m_handlers.end(), handler);
+			auto it{ std::find(m_handlers.begin(), m_handlers.end(), handler) };
 			if (it != m_handlers.end())
 			{
 				m_handlers.erase(it);
@@ -82,7 +82,7 @@ namespace Nickvision::Aura::Events
 			}
 		}
 		/**
-		 * @brief Subscribes a handler to the event
+		 * @brief Subscribes a handler to the event.
 		 * @param handler The handler function
 		 */
 		void operator+=(const std::function<void(const T&)>& handler) noexcept
@@ -90,7 +90,7 @@ namespace Nickvision::Aura::Events
 			subscribe(handler);
 		}
 		/**
-		 * @brief Unsubscribes a handler from the event
+		 * @brief Unsubscribes a handler from the event.
 		 * @param handler The handler function
 		 */
 		void operator-=(const std::function<void(const T&)>& handler) noexcept
@@ -98,7 +98,15 @@ namespace Nickvision::Aura::Events
 			unsubscribe(handler);
 		}
 		/**
-		 * @brief Copies an Event
+		 * @brief Invokes the event, calling all handlers.
+		 * @param param The parameter to pass to the handlers
+		 */
+		void operator()(const T& param) noexcept
+		{
+			invoke(param);
+		}
+		/**
+		 * @brief Copies an Event.
 		 * @param e The Event to copy
 		 * @return this
 		 */
@@ -113,7 +121,7 @@ namespace Nickvision::Aura::Events
 			return *this;
 		}
 		/**
-		 * @brief Moves an Event
+		 * @brief Moves an Event.
 		 * @param e The Event to move
 		 * @return this
 		 */

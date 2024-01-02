@@ -1,6 +1,8 @@
 #include "aura.h"
 #include <cstdlib>
-#include <stdexcept>
+#include <filesystem>
+#include <mutex>
+#include "systemdirectories.h"
 #include "localization/gettext.h"
 #include "helpers/stringhelpers.h"
 #ifdef __linux__
@@ -66,5 +68,45 @@ namespace Nickvision::Aura
 #elif defined(__linux__)
 		return setenv(key.c_str(), value.c_str(), true) == 0;
 #endif
+	}
+
+	const std::filesystem::path& Aura::findDependency(std::string dependency) noexcept
+	{
+		static std::map<std::string, std::filesystem::path> locations;
+		static std::mutex mutex;
+		std::lock_guard<std::mutex> lock{ mutex };
+#ifdef _WIN32
+		if (!std::filesystem::path(dependency).has_extension())
+		{
+			dependency += ".exe";
+		}
+#endif
+		if (locations.contains(dependency))
+		{
+			const std::filesystem::path& location = locations[dependency];
+			if (std::filesystem::exists(location))
+			{
+				return location;
+			}
+		}
+		locations[dependency] = std::filesystem::path();
+		std::filesystem::path path{ std::filesystem::current_path() / dependency };
+		if (std::filesystem::exists(path))
+		{
+			locations[dependency] = path;
+		}
+		else
+		{
+			for (const std::filesystem::path& dir : SystemDirectories::getPath())
+			{
+				path = { dir / dependency };
+				if (std::filesystem::exists(path) && dir.string().find("AppData\\Local\\Microsoft\\WindowsApps") == std::string::npos)
+				{
+					locations[dependency] = path;
+					break;
+				}
+			}
+		}
+		return locations[dependency];
 	}
 }

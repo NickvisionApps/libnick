@@ -44,7 +44,6 @@ add_library (${PROJECT_NAME}
 	src/appinfo.cpp
 	src/aura.cpp
 	src/configurationbase.cpp
-	src/dependencylocator.cpp
 	src/interprocesscommunicator.cpp
 	src/systemdirectories.cpp
 	src/userdirectories.cpp

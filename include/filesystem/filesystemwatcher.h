@@ -29,7 +29,7 @@ namespace Nickvision::Aura::Filesystem
 		 */
 		FileSystemWatcher(const std::filesystem::path& path, bool includeSubdirectories, WatcherFlags watcherFlags = WatcherFlags::FileName | WatcherFlags::DirectoryName | WatcherFlags::Attributes | WatcherFlags::Size | WatcherFlags::LastWrite | WatcherFlags::LastAccess);
 		/**
-		 * @brief Deconstructs a FileSystemWatcher. 
+		 * @brief Destructs a FileSystemWatcher. 
 		 */
 		~FileSystemWatcher() noexcept;
 		/**

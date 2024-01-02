@@ -79,7 +79,7 @@ public:
     bool save()
     {
         ...
-        saved.invoke({});
+        saved({}); //Same as saved.invoke({});
         ...
     }
 

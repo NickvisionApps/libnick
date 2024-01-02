@@ -1,5 +1,4 @@
 #include "appinfo.h"
-#include <memory>
 #include <sstream>
 #include <maddy/parser.h>
 #include "helpers/stringhelpers.h"
@@ -89,8 +88,8 @@ namespace Nickvision::Aura
 			markdown << StringHelpers::trim(line);
 			markdown << std::endl;
 		}
-		std::unique_ptr<maddy::Parser> parser{ std::make_unique<maddy::Parser>() };
-		m_htmlChangelog = parser->Parse(markdown);
+		maddy::Parser parser;
+		m_htmlChangelog = parser.Parse(markdown);
 	}
 
 	const std::string& AppInfo::getHtmlChangelog() const noexcept

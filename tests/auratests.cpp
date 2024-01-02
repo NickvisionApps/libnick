@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include "aura.h"
-#include "dependencylocator.h"
 #include "userdirectories.h"
 #include "notifications/shellnotification.h"
 
@@ -46,6 +45,12 @@ TEST_F(AuraTest, EnsureAura)
 	ASSERT_NO_THROW(Aura::getActive());
 }
 
+TEST_F(AuraTest, SetAppInfo)
+{
+	ASSERT_NO_THROW(Aura::getActive().getAppInfo().setChangelog("* Initial Release"));
+	ASSERT_TRUE(!Aura::getActive().getAppInfo().getHtmlChangelog().empty());
+}
+
 TEST_F(AuraTest, EnsureDefaultAppConfig)
 {
 	AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
@@ -74,9 +79,9 @@ TEST_F(AuraTest, ResetAppConfig)
 TEST_F(AuraTest, DependencyCheck)
 {
 #ifdef _WIN32
-	std::filesystem::path dependency{ DependencyLocator::find("cmd") };
+	std::filesystem::path dependency{ Aura::findDependency("cmd") };
 #elif defined(__linux__)
-	std::filesystem::path dependency{ DependencyLocator::find("ls") };
+	std::filesystem::path dependency{ Aura::findDependency("ls") };
 #endif
 	ASSERT_TRUE(!dependency.empty());
 	ASSERT_TRUE(std::filesystem::exists(dependency));
