@@ -13,7 +13,7 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("libaura" LANGUAGES CXX VERSION 2023.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libaura" LANGUAGES CXX VERSION 2024.1.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(GNUInstallDirs)
 
 #libaura Library Setup
@@ -35,6 +35,9 @@ add_library (${PROJECT_NAME}
 	src/network/networkmonitor.cpp
 	src/network/networkstatechangedeventargs.cpp
 	src/notifications/notificationsenteventargs.cpp
+	src/notifications/notifyicon.cpp
+	src/notifications/notifyiconmenu.cpp
+	src/notifications/shellnotification.cpp
 	src/notifications/shellnotificationsenteventargs.cpp
 	src/taskbar/taskbaritem.cpp
 	src/update/updater.cpp
@@ -94,6 +97,7 @@ if(NOT SKIP_TESTS)
 		tests/keyringtests.cpp
 		tests/main.cpp
 		tests/networktests.cpp
+		tests/notifyicontests.cpp
 		tests/passwordtests.cpp
 		tests/storetests.cpp
 		tests/stringtests.cpp

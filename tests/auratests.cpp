@@ -2,6 +2,7 @@
 #include "aura.h"
 #include "dependencylocator.h"
 #include "userdirectories.h"
+#include "notifications/shellnotification.h"
 
 using namespace Nickvision::Aura;
 
@@ -79,4 +80,13 @@ TEST_F(AuraTest, DependencyCheck)
 #endif
 	ASSERT_TRUE(!dependency.empty());
 	ASSERT_TRUE(std::filesystem::exists(dependency));
+	Notifications::ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), Notifications::NotificationSeverity::Success, "open", dependency.string() };
+#ifdef _WIN32
+	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
+	{
+		ASSERT_NO_THROW(Notifications::ShellNotification::send(args, GetConsoleWindow()));
+	}
+#elif defined(__linux__)
+	ASSERT_NO_THROW(Notifications::ShellNotification::send(args));
+#endif
 }

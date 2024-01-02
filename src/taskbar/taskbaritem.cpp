@@ -21,7 +21,7 @@ namespace Nickvision::Aura::Taskbar
 #ifdef _WIN32
 		GdiplusStartupInput gdiStartupIn;
 		GdiplusStartupOutput gdiStartupOut;
-		CoInitialize(nullptr);
+		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 		GdiplusStartup(&m_gdi, &gdiStartupIn, &gdiStartupOut);
 		m_hwnd = nullptr;
 		m_taskbar = nullptr;
