@@ -26,13 +26,25 @@ TEST_F(NotifyIconTest, CreateIcon)
 {
 	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
 	{
+		bool running{ true };
 		NotifyIconMenu contextMenu;
 		contextMenu.addSeparator();
-		contextMenu.addAction("Exit", []()
+		contextMenu.addAction("Exit", [&running]()
 		{
-			std::exit(0);
+			running = false;
 		});
 		ASSERT_NO_THROW(m_notifyIcon = std::make_unique<NotifyIcon>(GetConsoleWindow(), contextMenu));
+		std::cout << "Click \"Exit\" via the context menu of the NotifyIcon to continue..." << std::endl;
+		while (running)
+		{
+			MSG msg = { };
+			if(PeekMessageA(&msg, nullptr, 0, 0, PM_REMOVE) > 0)
+			{
+				TranslateMessage(&msg);
+				DispatchMessageA(&msg);
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		}
 	}
 	ASSERT_TRUE(true);
 }
@@ -41,7 +53,7 @@ TEST_F(NotifyIconTest, ShowShellNotification)
 {
 	if (m_notifyIcon)
 	{
-		ASSERT_NO_THROW(m_notifyIcon->showShellNotification({ "Test", "Hello from Notifications::NotifyIcon::showShellNotification()!", NotificationSeverity::Success }));
+		ASSERT_NO_THROW(m_notifyIcon->notify({ "Test", "Hello from Notifications::NotifyIcon::showShellNotification()!", NotificationSeverity::Success }));
 	}
 	ASSERT_TRUE(true);
 }

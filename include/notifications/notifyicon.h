@@ -4,6 +4,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #define WM_NOTIFYICON_EVENT (WM_APP + 100)
+#define IDM_CONTEXT_MENU (WM_APP + 200)
 
 #include <filesystem>
 #include <map>
@@ -23,31 +24,45 @@ namespace Nickvision::Aura::Notifications
 	public:
 		/**
 		 * @brief Constructs a NotifyIcon.
-		 * @brief The NotifyIcon will be shown by default.
 		 * @param hwnd The HWND handle of the main application window
 		 * @param menu The model for the context menu of the NotifyIcon
+		 * @param hidden Whether or not the NotifyIcon should be hidden by default
 		 * @throw std::logic_error Thrown if Aura::init() was not called yet 
 		 * @throw std::runtime_error Thrown if unable to create the NotifyIcon
 		 */
-		NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu = { });
+		NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu = { }, bool hidden = false);
 		/**
 		 * @brief Destructs a NotifyIcon. 
 		 */
 		~NotifyIcon() noexcept;
 		/**
 		 * @brief Hides the NotifyIcon.
+		 * @return True if NotifyIcon was updated, else false
 		 */
-		void hide() noexcept;
+		bool hide() noexcept;
 		/**
 		 * @brief Shows the NotifyIcon.
+		 * @return True if NotifyIcon was updated, else false
 		 */
-		void show() noexcept;
+		bool show() noexcept;
 		/**
-		 * @brief Shows a shell notification from the NotifyIcon.
+		 * @brief Gets the tooltip being shown by the NotifyIcon.
+		 * @return The tooltip being shown
+		 */
+		const std::string& getTooltip() const noexcept;
+		/**
+		 * @brief Sets the tooltip of the NotifyIcon.
+		 * @param tooltip The toolip
+		 * @return True if NotifyIcon was updated, else false
+		 */
+		bool setTooltip(const std::string& tooltip) noexcept;
+		/**
+		 * @brief Shows a notification from the NotifyIcon.
 		 * @brief Supports the action "open" with action param being a path of a file or folder to open.
 		 * @param e ShellNotificationSentEventArgs
+		 * @return True if NotifyIcon was updated, else false
 		 */
-		void showShellNotification(const ShellNotificationSentEventArgs& e) noexcept;
+		bool notify(const ShellNotificationSentEventArgs& e) noexcept;
 
 	private:
 		/**
@@ -64,9 +79,11 @@ namespace Nickvision::Aura::Notifications
 		LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 		std::string m_className;
 		bool m_isHidden;
+		std::string m_tooltip;
+		NotifyIconMenu m_contextMenu;
 		HWND m_hwnd;
 		GUID m_guid;
-		NotifyIconMenu m_contextMenu;
+		HMENU m_hmenu;
 		std::filesystem::path m_openPath;
 
 	private:

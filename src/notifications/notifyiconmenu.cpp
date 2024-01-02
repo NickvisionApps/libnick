@@ -58,7 +58,7 @@ namespace Nickvision::Aura::Notifications
 
 	const std::shared_ptr<NotifyIconMenuItem>& NotifyIconMenu::get(size_t index) const noexcept
 	{
-		if (index < 0 || index > m_items.size() - 1)
+		if (index < 0 || index >= m_items.size())
 		{
 			static std::shared_ptr<NotifyIconMenuItem> null{ nullptr };
 			return null;
@@ -84,7 +84,7 @@ namespace Nickvision::Aura::Notifications
 
 	bool NotifyIconMenu::removeSeparator(size_t index) noexcept
 	{
-		if (index < 0 || index > m_items.size() - 1)
+		if (index < 0 || index >= m_items.size())
 		{
 			return false;
 		}

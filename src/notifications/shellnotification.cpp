@@ -6,6 +6,7 @@
 #include "localization/gettext.h"
 #ifdef _WIN32
 #include "notifications/notifyicon.h"
+#include "notifications/notifyiconmenu.h"
 #elif defined(__linux__)
 #include <glib.h>
 #include <gio/gio.h>
@@ -16,9 +17,9 @@ namespace Nickvision::Aura::Notifications
 #ifdef _WIN32
 	void ShellNotification::show(const ShellNotificationSentEventArgs& e, HWND hwnd)
 	{
-		static std::shared_ptr<NotifyIcon> notifyIcon{ std::make_shared<NotifyIcon>(hwnd) };
+		static std::shared_ptr<NotifyIcon> notifyIcon{ std::make_shared<NotifyIcon>(hwnd, NotifyIconMenu(), true)};
 		notifyIcon->hide();
-		notifyIcon->showShellNotification(e);
+		notifyIcon->notify(e);
 	}
 #elif defined(__linux__)
 	void ShellNotification::show(const ShellNotificationSentEventArgs& e)
