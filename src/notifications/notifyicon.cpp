@@ -67,7 +67,7 @@ namespace Nickvision::Aura::Notifications
 			}
 			for (size_t i = 0; i < m_contextMenu.size(); i++)
 			{
-				const std::shared_ptr<NotifyIconMenuItem> item{ m_contextMenu.get(i) };
+				const std::shared_ptr<NotifyIconMenuItem>& item{ m_contextMenu.get(i) };
 				if (item->getType() == NotifyIconMenuItemType::Action)
 				{
 					const NotifyIconActionMenuItem* action{ static_cast<NotifyIconActionMenuItem*>(item.get()) };
