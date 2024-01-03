@@ -8,9 +8,11 @@ libaura provides Nickvision apps with a common set of cross-platform (Windows an
 
 Documentation for this library and its modules can be found [here](/docs).
 
-## Installation
+## Installation with Conan
 
-TODO when published on Conan.
+1. Download the `conanrecipe.py` file from the `conan` folder in the root directory of the repo.
+1. Move `conanrecipe.py` to your project's directory.
+1. Run `conan install conanrecipe.py --build=missing` to add libaura to your project with conan. 
 
 ## Manual Building and Installation
 libaura uses Conan package manager for resolving dependencies and CMake as it's build system.
