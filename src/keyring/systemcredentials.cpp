@@ -142,7 +142,7 @@ namespace Nickvision::Aura::Keyring
 		{
 			g_error_free(error);
 		}
-#endif
 		return false;
+#endif
 	}
 }

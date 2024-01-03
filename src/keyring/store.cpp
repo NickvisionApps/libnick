@@ -40,15 +40,17 @@ namespace Nickvision::Aura::Keyring
 				}
 				else
 				{
-					throw std::runtime_error("Unable to exec create table command. Key may be invalid. " + std::string(err ? err : ""));
+					std::string error{ err ? err : "" };
 					sqlite3_free(err);
+					sqlite3_close(database);
+					throw std::runtime_error("Unable to exec create table command. Key may be invalid. " + error);
 				}
 			}
 			else
 			{
+				sqlite3_close(database);
 				throw std::runtime_error("Unable to key the database.");
 			}
-			sqlite3_close(database);
 		}
 		else
 		{
