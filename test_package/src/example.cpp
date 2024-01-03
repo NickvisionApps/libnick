@@ -1,4 +1,6 @@
-#include "aura.h"
+#include "libaura/aura.h"
+
+using namespace Nickvision::Aura;
 
 int main() 
 {

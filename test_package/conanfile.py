@@ -10,6 +10,7 @@ class libauraTestConan(ConanFile):
 
     def requirements(self):
         self.requires(self.tested_reference_str)
+        self.requires("jsoncpp/1.9.5")
 
     def build(self):
         cmake = CMake(self)
