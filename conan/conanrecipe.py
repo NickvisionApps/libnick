@@ -26,8 +26,8 @@ class libauraRecipe(ConanFile):
         check_min_cppstd(self, "20")
 
     def requirements(self):
-        self.requires("boost/1.83.0")
         self.test_requires("gtest/1.14.0")
+        self.requires("boost/1.83.0")
         self.requires("jsoncpp/1.9.5")
         self.requires("libcurl/8.4.0")
         self.requires("libgettext/0.22")
@@ -41,7 +41,7 @@ class libauraRecipe(ConanFile):
     def source(self):
         git = Git(self)
         git.clone(url="https://github.com/NickvisionApps/libaura.git", target=".")
-        git.checkout("68689f2d2566769f0d28db79ac189b2a0a8735d8")
+        git.checkout("2024.1.0")
 
     def config_options(self):
         if self.settings.os == "Windows":
