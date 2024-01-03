@@ -11,8 +11,9 @@ Documentation for this library and its modules can be found [here](/docs).
 ## Installation with Conan
 
 1. Download the `conanrecipe.py` file from the `conan` folder in the root directory of the repo.
-1. Move `conanrecipe.py` to your project's directory.
-1. Run `conan install conanrecipe.py --build=missing` to add libaura to your project with conan. 
+1. Rename `conanrecipe.py` to `conanfile.py` and move it to a new folder called `libaura`.
+1. From this new `libaura` folder, run `conan create . --build=missing`.
+1. Once this is completed, you can reference `libaura/2024.1.0` in your project's conanfile.
 
 ## Manual Building and Installation
 libaura uses Conan package manager for resolving dependencies and CMake as it's build system.
