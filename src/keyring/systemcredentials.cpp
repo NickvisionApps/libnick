@@ -32,7 +32,7 @@ namespace Nickvision::Aura::Keyring
 		}
 #elif defined(__linux__)
 		GError* error{ nullptr };
-		char* password = secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL);
+		char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };
 		if (!error && password)
 		{
 			Credential c{ name, "", "default", password };
@@ -107,7 +107,7 @@ namespace Nickvision::Aura::Keyring
 		}
 #elif defined(__linux__)
 		GError* error{ nullptr };
-		char* password = secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), NULL);
+		char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), NULL) };
 		if (!error && password)
 		{
 			secret_password_free(password);
@@ -133,7 +133,7 @@ namespace Nickvision::Aura::Keyring
 		return CredDeleteA(name.c_str(), CRED_TYPE_GENERIC, 0);
 #elif defined(__linux__)
 		GError* error{ nullptr };
-		bool res = secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL);
+		bool res{ secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };
 		if (!error)
 		{
 			return res;

@@ -40,6 +40,26 @@ namespace Nickvision::Aura
 		 */
 		Version(const std::string& version);
 		/**
+		 * @brief Gets the major number of the version.
+		 * @return The major number
+		 */
+		int getMajor() const noexcept;
+		/**
+		 * @brief Gets the minor number of the version.
+		 * @return The minor number
+		 */
+		int getMinor() const noexcept;
+		/**
+		 * @brief Gets the build number of the version.
+		 * @return The build number
+		 */
+		int getBuild() const noexcept;
+		/**
+		 * @brief Gets the dev string of the version.
+		 * @return The dev string
+		 */
+		const std::string& getDev() const noexcept;
+		/**
 		 * @brief Gets the type of the version.
 		 * @return VersionType
 		 */

@@ -518,6 +518,22 @@ Path: `Nickvision::Aura::Version`
     - Accepts: The version as a string to parse, version.
     - Note: version must be in the format of `"major.minor.build-dev"`.
 - ```cpp
+  int getMajor() const
+  ```
+    - Returns: The major number of the version.
+- ```cpp
+  int getMinor() const
+  ```
+    - Returns: The minor number of the version.
+- ```cpp
+  int getBuild() const
+  ```
+    - Returns: The build number of the version.
+- ```cpp
+  const std::string& getDev() const
+  ```
+    - Returns: The dev string of the version.
+- ```cpp
   const std::string& toString() const
   ```
     - Returns: The string representation of the Version

@@ -60,7 +60,7 @@ find_package(CURL REQUIRED)
 find_package(jsoncpp REQUIRED)
 find_package(Intl REQUIRED)
 find_package(unofficial-maddy REQUIRED)
-find_package(sqlcipher REQUIRED)
+find_package(sqlcipher CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Boost::boost Boost::locale CURL::libcurl JsonCpp::JsonCpp Intl::Intl unofficial::maddy::maddy sqlcipher::sqlcipher)
 if(LINUX)
 	set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -105,7 +105,7 @@ if (NOT BUILD_TESTING STREQUAL OFF)
 
 	#libaura_test Packages
 	find_package(GTest REQUIRED)
-	target_link_libraries(${PROJECT_NAME}_test PRIVATE ${PROJECT_NAME} GTest::gtest_main GTest::gmock_main)
+	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest_main GTest::gmock_main ${PROJECT_NAME})
 endif()
 
 #libaura Install

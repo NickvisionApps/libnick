@@ -40,13 +40,13 @@ namespace Nickvision::Aura
 		m_minor{ 0 },
 		m_build{ 0 }
 	{
-		std::string s = version;
-		size_t pos;
-		int i = 0;
+		std::string s{ version };
+		size_t pos{ 0 };
+		int i{ 0 };
 		while ((pos = s.find('.')) != std::string::npos)
 		{
-			std::string token = s.substr(0, pos);
-			if (i == 0)
+			std::string token{ s.substr(0, pos) };
+			if (i == 0) 
 			{
 				m_major = std::stoi(token);
 			}
@@ -65,7 +65,7 @@ namespace Nickvision::Aura
 		{
 			throw std::invalid_argument("Ill-formated version string.");
 		}
-		size_t dashIndex = s.find('-');
+		size_t dashIndex{ s.find('-') };
 		m_build = std::stoi(s.substr(0, dashIndex));
 		s.erase(0, dashIndex);
 		if (!s.empty() && s[0] == '-') //dev version
@@ -73,6 +73,26 @@ namespace Nickvision::Aura
 			m_dev = s;
 		}
 		m_str = std::to_string(m_major) + "." + std::to_string(m_minor) + "." + std::to_string(m_build) + m_dev;
+	}
+
+	int Version::getMajor() const noexcept
+	{
+		return m_major;
+	}
+
+	int Version::getMinor() const noexcept
+	{
+		return m_minor;
+	}
+
+	int Version::getBuild() const noexcept
+	{
+		return m_build;
+	}
+
+	const std::string& Version::getDev() const noexcept
+	{
+		return m_dev;
 	}
 
 	VersionType Version::getVersionType() const noexcept

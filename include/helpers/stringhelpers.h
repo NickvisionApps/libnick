@@ -4,10 +4,14 @@
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 
 #include <string>
+#include <type_traits>
 #include <vector>
 
 namespace Nickvision::Aura::StringHelpers
 {
+	template<typename T>
+	concept StringImplicitlyConstructible = std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>;
+
 	/**
 	 * @brief Gets a fully lowercase string from the provided string.
 	 * @param s The string to get lowercase
@@ -35,19 +39,19 @@ namespace Nickvision::Aura::StringHelpers
 	std::string trim(const std::string& s, char delimiter) noexcept;
 	/**
 	 * @brief Splits a string based on a delimiter.
-	 * @tparam T The type of the resulting splits
+	 * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)
 	 * @param s The string to split
 	 * @param delimiter The delimiter to split the string on
 	 * @return The splits of the string
 	 */
-	template<typename T = std::string>
+	template<StringImplicitlyConstructible T = std::string>
 	std::vector<T> split(std::string s, const std::string& delimiter) noexcept
 	{
 		std::vector<T> splits;
-		size_t pos;
+		size_t pos{ 0 };
 		while ((pos = s.find(delimiter)) != std::string::npos)
 		{
-			std::string split = s.substr(0, pos);
+			std::string split{ s.substr(0, pos) };
 			splits.push_back(split);
 			s.erase(0, pos + 1);
 		}
