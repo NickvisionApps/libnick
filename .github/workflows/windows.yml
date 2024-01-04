@@ -31,9 +31,9 @@ jobs:
         uses: turtlebrowser/get-conan@main
       - name: "Install Conan"
         run: |
-          move conan/conanfile-windows.txt conanfile.txt
+          move conan/conanfile.py conanfile.py
           move conan/conanprofile-windows.txt conanprofile.txt
-          conan install conanfile.txt --profile:host=conanprofile.txt --profile:build=conanprofile.txt -s compiler.cppstd=20 --build=missing
+          conan install conanfile.py --profile:host=conanprofile.txt --profile:build=conanprofile.txt -s compiler.cppstd=20 --build=missing
       - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |

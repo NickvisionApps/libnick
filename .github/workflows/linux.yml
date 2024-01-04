@@ -49,9 +49,9 @@ jobs:
           conan config install settings_user.yml
       - name: "Install Conan"
         run: |
-          mv conan/conanfile-linux.txt conanfile.txt
+          mv conan/conanfile.py conanfile.py
           mv conan/conanprofile-linux.txt conanprofile.txt
-          conan install conanfile.txt --profile:host=conanprofile.txt --profile:build=conanprofile.txt -s compiler.cppstd=20 --build=missing
+          conan install conanfile.py --profile:host=conanprofile.txt --profile:build=conanprofile.txt -s compiler.cppstd=20 --build=missing
       - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |
