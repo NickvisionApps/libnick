@@ -102,9 +102,14 @@ namespace Nickvision::Aura
 		return m_sourceRepo;
 	}
 
-	void AppInfo::setSourceRepo(const std::string& sourceRepo) noexcept
+	bool AppInfo::setSourceRepo(const std::string& sourceRepo) noexcept
 	{
+		if (!StringHelpers::isValidUrl(sourceRepo))
+		{
+			return false;
+		}
 		m_sourceRepo = sourceRepo;
+		return true;
 	}
 
 	const std::string& AppInfo::getIssueTracker() const noexcept
@@ -112,9 +117,14 @@ namespace Nickvision::Aura
 		return m_issueTracker;
 	}
 
-	void AppInfo::setIssueTracker(const std::string& issueTracker) noexcept
+	bool AppInfo::setIssueTracker(const std::string& issueTracker) noexcept
 	{
+		if (!StringHelpers::isValidUrl(issueTracker))
+		{
+			return false;
+		}
 		m_issueTracker = issueTracker;
+		return true;
 	}
 
 	const std::string& AppInfo::getSupportUrl() const noexcept
@@ -122,9 +132,14 @@ namespace Nickvision::Aura
 		return m_supportUrl;
 	}
 
-	void AppInfo::setSupportUrl(const std::string& supportUrl) noexcept
+	bool AppInfo::setSupportUrl(const std::string& supportUrl) noexcept
 	{
+		if (!StringHelpers::isValidUrl(supportUrl))
+		{
+			return false;
+		}
 		m_supportUrl = supportUrl;
+		return true;
 	}
 
 	const std::string& AppInfo::getHtmlDocsStore() const noexcept

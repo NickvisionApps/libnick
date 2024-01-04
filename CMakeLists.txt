@@ -103,7 +103,7 @@ if (NOT BUILD_TESTING STREQUAL OFF)
 
 	#libaura_test Packages
 	find_package(GTest REQUIRED)
-	target_link_libraries(${PROJECT_NAME}_test PUBLIC libaura GTest::gtest_main GTest::gmock_main)
+	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest_main GTest::gmock_main libaura)
 endif()
 
 #libaura Install

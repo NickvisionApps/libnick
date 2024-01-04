@@ -68,16 +68,19 @@ Path: `Nickvision::Aura::AppInfo`
   ```
     - The application source repo url.
     - Ex: `"https://github.com/nickvisionapps/application"`
+    - Note: Calling `AppInfo::setSourceRepo(sourceRepo)` can return `false` if the `sourceRepo` param is not a valid formatted URL.
 - ```
   std::string IssueTracker: get, set
   ```
     - The application issue tracker url.
     - Ex: `"https://github.com/nickvisionapps/application/issues"`
+    - Note: Calling `AppInfo::setIssueTracker(issueTracker)` can return `false` if the `issueTracker` param is not a valid formatted URL.
 - ```
   std::string SupportUrl: get, set
   ```
     - The application support url.
     - Ex: `"https://github.com/nickvisionapps/application/discussions"`
+    - Note: Calling `AppInfo::setSupportUrl(supportUrl)` can return `false` if the `supportUrl` param is not a valid formatted URL.
 - ```
   std::string HtmlDocsStore: get, set
   ```

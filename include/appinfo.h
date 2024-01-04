@@ -101,8 +101,10 @@ namespace Nickvision::Aura
 		/**
 		 * @brief Sets the application source repo url
 		 * @param sourceRepo The application source repo url
+		 * @return True if the new source repo was set, else false
+		 * @return A false return value means that the sourceRepo param was not a valid formatted URL
 		 */
-		void setSourceRepo(const std::string& sourceRepo) noexcept;
+		bool setSourceRepo(const std::string& sourceRepo) noexcept;
 		/**
 		 * @brief Gets the application issue tracker url
 		 * @return The application issue tracker url
@@ -110,9 +112,11 @@ namespace Nickvision::Aura
 		const std::string& getIssueTracker() const noexcept;
 		/**
 		 * @brief Sets the application issue tracker url
-		 * @param sourceRepo The application issue tracker url
+		 * @param issueTracker The application issue tracker url
+		 * @return True if the new issue tracker was set, else false
+		 * @return A false return value means that the issueTracker param was not a valid formatted URL
 		 */
-		void setIssueTracker(const std::string& issueTracker) noexcept;
+		bool setIssueTracker(const std::string& issueTracker) noexcept;
 		/**
 		 * @brief Gets the application support url
 		 * @return The application support url
@@ -121,8 +125,10 @@ namespace Nickvision::Aura
 		/**
 		 * @brief Sets the application support url
 		 * @param supportUrl The application support url
+		 * @return True if the new support url was set, else false
+		 * @return A false return value means that the supportUrl param was not a valid formatted URL
 		 */
-		void setSupportUrl(const std::string& supportUrl) noexcept;
+		bool setSupportUrl(const std::string& supportUrl) noexcept;
 		/**
 		 * @brief Gets the application html docs store url
 		 * @return The application html docs store url
