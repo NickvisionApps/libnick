@@ -4,6 +4,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <wincred.h>
+#pragma comment(lib,"advapi32.lib")
 #elif defined(__linux__)
 #include <libsecret/secret.h>
 #endif

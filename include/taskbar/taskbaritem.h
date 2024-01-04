@@ -10,6 +10,7 @@
 #include <atlbase.h>
 #include <gdiplus.h>
 #include <shlobj_core.h>
+#pragma comment(lib,"shell32.lib")
 #pragma comment(lib,"gdiplus.lib")
 #elif defined(__linux__)
 #include <glib.h>
