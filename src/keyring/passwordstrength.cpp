@@ -12,7 +12,7 @@ namespace Nickvision::Aura::Keyring
 		{
 			return PasswordStrength::VeryWeak;
 		}
-		int strength = 0;
+		int strength{ 0 };
 		bool containsDigit = false;
 		bool containsLower = false;
 		bool containsUpper = false;

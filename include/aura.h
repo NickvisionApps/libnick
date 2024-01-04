@@ -9,6 +9,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include "appinfo.h"
 #include "configurationbase.h"
 

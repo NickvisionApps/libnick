@@ -53,7 +53,7 @@ namespace Nickvision::Aura
 
 	std::string Aura::getEnvVar(const std::string& key) noexcept
 	{
-		char* var = std::getenv(key.c_str());
+		char* var{ std::getenv(key.c_str()) };
 		if (var)
 		{
 			return { var };
@@ -83,7 +83,7 @@ namespace Nickvision::Aura
 #endif
 		if (locations.contains(dependency))
 		{
-			const std::filesystem::path& location = locations[dependency];
+			const std::filesystem::path& location{ locations[dependency] };
 			if (std::filesystem::exists(location))
 			{
 				return location;

@@ -54,7 +54,7 @@ namespace Nickvision::Aura
 			stream->write(ptr, size * nmemb);
 			return size * nmemb;
 		});
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&out);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
 #ifdef _WIN32
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -100,7 +100,7 @@ namespace Nickvision::Aura
 			stream->write(ptr, size * nmemb);
 			return size * nmemb;
 		});
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&out);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
 #ifdef _WIN32
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);

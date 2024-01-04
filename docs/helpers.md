@@ -45,6 +45,7 @@ Path: `Nickvision::Aura::StringHelpers`
   ```
     - Accepts: A string parameter, s, and a string delimiter, delimiter.
     - Returns: A list of the splits of s on delimiter and casted to type T. 
+    - Note: T requires the `StringImplicitlyConstructible` concept defined as: `std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>`.
     - Ex: `StringHelpers::split<std::string>("1,2,3,4", ",")` will return `std::vector<std::string>{ "1", "2", "3", "4" }`.
     - Ex: `StringHelpers::split<int>("1,2,3,4", ",")` will return `std::vector<int>{ 1, 2, 3, 4 }`.
 - ```cpp

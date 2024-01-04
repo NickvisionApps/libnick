@@ -28,7 +28,7 @@ namespace Nickvision::Aura::Update
 		}
 		try
 		{
-			std::vector<std::string> fields = StringHelpers::split(githubRepoUrl, "/");
+			std::vector<std::string> fields{ StringHelpers::split(githubRepoUrl, "/") };
 			m_repoOwner = fields[3];
 			m_repoName = fields[4];
 		}
@@ -56,7 +56,7 @@ namespace Nickvision::Aura::Update
 		{
 			return false;
 		}
-		std::string release = WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId));
+		std::string release{ WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId)) };
 		if (!release.empty())
 		{
 			Json::Value root;
@@ -90,7 +90,7 @@ namespace Nickvision::Aura::Update
 	Version Updater::fetchCurrentVersion(VersionType versionType) noexcept
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
-		std::string releases = WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases");
+		std::string releases{ WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
 		if (!releases.empty())
 		{
 			Json::Value root;

@@ -21,7 +21,6 @@ jobs:
         config:
         - name: "Build on x64"
           os: ubuntu-latest
-          artifact: "Linux-x64"
           env:
             CC: gcc
             CXX: g++
@@ -61,11 +60,10 @@ jobs:
       - name: "CMake Install"
         working-directory: ${{github.workspace}}/build
         run: cmake --install . --prefix "${{github.workspace}}/install"
-      - name: "CMake Test"
-        working-directory: ${{github.workspace}}/build
+      - name: "Test"
         run: ${{github.workspace}}/build/libaura_test
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
           path: ${{github.workspace}}/install
-          name: ${{matrix.config.artifact}}-${{env.BUILD_TYPE}}
+          name: Linux-x64-${{env.BUILD_TYPE}}
