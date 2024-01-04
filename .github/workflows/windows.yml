@@ -12,7 +12,6 @@ permissions:
 env:
   BUILD_TYPE: Release
   GITHUB_ACTIONS: true
-  VCPKG_ROOT: ${{github.workspace}}/vcpkg
 jobs:
   build:
     name: ${{ matrix.config.name }}
@@ -28,24 +27,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: "Vcpkg"
-        uses: johnwason/vcpkg-action@v5
-        id: vcpkg
-        with:
-          pkgs: boost-locale curl gettext gettext-libintl gtest jsoncpp maddy sqlcipher
-          triplet: x64-windows
-          cache-key: ${{ matrix.config.os }}
-          revision: 64e15f6669480b2d2bff1e5e815c571a8213421e
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Get Conan"
+        uses: turtlebrowser/get-conan@main
+      - name: "Install Conan"
+        run: |
+          move conan/conanfile-windows.txt conanfile.txt
+          move conan/conanprofile-windows.txt conanprofile.txt
+          conan install conanfile.txt --profile:host=conanprofile.txt --profile:build=conanprofile.txt -s compiler.cppstd=20 --build=missing
       - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |
-          cmake -G "Visual Studio 17 2022" ..
+          cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/generators/conan_toolchain.cmake"
           cmake --build . --config ${{env.BUILD_TYPE}}
       - name: "CMake Install"
         working-directory: ${{github.workspace}}/build
         run: cmake --install . --prefix "${{github.workspace}}/install"
-      - name: "CMake Test"
+      - name: "Test"
         run: ${{github.workspace}}/build/Release/libaura_test.exe
       - name: Upload
         uses: actions/upload-artifact@v3

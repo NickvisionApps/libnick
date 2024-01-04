@@ -1,0 +1,6 @@
+os:
+    Linux:
+        libc:
+            null:
+            glibc:
+                version: ["2.35", "2.36", "2.37", "2.38"]
