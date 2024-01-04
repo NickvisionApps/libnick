@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" version="1.1"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="Gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" style="stop-color:#62A0EA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#813D9C;stop-opacity:1" />
+    </linearGradient>
+    <filter id="alpha-to-white">
+      <feColorMatrix in="SourceGraphic" type="matrix"
+                     values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <g id="child-svg"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <path d="M8.004.197a.367.367 0 0 0-.342.244l-.756 2.096a.786.786 0 0 1-1.172.389L3.838 1.674a.367.367 0 0 0-.555.41l.621 2.139a.786.786 0 0 1-.718 1.004l-2.272.101a.367.367 0 0 0-.207.658l1.76 1.366a.786.786 0 0 1 .008 1.236L.697 10.004a.367.367 0 0 0 .219.654l2.227.07a.786.786 0 0 1 .732.995l-.605 2.19a.367.367 0 0 0 .56.401l1.844-1.252a.786.786 0 0 1 1.178.374l.796 2.128a.367.367 0 0 0 .69-.005l.756-2.096a.786.786 0 0 1 1.172-.389l1.896 1.252a.367.367 0 0 0 .555-.41l-.621-2.139a.786.786 0 0 1 .718-1.004l2.27-.101a.367.367 0 0 0 .209-.658l-1.76-1.366a.786.786 0 0 1-.008-1.236l1.778-1.416a.367.367 0 0 0-.219-.654l-2.227-.07a.786.786 0 0 1-.732-.995l.605-2.19a.367.367 0 0 0-.56-.401l-1.844 1.252a.786.786 0 0 1-1.178-.374L8.352.436a.367.367 0 0 0-.348-.239zM8 4a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4z" style="fill:#241f31" />
+</svg></g>
+  </defs>
+  <rect
+      width="256"
+      height="256"
+      fill="url(#Gradient)"
+      ry="128"
+      x="0"
+      y="0" />
+  <use xlink:href="#child-svg" filter="url(#alpha-to-white)"
+       transform="matrix(8,0,0,8,64,64)" />
+</svg>
