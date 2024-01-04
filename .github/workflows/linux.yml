@@ -47,10 +47,11 @@ jobs:
         id: vcpkg
         with:
           pkgs: boost-locale curl gettext gettext-libintl glib gtest jsoncpp libsecret libuuid maddy sqlcipher
-          triplet: x64-linux-release
+          triplet: x64-linux
           cache-key: ${{ matrix.config.os }}
           revision: 64e15f6669480b2d2bff1e5e815c571a8213421e
           token: ${{ secrets.GITHUB_TOKEN }}
+          extra-args: "--allow-unsupported"
       - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |

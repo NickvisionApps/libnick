@@ -33,7 +33,7 @@ jobs:
         id: vcpkg
         with:
           pkgs: boost-locale curl gettext gettext-libintl gtest jsoncpp maddy sqlcipher
-          triplet: x64-windows-release
+          triplet: x64-windows
           cache-key: ${{ matrix.config.os }}
           revision: 64e15f6669480b2d2bff1e5e815c571a8213421e
           token: ${{ secrets.GITHUB_TOKEN }}
