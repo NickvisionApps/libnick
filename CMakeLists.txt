@@ -16,7 +16,6 @@ endif()
 #libaura Definition
 project ("libaura" LANGUAGES C CXX VERSION 2024.1.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
-include(CTest)
 include(GNUInstallDirs)
 
 #libaura Setup
@@ -91,11 +90,11 @@ if(LINUX)
 endif()
 
 #libaura Install
-configure_file(${CMAKE_SOURCE_DIR}/cmake/libaura.pc.in libaura.pc @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/cmake/libaura.pc.in ${CMAKE_BINARY_DIR}/cmake/libaura.pc @ONLY)
 configure_package_config_file(${CMAKE_SOURCE_DIR}/cmake/config.cmake.in
-	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+	${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+write_basic_package_version_file(${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake
   	VERSION ${version}
   	COMPATIBILITY AnyNewerVersion)
 install(TARGETS ${PROJECT_NAME}
@@ -105,21 +104,19 @@ install(TARGETS ${PROJECT_NAME}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
+install(FILES ${CMAKE_BINARY_DIR}/cmake/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
 install(EXPORT ${PROJECT_NAME}Targets 
 	FILE ${PROJECT_NAME}Targets.cmake
 	NAMESPACE libaura::
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+install(FILES ${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake ${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 export(EXPORT ${PROJECT_NAME}Targets
-	FILE ${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake
+	FILE ${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake
 	NAMESPACE libaura::)
 
 #libaura Test
 if (NOT BUILD_TESTING STREQUAL OFF)
-	#libaura_test Setup
-	include(${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake)
 	add_executable(${PROJECT_NAME}_test
 		tests/auratests.cpp
 		tests/eventtests.cpp
@@ -137,8 +134,6 @@ if (NOT BUILD_TESTING STREQUAL OFF)
 		tests/updatertests.cpp
 		tests/versiontests.cpp
 		tests/webtests.cpp)
-
-	#libaura_test Packages
 	find_package(GTest REQUIRED)
-	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest_main GTest::gmock_main libaura::libaura)
+	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest_main GTest::gmock_main ${PROJECT_NAME})
 endif()
