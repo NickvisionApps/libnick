@@ -14,7 +14,7 @@ namespace Nickvision::Aura::Localization
 		}
 #endif
 		std::string lang{ "C" };
-		std::string sysLocale{ StringHelpers::split<std::string>(boost::locale::util::get_system_locale(), ".")[0] }; //split to remove the .UTF-8
+		std::string sysLocale{ StringHelpers::split(boost::locale::util::get_system_locale(), ".")[0] }; //split to remove the .UTF-8
 		if (!sysLocale.empty() && sysLocale != "C" && sysLocale != "en_US")
 		{
 			/*
@@ -36,7 +36,7 @@ namespace Nickvision::Aura::Localization
 			}
 			else
 			{
-				std::string twoLetter{ StringHelpers::split<std::string>(sysLocale, "_")[0] };
+				std::string twoLetter{ StringHelpers::split(sysLocale, "_")[0] };
 				for (const std::string& l : langs)
 				{
 					if (l.find(twoLetter) != std::string::npos)
