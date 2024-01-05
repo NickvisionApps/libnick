@@ -15,8 +15,6 @@ The following are a list of dependencies used by libaura.
 
 Following the [build instructions](#building-and-installing) below using vcpkg, will ensure these dependencies are installed properly for your platform.
 
-**However, when linking to libaura in your project, you may also need to link to some of these dependencies to ensure proper linkage to libaura, as some of libaura's header files reference these dependencies.**
-
 ### All Platforms
 - boost
 - gtest

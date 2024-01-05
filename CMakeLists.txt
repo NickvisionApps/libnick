@@ -13,16 +13,17 @@ if (POLICY CMP0141)
 	set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
+#libaura Definition
 project ("libaura" LANGUAGES C CXX VERSION 2024.1.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
-include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 include(CTest)
+include(GNUInstallDirs)
 
-#libaura Library Setup
+#libaura Setup
 add_compile_definitions(SQLITE_HAS_CODEC)
 if(LINUX)
 	add_compile_definitions(HAVE_USLEEP)
 endif()
-include_directories(${PROJECT_SOURCE_DIR}/include)
 add_library (${PROJECT_NAME}
 	src/filesystem/filesystemchangedeventargs.cpp
 	src/filesystem/filesystemwatcher.cpp
@@ -54,9 +55,18 @@ add_library (${PROJECT_NAME}
 	src/systemdirectories.cpp
 	src/userdirectories.cpp
 	src/version.cpp)
+target_include_directories(${PROJECT_NAME} PUBLIC 
+	$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 set_target_properties(${PROJECT_NAME} PROPERTIES 
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${PROJECT_VERSION})
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_VERSION})
+if(MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE /W4)
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+endif()
 
 #libaura Packages
 find_package(Boost REQUIRED COMPONENTS locale)
@@ -65,7 +75,7 @@ find_package(jsoncpp REQUIRED)
 find_package(Intl REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(unofficial-maddy REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE Boost::boost Boost::locale CURL::libcurl JsonCpp::JsonCpp Intl::Intl OpenSSL::SSL OpenSSL::Crypto unofficial::maddy::maddy)
+target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost Boost::locale CURL::libcurl JsonCpp::JsonCpp Intl::Intl OpenSSL::SSL OpenSSL::Crypto unofficial::maddy::maddy)
 if(LINUX)
 	set(THREADS_PREFER_PTHREAD_FLAG ON)
 	find_package(Threads REQUIRED)
@@ -77,17 +87,39 @@ if(LINUX)
 	pkg_check_modules(gthread REQUIRED IMPORTED_TARGET gthread-2.0)
 	pkg_check_modules(libsecret REQUIRED IMPORTED_TARGET libsecret-1)
 	find_package(unofficial-libuuid CONFIG REQUIRED)
-	target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret unofficial::UUID::uuid)
+	target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret unofficial::UUID::uuid)
 endif()
-if(MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE /W4)
-else()
-	target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
-endif()
+
+#libaura Install
+configure_file(${CMAKE_SOURCE_DIR}/cmake/libaura.pc.in libaura.pc @ONLY)
+configure_package_config_file(${CMAKE_SOURCE_DIR}/cmake/config.cmake.in
+	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+  	VERSION ${version}
+  	COMPATIBILITY AnyNewerVersion)
+install(TARGETS ${PROJECT_NAME}
+	EXPORT ${PROJECT_NAME}Targets
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
+install(EXPORT ${PROJECT_NAME}Targets 
+	FILE ${PROJECT_NAME}Targets.cmake
+	NAMESPACE libaura::
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+export(EXPORT ${PROJECT_NAME}Targets
+	FILE ${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake
+	NAMESPACE libaura::)
 
 #libaura Test
 if (NOT BUILD_TESTING STREQUAL OFF)
 	#libaura_test Setup
+	include(${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake)
 	add_executable(${PROJECT_NAME}_test
 		tests/auratests.cpp
 		tests/eventtests.cpp
@@ -108,14 +140,5 @@ if (NOT BUILD_TESTING STREQUAL OFF)
 
 	#libaura_test Packages
 	find_package(GTest REQUIRED)
-	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest_main GTest::gmock_main JsonCpp::JsonCpp ${PROJECT_NAME})
-	if(LINUX)
-		target_link_libraries(${PROJECT_NAME}_test PRIVATE PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread)
-	endif()
+	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest_main GTest::gmock_main libaura::libaura)
 endif()
-
-#libaura Install
-configure_file(${PROJECT_SOURCE_DIR}/pkg-config/libaura.pc.in libaura.pc @ONLY)
-install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
-install(FILES ${CMAKE_BINARY_DIR}/libaura.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
