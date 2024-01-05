@@ -24,43 +24,39 @@ if(LINUX)
 	add_compile_definitions(HAVE_USLEEP)
 endif()
 add_library (${PROJECT_NAME}
-	src/filesystem/filesystemchangedeventargs.cpp
-	src/filesystem/filesystemwatcher.cpp
-	src/helpers/stringhelpers.cpp
-	src/helpers/webhelpers.cpp
-	src/keyring/credential.cpp
-	src/keyring/keyring.cpp
-	src/keyring/keyringdialogcontroller.cpp
-	src/keyring/passwordgenerator.cpp
-	src/keyring/passwordstrength.cpp
-	src/keyring/store.cpp
-	src/keyring/systemcredentials.cpp
-	src/localization/documentation.cpp
-	src/localization/gettext.cpp
-	src/network/networkmonitor.cpp
-	src/network/networkstatechangedeventargs.cpp
-	src/notifications/notificationsenteventargs.cpp
-	src/notifications/notifyicon.cpp
-	src/notifications/notifyiconmenu.cpp
-	src/notifications/shellnotification.cpp
-	src/notifications/shellnotificationsenteventargs.cpp
-	src/taskbar/taskbaritem.cpp
-	src/update/updater.cpp
-	src/appinfo.cpp
-	src/aura.cpp
-	src/configurationbase.cpp
-	src/interprocesscommunicator.cpp
-	src/sqlite3.c
-	src/systemdirectories.cpp
-	src/userdirectories.cpp
-	src/version.cpp)
-target_include_directories(${PROJECT_NAME} PUBLIC 
-	$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-set_target_properties(${PROJECT_NAME} PROPERTIES 
-	VERSION ${PROJECT_VERSION}
-	SOVERSION ${PROJECT_VERSION})
-set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_VERSION})
+	"src/filesystem/filesystemchangedeventargs.cpp"
+	"src/filesystem/filesystemwatcher.cpp"
+	"src/helpers/stringhelpers.cpp"
+	"src/helpers/webhelpers.cpp"
+	"src/keyring/credential.cpp"
+	"src/keyring/keyring.cpp"
+	"src/keyring/keyringdialogcontroller.cpp"
+	"src/keyring/passwordgenerator.cpp"
+	"src/keyring/passwordstrength.cpp"
+	"src/keyring/store.cpp"
+	"src/keyring/systemcredentials.cpp"
+	"src/localization/documentation.cpp"
+	"src/localization/gettext.cpp"
+	"src/network/networkmonitor.cpp"
+	"src/network/networkstatechangedeventargs.cpp"
+	"src/notifications/notificationsenteventargs.cpp"
+	"src/notifications/notifyicon.cpp"
+	"src/notifications/notifyiconmenu.cpp"
+	"src/notifications/shellnotification.cpp"
+	"src/notifications/shellnotificationsenteventargs.cpp"
+	"src/taskbar/taskbaritem.cpp"
+	"src/update/updater.cpp"
+	"src/appinfo.cpp"
+	"src/aura.cpp"
+	"src/configurationbase.cpp"
+	"src/interprocesscommunicator.cpp"
+	"src/sqlite3.c"
+	"src/systemdirectories.cpp"
+	"src/userdirectories.cpp"
+	"src/version.cpp")
+target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>" "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION "${PROJECT_VERSION}" SOVERSION "${PROJECT_VERSION}")
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING "${PROJECT_VERSION}")
 if(MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /W4)
 else()
@@ -90,50 +86,35 @@ if(LINUX)
 endif()
 
 #libaura Install
-configure_file(${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in ${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}.pc @ONLY)
-configure_package_config_file(${CMAKE_SOURCE_DIR}/cmake/config.cmake.in
-	${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake
-	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-write_basic_package_version_file(${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake
-  	VERSION ${version}
-  	COMPATIBILITY AnyNewerVersion)
-install(TARGETS ${PROJECT_NAME}
-	EXPORT ${PROJECT_NAME}Targets
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
-install(FILES ${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
-install(EXPORT ${PROJECT_NAME}Targets 
-	FILE ${PROJECT_NAME}Targets.cmake
-	NAMESPACE ${PROJECT_NAME}::
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-install(FILES ${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake ${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-export(EXPORT ${PROJECT_NAME}Targets
-	FILE ${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake
-	NAMESPACE ${PROJECT_NAME}::)
+configure_file("${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in" "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}.pc" @ONLY)
+configure_package_config_file("${CMAKE_SOURCE_DIR}/cmake/config.cmake.in" "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake" INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+write_basic_package_version_file("${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake" VERSION "${PROJECT_VERSION}" COMPATIBILITY AnyNewerVersion)
+install(TARGETS ${PROJECT_NAME} EXPORT "${PROJECT_NAME}Targets" LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/include" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
+install(FILES "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}.pc" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig")
+install(EXPORT "${PROJECT_NAME}Targets" FILE "${PROJECT_NAME}Targets.cmake" NAMESPACE ${PROJECT_NAME}:: DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+install(FILES "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake" "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+export(EXPORT "${PROJECT_NAME}Targets" FILE "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake" NAMESPACE ${PROJECT_NAME}::)
 
 #libaura Test
 if (NOT BUILD_TESTING STREQUAL OFF)
 	add_executable(${PROJECT_NAME}_test
-		tests/auratests.cpp
-		tests/eventtests.cpp
-		tests/filewatchertests.cpp
-		tests/ipctests.cpp
-		tests/keyringtests.cpp
-		tests/main.cpp
-		tests/networktests.cpp
-		tests/notifyicontests.cpp
-		tests/passwordtests.cpp
-		tests/storetests.cpp
-		tests/stringtests.cpp
-		tests/systemcredentialstests.cpp
-		tests/taskbartests.cpp
-		tests/updatertests.cpp
-		tests/versiontests.cpp
-		tests/webtests.cpp)
+		"tests/auratests.cpp"
+		"tests/eventtests.cpp"
+		"tests/filewatchertests.cpp"
+		"tests/ipctests.cpp"
+		"tests/keyringtests.cpp"
+		"tests/main.cpp"
+		"tests/networktests.cpp"
+		"tests/notifyicontests.cpp"
+		"tests/passwordtests.cpp"
+		"tests/storetests.cpp"
+		"tests/stringtests.cpp"
+		"tests/systemcredentialstests.cpp"
+		"tests/taskbartests.cpp"
+		"tests/updatertests.cpp"
+		"tests/versiontests.cpp"
+		"tests/webtests.cpp")
 	find_package(GTest REQUIRED)
 	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest_main GTest::gmock_main ${PROJECT_NAME})
 endif()
