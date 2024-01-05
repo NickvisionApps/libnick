@@ -56,16 +56,16 @@ A C++20 compiler is also required to build libaura.
 #### Windows
 1. From the `build` folder, run `cmake .. -G "Visual Studio 17 2022"`.
     - To skip building libaura's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
-1. From the `build` folder, run ``cmake --build . --config Release`.
+1. From the `build` folder, run `cmake --build . --config Release`.
 1. After these commands complete, libaura will be successfully built and its binaries can be found in the `Release` folder of the `build` folder.
 #### Linux
 1. From the `build` folder, run `cmake .. -DCMAKE_BUILD_TYPE=Release`.
     - To skip building libaura's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
-1. From the `build` folder, run `cmake --build`.
+1. From the `build` folder, run `cmake --build .`.
 1. After these commands complete, libaura will be successfully built and its binaries can be found in the `build` folder.
 
 ### Installing
 1. To install libaura to the system, from the `build` folder, run `cmake --install . --prefix "PATH_TO_INSTALL_DIR"`.
     - Replace `PATH_TO_INSTALL_DIR` with the path to a folder to install libaura to. 
     - This is usually a dependencies folder set up by the programmer, added to the PATH variable, to allow linking to said dependencies.
-    - On linux, `PATH_TO_INSTALL_DIR` would usually be `/usr`.
+        - On linux, `PATH_TO_INSTALL_DIR` would usually be `/usr`.
