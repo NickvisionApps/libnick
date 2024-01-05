@@ -109,6 +109,9 @@ if (NOT BUILD_TESTING STREQUAL OFF)
 	#libaura_test Packages
 	find_package(GTest REQUIRED)
 	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest_main GTest::gmock_main JsonCpp::JsonCpp ${PROJECT_NAME})
+	if(LINUX)
+		target_link_libraries(${PROJECT_NAME}_test PRIVATE PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread)
+	endif()
 endif()
 
 #libaura Install
