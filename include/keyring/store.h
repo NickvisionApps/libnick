@@ -1,8 +1,6 @@
 #ifndef STORE_H
 #define STORE_H
 
-#define SQLITE_HAS_CODEC 1
-
 #include <filesystem>
 #include <memory>
 #include <mutex>

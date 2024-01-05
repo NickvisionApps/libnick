@@ -12,6 +12,7 @@ permissions:
 env:
   BUILD_TYPE: Release
   GITHUB_ACTIONS: true
+  VCPKG_ROOT: ${{github.workspace}}/vcpkg
 jobs:
   build:
     name: ${{ matrix.config.name }}
@@ -41,21 +42,19 @@ jobs:
           sudo apt-get install gettext tzdata locales -y
           sudo locale-gen en_US.UTF-8
           sudo update-locale LANG=en_US.UTF-8
-      - name: "Get Conan"
-        uses: turtlebrowser/get-conan@main
-      - name: "Setup Conan Settings"
-        run: |
-          mv conan/conansettings.yml settings_user.yml
-          conan config install settings_user.yml
-      - name: "Install Conan"
-        run: |
-          mv conan/conanfile.py conanfile.py
-          mv conan/conanprofile-linux.txt conanprofile.txt
-          conan install conanfile.py --profile:host=conanprofile.txt --profile:build=conanprofile.txt -s compiler.cppstd=20 --build=missing
+      - name: "Vcpkg"
+        uses: johnwason/vcpkg-action@v5
+        id: vcpkg
+        with:
+          pkgs: boost-locale curl gettext gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl
+          triplet: x64-linux
+          cache-key: ${{ matrix.config.os }}
+          revision: fc3f61366102c1f0d4547c06d03c523bb18c13a7
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: "CMake Build"
         working-directory: ${{github.workspace}}/build
         run: |
-          cmake .. -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/build/Release/generators/conan_toolchain.cmake" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
           cmake --build .
       - name: "CMake Install"
         working-directory: ${{github.workspace}}/build
