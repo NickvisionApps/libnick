@@ -27,5 +27,8 @@ class libauraRecipe(ConanFile):
             self.requires("libsecret/0.20.5")
             self.requires("libuuid/1.0.3")
 
+    def build_requirements(self):
+        self.tool_requires("cmake/[>=3.25]")
+
     def layout(self):
         cmake_layout(self)
