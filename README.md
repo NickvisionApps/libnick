@@ -25,7 +25,7 @@ Following the [build instructions](#building-and-installing) below using vcpkg, 
 - libgettext
 - maddy
 - openssl
-    - Used for sqlcipher, as libaura manually compiles sqlcipher. See [3rdparty/](3rdparty/).
+    - Used for sqlcipher, as libaura manually includes and compiles sqlcipher.
 
 ### Linux Only
 The above dependencies must be installed, plus the following for linux systems:
