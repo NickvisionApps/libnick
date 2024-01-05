@@ -7,8 +7,8 @@
 #include <optional>
 #include <string>
 #include <vector>
-#include <sqlcipher/sqlite3.h>
 #include "credential.h"
+#include "sqlite3.h"
 
 namespace Nickvision::Aura::Keyring
 {

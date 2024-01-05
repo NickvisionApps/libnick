@@ -22,9 +22,8 @@ add_compile_definitions(SQLITE_HAS_CODEC)
 if(LINUX)
 	add_compile_definitions(HAVE_USLEEP)
 endif()
-include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/3rdparty)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 add_library (${PROJECT_NAME}
-	3rdparty/sqlcipher/sqlite3.c
 	src/filesystem/filesystemchangedeventargs.cpp
 	src/filesystem/filesystemwatcher.cpp
 	src/helpers/stringhelpers.cpp
@@ -51,6 +50,7 @@ add_library (${PROJECT_NAME}
 	src/aura.cpp
 	src/configurationbase.cpp
 	src/interprocesscommunicator.cpp
+	src/sqlite3.c
 	src/systemdirectories.cpp
 	src/userdirectories.cpp
 	src/version.cpp)
