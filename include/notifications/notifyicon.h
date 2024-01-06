@@ -12,7 +12,6 @@
 #include <shellapi.h>
 #include "notifyiconmenu.h"
 #include "shellnotificationsenteventargs.h"
-#pragma comment(lib,"shell32.lib")
 
 namespace Nickvision::Aura::Notifications
 {

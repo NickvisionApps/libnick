@@ -3,7 +3,6 @@
 #include <limits>
 #ifdef _WIN32
 #include <dwmapi.h>
-#pragma comment(lib,"dwmapi.lib")
 using namespace Gdiplus;
 #elif defined(__linux__)
 #include <stdlib.h>
