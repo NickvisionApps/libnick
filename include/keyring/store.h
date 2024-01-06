@@ -1,7 +1,9 @@
 #ifndef STORE_H
 #define STORE_H
 
-#define SQLITE_HAS_CODEC 1
+#ifndef SQLITE_HAS_CODEC
+#define SQLITE_HAS_CODEC
+#endif
 
 #include <filesystem>
 #include <memory>
@@ -9,8 +11,8 @@
 #include <optional>
 #include <string>
 #include <vector>
-#include <sqlcipher/sqlite3.h>
 #include "credential.h"
+#include "sqlite3.h"
 
 namespace Nickvision::Aura::Keyring
 {

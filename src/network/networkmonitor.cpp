@@ -3,7 +3,6 @@
 #include "aura.h"
 #include "helpers/stringhelpers.h"
 #ifdef __linux__
-#include <glib.h>
 #include <gio/gio.h>
 #endif
 

@@ -8,7 +8,6 @@
 #include "notifications/notifyicon.h"
 #include "notifications/notifyiconmenu.h"
 #elif defined(__linux__)
-#include <glib.h>
 #include <gio/gio.h>
 #endif
 

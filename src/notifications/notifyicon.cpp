@@ -17,6 +17,26 @@ namespace Nickvision::Aura::Notifications
 		m_hwnd{ nullptr }
 	{
 		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+		HICON icon{ (HICON)GetClassLongPtrA(hwnd, GCLP_HICON) };
+		if (!icon)
+		{
+			SHSTOCKICONINFO info{ 0 };
+			info.cbSize = sizeof(info);
+			if (SHGetStockIconInfo(SIID_APPLICATION, SHGSI_ICON, &info) == S_OK)
+			{
+				icon = info.hIcon;
+			}
+		}
+		HICON smallIcon{ (HICON)GetClassLongPtrA(hwnd, GCLP_HICONSM) };
+		if (!smallIcon)
+		{
+			SHSTOCKICONINFO info{ 0 };
+			info.cbSize = sizeof(info);
+			if (SHGetStockIconInfo(SIID_APPLICATION, SHGSI_ICON | SHGSI_SMALLICON, &info) == S_OK)
+			{
+				icon = info.hIcon;
+			}
+		}
 		//Create a window for the NotifyIcon
 		WNDCLASSEXA windowClass;
 		windowClass.cbSize = sizeof(windowClass);
@@ -25,12 +45,12 @@ namespace Nickvision::Aura::Notifications
 		windowClass.cbClsExtra = 0;
 		windowClass.cbWndExtra = 0;
 		windowClass.hInstance = nullptr;
-		windowClass.hIcon = (HICON)GetClassLongPtrA(hwnd, GCLP_HICON);
+		windowClass.hIcon = icon;
 		windowClass.hCursor = LoadCursor(nullptr, IDC_ARROW);;
 		windowClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 		windowClass.lpszMenuName = 0;
 		windowClass.lpszClassName = m_className.c_str();
-		windowClass.hIconSm = (HICON)GetClassLongPtrA(hwnd, GCLP_HICONSM);
+		windowClass.hIconSm = smallIcon;
 		ATOM registeredClass{ RegisterClassExA(&windowClass) };
 		if (registeredClass == 0)
 		{
@@ -49,7 +69,7 @@ namespace Nickvision::Aura::Notifications
 		}
 		NOTIFYICONDATAA notify{ getBaseNotifyIconData() };
 		notify.uFlags |= NIF_ICON | NIF_TIP;
-		notify.hIcon = (HICON)GetClassLongPtrA(hwnd, GCLP_HICON);
+		notify.hIcon = icon;
 		StringCchCopyA(notify.szTip, ARRAYSIZE(notify.szTip), m_tooltip.c_str());
 		notify.uVersion = NOTIFYICON_VERSION_4;
 		if (!Shell_NotifyIconA(NIM_ADD, &notify))
@@ -153,7 +173,7 @@ namespace Nickvision::Aura::Notifications
 		}
 		else
 		{
-			notify.dwInfoFlags |= NIIF_USER;
+			notify.dwInfoFlags |= NIIF_NONE;
 		}
 		if (e.getAction() == "open" && std::filesystem::exists(e.getActionParam()))
 		{
