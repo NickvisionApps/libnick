@@ -15,7 +15,7 @@ if (POLICY CMP0141)
 endif()
 
 #libaura Definition
-project ("libaura" LANGUAGES C CXX VERSION 2024.1.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libaura" LANGUAGES C CXX VERSION 2024.1.1 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
