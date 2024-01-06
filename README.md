@@ -68,5 +68,5 @@ A C++20 compiler is also required to build libaura.
     - This is usually a dependencies folder set up by the programmer, added to the PATH variable, to allow linking to said dependencies.
         - On linux, `PATH_TO_INSTALL_DIR` would usually be `/usr`.
     - This command will export and install libaura cmake targets allowing you to simply use libaura in other cmake projects by adding:
-        - `find_package(libaura REQUIRED)`
+        - `find_package(libaura CONFIG REQUIRED)`
         - `target_link_libraries(main PRIVATE libaura::libaura)`
