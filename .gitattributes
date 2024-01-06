@@ -7,3 +7,6 @@
 *.ico binary
 *.pdf binary
 *.exe binary
+# Exclude sqlite From Stats
+include/sqlite3.h linguist-vendored
+src/sqlite3.c linguist-vendored
