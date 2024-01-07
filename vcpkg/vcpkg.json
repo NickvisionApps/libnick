@@ -1,6 +1,6 @@
 {
   "name": "libaura",
-  "version": "2024.1.1",
+  "version": "2024.1.2",
   "homepage": "https://github.com/NickvisionApps/libaura",
   "documentation": "https://github.com/NickvisionApps/libaura/tree/main/docs",
   "description": "A cross-platform base for native Nickvision applications.",
