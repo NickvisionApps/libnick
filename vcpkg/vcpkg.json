@@ -15,8 +15,10 @@
       "host": true
     },
     "gettext-libintl",
-    "glib",
-    "gtest",
+    {
+      "name": "glib",
+      "platform": "linux"
+    },
     "jsoncpp",
     {
       "name": "libsecret",
