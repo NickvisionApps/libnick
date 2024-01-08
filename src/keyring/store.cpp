@@ -4,13 +4,6 @@
 
 namespace Nickvision::Aura::Keyring
 {
-	static std::string sqlite3_column_string(sqlite3_stmt* statement, int index) noexcept
-	{
-		sqlite3_column_bytes(statement, index);
-		const char* data{ static_cast<const char*>(sqlite3_column_blob(statement, index)) };
-		return { data, static_cast<size_t>(sqlite3_column_bytes(statement, index)) };
-	}
-
 	static std::filesystem::path getPathFromName(const std::string& name) noexcept
 	{
 		std::filesystem::path dir{ UserDirectories::getConfig() / "Nickvision" / "Keyring" };
@@ -99,7 +92,7 @@ namespace Nickvision::Aura::Keyring
 			{
 				while (sqlite3_step(statement) == SQLITE_ROW)
 				{
-					creds.push_back({ sqlite3_column_int(statement, 0), sqlite3_column_string(statement, 1), sqlite3_column_string(statement, 2), sqlite3_column_string(statement, 3), sqlite3_column_string(statement, 4) });
+					creds.push_back({ sqlite3_column_int(statement, 0), (const char*)sqlite3_column_text(statement, 1), (const char*)sqlite3_column_text(statement, 2), (const char*)sqlite3_column_text(statement, 3), (const char*)sqlite3_column_text(statement, 4) });
 				}
 				sqlite3_finalize(statement);
 			}
@@ -120,7 +113,7 @@ namespace Nickvision::Aura::Keyring
 				{
 					if (sqlite3_step(statement) == SQLITE_ROW)
 					{
-						cred = { { sqlite3_column_int(statement, 0), sqlite3_column_string(statement, 1), sqlite3_column_string(statement, 2), sqlite3_column_string(statement, 3), sqlite3_column_string(statement, 4) } };
+						cred = { { sqlite3_column_int(statement, 0), (const char*)sqlite3_column_text(statement, 1), (const char*)sqlite3_column_text(statement, 2), (const char*)sqlite3_column_text(statement, 3), (const char*)sqlite3_column_text(statement, 4) } };
 					}
 				}
 				sqlite3_finalize(statement);
@@ -142,7 +135,7 @@ namespace Nickvision::Aura::Keyring
 				{
 					while (sqlite3_step(statement) == SQLITE_ROW)
 					{
-						creds.push_back({ sqlite3_column_int(statement, 0), sqlite3_column_string(statement, 1), sqlite3_column_string(statement, 2), sqlite3_column_string(statement, 3), sqlite3_column_string(statement, 4) });
+						creds.push_back({ sqlite3_column_int(statement, 0), (const char*)sqlite3_column_text(statement, 1), (const char*)sqlite3_column_text(statement, 2), (const char*)sqlite3_column_text(statement, 3), (const char*)sqlite3_column_text(statement, 4) });
 					}
 				}
 				sqlite3_finalize(statement);
