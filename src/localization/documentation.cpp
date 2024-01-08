@@ -8,9 +8,9 @@ namespace Nickvision::Localization
 	std::string Documentation::getHelpUrl(const std::string& pageName) noexcept
 	{
 #ifdef __linux__
-		if (Aura::getEnvVar("SNAP").empty())
+		if (Aura::Aura::getEnvVar("SNAP").empty())
 		{
-			return "help:" + StringHelpers::toLower(Aura::getActive().getAppInfo().getEnglishShortName()) + "/" + pageName;
+			return "help:" + StringHelpers::toLower(Aura::Aura::getActive().getAppInfo().getEnglishShortName()) + "/" + pageName;
 		}
 #endif
 		std::string lang{ "C" };
