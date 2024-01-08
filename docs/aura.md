@@ -141,6 +141,11 @@ Path: `Nickvision::Aura::Aura`
 
 ### Methods
 - ```cpp
+  ~Aura()
+  ```
+    - Destructs an Aura
+    - Note: This also called curl_global_clean().
+- ```cpp
   T& getConfig<T>(const std::string& key)
   ```
     - Accepts: The string key of the config file, key.

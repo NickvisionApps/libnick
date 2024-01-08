@@ -32,7 +32,7 @@ namespace Nickvision::Aura
 		}
 	}
 
-	Aura::~Aura()
+	Aura::~Aura() noexcept
 	{
 		curl_global_cleanup();
 	}
