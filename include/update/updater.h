@@ -3,9 +3,9 @@
 
 #include <mutex>
 #include <string>
-#include "../version.h"
+#include "version.h"
 
-namespace Nickvision::Aura::Update
+namespace Nickvision::Update
 {
 	/**
 	 * @brief An object to check for application updates through GitHub.

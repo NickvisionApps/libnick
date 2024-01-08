@@ -2,7 +2,7 @@
 #include <functional>
 #include "helpers/stringhelpers.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	Credential::Credential(int id, const std::string& name, const std::string& uri, const std::string& username, const std::string& password) noexcept
 		: m_id{ id },

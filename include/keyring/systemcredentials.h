@@ -5,7 +5,7 @@
 #include <string>
 #include "credential.h"
 
-namespace Nickvision::Aura::Keyring::SystemCredentials
+namespace Nickvision::Keyring::SystemCredentials
 {
 	/**
 	 * @brief Gets a credential from the system's credential manager.

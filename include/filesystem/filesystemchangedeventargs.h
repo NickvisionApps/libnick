@@ -5,7 +5,7 @@
 #include "fileaction.h"
 #include "events/eventargs.h"
 
-namespace Nickvision::Aura::Filesystem
+namespace Nickvision::Filesystem
 {
 	/**
 	 * @brief Event args for when a file system object is changed.

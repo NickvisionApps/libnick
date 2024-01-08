@@ -1,7 +1,7 @@
-#include "interprocesscommunicator.h"
+#include "aura/interprocesscommunicator.h"
 #include <cstdlib>
 #include <stdexcept>
-#include "aura.h"
+#include "aura/aura.h"
 #ifdef __linux__
 #include <unistd.h>
 #include <sys/socket.h>

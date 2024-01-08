@@ -7,7 +7,7 @@
 #include "credential.h"
 #include "store.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	/**
 	 * @brief A model of a keyring object for managing credentials.

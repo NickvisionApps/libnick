@@ -1,9 +1,9 @@
 #include "localization/documentation.h"
 #include <boost/locale.hpp>
-#include "aura.h"
+#include "aura/aura.h"
 #include "helpers/stringhelpers.h"
 
-namespace Nickvision::Aura::Localization
+namespace Nickvision::Localization
 {
 	std::string Documentation::getHelpUrl(const std::string& pageName) noexcept
 	{
@@ -47,6 +47,6 @@ namespace Nickvision::Aura::Localization
 				}
 			}
 		}
-		return "https://htmlpreview.github.io/?" + Aura::getActive().getAppInfo().getHtmlDocsStore() + "/" + lang + "/" + pageName + ".html";
+		return "https://htmlpreview.github.io/?" + Aura::Aura::getActive().getAppInfo().getHtmlDocsStore() + "/" + lang + "/" + pageName + ".html";
 	}
 }

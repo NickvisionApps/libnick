@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <vector>
 
-namespace Nickvision::Aura::SystemDirectories
+namespace Nickvision::Filesystem::SystemDirectories
 {
 	/*
 	 * @brief Gets a list of directories from the PATH variable

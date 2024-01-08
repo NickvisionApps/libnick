@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "taskbar/taskbaritem.h"
 
-using namespace Nickvision::Aura::Taskbar;
+using namespace Nickvision::Taskbar;
 
 class TaskbarTest : public testing::Test 
 {

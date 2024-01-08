@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
     /**
      * @brief Strengths for a password. 

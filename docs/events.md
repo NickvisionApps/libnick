@@ -1,4 +1,4 @@
-# Nickvision::Aura::Events
+# Nickvision::Events
 
 This module provides a C#-inspired event system to be used in C++ applications. 
 
@@ -15,9 +15,9 @@ Description: An event that can have handlers subscribe to it, which in turn will
 Interface: [event.h](/include/events/event.h)
 
 Type: `template<DerivedEventArgs T> class`
-- The typename T must derive from `Nickvision::Aura::Events::EventArgs`
+- The typename T must derive from `Nickvision::Events::EventArgs`
 
-Path: `Nickvision::Aura::Events::Event`
+Path: `Nickvision::Events::Event`
 
 ### Methods
 - ```cpp
@@ -62,7 +62,7 @@ Path: `Nickvision::Aura::Events::Event`
     - Moves an Event object.
 
 ### Defining Events In Your Classes
-libaura events are designed to easily integrate within your classes to easily notify consumers of changes in state of an object.
+libnick events are designed to easily integrate within your classes to easily notify consumers of changes in state of an object.
 
 Let's take a look at [ConfigurationBase](/include/configurationbase.h) and how it defines and uses events.
 
@@ -93,7 +93,7 @@ Here we can see how `ConfigurationBase` defines a `saved` event, exposes it to t
 
 A consumer of `ConfigurationBase` can easily subscribe to the event and have its handler called when the configuration object is saved:
 ```cpp
-void handler(const Nickvision::Aura::Events::EventArgs& e)
+void handler(const Nickvision::Events::EventArgs& e)
 {
     std::cout << "Config saved." << std::endl;
 }
@@ -115,7 +115,7 @@ Interface: [eventargs.h](/include/events/eventargs.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Events::EventArgs`
+Path: `Nickvision::Events::EventArgs`
 
 ### Methods
 - ```cpp
@@ -124,7 +124,7 @@ Path: `Nickvision::Aura::Events::EventArgs`
     - Constructs an EventArgs.
 
 ### Note
-This class should be the base class of all objects used as a parameter for a libaura Event. 
+This class should be the base class of all objects used as a parameter for a libnick Event. 
 
 ## ParamEventArgs
 Description: An event argument that contains a single parameter.
@@ -133,7 +133,7 @@ Interface: [parameventargs.h](/include/events/parameventargs.h)
 
 Type: `template<typename T> class`
 
-Path: `Nickvision::Aura::Events::ParamEventArgs`
+Path: `Nickvision::Events::ParamEventArgs`
 
 ### Member Variables
 - ```

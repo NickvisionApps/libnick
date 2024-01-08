@@ -1,8 +1,10 @@
 #include "keyring/store.h"
 #include <stdexcept>
-#include "userdirectories.h"
+#include "filesystem/userdirectories.h"
 
-namespace Nickvision::Aura::Keyring
+using namespace Nickvision::Filesystem;
+
+namespace Nickvision::Keyring
 {
 	static std::filesystem::path getPathFromName(const std::string& name) noexcept
 	{

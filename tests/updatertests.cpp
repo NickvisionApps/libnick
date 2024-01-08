@@ -1,9 +1,8 @@
 #include <gtest/gtest.h>
-#include "version.h"
 #include "update/updater.h"
+#include "update/version.h"
 
-using namespace Nickvision::Aura;
-using namespace Nickvision::Aura::Update;
+using namespace Nickvision::Update;
 
 TEST(UpdaterTests, ParabolicStableUpdate)
 {

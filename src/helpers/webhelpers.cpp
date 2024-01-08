@@ -1,7 +1,7 @@
 #include "helpers/webhelpers.h"
 #include <fstream>
 
-namespace Nickvision::Aura
+namespace Nickvision
 {
 	bool WebHelpers::isValidWebsite(const std::string& url) noexcept
 	{

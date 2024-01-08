@@ -1,7 +1,7 @@
 #ifndef NETWORKSTATE_H
 #define NETWORKSTATE_H
 
-namespace Nickvision::Aura::Network
+namespace Nickvision::Network
 {
 	/**
 	 * @brief States of a network connection. 

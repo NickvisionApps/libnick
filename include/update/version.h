@@ -5,7 +5,7 @@
 #include <string>
 #include "versiontype.h"
 
-namespace Nickvision::Aura
+namespace Nickvision::Update
 {
 	/**
 	 * @brief A model for a version number. Formatted in "major.minor.build-dev".

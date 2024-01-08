@@ -1,6 +1,6 @@
 #include "notifications/notificationsenteventargs.h"
 
-namespace Nickvision::Aura::Notifications
+namespace Nickvision::Notifications
 {
 	NotificationSentEventArgs::NotificationSentEventArgs(const std::string& message, NotificationSeverity severity, const std::string& action, const std::string& actionParam) noexcept
 		: m_message{ message },

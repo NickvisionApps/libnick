@@ -1,11 +1,9 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <mutex>
-#include "aura.h"
 #include "filesystem/filesystemwatcher.h"
 
-using namespace Nickvision::Aura;
-using namespace Nickvision::Aura::Filesystem;
+using namespace Nickvision::Filesystem;
 
 class FileWatcherTest : public testing::Test
 {

@@ -1,4 +1,4 @@
-# Nickvision::Aura::Taskbar
+# Nickvision::Taskbar
 
 This module contains objects for manipulating an application's taskbar button.
 
@@ -13,7 +13,7 @@ Interface: [progressstate.h](/include/taskbar/progressstate.h)
 
 Type: `enum class`
 
-Path: `Nickvision::Aura::Taskbar::ProgressState`
+Path: `Nickvision::Taskbar::ProgressState`
 
 ### Values
 - ```
@@ -44,11 +44,11 @@ Interface: [taskbaritem.h](/include/taskbar/taskbaritem.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Taskbar::TaskbarItem`
+Path: `Nickvision::Taskbar::TaskbarItem`
 
 ### Member Variables
 - ```
-  Nickvision::Aura::Taskbar::ProgressState ProgressState: get, set
+  Nickvision::Taskbar::ProgressState ProgressState: get, set
   ```
     - The state of the progress being shown.
 - ```

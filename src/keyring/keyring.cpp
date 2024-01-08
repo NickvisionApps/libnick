@@ -1,7 +1,7 @@
 #include "keyring/keyring.h"
 #include "keyring/systemcredentials.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	Keyring::Keyring(const Store& store) noexcept
 		: m_store{ store }

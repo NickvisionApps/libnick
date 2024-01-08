@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "helpers/stringhelpers.h"
 
-using namespace Nickvision::Aura;
+using namespace Nickvision;
 
 TEST(StringTests, Upper1)
 {
@@ -40,9 +40,9 @@ TEST(StringTests, Trim3)
 
 TEST(StringTests, Split1)
 {
-	std::vector<std::string> cmd{ StringHelpers::split("libaura -t fg -y", " ")};
+	std::vector<std::string> cmd{ StringHelpers::split("libnick -t fg -y", " ")};
 	ASSERT_EQ(cmd.size(), 4);
-	ASSERT_EQ(cmd[0], "libaura");
+	ASSERT_EQ(cmd[0], "libnick");
 	ASSERT_EQ(cmd[1], "-t");
 	ASSERT_EQ(cmd[2], "fg");
 	ASSERT_EQ(cmd[3], "-y");

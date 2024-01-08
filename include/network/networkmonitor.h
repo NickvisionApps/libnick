@@ -10,7 +10,7 @@
 #include <netlistmgr.h>
 #endif
 
-namespace Nickvision::Aura::Network
+namespace Nickvision::Network
 {
 	/**
 	 * @brief An object to monitor the state of the system's network connection. 

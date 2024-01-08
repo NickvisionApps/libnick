@@ -4,7 +4,7 @@ endif()
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO NickvisionApps/libaura
+    REPO NickvisionApps/libnick
     REF "${VERSION}"
     SHA512 042c92954bf70493152d685f4be3373d86013192809a5686913d215ca47fcd5ed883b130a718be07eaf811eb00a0b406de55171be0e7e3fb7e07e059b7901c37
     HEAD_REF main
@@ -18,7 +18,7 @@ vcpkg_cmake_configure(
 
 vcpkg_cmake_install()
 
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/libaura)
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/libnick)
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 

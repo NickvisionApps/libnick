@@ -5,7 +5,7 @@
 #include <string>
 #include "passwordstrength.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	/**
 	 * @brief A model of a credential stored in a keyring.

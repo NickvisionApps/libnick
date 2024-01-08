@@ -1,7 +1,7 @@
 #include "keyring/keyringdialogcontroller.h"
 #include "helpers/stringhelpers.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	KeyringDialogController::KeyringDialogController(const std::string& name, const std::optional<Keyring>& keyring) noexcept
 		: m_name{ name },

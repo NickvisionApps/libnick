@@ -1,7 +1,7 @@
 #ifndef VERSIONTYPE_H
 #define VERSIONTYPE_H
 
-namespace Nickvision::Aura
+namespace Nickvision::Update
 {
 	/**
 	 * @brief Types of a version.

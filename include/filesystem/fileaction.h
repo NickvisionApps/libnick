@@ -1,7 +1,7 @@
 #ifndef FILEACTION_H
 #define FILEACTION_H
 
-namespace Nickvision::Aura::Filesystem
+namespace Nickvision::Filesystem
 {
 	/**
 	 * @brief Actions that cause a file system object to change. 

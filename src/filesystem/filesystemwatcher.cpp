@@ -7,7 +7,7 @@
 #include <sys/inotify.h>
 #endif
 
-namespace Nickvision::Aura::Filesystem
+namespace Nickvision::Filesystem
 {
 	FileSystemWatcher::FileSystemWatcher(const std::filesystem::path& path, bool incudeSubdirectories, WatcherFlags watcherFlags)
 		: m_path{ path },

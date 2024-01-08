@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace Nickvision::Aura::Notifications
+namespace Nickvision::Notifications
 {
 	/**
 	 * @brief Types of menu items for a NotifyIcon. 

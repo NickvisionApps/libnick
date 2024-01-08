@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include <mutex>
-#include "aura.h"
-#include "interprocesscommunicator.h"
+#include "aura/aura.h"
+#include "aura/interprocesscommunicator.h"
 
 using namespace Nickvision::Aura;
-using namespace Nickvision::Aura::Events;
+using namespace Nickvision::Events;
 
 static std::vector<std::string> args{ "test1", "test2" };
 

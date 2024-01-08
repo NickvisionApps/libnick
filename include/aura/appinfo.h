@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "version.h"
+#include "update/version.h"
 
 namespace Nickvision::Aura
 {
@@ -72,12 +72,12 @@ namespace Nickvision::Aura
 		 * @brief Gets the application version.
 		 * @return The application version
 		 */
-		const Version& getVersion() const noexcept;
+		const Update::Version& getVersion() const noexcept;
 		/**
 		 * @brief Sets the application version.
 		 * @param version The application version
 		 */
-		void setVersion(const Version& version) noexcept;
+		void setVersion(const Update::Version& version) noexcept;
 		/**
 		 * @brief Gets the application changelog.
 		 * @return The application changelog
@@ -201,7 +201,7 @@ namespace Nickvision::Aura
 		std::string m_shortName;
 		std::string m_englishShortName;
 		std::string m_description;
-		Version m_version;
+		Update::Version m_version;
 		std::string m_changelog;
 		std::string m_htmlChangelog;
 		std::string m_sourceRepo;

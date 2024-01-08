@@ -3,7 +3,7 @@
 
 #include "enumflags.h"
 
-namespace Nickvision::Aura::Filesystem
+namespace Nickvision::Filesystem
 {
 	/**
 	 * @brief Flags to describe properties of a file system object that can change.  

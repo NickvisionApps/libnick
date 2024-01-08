@@ -1,6 +1,6 @@
 #include "keyring/passwordstrength.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	PasswordStrength getPasswordStrength(const std::string& password) noexcept
 	{

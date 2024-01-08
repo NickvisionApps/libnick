@@ -1,7 +1,7 @@
 #ifdef _WIN32
 #include "notifications/notifyiconmenu.h"
 
-namespace Nickvision::Aura::Notifications
+namespace Nickvision::Notifications
 {
 	NotifyIconMenuItem::NotifyIconMenuItem(NotifyIconMenuItemType type) noexcept
 		: m_type{ type }

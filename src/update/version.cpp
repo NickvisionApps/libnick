@@ -1,8 +1,8 @@
-#include "version.h"
+#include "update/version.h"
 #include <stdexcept>
 #include <iostream>
 
-namespace Nickvision::Aura
+namespace Nickvision::Update
 {
 	Version::Version() noexcept
 		: m_major{ 0 },

@@ -1,4 +1,4 @@
-# Nickvision::Aura::Notifications
+# Nickvision::Notifications
 
 This module contains objects for sending notifications within Nickvision applications.
 
@@ -17,7 +17,7 @@ Interface: [notificationsenteventargs.h](/include/notifications/notificationsent
 
 Type: `class`
 
-Path: `Nickvision::Aura::Notifications::NotificationSentEventArgs`
+Path: `Nickvision::Notifications::NotificationSentEventArgs`
 
 ### Member Variables
 - ```
@@ -25,7 +25,7 @@ Path: `Nickvision::Aura::Notifications::NotificationSentEventArgs`
   ```
     - The message of the notification.
 - ```
-  Nickvision::Aura::Notifications::NotificationSeverity Severity: get
+  Nickvision::Notifications::NotificationSeverity Severity: get
   ```
     - The severity of the notification.
 - ```
@@ -51,7 +51,7 @@ Interface: [notificationseverity.h](/include/notifications/notificationseverity.
 
 Type: `enum class`
 
-Path: `Nickvision::Aura::Notifications::NotificationSeverity`
+Path: `Nickvision::Notifications::NotificationSeverity`
 
 ### Values
 - ```
@@ -80,7 +80,7 @@ Interface: [notifyicon.h](/include/notifications/notifyicon.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Notifications::NotifyIcon`
+Path: `Nickvision::Notifications::NotifyIcon`
 
 ### Methods
 - ```cpp
@@ -131,7 +131,7 @@ Interface: [notifyiconmenu.h](/include/notifications/notifyiconmenu.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Notifications::NotifyIconMenu`
+Path: `Nickvision::Notifications::NotifyIconMenu`
 
 Note: There are other classes, notably: `NotifyIconMenuItem`, `NotifyIconSeparatorMenuItem`, `NotifyIconActionMenuItem`, that are meant for use by `NotifyIcon`'s implementation of the context menu itself. Users are free to use these objects, however they will not be covered in this documentation.
 
@@ -215,20 +215,20 @@ Interface: [shellnotification.h](/include/notifications/shellnotification.h)
 
 Type: `namespace`
 
-Path: `Nickvision::Aura::Notifications::ShellNotification`
+Path: `Nickvision::Notifications::ShellNotification`
 
 ### Functions
 - ```cpp
   void send(const ShellNotificationSentEventArgs& e, HWND hwnd)
   ``` 
     - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the `HWND` handle for the main application window, hwnd. The hwnd parameter is only used once on the initial creation of the static `NotifyIcon` and then is ignored on future calls.
-    - Note: This function is only available on the Windows platform. It uses `Nickvision::Aura::Notifications::NotifyIcon`.
+    - Note: This function is only available on the Windows platform. It uses `Nickvision::Notifications::NotifyIcon`.
     - Note: This function supports the action "open" with action param being a path of a file or folder to open.
     - Throws: std::logic_error if Aura::init() was not called yet 
 - ```cpp
-  void send(const ShellNotificationSentEventArgs& e)
+  void send(const ShellNotificationSentEventArgs& e, const std::string& openText)
   ``` 
-    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e.
+    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the localized text of "Open", openText.
     - Note: This function is only available on the Linux platform.
     - Note: This function supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event.
     - Throws: std::logic_error if Aura::init() was not called yet 
@@ -240,7 +240,7 @@ Interface: [shellnotificationsenteventargs.h](/include/notifications/shellnotifi
 
 Type: `class`
 
-Path: `Nickvision::Aura::Notifications::ShellNotificationSentEventArgs`
+Path: `Nickvision::Notifications::ShellNotificationSentEventArgs`
 
 ### Member Variables
 - ```
@@ -252,7 +252,7 @@ Path: `Nickvision::Aura::Notifications::ShellNotificationSentEventArgs`
   ```
     - The message of the notification.
 - ```
-  Nickvision::Aura::Notifications::NotificationSeverity Severity: get
+  Nickvision::Notifications::NotificationSeverity Severity: get
   ```
     - The severity of the notification.
 - ```

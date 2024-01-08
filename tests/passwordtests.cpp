@@ -2,7 +2,7 @@
 #include "keyring/passwordgenerator.h"
 #include "keyring/passwordstrength.h"
 
-using namespace Nickvision::Aura::Keyring;
+using namespace Nickvision::Keyring;
 
 TEST(PasswordTests, Strength1)
 {

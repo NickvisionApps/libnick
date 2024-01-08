@@ -5,7 +5,7 @@
 #include <vector>
 #include "passwordcontent.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	/**
 	 * @brief A random password generator. 

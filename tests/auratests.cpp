@@ -1,9 +1,11 @@
 #include <gtest/gtest.h>
-#include "aura.h"
-#include "userdirectories.h"
+#include "aura/aura.h"
+#include "filesystem/userdirectories.h"
 #include "notifications/shellnotification.h"
 
 using namespace Nickvision::Aura;
+using namespace Nickvision::Filesystem;
+using namespace Nickvision::Notifications;
 
 enum class Theme
 {
@@ -85,13 +87,13 @@ TEST_F(AuraTest, DependencyCheck)
 #endif
 	ASSERT_TRUE(!dependency.empty());
 	ASSERT_TRUE(std::filesystem::exists(dependency));
-	Notifications::ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), Notifications::NotificationSeverity::Success, "open", dependency.string() };
+	ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), NotificationSeverity::Success, "open", dependency.string() };
 #ifdef _WIN32
 	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
 	{
-		ASSERT_NO_THROW(Notifications::ShellNotification::send(args, GetConsoleWindow()));
+		ASSERT_NO_THROW(ShellNotification::send(args, GetConsoleWindow()));
 	}
 #elif defined(__linux__)
-	ASSERT_NO_THROW(Notifications::ShellNotification::send(args));
+	ASSERT_NO_THROW(ShellNotification::send(args));
 #endif
 }

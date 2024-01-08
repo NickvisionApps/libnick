@@ -14,7 +14,7 @@
 #include <gio/gio.h>
 #endif
 
-namespace Nickvision::Aura::Taskbar
+namespace Nickvision::Taskbar
 {
 	/**
 	 * @brief An item on the taskbar. 
