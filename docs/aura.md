@@ -161,6 +161,8 @@ Path: `Nickvision::Aura::Aura`
     - Accepts: An application id, id, an application name, name, and an application english short name, englishShortName.
     - Returns: A reference to the newly initialized singleton `Aura` object.
     - Throws: `std::runtime_error` if creation of Aura object fails.
+    - Note: This also calls curl_global_init().
+    - Note: This also calls Localization::Gettext::init().
 - ```cpp
   Nickvision::Aura::Aura& getActive()
   ```

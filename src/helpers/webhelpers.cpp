@@ -9,7 +9,6 @@ namespace Nickvision::Aura
 		{
 			return false;
 		}
-		curl_global_init(CURL_GLOBAL_DEFAULT);
 		CURL* curl{ curl_easy_init() };
 		if (!curl)
 		{
@@ -25,7 +24,6 @@ namespace Nickvision::Aura
 #endif
 		CURLcode code{ curl_easy_perform(curl) };
 		curl_easy_cleanup(curl);
-		curl_global_cleanup();
 		return code == CURLE_OK;
 	}
 
@@ -39,7 +37,6 @@ namespace Nickvision::Aura
 		{
 			return false;
 		}
-		curl_global_init(CURL_GLOBAL_DEFAULT);
 		CURL* curl{ curl_easy_init() };
 		if (!curl)
 		{
@@ -71,7 +68,6 @@ namespace Nickvision::Aura
 		}
 		CURLcode code{ curl_easy_perform(curl) };
 		curl_easy_cleanup(curl);
-		curl_global_cleanup();
 		return code == CURLE_OK;
 	}
 
@@ -81,7 +77,6 @@ namespace Nickvision::Aura
 		{
 			return "";
 		}
-		curl_global_init(CURL_GLOBAL_DEFAULT);
 		CURL* curl{ curl_easy_init() };
 		if (!curl)
 		{
@@ -108,7 +103,6 @@ namespace Nickvision::Aura
 		CURLcode code{ curl_easy_perform(curl) };
 		curl_easy_cleanup(curl);
 		curl_slist_free_all(listHttpHeader);
-		curl_global_cleanup();
 		return code == CURLE_OK ? out.str() : "";
 	}
 }

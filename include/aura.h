@@ -25,6 +25,10 @@ namespace Nickvision::Aura
 	{
 	public:
 		/**
+		 * @brief Destructs an Aura.
+		 */
+		~Aura() noexcept;
+		/**
 		 * @brief Gets the AppInfo object for the application.
 		 */
 		AppInfo& getAppInfo() noexcept;
@@ -52,10 +56,12 @@ namespace Nickvision::Aura
 	private:
 		/**
 		 * @brief Constructs an Aura.
+		 * @brief This also calls curl_global_init().
 		 * @brief This also calls Localization::Gettext::init().
 		 * @param id The application id
 		 * @param name The application name
 		 * @param englishShortName The application short name in English
+		 * @throw std::runtime_error Thrown if libcurl fails to initialize
 		 * @throw std::runtime_error Thrown if the gettext system fails to initialize
 		 */
 		Aura(const std::string& id, const std::string& name, const std::string& englishShortName);
@@ -65,6 +71,7 @@ namespace Nickvision::Aura
 	public:
 		/**
 		 * @brief Initializes Aura.
+		 * @brief This also calls curl_global_init().
 		 * @brief This also calls Localization::Gettext::init().
 		 * @param id The application id
 		 * @param name The application name

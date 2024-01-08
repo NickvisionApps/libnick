@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <mutex>
+#include <curl/curl.h>
 #include "systemdirectories.h"
 #include "localization/gettext.h"
 #include "helpers/stringhelpers.h"
@@ -18,11 +19,20 @@ namespace Nickvision::Aura
 		m_appInfo.setId(id);
 		m_appInfo.setName(name);
 		m_appInfo.setEnglishShortName(englishShortName);
+		if (curl_global_init(CURL_GLOBAL_DEFAULT) != 0)
+		{
+			throw std::runtime_error("Unable to initialize curl.");
+		}
 		std::string domainName{ StringHelpers::toLower(StringHelpers::replace(m_appInfo.getEnglishShortName(), " ", "")) };
 		if (!Localization::Gettext::init(domainName))
 		{
 			throw std::runtime_error("Unable to initialize gettext.");
 		}
+	}
+
+	Aura::~Aura()
+	{
+		curl_global_cleanup();
 	}
 
 	AppInfo& Aura::getAppInfo() noexcept
