@@ -34,7 +34,7 @@ jobs:
         uses: johnwason/vcpkg-action@v5
         id: vcpkg
         with:
-          pkgs: boost-locale curl gettext gettext-libintl gtest jsoncpp maddy openssl
+          pkgs: boost-locale curl gettext-libintl gtest jsoncpp maddy openssl
           triplet: x64-windows
           cache-key: ${{ matrix.config.os }}
           revision: f634024a30c5afa9f04d533ad5d0c0220778fd0b
