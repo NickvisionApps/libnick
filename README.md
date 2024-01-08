@@ -20,7 +20,7 @@ Following the [build instructions](#building-and-installing) below using vcpkg, 
 - gtest
 - jsoncpp
 - libcurl
-- libgettext
+- libintl
 - maddy
 - openssl
     - Used for sqlcipher, as libnick manually includes and compiles sqlcipher.
