@@ -94,6 +94,6 @@ TEST_F(AuraTest, DependencyCheck)
 		ASSERT_NO_THROW(ShellNotification::send(args, GetConsoleWindow()));
 	}
 #elif defined(__linux__)
-	ASSERT_NO_THROW(ShellNotification::send(args));
+	ASSERT_NO_THROW(ShellNotification::send(args), "Open");
 #endif
 }
