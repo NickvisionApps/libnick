@@ -5,7 +5,7 @@
 #include "notificationseverity.h"
 #include "events/eventargs.h"
 
-namespace Nickvision::Aura::Notifications
+namespace Nickvision::Notifications
 {
 	/**
 	 * @brief Event args for when a notification is sent.

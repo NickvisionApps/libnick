@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "events/event.h"
 
-using namespace Nickvision::Aura::Events;
+using namespace Nickvision::Events;
 
 class StateChangedEventArgs : EventArgs
 {

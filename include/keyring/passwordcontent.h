@@ -3,7 +3,7 @@
 
 #include "enumflags.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	/**
 	 * @brief Flags to describe the content of a password.

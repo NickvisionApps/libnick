@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <cstdlib>
 
-namespace Nickvision::Aura::Localization
+namespace Nickvision::Localization
 {
 	bool Gettext::init(const std::string& domainName) noexcept
 	{

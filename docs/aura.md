@@ -1,22 +1,17 @@
-# Nickvision::Aura
+# Nickvision
 
-This module contains types and functions every Nickvision application utilizes.
+This module contains types and functions for creating Nickvision applications.
 
 ## Table of Contents
 - [AppInfo](#appinfo)
 - [Aura](#aura)
 - [ConfigurationBase](#configurationbase)
-- [EnumFlags](#enumflags)
 - [InterProcessCommunicator](#interprocesscommunicator)
-- [SystemDirectories](#systemdirectories)
-- [UserDirectories](#userdirectories)
-- [Version](#version)
-- [VersionType](#versiontype)
 
 ## AppInfo
 Description: A model for the information about an application.
 
-Interface: [appinfo.h](/include/appinfo.h)
+Interface: [appinfo.h](/include/aura/appinfo.h)
 
 Type: `class`
 
@@ -49,7 +44,7 @@ Path: `Nickvision::Aura::AppInfo`
     - The application description.
     - Ex: `"A template for Nickvision applications."`
 - ```
-  Nickvision::Aura::Version Version: get, set
+  Nickvision::Version Version: get, set
   ```
     - The application version.
     - Ex: `2023.12.0`
@@ -132,7 +127,7 @@ Path: `Nickvision::Aura::AppInfo`
 ## Aura
 Description: An application base.
 
-Interface: [aura.h](/include/aura.h)
+Interface: [aura.h](/include/aura/aura.h)
 
 Type: `class`
 
@@ -140,7 +135,7 @@ Path: `Nickvision::Aura::Aura`
 
 ### Member Variables
 - ```
-  Nickvision::Aura::AppInfo& AppInfo: get
+  Nickvision::AppInfo& AppInfo: get
   ```
     - The AppInfo object for the application
 
@@ -151,12 +146,12 @@ Path: `Nickvision::Aura::Aura`
     - Accepts: The string key of the config file, key.
     - Returns: A reference to the configuration object of type T with key key.
     - Throws: `std::invalid_argument` if key is empty
-    - Note: T must be a type that derives from `Nickvision::Aura::ConfigurationBase`
+    - Note: T must be a type that derives from `Nickvision::ConfigurationBase`
     - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
 
 ### Static Functions
 - ```cpp
-  Nickvision::Aura::Aura& init(const std::string& id, const std::string& name, const std::string& englishShortName)
+  Nickvision::Aura& init(const std::string& id, const std::string& name, const std::string& englishShortName)
   ```
     - Accepts: An application id, id, an application name, name, and an application english short name, englishShortName.
     - Returns: A reference to the newly initialized singleton `Aura` object.
@@ -164,7 +159,7 @@ Path: `Nickvision::Aura::Aura`
     - Note: This also calls curl_global_init().
     - Note: This also calls Localization::Gettext::init().
 - ```cpp
-  Nickvision::Aura::Aura& getActive()
+  Nickvision::Aura& getActive()
   ```
     - Returns: The reference to the singleton `Aura` object.
     - Throws: `std::logic_error` if `Aura::init()` was not yet called.
@@ -194,7 +189,7 @@ Path: `Nickvision::Aura::Aura`
 ## ConfigurationBase
 Description: A base class for configuration files.
 
-Interface: [configurationbase.h](/include/configurationbase.h)
+Interface: [configurationbase.h](/include/aura/configurationbase.h)
 
 Type: `class`
 
@@ -208,7 +203,7 @@ Path: `Nickvision::Aura::ConfigurationBase`
 
 ### Events
 - ```
-  Event<Nickvision::Aura::Events::EventArgs> Saved
+  Event<Nickvision::Events::EventArgs> Saved
   ```
     - Invoked when the configuration file is saved to disk
 
@@ -259,7 +254,7 @@ public:
 ```
 This object can now be used by an Aura-based application:
 ```cpp
-void onConfigSaved(const Nickvision::Aura::Events::EventArgs& e)
+void onConfigSaved(const Nickvision::Events::EventArgs& e)
 {
     std::cout << "Config saved to disk." << std::endl;
 }
@@ -283,7 +278,7 @@ Description: Macros for working with enums to be used as flags.
 
 Interface: [enumflags.h](/include/enumflags.h)
 
-Type: `namespace`
+Type: `file`
 
 ### Macros
 - ```cpp
@@ -297,7 +292,7 @@ Type: `namespace`
 ## InterProcessCommunicator
 Description: An inter process communicator (server/client).
 
-Interface: [interprocesscommunicator.h](/include/interprocesscommunicator.h)
+Interface: [interprocesscommunicator.h](/include/aura/interprocesscommunicator.h)
 
 Type: `class`
 
@@ -315,7 +310,7 @@ Path: `Nickvision::Aura::InterProcessCommunicator`
 
 ### Events
 - ```
-  Event<Nickvision::Aura::Events::ParamEventArgs<std::vector<std::string>>> CommandReceived
+  Event<Nickvision::Events::ParamEventArgs<std::vector<std::string>>> CommandReceived
   ```
     - Invoked when this IPC server instance received a command from a client instance.
     - Note: If `isClient()` is true, this event will never be invoked for that instance.
@@ -342,7 +337,7 @@ Path: `Nickvision::Aura::InterProcessCommunicator`
     - Note: If this instance is the running server and communicate was called on said instance, `CommandReceived` will still be triggered with the passed args.
 
 ### Performing Inter-Process Communication
-libaura uses named-pipes on Windows and Unix Domain Sockets on Linux to establish inter process server and client communicators, while abstracting all of that away from the consumer in the easy to use `InterProcessCommunicator` API.
+libnick uses named-pipes on Windows and Unix Domain Sockets on Linux to establish inter process server and client communicators, while abstracting all of that away from the consumer in the easy to use `InterProcessCommunicator` API.
 
 Upon creating an `InterProcessCommunicator` object, either `isServer()` or `isClient()` will return true depending on whether or not this instance is a server or client respectively. Server instances should register a callback to the `CommandReceived` event to be invoked when clients send commands to the server.
 
@@ -372,238 +367,3 @@ If this program is ran for the first time, ipc will be the server instance. `han
 
 If this program is ran not for the first time, its arguments will be sent to the first instance and this instance itself will close. The first instance's `handleArguments` function will be called as a result of `CommandReceived` being invoked by the ipc server receiving the command. 
 
-## SystemDirectories
-Description: Functions for working with system directories.
-
-Interface: [systemdirectories.h](/include/systemdirectories.h)
-
-Type: `namespace`
-
-Path: `Nickvision::Aura::SystemDirectories`
-
-### Functions
-- ```cpp
-  std::vector<std::filesystem::path> getPath()
-  ```
-    - Returns: The list of directory paths found in the system's PATH variable.
-- ```cpp
-  std::vector<std::filesystem::path> getConfig()
-  ```
-    - Returns: The list of directory paths found in the system's XDG_CONFIG_DIRS variable.
-- ```cpp
-  std::vector<std::filesystem::path> getData()
-  ```
-    - Returns: The list of directory paths found in the system's XDG_DATA_DIRS variable.
-
-## UserDirectories
-Description: Functions for working with user directories.
-
-Interface: [userdirectories.h](/include/userdirectories.h)
-
-Type: `namespace`
-
-Path: `Nickvision::Aura::UserDirectories`
-
-### Functions
-- ```cpp
-  std::filesystem::path getHome()
-  ```
-    - Returns: The path to the user's home directory.
-    - Returns: `FOLDERID_Profile` on Windows, `$HOME` on Linux.
-- ```cpp
-  std::filesystem::path getConfig()
-  ```
-    - Returns: The path to the user's config directory.
-    - Returns: `FOLDERID_RoamingAppData` on Windows, `XDG_CONFIG_HOME` on Linux.
-- ```cpp
-  std::filesystem::path getApplicationConfig()
-  ```
-    - Returns: The path to the application's config directory.
-    - Returns: `getConfig() + Aura::getActive().getAppInfo().getName()`
-- ```cpp
-  std::filesystem::path getCache()
-  ```
-    - Returns: The path to the user's cache directory.
-    - Returns: `FOLDERID_LocalAppData` on Windows, `XDG_CACHE_HOME` on Linux.
-- ```cpp
-  std::filesystem::path getApplicationCache()
-  ```
-    - Returns: The path to the application's cache directory.
-    - Returns: `getCache() + Aura::getActive().getAppInfo().getName()`
-- ```cpp
-  std::filesystem::path getLocalData()
-  ```
-    - Returns: The path to the user's local data directory.
-    - Returns: `FOLDERID_RoamingAppData` on Windows, `XDG_DATA_HOME` on Linux.
-- ```cpp
-  std::filesystem::path getApplicationLocalData()
-  ```
-    - Returns: The path to the application's local data directory.
-    - Returns: `getLocalData() + Aura::getActive().getAppInfo().getName()`
-- ```cpp
-  std::filesystem::path getRuntime()
-  ```
-    - Returns: The path to the user's runtime directory.
-    - Returns: Empty path on Windows, `XDG_RUNTIME_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getDesktop()
-  ```
-    - Returns: The path to the user's desktop directory.
-    - Returns: `FOLDERID_Desktop` on Windows, `XDG_DESKTOP_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getDocuments()
-  ```
-    - Returns: The path to the user's documents directory.
-    - Returns: `FOLDERID_Documents` on Windows, `XDG_DOCUMENTS_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getDownloads()
-  ```
-    - Returns: The path to the user's downloads directory.
-    - Returns: `FOLDERID_Downloads` on Windows, `XDG_DOWNLOAD_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getMusic()
-  ```
-    - Returns: The path to the user's music directory.
-    - Returns: `FOLDERID_Music` on Windows, `XDG_MUSIC_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getPictures()
-  ```
-    - Returns: The path to the user's pictures directory.
-    - Returns: `FOLDERID_Pictures` on Windows, `XDG_PICTURES_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getPublicShare()
-  ```
-    - Returns: The path to the user's pictures directory.
-    - Returns: Empty path on Windows, `XDG_PUBLICSHARE_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getTemplates()
-  ```
-    - Returns: The path to the user's pictures directory.
-    - Returns: `FOLDERID_Templates` on Windows, `XDG_TEMPLATES_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getVideos()
-  ```
-    - Returns: The path to the user's pictures directory.
-    - Returns: `FOLDERID_Videos` on Windows, `XDG_VIDEOS_DIR` on Linux.
-
-## Version
-Description: A model for a version number. Formatted in "major.minor.build-dev".
-
-Interface: [version.h](/include/version.h)
-
-Type: `class`
-
-Path: `Nickvision::Aura::Version`
-
-### Member Variables
-- ```
-  Nickvision::Aura::VersionType VersionType: get
-  ```
-    - The type of the version
-
-### Methods
-- ```cpp
-  Version()
-  ```
-    - Constructs a blank Version.
-- ```cpp
-  Version(int major, int minor, int build)
-  ```
-    - Constructs a Version.
-    - Accepts: The major version number, major, the minor version number, minor, and the build version number, build.
-- ```cpp
-  Version(int major, int minor, int build, const std::string& dev)
-  ```
-    - Constructs a Version.
-    - Accepts: The major version number, major, the minor version number, minor, the build version number, build, and the dev version string, dev.
-- ```cpp
-  Version(const std::string& version)
-  ```
-    - Constructs a Version.
-    - Accepts: The version as a string to parse, version.
-    - Note: version must be in the format of `"major.minor.build-dev"`.
-- ```cpp
-  int getMajor() const
-  ```
-    - Returns: The major number of the version.
-- ```cpp
-  int getMinor() const
-  ```
-    - Returns: The minor number of the version.
-- ```cpp
-  int getBuild() const
-  ```
-    - Returns: The build number of the version.
-- ```cpp
-  const std::string& getDev() const
-  ```
-    - Returns: The dev string of the version.
-- ```cpp
-  const std::string& toString() const
-  ```
-    - Returns: The string representation of the Version
-- ```cpp
-  bool empty() const
-  ```
-    - Returns: `true` if the Version object is empty
-    - Returns: `false` if the Version object is not empty
-- ```cpp
-  bool operator<(const Version& compare) const
-  ```
-    - Accepts: The version object to compare to this object, compare.
-    - Returns: `true` if this < compare.
-    - Returns: `false` if this >= compare.
-- ```cpp
-  bool operator<=(const Version& compare) const
-  ```
-    - Accepts: The version object to compare to this object, compare.
-    - Returns: `true` if this <= compare.
-    - Returns: `false` if this > compare.
-- ```cpp
-  bool operator>(const Version& compare) const
-  ```
-    - Accepts: The version object to compare to this object, compare.
-    - Returns: `true` if this > compare.
-    - Returns: `false` if this <= compare.
-- ```cpp
-  bool operator>=(const Version& compare) const
-  ```
-    - Accepts: The version object to compare to this object, compare.
-    - Returns: `true` if this >= compare.
-    - Returns: `false` if this < compare.
-- ```cpp
-  bool operator==(const Version& compare) const
-  ```
-    - Accepts: The version object to compare to this object, compare.
-    - Returns: `true` if this == compare.
-    - Returns: `false` if this != compare.
-- ```cpp
-  bool operator!=(const Version& compare) const
-  ```
-    - Accepts: The version object to compare to this object, compare.
-    - Returns: `true` if this != compare.
-    - Returns: `false` if this == compare.
-- ```cpp
-  friend std::ostream& operator<<(std::ostream& os, const Version& version)
-  ```
-    - Accepts: The ostream to output the version to, os, and the Version object to output, version.
-    - Returns: A reference to the ostream object accepted by the function.
-
-## VersionType
-Description: Types of a version
-
-Interface: [versiontype.h](/include/versiontype.h)
-
-Type: `enum class`
-
-Path: `Nickvision::Aura::VersionType`
-
-### Values
-- ```cpp
-  Stable = 0
-  ```
-    - Represents a stable version
-- ```cpp
-  Preview = 1
-  ```
-    - Represents a preview (dev) version

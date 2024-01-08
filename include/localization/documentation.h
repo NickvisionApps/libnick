@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace Nickvision::Aura::Localization::Documentation
+namespace Nickvision::Localization::Documentation
 {
 	/**
 	 * @brief Gets the url for a documentation page.

@@ -48,7 +48,7 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: cmake --install . --prefix "${{github.workspace}}/install"
       - name: "Test"
-        run: ${{github.workspace}}/build/Release/libaura_test.exe
+        run: ${{github.workspace}}/build/Release/libnick_test.exe
       - name: Upload
         uses: actions/upload-artifact@v3
         with:

@@ -1,4 +1,4 @@
-# Nickvision::Aura::Network
+# Nickvision::Network
 
 This module contains objects for managing a system's network state.
 
@@ -14,17 +14,17 @@ Interface: [networkmonitor.h](/include/network/networkmonitor.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Network::NetworkMonitor`
+Path: `Nickvision::Network::NetworkMonitor`
 
 ### Member Variables
 - ```
-  Nickvision::Aura::Network::NetworkState ConnectionState: get
+  Nickvision::Network::NetworkState ConnectionState: get
   ```
     - The state of the system's network connection.
 
 ### Events
 - ```
-  Event<Nickvision::Aura::Network::NetworkStateChangedEventArgs> StateChanged
+  Event<Nickvision::Network::NetworkStateChangedEventArgs> StateChanged
   ```
     - Invoked when the system's network state is changed.
 
@@ -75,7 +75,7 @@ Interface: [networkstate.h](/include/network/networkstate.h)
 
 Type: `enum class`
 
-Path: `Nickvision::Aura::Network::NetworkState`
+Path: `Nickvision::Network::NetworkState`
 
 ### Values
 - ```
@@ -98,7 +98,7 @@ Interface: [networkstatechangedeventargs.h](/include/network/networkstatechanged
 
 Type: `class`
 
-Path: `Nickvision::Aura::Network::NetworkStateChangedEventArgs`
+Path: `Nickvision::Network::NetworkStateChangedEventArgs`
 
 ## Member Variables
 - ```

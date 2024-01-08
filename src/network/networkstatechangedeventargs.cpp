@@ -1,6 +1,6 @@
 #include "network/networkstatechangedeventargs.h"
 
-namespace Nickvision::Aura::Network
+namespace Nickvision::Network
 {
 	NetworkStateChangedEventArgs::NetworkStateChangedEventArgs(NetworkState state) noexcept
 		: m_state{ state }

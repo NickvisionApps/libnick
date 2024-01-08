@@ -14,7 +14,7 @@
 #include <uuid/uuid.h>
 #endif
 
-namespace Nickvision::Aura
+namespace Nickvision
 {
 	std::string StringHelpers::toLower(std::string s) noexcept
 	{

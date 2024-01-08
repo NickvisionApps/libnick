@@ -17,19 +17,25 @@ if (POLICY CMP0141)
 	set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-#libaura Definition
-project ("libaura" LANGUAGES C CXX VERSION 2024.1.2 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+#libnick Definition
+project ("libnick" LANGUAGES C CXX VERSION 2024.1.3 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
-#libaura Setup
+#libnick Setup
 add_compile_definitions(SQLITE_HAS_CODEC)
 if(LINUX)
 	add_compile_definitions(HAVE_USLEEP)
 endif()
 add_library (${PROJECT_NAME}
+	"src/aura/appinfo.cpp"
+	"src/aura/aura.cpp"
+	"src/aura/configurationbase.cpp"
+	"src/aura/interprocesscommunicator.cpp"
 	"src/filesystem/filesystemchangedeventargs.cpp"
 	"src/filesystem/filesystemwatcher.cpp"
+	"src/filesystem/systemdirectories.cpp"
+	"src/filesystem/userdirectories.cpp"
 	"src/helpers/stringhelpers.cpp"
 	"src/helpers/webhelpers.cpp"
 	"src/keyring/credential.cpp"
@@ -50,14 +56,8 @@ add_library (${PROJECT_NAME}
 	"src/notifications/shellnotificationsenteventargs.cpp"
 	"src/taskbar/taskbaritem.cpp"
 	"src/update/updater.cpp"
-	"src/appinfo.cpp"
-	"src/aura.cpp"
-	"src/configurationbase.cpp"
-	"src/interprocesscommunicator.cpp"
-	"src/sqlite3.c"
-	"src/systemdirectories.cpp"
-	"src/userdirectories.cpp"
-	"src/version.cpp")
+	"src/update/version.cpp"
+	"src/sqlite3.c")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>" "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION "${PROJECT_VERSION}" SOVERSION "${PROJECT_VERSION}")
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING "${PROJECT_VERSION}")
@@ -67,7 +67,7 @@ else()
 	target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-#libaura Packages
+#libnick Packages
 find_package(Boost REQUIRED COMPONENTS locale)
 find_package(CURL REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
@@ -91,7 +91,7 @@ elseif(LINUX)
 	target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret unofficial::UUID::uuid)
 endif()
 
-#libaura Install
+#libnick Install
 configure_file("${CMAKE_SOURCE_DIR}/cmake/${PROJECT_NAME}.pc.in" "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}.pc" @ONLY)
 configure_package_config_file("${CMAKE_SOURCE_DIR}/cmake/config.cmake.in" "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake" INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 write_basic_package_version_file("${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake" VERSION "${PROJECT_VERSION}" COMPATIBILITY AnyNewerVersion)
@@ -102,7 +102,7 @@ install(EXPORT "${PROJECT_NAME}Targets" FILE "${PROJECT_NAME}Targets.cmake" NAME
 install(FILES "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake" "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 export(EXPORT "${PROJECT_NAME}Targets" FILE "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake" NAMESPACE ${PROJECT_NAME}::)
 
-#libaura Test
+#libnick Test
 if (NOT BUILD_TESTING STREQUAL OFF)
 	add_executable(${PROJECT_NAME}_test
 		"tests/auratests.cpp"

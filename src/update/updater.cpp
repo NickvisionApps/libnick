@@ -4,15 +4,17 @@
 #include <stdexcept>
 #include <vector>
 #include <json/json.h>
-#include "aura.h"
-#include "userdirectories.h"
+#include "aura/aura.h"
+#include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
 #include "helpers/webhelpers.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
-namespace Nickvision::Aura::Update
+using namespace Nickvision::Filesystem;
+
+namespace Nickvision::Update
 {
 	Updater::Updater(std::string githubRepoUrl)
 		: m_latestStableReleaseId{ -1 },
@@ -20,7 +22,7 @@ namespace Nickvision::Aura::Update
 	{
 		if (!WebHelpers::isValidWebsite(githubRepoUrl))
 		{
-			githubRepoUrl = Aura::getActive().getAppInfo().getSourceRepo();
+			githubRepoUrl = Aura::Aura::getActive().getAppInfo().getSourceRepo();
 			if (!WebHelpers::isValidWebsite(githubRepoUrl))
 			{
 				throw std::invalid_argument("The source repo of the active Aura::AppInfo is invalid.");

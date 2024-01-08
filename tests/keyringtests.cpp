@@ -2,7 +2,7 @@
 #include "keyring/keyring.h"
 #include "keyring/keyringdialogcontroller.h"
 
-using namespace Nickvision::Aura::Keyring;
+using namespace Nickvision::Keyring;
 
 class KeyringTest : public testing::Test
 {

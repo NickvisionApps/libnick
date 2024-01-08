@@ -7,10 +7,10 @@
 #define GETTEXT_CONTEXT_SEPARATOR "\004"
 #define _(String) gettext(String)
 #define _n(String, StringPlural, N) ngettext(String, StringPlural, N)
-#define _p(Context, String) ::Nickvision::Aura::Localization::Gettext::pgettext(Context GETTEXT_CONTEXT_SEPARATOR String, String)
-#define _pn(Context, String, StringPlural, N) ::Nickvision::Aura::Localization::Gettext::pngettext(Context GETTEXT_CONTEXT_SEPARATOR String, String, StringPlural, N)
+#define _p(Context, String) ::Nickvision::Localization::Gettext::pgettext(Context GETTEXT_CONTEXT_SEPARATOR String, String)
+#define _pn(Context, String, StringPlural, N) ::Nickvision::Localization::Gettext::pngettext(Context GETTEXT_CONTEXT_SEPARATOR String, String, StringPlural, N)
 
-namespace Nickvision::Aura::Localization::Gettext
+namespace Nickvision::Localization::Gettext
 {
 	/**
 	 * @brief Initializes the gettext system. This function should only be called once, regradless of with different domain names.

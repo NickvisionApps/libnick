@@ -8,7 +8,7 @@ using namespace Gdiplus;
 #include <stdlib.h>
 #endif
 
-namespace Nickvision::Aura::Taskbar
+namespace Nickvision::Taskbar
 {
 	TaskbarItem::TaskbarItem() noexcept
 		: m_progressState{ ProgressState::NoProgress },

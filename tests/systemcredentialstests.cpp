@@ -2,7 +2,7 @@
 #include "keyring/credential.h"
 #include "keyring/systemcredentials.h"
 
-using namespace Nickvision::Aura::Keyring;
+using namespace Nickvision::Keyring;
 
 static const std::string randCredentialName{ "RandomAuraTestCredential1" };
 

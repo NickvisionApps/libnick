@@ -1,6 +1,6 @@
 #include "filesystem/filesystemchangedeventargs.h"
 
-namespace Nickvision::Aura::Filesystem
+namespace Nickvision::Filesystem
 {
 	FileSystemChangedEventArgs::FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why) noexcept
 		: m_path{ path },

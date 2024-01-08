@@ -4,7 +4,7 @@
 #include "networkstate.h"
 #include "events/eventargs.h"
 
-namespace Nickvision::Aura::Network
+namespace Nickvision::Network
 {
 	/**
 	 * @brief Event args for when the network state is changed

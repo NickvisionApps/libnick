@@ -3,7 +3,7 @@
 
 #include <filesystem>
 
-namespace Nickvision::Aura::UserDirectories
+namespace Nickvision::Filesystem::UserDirectories
 {
 	/*
 	 * @brief Gets the user's home directory

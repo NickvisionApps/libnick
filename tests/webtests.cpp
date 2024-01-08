@@ -2,7 +2,7 @@
 #include <filesystem>
 #include "helpers/webhelpers.h"
 
-using namespace Nickvision::Aura;
+using namespace Nickvision;
 
 TEST(WebTests, ValidWebsite1)
 {

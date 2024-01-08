@@ -2,7 +2,7 @@
 #include "keyring/passwordgenerator.h"
 #include "keyring/store.h"
 
-using namespace Nickvision::Aura::Keyring;
+using namespace Nickvision::Keyring;
 
 class StoreTest : public testing::Test
 {

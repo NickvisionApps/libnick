@@ -1,7 +1,7 @@
 #ifndef PROGRESSSTATE_H
 #define PROGRESSSTATE_H
 
-namespace Nickvision::Aura::Taskbar
+namespace Nickvision::Taskbar
 {
 	/**
 	 * @brief States of progress on a taskbar button.

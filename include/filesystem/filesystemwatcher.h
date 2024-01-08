@@ -12,7 +12,7 @@
 #include <windows.h>
 #endif
 
-namespace Nickvision::Aura::Filesystem
+namespace Nickvision::Filesystem
 {
 	/**
 	 * @brief A watcher of a file system folder.

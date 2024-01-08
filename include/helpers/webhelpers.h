@@ -6,7 +6,7 @@
 #include <string>
 #include <curl/curl.h>
 
-namespace Nickvision::Aura::WebHelpers
+namespace Nickvision::WebHelpers
 {
 	typedef std::function<int(curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)> CurlProgressFunction;
 

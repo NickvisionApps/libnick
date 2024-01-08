@@ -8,7 +8,7 @@
 #include <libsecret/secret.h>
 #endif
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 #ifdef __linux__
 	static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };

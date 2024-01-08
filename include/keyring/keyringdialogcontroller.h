@@ -8,7 +8,7 @@
 #include "credentialcheckstatus.h"
 #include "keyring.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	/**
 	 * @brief A controller for a KeyringDialog. 

@@ -14,7 +14,7 @@
 #include "credential.h"
 #include "sqlite3.h"
 
-namespace Nickvision::Aura::Keyring
+namespace Nickvision::Keyring
 {
 	/**
 	 * @brief A store object for credentials. Backed by sqlcipher.

@@ -1,7 +1,9 @@
-#include "configurationbase.h"
+#include "aura/configurationbase.h"
 #include <fstream>
 #include <stdexcept>
-#include "userdirectories.h"
+#include "filesystem/userdirectories.h"
+
+using namespace Nickvision::Filesystem;
 
 namespace Nickvision::Aura
 {

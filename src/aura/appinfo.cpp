@@ -1,7 +1,9 @@
-#include "appinfo.h"
+#include "aura/appinfo.h"
 #include <sstream>
 #include <maddy/parser.h>
 #include "helpers/stringhelpers.h"
+
+using namespace Nickvision::Update;
 
 namespace Nickvision::Aura
 {

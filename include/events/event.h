@@ -8,7 +8,7 @@
 #include <vector>
 #include "eventargs.h"
 
-namespace Nickvision::Aura::Events
+namespace Nickvision::Events
 {
 	template<typename T>
 	concept DerivedEventArgs = std::is_base_of_v<EventArgs, T>;

@@ -13,7 +13,7 @@
 #include "notifyiconmenu.h"
 #include "shellnotificationsenteventargs.h"
 
-namespace Nickvision::Aura::Notifications
+namespace Nickvision::Notifications
 {
 	/**
 	 * @brief An icon for the system tray.

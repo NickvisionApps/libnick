@@ -3,7 +3,7 @@
 
 #include "eventargs.h"
 
-namespace Nickvision::Aura::Events
+namespace Nickvision::Events
 {
 	/**
 	 * @brief An event argument that contains a single parameter.

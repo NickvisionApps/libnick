@@ -2,17 +2,17 @@
 #include "notifications/notifyicon.h"
 #include <stdexcept>
 #include <strsafe.h>
-#include "aura.h"
+#include "aura/aura.h"
 #include "helpers/stringhelpers.h"
 
-namespace Nickvision::Aura::Notifications
+namespace Nickvision::Notifications
 {
 	std::map<HWND, NotifyIcon*> NotifyIcon::m_icons = {};
 
 	NotifyIcon::NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu, bool hidden)
 		: m_className{ StringHelpers::newGuid() },
 		m_isHidden{ hidden },
-		m_tooltip{ Aura::getActive().getAppInfo().getName() },
+		m_tooltip{ Aura::Aura::getActive().getAppInfo().getName() },
 		m_contextMenu{ contextMenu },
 		m_hwnd{ nullptr }
 	{

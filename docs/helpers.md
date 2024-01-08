@@ -1,4 +1,4 @@
-# Nickvision::Aura::Helpers
+# Nickvision::Helpers
 
 This module contains various helper namespaces that making working with C++ a bit less painful.
 
@@ -13,7 +13,7 @@ Interface: [stringhelpers.h](/include/helpers/stringhelpers.h)
 
 Type: `namespace`
 
-Path: `Nickvision::Aura::StringHelpers`
+Path: `Nickvision::StringHelpers`
 
 ### Functions
 - ```cpp 
@@ -94,7 +94,7 @@ Interface: [webhelpers.h](/include/helpers/webhelpers.h)
 
 Type: `namespace`
 
-Path: `Nickvision::Aura::WebHelpers`
+Path: `Nickvision::WebHelpers`
 
 ### Functions
 - ```cpp

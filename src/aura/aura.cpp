@@ -1,14 +1,16 @@
-#include "aura.h"
+#include "aura/aura.h"
 #include <cstdlib>
 #include <filesystem>
 #include <mutex>
 #include <curl/curl.h>
-#include "systemdirectories.h"
+#include "filesystem/systemdirectories.h"
 #include "localization/gettext.h"
 #include "helpers/stringhelpers.h"
 #ifdef __linux__
 #include <stdlib.h>
 #endif
+
+using namespace Nickvision::Filesystem;
 
 namespace Nickvision::Aura
 {

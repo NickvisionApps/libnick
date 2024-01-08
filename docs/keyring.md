@@ -1,4 +1,4 @@
-# Nickvision::Aura::Keyring
+# Nickvision::Keyring
 
 The module contains objects for storing and managing credentials, either through a database file or within a system's credential (secret) manager.
 
@@ -20,7 +20,7 @@ Interface: [credential.h](/include/keyring/credential.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Keyring::Credential`
+Path: `Nickvision::Keyring::Credential`
 
 ### Member Variables
 - ```
@@ -84,7 +84,7 @@ Interface: [credentialcheckstatus.h](/include/keyring/credentialcheckstatus.h)
 
 Type: `enum class` with `DEFINE_ENUM_FLAG_OPERATORS`
 
-Path: `Nickvision::Aura::Keyring::CredentialCheckStatus`
+Path: `Nickvision::Keyring::CredentialCheckStatus`
 
 ### Values
 - ```cpp
@@ -111,7 +111,7 @@ Interface: [keyring.h](/include/keyring/keyring.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Keyring::Keyring`
+Path: `Nickvision::Keyring::Keyring`
 
 ### Member Variables
 - ```
@@ -188,7 +188,7 @@ Interface: [keyringdialogcontroller.h](/include/keyring/keyringdialogcontroller.
 
 Type: `class`
 
-Path: `Nickvision::Aura::Keyring::KeyringDialogController`
+Path: `Nickvision::Keyring::KeyringDialogController`
 
 ### Member Variables
 - ```
@@ -257,7 +257,7 @@ Interface: [passwordcontent.h](/include/keyring/passwordcontent.h)
 
 Type: `enum class` with `DEFINE_ENUM_FLAG_OPERATORS`
 
-Path: `Nickvision::Aura::Keyring::PasswordContent`
+Path: `Nickvision::Keyring::PasswordContent`
 
 ### Values
 - ```
@@ -284,11 +284,11 @@ Interface: [passwordgenerator.h](/include/keyring/passwordgenerator.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Keyring::PasswordGenerator`
+Path: `Nickvision::Keyring::PasswordGenerator`
 
 ### Member Variables
 - ```
-  Nickvision::Aura::Keyring::PasswordContent ContentFlags: get, set
+  Nickvision::Keyring::PasswordContent ContentFlags: get, set
   ``` 
     - The flags of possible characters in a generated password.
 
@@ -311,7 +311,7 @@ Interface: [passwordstrength.h](/include/keyring/passwordstrength.h)
 
 Type: `enum class`
 
-Path: `Nickvision::Aura::Keyring::PasswordStrength`
+Path: `Nickvision::Keyring::PasswordStrength`
 
 ### Values
 - ```
@@ -353,7 +353,7 @@ Interface: [store.h](/include/keyring/store.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Keyring::Store`
+Path: `Nickvision::Keyring::Store`
 
 ### Member Variables
 - ```
@@ -450,7 +450,7 @@ Interface: [systemcredentials.h](/include/keyring/systemcredentials.h)
 
 Type: `namespace`
 
-Path: `Nickvision::Aura::Keyring::SystemCredentials`
+Path: `Nickvision::Keyring::SystemCredentials`
 
 ### Functions
 - ```cpp

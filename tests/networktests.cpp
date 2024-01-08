@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include "aura.h"
+#include "aura/aura.h"
 #include "network/networkmonitor.h"
 
 using namespace Nickvision::Aura;
-using namespace Nickvision::Aura::Network;
+using namespace Nickvision::Network;
 
 TEST(NetworkTests, ConnectedGlobal)
 {
