@@ -13,8 +13,6 @@ Documentation for this library and its modules can be found [here](/docs).
 ## Dependencies
 The following are a list of dependencies used by libnick. 
 
-Following the [build instructions](#building-and-installing) below using vcpkg, will ensure these dependencies are installed properly for your platform.
-
 ### All Platforms
 - boost
 - gtest
@@ -31,7 +29,20 @@ The above dependencies must be installed, plus the following for linux systems:
 - libsecret
 - libuuid
 
-## Building and Installing
+## Consuming libnick via vcpkg
+libnick is available through `vcpkg`. 
+
+Simply install and configure vcpkg for your system, and run:
+```
+vcpkg install libnick
+```
+You can then use libnick from cmake with the following:
+```
+find_package(libnick CONFIG REQUIRED)
+target_link_libraries(main PRIVATE libnick::libnick)
+```
+
+## Building and Installing Manually
 libnick uses `vcpkg` to manage its dependencies and `cmake` as its build system.
 
 Ensure both `vcpkg` and `cmake` are installed on your system before building and installing libnick.
@@ -41,10 +52,10 @@ A C++20 compiler is also required to build libnick.
 ### Configuring vcpkg
 1. Set the `VCPKG_ROOT` environment variable to the path of your vcpkg installation's root directory.
 #### Windows
-1. Set `VCPKG_DEFAULT_TRIPLET` to `x64-windows`
+1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-windows`
 1. Run `vcpkg install boost-locale curl gettext-libintl gtest jsoncpp maddy openssl`
 #### Linux
-1. Set `VCPKG_DEFAULT_TRIPLET` to `x64-linux`
+1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
 1. Run `vcpkg install boost-locale curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
 
 ### Building
@@ -67,6 +78,8 @@ A C++20 compiler is also required to build libnick.
     - Replace `PATH_TO_INSTALL_DIR` with the path to a folder to install libnick to. 
     - This is usually a dependencies folder set up by the programmer, added to the PATH variable, to allow linking to said dependencies.
         - On linux, `PATH_TO_INSTALL_DIR` would usually be `/usr`.
-    - This command will export and install libnick cmake targets allowing you to simply use libnick in other cmake projects by adding:
-        - `find_package(libnick CONFIG REQUIRED)`
-        - `target_link_libraries(main PRIVATE libnick::libnick)`
+    - This command will export and install libnick cmake targets allowing you to simply use libnick in other cmake projects with the following:
+        ```
+        find_package(libnick CONFIG REQUIRED)
+        target_link_libraries(main PRIVATE libnick::libnick)
+        ```
