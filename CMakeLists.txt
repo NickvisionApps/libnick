@@ -18,7 +18,7 @@ if (POLICY CMP0141)
 endif()
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2024.1.4 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2024.1.5 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
