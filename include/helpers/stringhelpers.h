@@ -103,12 +103,13 @@ namespace Nickvision::StringHelpers
 	 */
 	std::wstring toWstring(const std::string& s) noexcept;
 	/**
-	 * @brief Concatenates the elements of a string list using the specified delimiter between each element.
+	 * @brief Concatenates the elements of a string list using the specified separator between each element.
 	 * @param values The list of strings to join
 	 * @param delimiter The string to use as a separator between each element
+	 * @param delimitLast Whether or not to include the separator for the last joined element
 	 * @return A single string that consists of all elements of the string list separated by the delimiter
 	 */
-	std::string join(const std::vector<std::string>& values, const std::string& delimiter) noexcept;
+	std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true) noexcept;
 
 }
 

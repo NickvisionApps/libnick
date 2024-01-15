@@ -169,12 +169,17 @@ namespace Nickvision
 		return converter.from_bytes(s);
 	}
 
-	std::string StringHelpers::join(const std::vector<std::string>& values, const std::string& delimiter) noexcept
+	std::string StringHelpers::join(const std::vector<std::string>& values, const std::string& separator, bool separateLast) noexcept
 	{
 		std::stringstream builder;
-		for (const std::string& value : values)
+		for(size_t i = 0; i < values.size(); i++)
 		{
-			builder << value << delimiter;
+			const std::string& value{ values[i] };
+			builder << value;
+			if(i != values.size() - 1 || (i == values.size() - 1 && separateLast))
+			{
+				builder << separator;
+			}
 		}
 		return builder.str();
 	}

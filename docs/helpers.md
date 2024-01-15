@@ -87,9 +87,9 @@ Path: `Nickvision::StringHelpers`
     - Returns: s as a wide string.
     - Ex: `StringHelpers::toWstring("abc")` will return `L"abc"`.
 - ```cpp
-  std::string join(const std::vector<std::string>& values, const std::string& delimiter)
+  std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true)
   ```
-    - Accepts: The list of strings to join, values, and the string to insert as a separator between each value, delimiter.
+    - Accepts: The list of strings to join, values, the string to insert as a separator between each value, separator, and whether or not to include the separator for the last element, separateLast.
     - Returns: A single string that consists of all elements of values separated by delimiter.
     - Ex: `StringHelpers::join({ "hi", "bye" }, "|")` will return `"hi|bye"`.
 
