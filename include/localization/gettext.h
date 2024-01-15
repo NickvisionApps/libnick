@@ -6,9 +6,9 @@
 
 #define GETTEXT_CONTEXT_SEPARATOR "\004"
 #define _(String) gettext(String)
-#define _n(String, StringPlural, N) ngettext(String, StringPlural, N)
+#define _n(String, StringPlural, N) ngettext(String, StringPlural, static_cast<unsigned long>(N))
 #define _p(Context, String) ::Nickvision::Localization::Gettext::pgettext(Context GETTEXT_CONTEXT_SEPARATOR String, String)
-#define _pn(Context, String, StringPlural, N) ::Nickvision::Localization::Gettext::pngettext(Context GETTEXT_CONTEXT_SEPARATOR String, String, StringPlural, N)
+#define _pn(Context, String, StringPlural, N) ::Nickvision::Localization::Gettext::pngettext(Context GETTEXT_CONTEXT_SEPARATOR String, String, StringPlural, static_cast<unsigned long>(N))
 
 namespace Nickvision::Localization::Gettext
 {
