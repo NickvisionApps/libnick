@@ -74,3 +74,13 @@ TEST(StringTests, UrlValidity4)
 {
 	ASSERT_FALSE(StringHelpers::isValidUrl("asderm"));
 }
+
+TEST(StringTests, Join1)
+{
+	ASSERT_EQ(StringHelpers::join({ "hi", "bye" }, "|"), "hi|bye");
+}
+
+TEST(StringTests, Join2)
+{
+	ASSERT_EQ(StringHelpers::join({ "hi" }, "\n"), "hi\n");
+}

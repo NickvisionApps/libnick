@@ -86,6 +86,12 @@ Path: `Nickvision::StringHelpers`
     - Accepts: A non-wide string parameter, s.
     - Returns: s as a wide string.
     - Ex: `StringHelpers::toWstring("abc")` will return `L"abc"`.
+- ```cpp
+  std::string join(const std::vector<std::string>& values, const std::string& delimiter)
+  ```
+    - Accepts: The list of strings to join, values, and the string to insert as a separator between each value, delimiter.
+    - Returns: A single string that consists of all elements of values separated by delimiter.
+    - Ex: `StringHelpers::join({ "hi", "bye" }, "|")` will return `"hi|bye"`.
 
 ## WebHelpers
 Description: Helper functions for working with websites

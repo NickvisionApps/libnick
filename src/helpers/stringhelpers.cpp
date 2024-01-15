@@ -168,4 +168,14 @@ namespace Nickvision
 		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 		return converter.from_bytes(s);
 	}
+
+	std::string StringHelpers::join(const std::vector<std::string>& values, const std::string& delimiter) noexcept
+	{
+		std::stringstream builder;
+		for (const std::string& value : values)
+		{
+			builder << value << delimiter;
+		}
+		return builder.str();
+	}
 }
