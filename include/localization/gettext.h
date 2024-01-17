@@ -5,8 +5,8 @@
 #include <libintl.h>
 
 #define GETTEXT_CONTEXT_SEPARATOR "\004"
-#define _(String) gettext(String)
-#define _n(String, StringPlural, N) ngettext(String, StringPlural, static_cast<unsigned long>(N))
+#define _(String) dgettext(::Nickvision::Localization::Gettext::getDomainName().c_str(), String)
+#define _n(String, StringPlural, N) dngettext(::Nickvision::Localization::Gettext::getDomainName().c_str(), String, StringPlural, static_cast<unsigned long>(N))
 #define _p(Context, String) ::Nickvision::Localization::Gettext::pgettext(Context GETTEXT_CONTEXT_SEPARATOR String, String)
 #define _pn(Context, String, StringPlural, N) ::Nickvision::Localization::Gettext::pngettext(Context GETTEXT_CONTEXT_SEPARATOR String, String, StringPlural, static_cast<unsigned long>(N))
 
@@ -18,6 +18,11 @@ namespace Nickvision::Localization::Gettext
 	 * @return True if initialized, else false
 	 */
 	bool init(const std::string& domainName) noexcept;
+	/**
+	 * @brief Gets the domain name used for gettext translations.
+	 * @return The gettext domain name
+	 */
+	const std::string& getDomainName() noexcept;
 	/**
 	 * @brief Translates a message for a given context.
 	 * @param context The context of the message

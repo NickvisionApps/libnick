@@ -64,6 +64,10 @@ Path: `Nickvision::Localization::Gettext`
     - Returns: `false` if there was an error initializing the gettext system.
     - Note: This function should only be called once, regradless of with different domain names.
 - ```cpp
+  const std::string& getDomainName();
+  ```
+    - Returns: The domain name used for gettext translations.
+- ```cpp
   const char* pgettext(const char* context, const char* msg)
   ```
    - Accepts: The context of a string to translate, context, and the string to translate, msg.

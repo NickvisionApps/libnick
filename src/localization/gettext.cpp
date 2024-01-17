@@ -4,23 +4,37 @@
 
 namespace Nickvision::Localization
 {
+	static std::string m_domainName;
+
 	bool Gettext::init(const std::string& domainName) noexcept
 	{
-		bool res{ true };
-		setlocale(LC_ALL, "");
+		static bool initialized{ false };
+		if(!initialized)
+		{
+			bool res{ true };
+			setlocale(LC_ALL, "");
+			m_domainName = domainName;
 #ifdef _WIN32
-		res = res && (wbindtextdomain(domainName.c_str(), std::filesystem::current_path().c_str()) != nullptr);
+			res = res && (wbindtextdomain(m_domainName.c_str(), std::filesystem::current_path().c_str()) != nullptr);
 #elif defined(__linux__)
-		res = res && (bindtextdomain(domainName.c_str(), std::filesystem::current_path().c_str()) != nullptr);
-		res = res && (bind_textdomain_codeset(domainName.c_str(), "UTF-8") != nullptr);
+			res = res && (bindtextdomain(m_domainName.c_str(), std::filesystem::current_path().c_str()) != nullptr);
+			res = res && (bind_textdomain_codeset(m_domainName.c_str(), "UTF-8") != nullptr);
 #endif
-		res = res && (textdomain(domainName.c_str()) != nullptr);
-		return res;
+			res = res && (textdomain(m_domainName.c_str()) != nullptr);
+			initialized = true;
+			return res;
+		}
+		return true;
+	}
+
+	const std::string& Gettext::getDomainName() noexcept
+	{
+		return m_domainName;
 	}
 
 	const char* Gettext::pgettext(const char* context, const char* msg) noexcept
 	{
-		const char* translation{ dcgettext(nullptr, context, LC_MESSAGES) };
+		const char* translation{ dcgettext(m_domainName.c_str(), context, LC_MESSAGES) };
 		if (translation == context)
 		{
 			return msg;
@@ -30,7 +44,7 @@ namespace Nickvision::Localization
 
 	const char* Gettext::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n) noexcept
 	{
-		const char* translation{ dcngettext(nullptr, context, msgPlural, n, LC_MESSAGES) };
+		const char* translation{ dcngettext(m_domainName.c_str(), context, msgPlural, n, LC_MESSAGES) };
 		if (translation == context || translation == msgPlural)
 		{
 			return n == 1 ? msg : msgPlural;
