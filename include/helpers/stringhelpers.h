@@ -3,10 +3,6 @@
 
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 
-#ifndef UUID_SYSTEM_GENERATOR 
-#define UUID_SYSTEM_GENERATOR
-#endif
-
 #include <string>
 #include <type_traits>
 #include <vector>

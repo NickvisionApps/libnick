@@ -22,12 +22,12 @@ The following are a list of dependencies used by libnick.
 - maddy
 - openssl
     - Used for sqlcipher, as libnick manually includes and compiles sqlcipher.
-- stduuid
 
 ### Linux Only
 The above dependencies must be installed, plus the following for linux systems:
 - glib
 - libsecret
+- libuuid
 
 ## Consuming libnick via vcpkg
 libnick is available through `vcpkg`. 
