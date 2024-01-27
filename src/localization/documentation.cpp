@@ -27,7 +27,7 @@ namespace Nickvision::Localization
             std::vector<std::string> langs;
             for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(std::filesystem::current_path()))
             {
-                if (e.is_directory() && std::filesystem::exists(e.path() / Gettext::getDomainName() / ".mo"))
+                if (e.is_directory() && std::filesystem::exists(e.path() / (Gettext::getDomainName() + ".mo")))
                 {
                     langs.push_back(e.path().filename().string());
                 }
