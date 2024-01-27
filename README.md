@@ -1,6 +1,6 @@
 # libnick
 
-<img width='96' height='96' alt='Logo' src='resources/logo.png'/>
+<img width='96' height='96' alt='Logo' src='resources/libnick-r.svg'/>
 
 **A cross-platform base for native Nickvision applications.**
 

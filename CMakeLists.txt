@@ -21,6 +21,7 @@ endif()
 project ("libnick" LANGUAGES C CXX VERSION 2024.1.6 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
+include(CTest)
 
 #libnick Setup
 add_compile_definitions(SQLITE_HAS_CODEC)
@@ -103,7 +104,7 @@ install(FILES "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake" "${CMAKE_B
 export(EXPORT "${PROJECT_NAME}Targets" FILE "${CMAKE_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake" NAMESPACE ${PROJECT_NAME}::)
 
 #libnick Test
-if (NOT BUILD_TESTING STREQUAL OFF)
+if (BUILD_TESTING)
 	add_executable(${PROJECT_NAME}_test
 		"tests/auratests.cpp"
 		"tests/eventtests.cpp"
