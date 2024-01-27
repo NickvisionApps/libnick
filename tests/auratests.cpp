@@ -45,6 +45,7 @@ public:
 TEST_F(AuraTest, EnsureAura)
 {
 	ASSERT_NO_THROW(Aura::getActive());
+	std::cout << Aura::getExecutableDirectory() << std::endl;
 }
 
 TEST_F(AuraTest, SetAppInfo)

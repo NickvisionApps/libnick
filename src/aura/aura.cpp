@@ -6,7 +6,9 @@
 #include "filesystem/systemdirectories.h"
 #include "localization/gettext.h"
 #include "helpers/stringhelpers.h"
-#ifdef __linux__
+#ifdef _WIN32
+#include <windows.h>
+#elif defined(__linux__)
 #include <stdlib.h>
 #endif
 
@@ -63,6 +65,21 @@ namespace Nickvision::Aura
 		return *m_instance;
 	}
 
+	std::filesystem::path Aura::getExecutableDirectory() noexcept
+	{
+#ifdef _WIN32
+		char pth[MAX_PATH];
+		DWORD len{ GetModuleFileNameA(nullptr, pth, sizeof(pth)) };
+		if(len > 0)
+		{
+			return std::filesystem::path(std::string(pth, len)).parent_path();
+		}
+#elif defined(__linux__)
+		return std::filesystem::canonical("/proc/self/exe").parent_path();
+#endif
+		return {};
+	}
+
 	std::string Aura::getEnvVar(const std::string& key) noexcept
 	{
 		char* var{ std::getenv(key.c_str()) };
@@ -102,7 +119,7 @@ namespace Nickvision::Aura
 			}
 		}
 		locations[dependency] = std::filesystem::path();
-		std::filesystem::path path{ std::filesystem::current_path() / dependency };
+		std::filesystem::path path{ getExecutableDirectory() / dependency };
 		if (std::filesystem::exists(path))
 		{
 			locations[dependency] = path;

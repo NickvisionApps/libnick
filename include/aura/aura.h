@@ -87,6 +87,11 @@ namespace Nickvision::Aura
 		 */
 		static Aura& getActive();
 		/**
+		 * @brief Gets the path of the executable's directory.
+		 * @return The executable's directory path
+		 */
+		static std::filesystem::path getExecutableDirectory() noexcept;
+		/**
 		 * @brief Gets a system environment variable.
 		 * @param key The environment variable to get
 		 * @return The environment variable if found, else empty string

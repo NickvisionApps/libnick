@@ -169,6 +169,10 @@ Path: `Nickvision::Aura::Aura`
     - Returns: The reference to the singleton `Aura` object.
     - Throws: `std::logic_error` if `Aura::init()` was not yet called.
 - ```cpp
+  std::filesystem::path getExecutableDirectory()
+  ```
+    - Returns: The path of the executable's directory.
+- ```cpp
   std::string getEnvVar(const std::string& key)
   ```
     - Accepts: The name of the environment variable, key.

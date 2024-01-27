@@ -54,6 +54,7 @@ TEST(StringTests, Guid1)
 	ASSERT_NO_THROW(s = StringHelpers::newGuid());
 	ASSERT_FALSE(s.empty());
 	ASSERT_TRUE(s.size() == 36);
+	std::cout << s << std::endl;
 }
 
 TEST(StringTests, UrlValidity1)
