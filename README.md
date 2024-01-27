@@ -65,19 +65,18 @@ A C++20 compiler is also required to build libnick.
 #### Windows
 1. From the `build` folder, run `cmake .. -G "Visual Studio 17 2022"`.
     - To skip building libnick's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
+    - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
 1. From the `build` folder, run `cmake --build . --config Release`.
 1. After these commands complete, libnick will be successfully built and its binaries can be found in the `Release` folder of the `build` folder.
 #### Linux
 1. From the `build` folder, run `cmake .. -DCMAKE_BUILD_TYPE=Release`.
     - To skip building libnick's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
+    - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
 1. From the `build` folder, run `cmake --build .`.
 1. After these commands complete, libnick will be successfully built and its binaries can be found in the `build` folder.
 
 ### Installing
-1. To install libnick to the system, from the `build` folder, run `cmake --install . --prefix "PATH_TO_INSTALL_DIR"`.
-    - Replace `PATH_TO_INSTALL_DIR` with the path to a folder to install libnick to. 
-    - This is usually a dependencies folder set up by the programmer, added to the PATH variable, to allow linking to said dependencies.
-        - On linux, `PATH_TO_INSTALL_DIR` would usually be `/usr`.
+1. To install libnick to the system, from the `build` folder, run `cmake --install .`.
     - This command will export and install libnick cmake targets allowing you to simply use libnick in other cmake projects with the following:
         ```
         find_package(libnick CONFIG REQUIRED)
