@@ -53,6 +53,7 @@ TEST(StringTests, Guid1)
 	std::string s;
 	ASSERT_NO_THROW(s = StringHelpers::newGuid());
 	ASSERT_FALSE(s.empty());
+	ASSERT_TRUE(s.size() == 36);
 }
 
 TEST(StringTests, UrlValidity1)

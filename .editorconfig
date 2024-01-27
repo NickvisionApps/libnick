@@ -1,0 +1,7 @@
+[*.{h,cpp,py,json,page,txt}]
+indent_style = space
+indent_size = 4
+
+[*.{xml,css,md,blp,yml}]
+indent_style = space
+indent_size = 2
