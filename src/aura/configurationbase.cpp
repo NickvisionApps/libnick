@@ -22,17 +22,17 @@ namespace Nickvision::Aura
 		}
 	}
 
-	const std::string& ConfigurationBase::getKey() const noexcept
+	const std::string& ConfigurationBase::getKey() const
 	{
 		return m_key;
 	}
 
-	Events::Event<Events::EventArgs>& ConfigurationBase::saved() noexcept
+	Events::Event<Events::EventArgs>& ConfigurationBase::saved()
 	{
 		return m_saved;
 	}
 
-	bool ConfigurationBase::save() noexcept
+	bool ConfigurationBase::save()
 	{
 		std::ofstream out{ m_path };
 		out << m_json;

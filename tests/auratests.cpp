@@ -17,7 +17,8 @@ enum class Theme
 class AppConfig : public ConfigurationBase
 {
 public:
-	AppConfig(const std::string& key) : ConfigurationBase(key) 
+	AppConfig(const std::string& key)
+        : ConfigurationBase{ key } 
 	{ 
 
 	}
@@ -38,14 +39,14 @@ class AuraTest : public testing::Test
 public:
 	static void SetUpTestSuite()
 	{
-		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
+		Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
 	}
 };
 
 TEST_F(AuraTest, EnsureAura)
 {
 	ASSERT_NO_THROW(Aura::getActive());
-	std::cout << Aura::getExecutableDirectory() << std::endl;
+	std::cout << Aura::getActive().getExecutableDirectory() << std::endl;
 }
 
 TEST_F(AuraTest, SetAppInfo)
@@ -82,15 +83,15 @@ TEST_F(AuraTest, ResetAppConfig)
 TEST_F(AuraTest, DependencyCheck)
 {
 #ifdef _WIN32
-	std::filesystem::path dependency{ Aura::findDependency("cmd") };
+	std::filesystem::path dependency{ Aura::getActive().findDependency("cmd") };
 #elif defined(__linux__)
-	std::filesystem::path dependency{ Aura::findDependency("ls") };
+	std::filesystem::path dependency{ Aura::getActive().findDependency("ls") };
 #endif
 	ASSERT_TRUE(!dependency.empty());
 	ASSERT_TRUE(std::filesystem::exists(dependency));
 	ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), NotificationSeverity::Success, "open", dependency.string() };
 #ifdef _WIN32
-	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
+	if (Aura::getActive().getEnvVar("GITHUB_ACTIONS").empty())
 	{
 		ASSERT_NO_THROW(ShellNotification::send(args, GetConsoleWindow()));
 	}

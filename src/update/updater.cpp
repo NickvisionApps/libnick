@@ -40,18 +40,36 @@ namespace Nickvision::Update
 		}
 	}
 
-	Version Updater::fetchCurrentStableVersion() noexcept
+    Updater::Updater(const Updater& u)
+    {
+        std::lock_guard<std::mutex> lock{ u.m_mutex };
+        m_repoOwner = u.m_repoOwner;
+        m_repoName = u.m_repoName;
+        m_latestStableReleaseId = u.m_latestStableReleaseId;
+        m_latestPreviewReleaseId = u.m_latestPreviewReleaseId;
+    }
+
+    Updater::Updater(Updater&& u) noexcept
+    {
+        std::lock_guard<std::mutex> lock{ u.m_mutex };
+        m_repoOwner = std::move(u.m_repoOwner);
+        m_repoName = std::move(u.m_repoName);
+        m_latestStableReleaseId = std::move(u.m_latestStableReleaseId);
+        m_latestPreviewReleaseId = std::move(u.m_latestPreviewReleaseId);
+    }
+
+	Version Updater::fetchCurrentStableVersion()
 	{
 		return fetchCurrentVersion(VersionType::Stable);
 	}
 
-	Version Updater::fetchCurrentPreviewVersion() noexcept
+	Version Updater::fetchCurrentPreviewVersion()
 	{
 		return fetchCurrentVersion(VersionType::Preview);
 	}
 
 #ifdef _WIN32
-	bool Updater::windowsUpdate(VersionType versionType) noexcept
+	bool Updater::windowsUpdate(VersionType versionType)
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
@@ -89,7 +107,35 @@ namespace Nickvision::Update
 	}
 #endif
 
-	Version Updater::fetchCurrentVersion(VersionType versionType) noexcept
+    Updater& Updater::operator=(const Updater& u)
+    {
+        if (this != &u)
+        {
+            std::lock_guard<std::mutex> lock{ m_mutex };
+            std::lock_guard<std::mutex> lock2{ u.m_mutex };
+            m_repoOwner = u.m_repoOwner;
+            m_repoName = u.m_repoName;
+            m_latestStableReleaseId = u.m_latestStableReleaseId;
+            m_latestPreviewReleaseId = u.m_latestPreviewReleaseId;
+        }
+        return *this;
+    }
+
+    Updater& Updater::operator=(Updater&& u) noexcept
+    {
+        if (this != &u)
+        {
+            std::lock_guard<std::mutex> lock{ m_mutex };
+            std::lock_guard<std::mutex> lock2{ u.m_mutex };
+            m_repoOwner = std::move(u.m_repoOwner);
+            m_repoName = std::move(u.m_repoName);
+            m_latestStableReleaseId = std::move(u.m_latestStableReleaseId);
+            m_latestPreviewReleaseId = std::move(u.m_latestPreviewReleaseId);
+        }
+        return *this;
+    }
+
+	Version Updater::fetchCurrentVersion(VersionType versionType)
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		std::string releases{ WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };

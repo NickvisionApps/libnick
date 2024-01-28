@@ -14,7 +14,7 @@ namespace Nickvision::Keyring
 	static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
 #endif
 
-	std::optional<Credential> SystemCredentials::getCredential(const std::string& name) noexcept
+	std::optional<Credential> SystemCredentials::getCredential(const std::string& name)
 	{
 #ifdef _WIN32
 		CREDENTIALA* cred{ nullptr };
@@ -25,7 +25,7 @@ namespace Nickvision::Keyring
 				std::string credName{ cred->TargetName ? cred->TargetName : "" };
 				std::string credUrl{ cred->Comment ? cred->Comment : "" };
 				std::string credUsername{ cred->UserName ? cred->UserName : "" };
-				std::string credPassword{ LPCSTR(cred->CredentialBlob) ? LPCSTR(cred->CredentialBlob) : "", cred->CredentialBlobSize };
+				std::string credPassword{ LPCSTR(cred->CredentialBlob), cred->CredentialBlobSize };
 				CredFree(cred);
 				return { { credName, credUrl, credUsername, credPassword } };
 			}
@@ -47,7 +47,7 @@ namespace Nickvision::Keyring
 		return std::nullopt;
 	}
 
-	std::optional<Credential> SystemCredentials::addCredential(const std::string& name) noexcept
+	std::optional<Credential> SystemCredentials::addCredential(const std::string& name)
 	{
 		PasswordGenerator passGen;
 		Credential c{ name, "", "default", passGen.next() };
@@ -58,7 +58,7 @@ namespace Nickvision::Keyring
 		return std::nullopt;
 	}
 
-	bool SystemCredentials::addCredential(const Credential& credential) noexcept
+	bool SystemCredentials::addCredential(const Credential& credential)
 	{
 #ifdef _WIN32
 		CREDENTIALA* cred{ new CREDENTIALA() };
@@ -86,7 +86,7 @@ namespace Nickvision::Keyring
 #endif
 	}
 
-	bool SystemCredentials::updateCredential(const Credential& credential) noexcept
+	bool SystemCredentials::updateCredential(const Credential& credential)
 	{
 #ifdef _WIN32
 		CREDENTIALA* cred{ nullptr };
@@ -127,7 +127,7 @@ namespace Nickvision::Keyring
 		return false;
 	}
 	 
-	bool SystemCredentials::deleteCredential(const std::string& name) noexcept
+	bool SystemCredentials::deleteCredential(const std::string& name)
 	{
 #ifdef _WIN32
 		return CredDeleteA(name.c_str(), CRED_TYPE_GENERIC, 0);

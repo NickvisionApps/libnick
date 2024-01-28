@@ -17,19 +17,19 @@ namespace Nickvision::Localization::Gettext
 	 * @param domainName The domain name to use for gettext translations
 	 * @return True if initialized, else false
 	 */
-	bool init(const std::string& domainName) noexcept;
+	bool init(const std::string& domainName);
 	/**
 	 * @brief Gets the domain name used for gettext translations.
 	 * @return The gettext domain name
 	 */
-	const std::string& getDomainName() noexcept;
+	const std::string& getDomainName();
 	/**
 	 * @brief Translates a message for a given context.
 	 * @param context The context of the message
 	 * @param msg The message to translate
 	 * @return The translated message for the given context.
 	 */
-	const char* pgettext(const char* context, const char* msg) noexcept;
+	const char* pgettext(const char* context, const char* msg);
 	/**
 	 * @brief Translates a plural message for a given context.
 	 * @param context The context of the message
@@ -38,7 +38,7 @@ namespace Nickvision::Localization::Gettext
 	 * @param n The number of objects (used to determine whether or not to use the plural version of the message)
 	 * @return The translated message for the given context and number of objects.
 	 */
-	const char* pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n) noexcept;
+	const char* pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n);
 }
 
 #endif //GETTEXT_H

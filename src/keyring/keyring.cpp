@@ -3,48 +3,48 @@
 
 namespace Nickvision::Keyring
 {
-	Keyring::Keyring(const Store& store) noexcept
+	Keyring::Keyring(const Store& store)
 		: m_store{ store }
 	{
 
 	}
 
-	const std::string& Keyring::getName() const noexcept
+	const std::string& Keyring::getName() const
 	{
 		return m_store.getName();
 	}
 
-	std::vector<Credential> Keyring::getAllCredentials() const noexcept
+	std::vector<Credential> Keyring::getAllCredentials() const
 	{
 		return m_store.getAllCredentials();
 	}
 
-	std::optional<Credential> Keyring::getCredential(int id) const noexcept
+	std::optional<Credential> Keyring::getCredential(int id) const
 	{
 		return m_store.getCredential(id);
 	}
 
-	std::vector<Credential> Keyring::getCredentials(const std::string& name) const noexcept
+	std::vector<Credential> Keyring::getCredentials(const std::string& name) const
 	{
 		return m_store.getCredentials(name);
 	}
 
-	bool Keyring::addCredential(const Credential& credential) noexcept
+	bool Keyring::addCredential(const Credential& credential)
 	{
 		return m_store.addCredential(credential);
 	}
 
-	bool Keyring::updateCredential(const Credential& credential) noexcept
+	bool Keyring::updateCredential(const Credential& credential)
 	{
 		return m_store.updateCredential(credential);
 	}
 
-	bool Keyring::deleteCredential(int id) noexcept
+	bool Keyring::deleteCredential(int id)
 	{
 		return m_store.deleteCredential(id);
 	}
 
-	bool Keyring::destroy() noexcept
+	bool Keyring::destroy()
 	{
 		if (m_store.destroy())
 		{
@@ -54,7 +54,7 @@ namespace Nickvision::Keyring
 		return false;
 	}
 
-	std::optional<Keyring> Keyring::access(const std::string& name, std::string password) noexcept
+	std::optional<Keyring> Keyring::access(const std::string& name, std::string password)
 	{
 		//If password empty, get password from system credential store
 		if (password.empty())
@@ -85,12 +85,12 @@ namespace Nickvision::Keyring
 		return std::nullopt;
 	}
 
-	bool Keyring::exists(const std::string& name) noexcept
+	bool Keyring::exists(const std::string& name)
 	{
 		return Store::exists(name);
 	}
 
-	bool Keyring::destroy(const std::string& name) noexcept
+	bool Keyring::destroy(const std::string& name)
 	{
 		if (Store::destroy(name))
 		{

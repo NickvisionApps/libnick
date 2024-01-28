@@ -2,41 +2,34 @@
 #include "aura/aura.h"
 #include "helpers/stringhelpers.h"
 
-#ifdef _WIN32
-#define ENV_VAR_PATH_SEPARATOR ";"
-#elif defined(__linux__)
-#define ENV_VAR_PATH_SEPARATOR ":"
-#endif
-
 namespace Nickvision::Filesystem
 {
-	std::vector<std::filesystem::path> SystemDirectories::getPath() noexcept
-	{
-		std::string var{ Aura::Aura::getEnvVar("PATH") };
-		if (!var.empty())
+    static std::vector<std::filesystem::path> getFromVar(const std::string& var)
+    {
+        std::string env{ Aura::Aura::getActive().getEnvVar(var) };
+		if (!env.empty())
 		{
-			return StringHelpers::split<std::filesystem::path>(var, ENV_VAR_PATH_SEPARATOR);
+#ifdef _WIN32
+            return StringHelpers::split<std::filesystem::path>(env, ";");
+#elif defined(__linux__)
+            return StringHelpers::split<std::filesystem::path>(env, ":");
+#endif
 		}
 		return {};
+    }
+
+	std::vector<std::filesystem::path> SystemDirectories::getPath()
+	{
+        return getFromVar("PATH");
 	}
 
-	std::vector<std::filesystem::path> SystemDirectories::getConfig() noexcept
+	std::vector<std::filesystem::path> SystemDirectories::getConfig()
 	{
-		std::string var{ Aura::Aura::getEnvVar("XDG_CONFIG_DIRS") };
-		if (!var.empty())
-		{
-			return StringHelpers::split<std::filesystem::path>(var, ENV_VAR_PATH_SEPARATOR);
-		}
-		return {};
+        return getFromVar("XDG_CONFIG_DIRS");
 	}
 
-	std::vector<std::filesystem::path> SystemDirectories::getData() noexcept
+	std::vector<std::filesystem::path> SystemDirectories::getData()
 	{
-		std::string var{ Aura::Aura::getEnvVar("XDG_DATA_DIRS") };
-		if (!var.empty())
-		{
-			return StringHelpers::split<std::filesystem::path>(var, ENV_VAR_PATH_SEPARATOR);
-		}
-		return {};
+        return getFromVar("XDG_DATA_DIRS");
 	}
 }

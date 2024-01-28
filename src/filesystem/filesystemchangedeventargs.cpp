@@ -2,19 +2,19 @@
 
 namespace Nickvision::Filesystem
 {
-	FileSystemChangedEventArgs::FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why) noexcept
+	FileSystemChangedEventArgs::FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why)
 		: m_path{ path },
 		m_why{ why }
 	{
 
 	}
 
-	const std::filesystem::path& FileSystemChangedEventArgs::getPath() const noexcept
+	const std::filesystem::path& FileSystemChangedEventArgs::getPath() const
 	{
 		return m_path;
 	}
 
-	FileAction FileSystemChangedEventArgs::getWhy() const noexcept
+	FileAction FileSystemChangedEventArgs::getWhy() const
 	{
 		return m_why;
 	}

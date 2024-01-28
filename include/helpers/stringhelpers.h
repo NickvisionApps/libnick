@@ -13,30 +13,32 @@ namespace Nickvision::StringHelpers
 	concept StringImplicitlyConstructible = std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>;
 
 	/**
-	 * @brief Gets a fully lowercase string from the provided string.
-	 * @param s The string to get lowercase
-	 * @return The new lowercase string
+	 * @brief Gets whether or not the provided string is a valid url
+	 * @param s The string to check
+	 * @return True if the string is a valid url, else false
 	 */
-	std::string toLower(std::string s) noexcept;
+	bool isValidUrl(const std::string& s);
+    /**
+	 * @brief Concatenates the elements of a string list using the specified separator between each element.
+	 * @param values The list of strings to join
+	 * @param delimiter The string to use as a separator between each element
+	 * @param delimitLast Whether or not to include the separator for the last joined element
+	 * @return A single string that consists of all elements of the string list separated by the delimiter
+	 */
+	std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true);
 	/**
-	 * @brief Gets a fully uppercase string from the provided string.
-	 * @param s The string to get uppercase
-	 * @return The new uppercase string
+	 * @brief Generates a new guid (uuid v4) value.
+	 * @return The guid value
 	 */
-	std::string toUpper(std::string s) noexcept;
+	std::string newGuid();
 	/**
-	 * @brief Trims whitespace form the beginning and end of a string.
-	 * @param s The string to trim (unmodified)
-	 * @return The new trimmed string
+	 * @brief Replaces a substring within a string with a new string.
+	 * @param s The string to work on
+	 * @param toRepalce The substring to be replaced
+	 * @param replace The new string to replace with
+	 * @return The new replaced string
 	 */
-	std::string trim(const std::string& s) noexcept;
-	/**
-	 * @brief Trims the delimiter character form the beginning and end of a string.
-	 * @param s The string to trim (unmodified)
-	 * @param delimiter The character to trim
-	 * @return The new trimmed string
-	 */
-	std::string trim(const std::string& s, char delimiter) noexcept;
+	std::string replace(std::string s, const std::string& toReplace, const std::string& replace);
 	/**
 	 * @brief Splits a string based on a delimiter.
 	 * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)
@@ -45,7 +47,7 @@ namespace Nickvision::StringHelpers
 	 * @return The splits of the string
 	 */
 	template<StringImplicitlyConstructible T = std::string>
-	std::vector<T> split(std::string s, const std::string& delimiter) noexcept
+	std::vector<T> split(std::string s, const std::string& delimiter)
 	{
 		std::vector<T> splits;
 		size_t pos{ 0 };
@@ -61,15 +63,7 @@ namespace Nickvision::StringHelpers
 		}
 		return splits;
 	}
-	/**
-	 * @brief Replaces a substring within a string with a new string.
-	 * @param s The string to work on
-	 * @param toRepalce The substring to be replaced
-	 * @param replace The new string to replace with
-	 * @return The new replaced string
-	 */
-	std::string replace(std::string s, const std::string& toReplace, const std::string& replace) noexcept;
-	/**
+    	/**
 	 * @brief Converts a string to an unsigned int
 	 * @param s The string to convert
 	 * @param idx The address of a size_t to store the number of characters processed
@@ -78,38 +72,44 @@ namespace Nickvision::StringHelpers
 	 * @return UINT_MAX if the converted string is too long
 	 * @return 0 if error
 	 */
-	unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10) noexcept;
+	unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10);
 	/**
-	 * @brief Generates a new guid value.
-	 * @return The guid value
+	 * @brief Gets a fully lowercase string from the provided string.
+	 * @param s The string to get lowercase
+	 * @return The new lowercase string
 	 */
-	std::string newGuid() noexcept;
-	/**
-	 * @brief Gets whether or not the provided string is a valid url
-	 * @param s The string to check
-	 * @return True if the string is a valid url, else false
-	 */
-	bool isValidUrl(const std::string& s) noexcept;
-	/**
+	std::string toLower(std::string s);
+    /**
 	 * @brief Converts the wstring to a string.
 	 * @param s The wstring to convert
 	 * @return The string version of the wstring
 	 */
-	std::string toString(const std::wstring& s) noexcept;
+	std::string toString(const std::wstring& s);
 	/**
+	 * @brief Gets a fully uppercase string from the provided string.
+	 * @param s The string to get uppercase
+	 * @return The new uppercase string
+	 */
+	std::string toUpper(std::string s);
+    /**
 	 * @brief Converts the string to a wstring.
 	 * @param s The string to convert
 	 * @return The wstring version of the string
 	 */
-	std::wstring toWstring(const std::string& s) noexcept;
+	std::wstring toWstring(const std::string& s);
 	/**
-	 * @brief Concatenates the elements of a string list using the specified separator between each element.
-	 * @param values The list of strings to join
-	 * @param delimiter The string to use as a separator between each element
-	 * @param delimitLast Whether or not to include the separator for the last joined element
-	 * @return A single string that consists of all elements of the string list separated by the delimiter
+	 * @brief Trims whitespace form the beginning and end of a string.
+	 * @param s The string to trim (unmodified)
+	 * @return The new trimmed string
 	 */
-	std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true) noexcept;
+	std::string trim(const std::string& s);
+	/**
+	 * @brief Trims the delimiter character form the beginning and end of a string.
+	 * @param s The string to trim (unmodified)
+	 * @param delimiter The character to trim
+	 * @return The new trimmed string
+	 */
+	std::string trim(const std::string& s, char delimiter);
 
 }
 

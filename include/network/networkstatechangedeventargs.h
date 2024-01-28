@@ -16,12 +16,12 @@ namespace Nickvision::Network
 		 * @brief Constructs a NetworkStateChangedEventArgs.
 		 * @param state NetworkStae
 		 */
-		NetworkStateChangedEventArgs(NetworkState state) noexcept;
+		NetworkStateChangedEventArgs(NetworkState state);
 		/**
 		 * @brief Gets the network state.
 		 * @return NetworkState
 		 */
-		NetworkState getState() const noexcept;
+		NetworkState getState() const;
 
 	private:
 		NetworkState m_state;

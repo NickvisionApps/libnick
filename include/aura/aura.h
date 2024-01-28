@@ -5,6 +5,7 @@
 #ifndef AURA_H
 #define AURA_H
 
+#include <filesystem>
 #include <map>
 #include <memory>
 #include <stdexcept>
@@ -24,15 +25,54 @@ namespace Nickvision::Aura
 	class Aura
 	{
 	public:
+        Aura(const Aura&) = delete;
+        void operator=(const Aura&) = delete;
 		/**
 		 * @brief Destructs an Aura.
 		 */
-		~Aura() noexcept;
+		~Aura();
+        /**
+		 * @brief Initializes Aura.
+		 * @brief This also calls curl_global_init().
+		 * @brief This also calls Localization::Gettext::init().
+		 * @param id The application id
+		 * @param name The application name
+		 * @param englishShortName The application short name in English
+		 * @throw std::runtime_error Thrown if libcurl fails to initialize
+		 * @throw std::runtime_error Thrown if the gettext system fails to initialize
+         * @throw std::runtime_error Thrown if unable to get the executable directory path
+         * @return True if initialized, else false
+		 */
+        bool init(const std::string& id, const std::string& name, const std::string& englishShortName);
 		/**
 		 * @brief Gets the AppInfo object for the application.
 		 */
-		AppInfo& getAppInfo() noexcept;
+		AppInfo& getAppInfo();
+        /**
+		 * @brief Gets the path of the executable's directory.
+		 * @return The executable's directory path
+		 */
+		const std::filesystem::path& getExecutableDirectory() const;
 		/**
+		 * @brief Gets a system environment variable.
+		 * @param key The environment variable to get
+		 * @return The environment variable if found, else empty string
+		 */
+		std::string getEnvVar(const std::string& key);
+		/**
+		 * @brief Sets a system environment variable.
+		 * @param key The environment variable to set
+		 * @param value The value for the environment variable
+		 * @return True if set, else false
+		 */
+		bool setEnvVar(const std::string& key, const std::string& value);
+		/**
+		 * @brief Finds the path of a given dependency.
+		 * @param dependency The name of the dependency to find
+		 * @return The path of the dependency if found, else empty path
+		 */
+		const std::filesystem::path& findDependency(std::string dependency);
+        /**
 		 * @brief Gets a config object.
 		 * @tparam T Derived type of ConfigurationBase
 		 * @param key The key of the config file
@@ -56,63 +96,20 @@ namespace Nickvision::Aura
 	private:
 		/**
 		 * @brief Constructs an Aura.
-		 * @brief This also calls curl_global_init().
-		 * @brief This also calls Localization::Gettext::init().
-		 * @param id The application id
-		 * @param name The application name
-		 * @param englishShortName The application short name in English
-		 * @throw std::runtime_error Thrown if libcurl fails to initialize
-		 * @throw std::runtime_error Thrown if the gettext system fails to initialize
 		 */
-		Aura(const std::string& id, const std::string& name, const std::string& englishShortName);
+		Aura();
+        bool m_initialized;
 		AppInfo m_appInfo;
-		std::map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
+        std::filesystem::path m_executableDirectory;
+        std::map<std::string, std::filesystem::path> m_dependencies;
+        std::map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
 
 	public:
 		/**
-		 * @brief Initializes Aura.
-		 * @brief This also calls curl_global_init().
-		 * @brief This also calls Localization::Gettext::init().
-		 * @param id The application id
-		 * @param name The application name
-		 * @param englishShortName The application short name in English
-		 * @throw std::runtime_error Thrown if creation of Aura object fails
-		 * @return The active aura instance
-		 */
-		static Aura& init(const std::string& id, const std::string& name, const std::string& englishShortName);
-		/**
-		 * @brief Gets the active aura instance. Aura::init() must have been called first.
-		 * @throw std::logic_error Thrown if Aura::init() was not yet called
+		 * @brief Gets the active aura instance.
 		 * @return The active aura instance
 		 */
 		static Aura& getActive();
-		/**
-		 * @brief Gets the path of the executable's directory.
-		 * @return The executable's directory path
-		 */
-		static std::filesystem::path getExecutableDirectory() noexcept;
-		/**
-		 * @brief Gets a system environment variable.
-		 * @param key The environment variable to get
-		 * @return The environment variable if found, else empty string
-		 */
-		static std::string getEnvVar(const std::string& key) noexcept;
-		/**
-		 * @brief Sets a system environment variable.
-		 * @param key The environment variable to set
-		 * @param value The value for the environment variable
-		 * @return True if set, else false
-		 */
-		static bool setEnvVar(const std::string& key, const std::string& value) noexcept;
-		/**
-		 * @brief Finds the path of a given dependency.
-		 * @param dependency The name of the dependency to find
-		 * @return The path of the dependency if found, else empty path
-		 */
-		static const std::filesystem::path& findDependency(std::string dependency) noexcept;
-
-	private:
-		static std::unique_ptr<Aura> m_instance;
 	};
 }
 

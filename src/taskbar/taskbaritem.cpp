@@ -10,7 +10,7 @@ using namespace Gdiplus;
 
 namespace Nickvision::Taskbar
 {
-	TaskbarItem::TaskbarItem() noexcept
+	TaskbarItem::TaskbarItem()
 		: m_progressState{ ProgressState::NoProgress },
 		m_progress{ 0.0 },
 		m_urgent{ false },
@@ -30,23 +30,23 @@ namespace Nickvision::Taskbar
 #endif
 	}
 
-	TaskbarItem::~TaskbarItem() noexcept
+	TaskbarItem::~TaskbarItem()
 	{
 		setProgressState(ProgressState::NoProgress);
 		setUrgent(false);
 		setCountVisible(false);
 #ifdef _WIN32
-		GdiplusShutdown(m_gdi);
+		GdiplusShutdown(m_gdi);    
 #endif
 	}
 
-	ProgressState TaskbarItem::getProgressState() const noexcept
+	ProgressState TaskbarItem::getProgressState() const
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_progressState;
 	}
 
-	void TaskbarItem::setProgressState(ProgressState state) noexcept
+	void TaskbarItem::setProgressState(ProgressState state)
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_progressState = state;
@@ -69,13 +69,13 @@ namespace Nickvision::Taskbar
 #endif
 	}
 
-	double TaskbarItem::getProgress() const noexcept
+	double TaskbarItem::getProgress() const
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_progress;
 	}
 
-	void TaskbarItem::setProgress(double progress) noexcept
+	void TaskbarItem::setProgress(double progress)
 	{
 		std::unique_lock<std::mutex> lock{ m_mutex };
 		m_progress = progress;
@@ -100,13 +100,13 @@ namespace Nickvision::Taskbar
 		setProgressState(progress == 0 ? ProgressState::NoProgress : ProgressState::Normal);
 	}
 
-	bool TaskbarItem::getUrgent() const noexcept
+	bool TaskbarItem::getUrgent() const
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_urgent;
 	}
 
-	void TaskbarItem::setUrgent(bool urgent) noexcept
+	void TaskbarItem::setUrgent(bool urgent)
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_urgent = urgent;
@@ -135,13 +135,13 @@ namespace Nickvision::Taskbar
 #endif
 	}
 
-	bool TaskbarItem::getCountVisible() const noexcept
+	bool TaskbarItem::getCountVisible() const
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_countVisible;
 	}
 
-	void TaskbarItem::setCountVisible(bool countVisible) noexcept
+	void TaskbarItem::setCountVisible(bool countVisible)
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_countVisible = countVisible;
@@ -188,13 +188,13 @@ namespace Nickvision::Taskbar
 #endif
 	}
 
-	long TaskbarItem::getCount() const noexcept
+	long TaskbarItem::getCount() const
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_count;
 	}
 
-	void TaskbarItem::setCount(long count) noexcept
+	void TaskbarItem::setCount(long count)
 	{
 		std::unique_lock<std::mutex> lock{ m_mutex };
 		m_count = count;
@@ -215,8 +215,12 @@ namespace Nickvision::Taskbar
 	}
 
 #ifdef _WIN32
-	bool TaskbarItem::connect(HWND hwnd) noexcept
+	bool TaskbarItem::connect(HWND hwnd)
 	{
+        if(m_hwnd)
+        {
+            return true;
+        }
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (!hwnd)
 		{
@@ -230,8 +234,12 @@ namespace Nickvision::Taskbar
 		return false;
 	}
 #elif defined(__linux__)
-	bool TaskbarItem::connect(const std::string& desktopFile) noexcept
+	bool TaskbarItem::connect(const std::string& desktopFile)
 	{
+        if(m_connection)
+        {
+            return true;
+        }
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		if (desktopFile.empty())
 		{

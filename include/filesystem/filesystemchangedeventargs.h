@@ -18,17 +18,17 @@ namespace Nickvision::Filesystem
 		 * @param path The path of the file/folder that changed
 		 * @param why The action that caused the file system object to change
 		 */
-		FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why) noexcept;
+		FileSystemChangedEventArgs(const std::filesystem::path& path, FileAction why);
 		/**
 		 * @brief Gets the path of the changed file system object system object.
 		 * @return The path of the changed file/folder
 		 */
-		const std::filesystem::path& getPath() const noexcept;
+		const std::filesystem::path& getPath() const;
 		/**
 		 * @brief Gets the action that caused the file system object to change.
 		 * @return The action that caused the file system object to change
 		 */
-		FileAction getWhy() const noexcept;
+		FileAction getWhy() const;
 
 	private:
 		std::filesystem::path m_path;

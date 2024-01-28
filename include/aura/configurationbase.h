@@ -28,17 +28,17 @@ namespace Nickvision::Aura
 		 * Gets the key of the config file.
 		 * @return The key of the config file
 		 */
-		const std::string& getKey() const noexcept;
+		const std::string& getKey() const;
 		/**
 		 * @brief Gets the Saved event.
 		 * @return The Saved event
 		 */
-		Events::Event<Events::EventArgs>& saved() noexcept;
+		Events::Event<Events::EventArgs>& saved();
 		/**
 		 * @brief Saves the config file to disk. 
 		 * @return True if saved to disk, else false
 		 */
-		bool save() noexcept;
+		bool save();
 
 	protected:
 		Json::Value m_json;

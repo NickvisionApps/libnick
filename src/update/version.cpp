@@ -4,7 +4,7 @@
 
 namespace Nickvision::Update
 {
-	Version::Version() noexcept
+	Version::Version()
 		: m_major{ 0 },
 		m_minor{ 0 },
 		m_build{ 0 },
@@ -13,7 +13,7 @@ namespace Nickvision::Update
 
 	}
 
-	Version::Version(int major, int minor, int build) noexcept
+	Version::Version(int major, int minor, int build)
 		: m_major{ major },
 		m_minor{ minor },
 		m_build{ build },
@@ -75,42 +75,42 @@ namespace Nickvision::Update
 		m_str = std::to_string(m_major) + "." + std::to_string(m_minor) + "." + std::to_string(m_build) + m_dev;
 	}
 
-	int Version::getMajor() const noexcept
+	int Version::getMajor() const
 	{
 		return m_major;
 	}
 
-	int Version::getMinor() const noexcept
+	int Version::getMinor() const
 	{
 		return m_minor;
 	}
 
-	int Version::getBuild() const noexcept
+	int Version::getBuild() const
 	{
 		return m_build;
 	}
 
-	const std::string& Version::getDev() const noexcept
+	const std::string& Version::getDev() const
 	{
 		return m_dev;
 	}
 
-	VersionType Version::getVersionType() const noexcept
+	VersionType Version::getVersionType() const
 	{
 		return m_dev.empty() ? VersionType::Stable : VersionType::Preview;
 	}
 
-	const std::string& Version::toString() const noexcept
+	const std::string& Version::toString() const
 	{
 		return m_str;
 	}
 
-	bool Version::empty() const noexcept
+	bool Version::empty() const
 	{
 		return m_major == 0 && m_minor == 0 && m_build == 0 && m_dev.empty();
 	}
 
-	bool Version::operator<(const Version& compare) const noexcept
+	bool Version::operator<(const Version& compare) const
 	{
 		if (m_major < compare.m_major)
 		{
@@ -140,12 +140,12 @@ namespace Nickvision::Update
 		return false;
 	}
 
-	bool Version::operator<=(const Version& compare) const noexcept
+	bool Version::operator<=(const Version& compare) const
 	{
 		return operator>(compare) || operator==(compare);
 	}
 
-	bool Version::operator>(const Version& compare) const noexcept
+	bool Version::operator>(const Version& compare) const
 	{
 		if (m_major > compare.m_major)
 		{
@@ -175,22 +175,22 @@ namespace Nickvision::Update
 		return false;
 	}
 
-	bool Version::operator>=(const Version& compare) const noexcept
+	bool Version::operator>=(const Version& compare) const
 	{
 		return operator<(compare) || operator==(compare);
 	}
 
-	bool Version::operator==(const Version& compare) const noexcept
+	bool Version::operator==(const Version& compare) const
 	{
 		return m_major == compare.m_major && m_minor == compare.m_minor && m_build == compare.m_build && m_dev == compare.m_dev;
 	}
 
-	bool Version::operator!=(const Version& compare) const noexcept
+	bool Version::operator!=(const Version& compare) const
 	{
 		return !(operator==(compare));
 	}
 
-	std::ostream& operator<<(std::ostream& os, const Version& version) noexcept
+	std::ostream& operator<<(std::ostream& os, const Version& version)
 	{
 		os << version.toString();
 		return os;

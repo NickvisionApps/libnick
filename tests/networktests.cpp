@@ -13,7 +13,7 @@ TEST(NetworkTests, ConnectedGlobal)
 
 TEST(NetworkTests, DisableNetCheck)
 {
-	ASSERT_TRUE(Aura::setEnvVar("AURA_DISABLE_NETCHECK", "true"));
+	ASSERT_TRUE(Aura::getActive().setEnvVar("AURA_DISABLE_NETCHECK", "true"));
 	NetworkMonitor netmon;
 	ASSERT_EQ(netmon.getConnectionState(), NetworkState::ConnectedGlobal);
 }

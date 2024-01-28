@@ -91,3 +91,8 @@ TEST(StringTests, Join3)
 {
 	ASSERT_EQ(StringHelpers::join({ "hi" }, "\n"), "hi\n");
 }
+
+TEST(StringTests, Replace1)
+{
+	ASSERT_EQ(StringHelpers::replace("hello bye hi", "bye", "goodbye"), "hello goodbye hi");
+}

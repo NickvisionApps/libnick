@@ -26,23 +26,23 @@ namespace Nickvision::Network
 		/**
 		 * @brief Destructs a NetworkMonitor. 
 		 */
-		~NetworkMonitor() noexcept;
+		~NetworkMonitor();
 		/**
 		 * @brief Gets the StateChanged event. This event is invoked whenever the state of the network connection changes.
 		 * @return The StateChanged event
 		 */
-		Events::Event<NetworkStateChangedEventArgs>& stateChanged() noexcept;
+		Events::Event<NetworkStateChangedEventArgs>& stateChanged();
 		/**
 		 * @brief Gets the state of the network connection.
 		 * @return NetworkState
 		 */
-		NetworkState getConnectionState() const noexcept;
+		NetworkState getConnectionState() const;
 
 	private:
 		/**
 		 * @brief Manually checks the state of the system's network connection. If a change is detected, the StateChanged event will be invoked.
 		 */
-		void checkConnectionState() noexcept;
+		void checkConnectionState();
 		mutable std::mutex m_mutex;
 		Events::Event<NetworkStateChangedEventArgs> m_stateChanged;
 		NetworkState m_connectionState;

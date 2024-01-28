@@ -19,24 +19,46 @@ namespace Nickvision::Update
 		 * @throw std::invalid_argument Thrown if no valid GitHub url can be determined
 		 */
 		Updater(std::string githubRepoUrl = "");
+        /**
+         * @brief Constructs an Updater via copy.
+         * @param u The object to copy 
+         */
+        Updater(const Updater& u);
+         /**
+         * @brief Constructs an Updater via move.
+         * @param u The object to move 
+         */
+        Updater(Updater&& u) noexcept;
 		/**
 		 * @brief Gets the latest stable version from the GitHub repo.
 		 * @return The current stable version if available, else empty Version
 		 */
-		Version fetchCurrentStableVersion() noexcept;
+		Version fetchCurrentStableVersion();
 		/**
 		 * @brief Gets the latest preview version from the GitHub repo.
 		 * @return The current preview version if available, else empty Version
 		 */
-		Version fetchCurrentPreviewVersion() noexcept;
+		Version fetchCurrentPreviewVersion();
 #ifdef _WIN32
 		/**
 		 * @brief Downloads and installs an application update for Windows. getCurrentStableVersion or getCurrentPreviewVersion should be called first before running this method. This method will force quit the current running application to install the update.
 		 * @param versionType The type of version update to install
 		 * @return True if successful, else false
 		 */
-		bool windowsUpdate(VersionType versionType) noexcept;
+		bool windowsUpdate(VersionType versionType);
 #endif
+		/**
+		 * @brief Copies an Updater.
+		 * @param u The Updater to copy
+		 * @return this
+		 */
+		Updater& operator=(const Updater& u);
+		/**
+		 * @brief Moves an Updater.
+		 * @param u The Updater to move
+		 * @return this
+		 */
+		Updater& operator=(Updater&& u) noexcept;
 
 	private:
 		/**
@@ -44,7 +66,7 @@ namespace Nickvision::Update
 		 * @param versionType The type of the version to get
 		 * @return The current version of the proivded type if available, else empty Version
 		 */
-		Version fetchCurrentVersion(VersionType versionType) noexcept;
+		Version fetchCurrentVersion(VersionType versionType);
 		mutable std::mutex m_mutex;
 		std::string m_repoOwner;
 		std::string m_repoName;

@@ -6,10 +6,10 @@
 
 namespace Nickvision::Localization
 {
-    std::string Documentation::getHelpUrl(const std::string& pageName) noexcept
+    std::string Documentation::getHelpUrl(const std::string& pageName)
     {
 #ifdef __linux__
-        if (Aura::Aura::getEnvVar("SNAP").empty())
+        if (Aura::Aura::getActive().getEnvVar("SNAP").empty())
         {
             return "help:" + StringHelpers::toLower(Aura::Aura::getActive().getAppInfo().getEnglishShortName()) + "/" + pageName;
         }
@@ -25,7 +25,7 @@ namespace Nickvision::Localization
              * language code) to the list of available translated languages for the app.
              */
             std::vector<std::string> langs;
-            for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(std::filesystem::current_path()))
+            for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(Aura::Aura::getActive().getExecutableDirectory()))
             {
                 if (e.is_directory() && std::filesystem::exists(e.path() / (Gettext::getDomainName() + ".mo")))
                 {

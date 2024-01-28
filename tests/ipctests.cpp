@@ -15,7 +15,7 @@ public:
 
 	static void SetUpTestSuite()
 	{
-		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
+		Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
 		m_server = std::make_unique<InterProcessCommunicator>();
 		m_server->commandReceived() += onCommandReceived;
 	}
@@ -48,7 +48,7 @@ TEST_F(IPCTest, CheckServerStatus)
 
 TEST_F(IPCTest, Client1Send)
 {
-	if (Aura::getEnvVar("GITHUB_ACTIONS") == "true")
+	if (Aura::getActive().getEnvVar("GITHUB_ACTIONS") == "true")
 	{
 		ASSERT_TRUE(true);
 		return;
@@ -61,7 +61,7 @@ TEST_F(IPCTest, Client1Send)
 TEST_F(IPCTest, CheckServerReceived)
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
-	ASSERT_TRUE(getReceived() > 0 || Aura::getEnvVar("GITHUB_ACTIONS") == "true");
+	ASSERT_TRUE(getReceived() > 0 || Aura::getActive().getEnvVar("GITHUB_ACTIONS") == "true");
 }
 
 TEST_F(IPCTest, Cleanup)

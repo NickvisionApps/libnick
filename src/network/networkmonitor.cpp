@@ -99,7 +99,7 @@ namespace Nickvision::Network
 		checkConnectionState();
 	}
 
-	NetworkMonitor::~NetworkMonitor() noexcept
+	NetworkMonitor::~NetworkMonitor()
 	{
 #ifdef _WIN32
 		m_connectionPoint->Unadvise(m_cookie);
@@ -109,22 +109,22 @@ namespace Nickvision::Network
 #endif
 	}
 
-	Events::Event<NetworkStateChangedEventArgs>& NetworkMonitor::stateChanged() noexcept
+	Events::Event<NetworkStateChangedEventArgs>& NetworkMonitor::stateChanged()
 	{
 		return m_stateChanged;
 	}
 
-	NetworkState NetworkMonitor::getConnectionState() const noexcept
+	NetworkState NetworkMonitor::getConnectionState() const
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		return m_connectionState;
 	}
 
-	void NetworkMonitor::checkConnectionState() noexcept
+	void NetworkMonitor::checkConnectionState()
 	{
 		std::lock_guard<std::mutex> lock{ m_mutex };
 		NetworkState newState{ NetworkState::Disconnected };
-		std::string noNetCheck{ StringHelpers::toLower(Aura::Aura::getEnvVar("AURA_DISABLE_NETCHECK")) };
+		std::string noNetCheck{ StringHelpers::toLower(Aura::Aura::getActive().getEnvVar("AURA_DISABLE_NETCHECK")) };
 		if (!noNetCheck.empty() && (noNetCheck == "true" || noNetCheck == "t" || noNetCheck == "yes" || noNetCheck == "y" || noNetCheck == "1"))
 		{
 			newState = NetworkState::ConnectedGlobal;

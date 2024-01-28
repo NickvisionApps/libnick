@@ -3,24 +3,24 @@
 
 namespace Nickvision::Notifications
 {
-	NotifyIconMenuItem::NotifyIconMenuItem(NotifyIconMenuItemType type) noexcept
+	NotifyIconMenuItem::NotifyIconMenuItem(NotifyIconMenuItemType type)
 		: m_type{ type }
 	{
 
 	}
 
-	NotifyIconMenuItemType NotifyIconMenuItem::getType() const noexcept
+	NotifyIconMenuItemType NotifyIconMenuItem::getType() const
 	{
 		return m_type;
 	}
 
-	NotifyIconSeparatorMenuItem::NotifyIconSeparatorMenuItem() noexcept
+	NotifyIconSeparatorMenuItem::NotifyIconSeparatorMenuItem()
 		: NotifyIconMenuItem{ NotifyIconMenuItemType::Separator }
 	{
 
 	}
 
-	NotifyIconActionMenuItem::NotifyIconActionMenuItem(const std::string& label, const std::function<void()>& action) noexcept
+	NotifyIconActionMenuItem::NotifyIconActionMenuItem(const std::string& label, const std::function<void()>& action)
 		: NotifyIconMenuItem{ NotifyIconMenuItemType::Action },
 		m_label{ label },
 		m_action{ action }
@@ -28,12 +28,12 @@ namespace Nickvision::Notifications
 
 	}
 
-	const std::string& NotifyIconActionMenuItem::getLabel() const noexcept
+	const std::string& NotifyIconActionMenuItem::getLabel() const
 	{
 		return m_label;
 	}
 
-	void NotifyIconActionMenuItem::invoke() const noexcept
+	void NotifyIconActionMenuItem::invoke() const
 	{
 		if (m_action)
 		{
@@ -41,22 +41,22 @@ namespace Nickvision::Notifications
 		}
 	}
 
-	void NotifyIconActionMenuItem::operator()() const noexcept
+	void NotifyIconActionMenuItem::operator()() const
 	{
 		invoke();
 	}
 
-	size_t NotifyIconMenu::size() const noexcept
+	size_t NotifyIconMenu::size() const
 	{
 		return m_items.size();
 	}
 
-	bool NotifyIconMenu::empty() const noexcept
+	bool NotifyIconMenu::empty() const
 	{
 		return m_items.size() == 0;
 	}
 
-	const std::shared_ptr<NotifyIconMenuItem>& NotifyIconMenu::get(size_t index) const noexcept
+	const std::shared_ptr<NotifyIconMenuItem>& NotifyIconMenu::get(size_t index) const
 	{
 		if (index < 0 || index >= m_items.size())
 		{
@@ -66,13 +66,13 @@ namespace Nickvision::Notifications
 		return m_items[index];
 	}
 
-	size_t NotifyIconMenu::addSeparator() noexcept
+	size_t NotifyIconMenu::addSeparator()
 	{
 		m_items.push_back(std::make_shared<NotifyIconSeparatorMenuItem>());
 		return m_items.size() - 1;
 	}
 
-	bool NotifyIconMenu::insertSeparator(size_t index) noexcept
+	bool NotifyIconMenu::insertSeparator(size_t index)
 	{
 		if (index < 0 || index > m_items.size())
 		{
@@ -82,7 +82,7 @@ namespace Nickvision::Notifications
 		return true;
 	}
 
-	bool NotifyIconMenu::removeSeparator(size_t index) noexcept
+	bool NotifyIconMenu::removeSeparator(size_t index)
 	{
 		if (index < 0 || index >= m_items.size())
 		{
@@ -97,13 +97,13 @@ namespace Nickvision::Notifications
 		return true;
 	}
 
-	size_t NotifyIconMenu::addAction(const std::string& label, const std::function<void()>& action) noexcept
+	size_t NotifyIconMenu::addAction(const std::string& label, const std::function<void()>& action)
 	{
 		m_items.push_back(std::make_shared<NotifyIconActionMenuItem>(label, action));
 		return m_items.size() - 1;
 	}
 
-	bool NotifyIconMenu::insertAction(size_t index, const std::string& label, const std::function<void()>& action) noexcept
+	bool NotifyIconMenu::insertAction(size_t index, const std::string& label, const std::function<void()>& action)
 	{
 		if (index < 0 || index > m_items.size())
 		{
@@ -113,7 +113,7 @@ namespace Nickvision::Notifications
 		return true;
 	}
 
-	bool NotifyIconMenu::removeAction(size_t index) noexcept
+	bool NotifyIconMenu::removeAction(size_t index)
 	{
 		if (index < 0 || index > m_items.size() - 1)
 		{

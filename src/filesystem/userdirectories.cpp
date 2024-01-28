@@ -15,9 +15,9 @@
 namespace Nickvision::Filesystem
 {
 #ifdef __linux__
-	static std::filesystem::path getXDGDir(const std::string& key) noexcept
+	static std::filesystem::path getXDGDir(const std::string& key)
 	{
-		std::string var{ Aura::Aura::getEnvVar(key) };
+		std::string var{ Aura::Aura::getActive().getEnvVar(key) };
 		if (!var.empty())
 		{
 			return var;
@@ -49,7 +49,7 @@ namespace Nickvision::Filesystem
 	}
 #endif
 
-	std::filesystem::path UserDirectories::getHome() noexcept
+	std::filesystem::path UserDirectories::getHome()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -60,13 +60,13 @@ namespace Nickvision::Filesystem
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		std::filesystem::path var{ Aura::Aura::getEnvVar("HOME") };
+		std::filesystem::path var{ Aura::Aura::getActive().getEnvVar("HOME") };
 		result = !var.empty() ? var : getpwuid(getuid())->pw_dir;
 #endif
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getConfig() noexcept
+	std::filesystem::path UserDirectories::getConfig()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -77,21 +77,21 @@ namespace Nickvision::Filesystem
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		std::filesystem::path var{ Aura::Aura::getEnvVar("XDG_CONFIG_HOME") };
+		std::filesystem::path var{ Aura::Aura::getActive().getEnvVar("XDG_CONFIG_HOME") };
 		result = !var.empty() ? var : (getHome() / ".config");
 #endif
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getApplicationConfig() noexcept
+	std::filesystem::path UserDirectories::getApplicationConfig()
 	{
 		std::filesystem::path result = getConfig() / Aura::Aura::getActive().getAppInfo().getName();
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getCache() noexcept
+	std::filesystem::path UserDirectories::getCache()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -102,51 +102,51 @@ namespace Nickvision::Filesystem
 		}
 		CoTaskMemFree(static_cast<void*>(p));
 #elif defined(__linux__)
-		std::filesystem::path var{ Aura::Aura::getEnvVar("XDG_CACHE_HOME") };
+		std::filesystem::path var{ Aura::Aura::getActive().getEnvVar("XDG_CACHE_HOME") };
 		result = !var.empty() ? var : (getHome() / ".cache");
 #endif
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getApplicationCache() noexcept
+	std::filesystem::path UserDirectories::getApplicationCache()
 	{
 		std::filesystem::path result = getCache() / Aura::Aura::getActive().getAppInfo().getName();
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getLocalData() noexcept
+	std::filesystem::path UserDirectories::getLocalData()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
 		result = getConfig();
 #elif defined(__linux__)
-		std::filesystem::path var{ Aura::Aura::getEnvVar("XDG_DATA_HOME") };
+		std::filesystem::path var{ Aura::Aura::getActive().getEnvVar("XDG_DATA_HOME") };
 		result = !var.empty() ? var : (getHome() / ".local/share");
 #endif
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getApplicationLocalData() noexcept
+	std::filesystem::path UserDirectories::getApplicationLocalData()
 	{
 		std::filesystem::path result{ getLocalData() / Aura::Aura::getActive().getAppInfo().getName() };
 		std::filesystem::create_directories(result);
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getRuntime() noexcept
+	std::filesystem::path UserDirectories::getRuntime()
 	{
 		std::filesystem::path result;
 #ifdef __linux__
-		std::filesystem::path var{ Aura::Aura::getEnvVar("XDG_RUNTIME_DIR") };
-		result = !var.empty() ? var : (std::filesystem::path("/run/user/") / Aura::Aura::getEnvVar("UID"));
+		std::filesystem::path var{ Aura::Aura::getActive().getEnvVar("XDG_RUNTIME_DIR") };
+		result = !var.empty() ? var : (std::filesystem::path("/run/user/") / Aura::Aura::getActive().getEnvVar("UID"));
 #endif
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getDesktop() noexcept
+	std::filesystem::path UserDirectories::getDesktop()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -164,7 +164,7 @@ namespace Nickvision::Filesystem
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getDocuments() noexcept
+	std::filesystem::path UserDirectories::getDocuments()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -182,7 +182,7 @@ namespace Nickvision::Filesystem
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getDownloads() noexcept
+	std::filesystem::path UserDirectories::getDownloads()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -200,7 +200,7 @@ namespace Nickvision::Filesystem
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getMusic() noexcept
+	std::filesystem::path UserDirectories::getMusic()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -218,7 +218,7 @@ namespace Nickvision::Filesystem
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getPictures() noexcept
+	std::filesystem::path UserDirectories::getPictures()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -236,7 +236,7 @@ namespace Nickvision::Filesystem
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getPublicShare() noexcept
+	std::filesystem::path UserDirectories::getPublicShare()
 	{
 		std::filesystem::path result;
 #ifdef __linux__
@@ -245,7 +245,7 @@ namespace Nickvision::Filesystem
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getTemplates() noexcept
+	std::filesystem::path UserDirectories::getTemplates()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32
@@ -263,7 +263,7 @@ namespace Nickvision::Filesystem
 		return result;
 	}
 
-	std::filesystem::path UserDirectories::getVideos() noexcept
+	std::filesystem::path UserDirectories::getVideos()
 	{
 		std::filesystem::path result;
 #ifdef _WIN32

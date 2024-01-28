@@ -34,49 +34,49 @@ namespace Nickvision::Notifications
 		/**
 		 * @brief Destructs a NotifyIcon. 
 		 */
-		~NotifyIcon() noexcept;
+		~NotifyIcon();
 		/**
 		 * @brief Hides the icon.
 		 * @return True if icon was hidden, else false
 		 */
-		bool hide() noexcept;
+		bool hide();
 		/**
 		 * @brief Shows the icon.
 		 * @return True if icon was shown, else false
 		 */
-		bool show() noexcept;
+		bool show();
 		/**
 		 * @brief Gets the tooltip text of the icon.
 		 * @return The tooltip text
 		 */
-		const std::string& getTooltip() const noexcept;
+		const std::string& getTooltip() const;
 		/**
 		 * @brief Sets the tooltip text of the icon.
 		 * @param tooltip The toolip text
 		 * @return True if the tooltip was updated, else false
 		 */
-		bool setTooltip(const std::string& tooltip) noexcept;
+		bool setTooltip(const std::string& tooltip);
 		/**
 		 * @brief Shows a notification from the icon.
 		 * @brief Supports the action "open" with action param being a path of a file or folder to open.
 		 * @param e ShellNotificationSentEventArgs
 		 * @return True if notification was shown from the icon
 		 */
-		bool notify(const ShellNotificationSentEventArgs& e) noexcept;
+		bool notify(const ShellNotificationSentEventArgs& e);
 
 	private:
 		/**
 		 * @brief Gets a basic NOTIFYICONDATAA struct for this NotifyIcon.
 		 * @return NOTIFYICONDATAA
 		 */
-		NOTIFYICONDATAA getBaseNotifyIconData() noexcept;
+		NOTIFYICONDATAA getBaseNotifyIconData();
 		/**
 		 * @brief Handles a WM_NOTIFYICON_EVENT message.
 		 * @param wParam WPARAM
 		 * @param lParam LPARAM
 		 * @return LRESULT
 		 */
-		LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
+		LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		std::string m_className;
 		bool m_isHidden;
 		std::string m_tooltip;
@@ -95,7 +95,7 @@ namespace Nickvision::Notifications
 		 * @param wParam WPARAM
 		 * @param lParam LPARAM
 		 */
-		static LRESULT notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
+		static LRESULT notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	};
 }
 

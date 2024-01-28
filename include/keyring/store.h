@@ -33,7 +33,7 @@ namespace Nickvision::Keyring
 		 * @brief Copies a Store object.
 		 * @param store The object to move
 		 */
-		Store(const Store& store) noexcept;
+		Store(const Store& store);
 		/**
 		 * @brief Moves a Store object.
 		 * @param store The object to move
@@ -43,58 +43,58 @@ namespace Nickvision::Keyring
 		 * @brief Gets the name of the store.
 		 * @return The name of the store
 		 */
-		const std::string& getName() const noexcept;
+		const std::string& getName() const;
 		/**
 		 * @brief Gets the file path of the store on disk.
 		 * @return The file path of the store
 		 */
-		const std::filesystem::path& getPath() const noexcept;
+		const std::filesystem::path& getPath() const;
 		/**
 		 * @brief Gets all credentials in the store.
 		 * @return The list of all credentials
 		 */
-		std::vector<Credential> getAllCredentials() const noexcept;
+		std::vector<Credential> getAllCredentials() const;
 		/**
 		 * @brief Gets the credential matching the provided id.
 		 * @param id The id of the credential
 		 * @return The credential matching the id, std::nullopt if no matching credential
 		 */
-		std::optional<Credential> getCredential(int id) const noexcept;
+		std::optional<Credential> getCredential(int id) const;
 		/**
 		 * @brief Gets the credentials containing the provided name.
 		 * @param name The name
 		 * @return The list of credentials matching the name
 		 */
-		std::vector<Credential> getCredentials(const std::string& name) const noexcept;
+		std::vector<Credential> getCredentials(const std::string& name) const;
 		/**
 		 * @brief Adds a credential to the store.
 		 * @param credential The Credential to add
 		 * @return True if successful, else false
 		 */
-		bool addCredential(const Credential& credential) noexcept;
+		bool addCredential(const Credential& credential);
 		/**
 		 * @brief Updates a credential in the store.
 		 * @param credential The Credential to update
 		 * @return True if successful, else false
 		 */
-		bool updateCredential(const Credential& credential) noexcept;
+		bool updateCredential(const Credential& credential);
 		/**
 		 * @brief Deletes a credential from the store.
 		 * @param id The id of the credential to delete
 		 * @return True if successful, else false
 		 */
-		bool deleteCredential(int id) noexcept;
+		bool deleteCredential(int id);
 		/**
 		 * @brief Destroys the store and all of its data from disk. Once this method is called, the object should no longer be referenced, with or without success.
 		 * @return True if successful, else false
 		 */
-		bool destroy() noexcept;
+		bool destroy();
 		/**
 		 * @brief Copies a Store object.
 		 * @param store The Store to copy
 		 * @return this
 		 */
-		Store& operator=(const Store& store) noexcept;
+		Store& operator=(const Store& store);
 		/**
 		 * @brief Moves a Store object.
 		 * @param store The Store to move
@@ -115,13 +115,13 @@ namespace Nickvision::Keyring
 		 * @param name The name of the store to check
 		 * @return True if a store with the provided name exists, else false
 		 */
-		static bool exists(const std::string& name) noexcept;
+		static bool exists(const std::string& name);
 		/**
 		 * @brief Destroys a store and all of its data from disk.
 		 * @param The name of the store to destroy
 		 * @return True if successful, else false
 		 */
-		static bool destroy(const std::string& name) noexcept;
+		static bool destroy(const std::string& name);
 	};
 }
 

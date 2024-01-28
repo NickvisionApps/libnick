@@ -19,12 +19,12 @@ namespace Nickvision::Notifications
 		 * @param action An additional action for the notification
 		 * @param actionParam The parameter of the additional action
 		 */
-		ShellNotificationSentEventArgs(const std::string& title, const std::string& message, NotificationSeverity severity, const std::string& action = "", const std::string& actionParam = "") noexcept;
+		ShellNotificationSentEventArgs(const std::string& title, const std::string& message, NotificationSeverity severity, const std::string& action = "", const std::string& actionParam = "");
 		/**
 		 * @brief Gets the title of the notification.
 		 * @return The title of the notification
 		 */
-		const std::string& getTitle() const noexcept;
+		const std::string& getTitle() const;
 
 	protected:
 		std::string m_title;

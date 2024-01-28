@@ -61,7 +61,7 @@ namespace Nickvision::Aura
 		}
 	}
 
-	InterProcessCommunicator::~InterProcessCommunicator() noexcept
+	InterProcessCommunicator::~InterProcessCommunicator()
 	{
 		m_serverRunning = false;
 #ifdef _WIN32
@@ -82,22 +82,22 @@ namespace Nickvision::Aura
 #endif
 	}
 
-	Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& InterProcessCommunicator::commandReceived() noexcept
+	Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& InterProcessCommunicator::commandReceived()
 	{
 		return m_commandReceived;
 	}
 
-	bool InterProcessCommunicator::isServer() const noexcept
+	bool InterProcessCommunicator::isServer() const
 	{
 		return m_serverRunning;
 	}
 
-	bool InterProcessCommunicator::isClient() const noexcept
+	bool InterProcessCommunicator::isClient() const
 	{
 		return !m_serverRunning;
 	}
 
-	bool InterProcessCommunicator::communicate(const std::vector<std::string>& args, bool exitIfClient) noexcept
+	bool InterProcessCommunicator::communicate(const std::vector<std::string>& args, bool exitIfClient)
 	{
 		if (m_serverRunning)
 		{
@@ -140,7 +140,7 @@ namespace Nickvision::Aura
 		return true;
 	}
 
-	void InterProcessCommunicator::runServer() noexcept
+	void InterProcessCommunicator::runServer()
 	{
 		std::vector<char> buffer(1024);
 		while (m_serverRunning)

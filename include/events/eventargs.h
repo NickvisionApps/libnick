@@ -12,7 +12,7 @@ namespace Nickvision::Events
 		/**
 		 * @brief Constructs an EventArgs.
 		 */
-		EventArgs() noexcept = default;
+		EventArgs() = default;
 	};
 }
 

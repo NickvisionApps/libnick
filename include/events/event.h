@@ -24,12 +24,12 @@ namespace Nickvision::Events
 		/**
 		 * @brief Constructs an Event.
 		 */
-		Event() noexcept = default;
+		Event() = default;
 		/**
 		 * @brief Constructs an Event via copy.
 		 * @param e The object to copy
 		 */
-		Event(const Event& e) noexcept
+		Event(const Event& e)
 		{ 
 			std::lock_guard<std::mutex> lock{ e.m_mutex };
 			m_handlers = e.m_handlers;
@@ -47,7 +47,7 @@ namespace Nickvision::Events
 		 * @brief Subscribes a handler to the event.
 		 * @param handler The handler function
 		 */
-		void subscribe(const std::function<void(const T&)>& handler) noexcept
+		void subscribe(const std::function<void(const T&)>& handler)
 		{
 			std::lock_guard<std::mutex> lock{ m_mutex };
 			m_handlers.push_back(handler);
@@ -56,7 +56,7 @@ namespace Nickvision::Events
 		 * @brief Unsubscribes a handler from the event.
 		 * @param handler The handler function
 		 */
-		void unsubscribe(const std::function<void(const T&)>& handler) noexcept
+		void unsubscribe(const std::function<void(const T&)>& handler)
 		{
 			std::lock_guard<std::mutex> lock{ m_mutex };
 			if (m_handlers.size() == 0)
@@ -73,7 +73,7 @@ namespace Nickvision::Events
 		 * @brief Invokes the event, calling all handlers.
 		 * @param param The parameter to pass to the handlers
 		 */
-		void invoke(const T& param) const noexcept
+		void invoke(const T& param) const
 		{
 			std::lock_guard<std::mutex> lock{ m_mutex };
 			for (const std::function<void(const T&)>& handler : m_handlers)
@@ -85,7 +85,7 @@ namespace Nickvision::Events
 		 * @brief Subscribes a handler to the event.
 		 * @param handler The handler function
 		 */
-		void operator+=(const std::function<void(const T&)>& handler) noexcept
+		void operator+=(const std::function<void(const T&)>& handler)
 		{
 			subscribe(handler);
 		}
@@ -93,7 +93,7 @@ namespace Nickvision::Events
 		 * @brief Unsubscribes a handler from the event.
 		 * @param handler The handler function
 		 */
-		void operator-=(const std::function<void(const T&)>& handler) noexcept
+		void operator-=(const std::function<void(const T&)>& handler)
 		{
 			unsubscribe(handler);
 		}
@@ -101,7 +101,7 @@ namespace Nickvision::Events
 		 * @brief Invokes the event, calling all handlers.
 		 * @param param The parameter to pass to the handlers
 		 */
-		void operator()(const T& param) noexcept
+		void operator()(const T& param)
 		{
 			invoke(param);
 		}
@@ -110,7 +110,7 @@ namespace Nickvision::Events
 		 * @param e The Event to copy
 		 * @return this
 		 */
-		Event& operator=(const Event& e) noexcept
+		Event& operator=(const Event& e)
 		{
 			if (this != &e)
 			{

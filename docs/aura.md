@@ -135,9 +135,13 @@ Path: `Nickvision::Aura::Aura`
 
 ### Member Variables
 - ```
-  Nickvision::AppInfo& AppInfo: get
+  Nickvision::Aura::AppInfo& AppInfo: get
   ```
     - The AppInfo object for the application
+- ```
+  std::filesystem::path& ExecutableDirectory: get
+  ```
+    - The path of the executable's directory.
 
 ### Methods
 - ```cpp
@@ -146,32 +150,15 @@ Path: `Nickvision::Aura::Aura`
     - Destructs an Aura
     - Note: This also called curl_global_clean().
 - ```cpp
-  T& getConfig<T>(const std::string& key)
-  ```
-    - Accepts: The string key of the config file, key.
-    - Returns: A reference to the configuration object of type T with key key.
-    - Throws: `std::invalid_argument` if key is empty
-    - Note: T must be a type that derives from `Nickvision::ConfigurationBase`
-    - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
-
-### Static Functions
-- ```cpp
-  Nickvision::Aura& init(const std::string& id, const std::string& name, const std::string& englishShortName)
+  bool init(const std::string& id, const std::string& name, const std::string& englishShortName)
   ```
     - Accepts: An application id, id, an application name, name, and an application english short name, englishShortName.
-    - Returns: A reference to the newly initialized singleton `Aura` object.
-    - Throws: `std::runtime_error` if creation of Aura object fails.
+    - Returns: True if initialized, else false
+    - Throws: `std::runtime_error` if libcurl fails to initialize
+    - Throws: `std::runtime_error` if the gettext system fails to initialize
+    - Throws: `std::runtime_error` if unable to get the executable directory path
     - Note: This also calls curl_global_init().
     - Note: This also calls Localization::Gettext::init().
-- ```cpp
-  Nickvision::Aura& getActive()
-  ```
-    - Returns: The reference to the singleton `Aura` object.
-    - Throws: `std::logic_error` if `Aura::init()` was not yet called.
-- ```cpp
-  std::filesystem::path getExecutableDirectory()
-  ```
-    - Returns: The path of the executable's directory.
 - ```cpp
   std::string getEnvVar(const std::string& key)
   ```
@@ -194,6 +181,20 @@ Path: `Nickvision::Aura::Aura`
     - Returns: An empty path if the dependency was not found on disk.
     - Ex: `Aura::findDependency("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
     - Ex: `Aura::findDependency("bash")` on Linux will return `/usr/bin/bash`.
+- ```cpp
+  T& getConfig<T>(const std::string& key)
+  ```
+    - Accepts: The string key of the config file, key.
+    - Returns: A reference to the configuration object of type T with key key.
+    - Throws: `std::invalid_argument` if key is empty
+    - Note: T must be a type that derives from `Nickvision::ConfigurationBase`
+    - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
+
+### Static Functions
+- ```cpp
+  Nickvision::Aura& getActive()
+  ```
+    - Returns: The reference to the singleton `Aura` object.
 
 ## ConfigurationBase
 Description: A base class for configuration files.
@@ -244,7 +245,7 @@ Here is an example of a custom configuration object using `ConfigurationBase`:
 class AppConfig : public ConfigurationBase
 {
 public:
-	AppConfig(const std::string& key) : ConfigurationBase(key) 
+	AppConfig(const std::string& key) : ConfigurationBase{ key } 
 	{ 
 
 	}
@@ -263,22 +264,17 @@ public:
 ```
 This object can now be used by an Aura-based application:
 ```cpp
-void onConfigSaved(const Nickvision::Events::EventArgs& e)
-{
-    std::cout << "Config saved to disk." << std::endl;
-}
-
 int main()
 {
-    Aura::init(...);
+    Aura::getActive().init(...);
     AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
-    config.saved() += onConfigSaved;
+    config.saved() += [](const Nickvision::Events::EventArgs& e) { std::cout << "Config saved to disk." << std::endl; };
     if(config.getPreviousCount() > 0)
     {
         std::cout << config.getPreviousCount() << std::endl;
     }
     config.setPreviousCount(6);
-    config.save(); //onConfigSaved will be invoked on success
+    config.save(); //lambda will be invoked on success
 }
 ```
 
@@ -330,8 +326,7 @@ Path: `Nickvision::Aura::InterProcessCommunicator`
   ```
     - Constructs an InterProcessCommunicator.
     - Note: If this is the first IPC instance for all processes of this AppInfo::id, this instance will become an IPC server.
-    - Note: If this is not the first IPC instance, this instance will become an IPC client. 
-    - Throws: `std::logic_error` if Aura::init() was not called yet.
+    - Note: If this is not the first IPC instance, this instance will become an IPC client.
     - Throws: `std::runtime_error` if the client or server IPC cannot be created.
 - ```cpp
   ~InterProcessCommunicator()
@@ -358,7 +353,7 @@ Here's the code for this:
 ```cpp
 int main(int argc, char*[] argv)
 {
-    Aura::init(...); //ensures AppInfo::id
+    Aura::getActive().init(...); //ensures AppInfo::id
     std::vector<std::string> modernArgs;
     for(int i = 0; i < argc; i++)
     {
@@ -368,7 +363,7 @@ int main(int argc, char*[] argv)
         }
     }
     InterProcessCommunicator ipc;
-    ipc.commandReceived() += handleArguments; //handleArguments definition excluded
+    ipc.commandReceived() += [](const Events::ParamEventArgs<std::vector<std::string>>& args) { ... };
     ipc.communicate(modernArgs, true);
 }
 ```

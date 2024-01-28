@@ -135,6 +135,8 @@ Type: `template<typename T> class`
 
 Path: `Nickvision::Events::ParamEventArgs`
 
+Note: `T` must be copy AND move constructible.
+
 ### Member Variables
 - ```
   T Param: get

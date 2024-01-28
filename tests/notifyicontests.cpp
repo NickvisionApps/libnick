@@ -16,7 +16,7 @@ public:
 
 	static void SetUpTestSuite()
 	{
-		Aura::init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
+		Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
 	}
 };
 
@@ -24,7 +24,7 @@ std::unique_ptr<NotifyIcon> NotifyIconTest::m_notifyIcon = nullptr;
 
 TEST_F(NotifyIconTest, CreateIcon)
 {
-	if (Aura::getEnvVar("GITHUB_ACTIONS").empty())
+	if (Aura::getActive().getEnvVar("GITHUB_ACTIONS").empty())
 	{
 		bool waiting{ true };
 		NotifyIconMenu contextMenu;

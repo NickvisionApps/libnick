@@ -23,7 +23,7 @@ namespace Nickvision::Keyring
      * @param password The password to measure the strength of
      * @return The strength of the password
      */
-    PasswordStrength getPasswordStrength(const std::string& password) noexcept;
+    PasswordStrength getPasswordStrength(const std::string& password);
 }
 
 #endif //PASSWORDSTRENGTH_H

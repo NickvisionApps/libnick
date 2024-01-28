@@ -12,7 +12,7 @@ namespace Nickvision::Localization::Documentation
 	 * @param pageName The name of the page to get the url for
 	 * @return The url for the documentation page
 	 */
-	std::string getHelpUrl(const std::string& pageName) noexcept;
+	std::string getHelpUrl(const std::string& pageName);
 }
 
 #endif //DOCUMENTATION

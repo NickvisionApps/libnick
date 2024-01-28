@@ -3,31 +3,7 @@
 
 namespace Nickvision
 {
-	bool WebHelpers::isValidWebsite(const std::string& url) noexcept
-	{
-		if (url.empty())
-		{
-			return false;
-		}
-		CURL* curl{ curl_easy_init() };
-		if (!curl)
-		{
-			return false;
-		}
-		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
-		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
-		curl_easy_setopt(curl, CURLOPT_HEADER, false);
-#ifdef _WIN32
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
-#endif
-		CURLcode code{ curl_easy_perform(curl) };
-		curl_easy_cleanup(curl);
-		return code == CURLE_OK;
-	}
-
-	bool WebHelpers::downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress, bool overwrite) noexcept
+	bool WebHelpers::downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress, bool overwrite)
 	{
 		if (url.empty())
 		{
@@ -71,7 +47,7 @@ namespace Nickvision
 		return code == CURLE_OK;
 	}
 
-	std::string WebHelpers::fetchJsonString(const std::string& url) noexcept
+	std::string WebHelpers::fetchJsonString(const std::string& url)
 	{
 		if (url.empty())
 		{
@@ -104,5 +80,29 @@ namespace Nickvision
 		curl_easy_cleanup(curl);
 		curl_slist_free_all(listHttpHeader);
 		return code == CURLE_OK ? out.str() : "";
+	}
+
+	bool WebHelpers::isValidWebsite(const std::string& url)
+	{
+		if (url.empty())
+		{
+			return false;
+		}
+		CURL* curl{ curl_easy_init() };
+		if (!curl)
+		{
+			return false;
+		}
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
+		curl_easy_setopt(curl, CURLOPT_HEADER, false);
+#ifdef _WIN32
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
+#endif
+		CURLcode code{ curl_easy_perform(curl) };
+		curl_easy_cleanup(curl);
+		return code == CURLE_OK;
 	}
 }

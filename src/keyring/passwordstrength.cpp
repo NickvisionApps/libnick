@@ -2,7 +2,7 @@
 
 namespace Nickvision::Keyring
 {
-	PasswordStrength getPasswordStrength(const std::string& password) noexcept
+	PasswordStrength getPasswordStrength(const std::string& password)
 	{
 		if (password.empty())
 		{

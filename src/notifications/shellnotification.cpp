@@ -15,7 +15,7 @@ namespace Nickvision::Notifications
 #ifdef _WIN32
 	void ShellNotification::send(const ShellNotificationSentEventArgs& e, HWND hwnd)
 	{
-		static std::shared_ptr<NotifyIcon> notifyIcon{ std::make_shared<NotifyIcon>(hwnd, NotifyIconMenu(), true)};
+		static std::shared_ptr<NotifyIcon> notifyIcon{ std::make_shared<NotifyIcon>(hwnd, NotifyIconMenu(), true) };
 		notifyIcon->hide();
 		notifyIcon->notify(e);
 	}
@@ -28,14 +28,14 @@ namespace Nickvision::Notifications
 			GIcon* icon{ nullptr };
 			GFile* fileIcon{ nullptr };
 			std::string appId{ Aura::Aura::getActive().getAppInfo().getId() };
-			if (Aura::Aura::getEnvVar("SNAP").empty())
+			if (Aura::Aura::getActive().getEnvVar("SNAP").empty())
 			{
 				std::string name{ appId + "-symbolic" };
 				icon = g_themed_icon_new(name.c_str());
 			}
 			else
 			{
-				std::string path{ Aura::Aura::getEnvVar("SNAP") + "/usr/share/icons/hicolor/symbolic/apps/" + appId + "-symbolic.svg"};
+				std::string path{ Aura::Aura::getActive().getEnvVar("SNAP") + "/usr/share/icons/hicolor/symbolic/apps/" + appId + "-symbolic.svg"};
 				fileIcon = g_file_new_for_path(path.c_str());
 				icon = g_file_icon_new(fileIcon);
 			}

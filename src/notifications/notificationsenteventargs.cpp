@@ -2,7 +2,7 @@
 
 namespace Nickvision::Notifications
 {
-	NotificationSentEventArgs::NotificationSentEventArgs(const std::string& message, NotificationSeverity severity, const std::string& action, const std::string& actionParam) noexcept
+	NotificationSentEventArgs::NotificationSentEventArgs(const std::string& message, NotificationSeverity severity, const std::string& action, const std::string& actionParam)
 		: m_message{ message },
 		m_severity{ severity },
 		m_action{ action },
@@ -11,22 +11,22 @@ namespace Nickvision::Notifications
 
 	}
 
-	const std::string& NotificationSentEventArgs::getMessage() const noexcept
+	const std::string& NotificationSentEventArgs::getMessage() const
 	{
 		return m_message;
 	}
 
-	NotificationSeverity NotificationSentEventArgs::getSeverity() const noexcept
+	NotificationSeverity NotificationSentEventArgs::getSeverity() const
 	{
 		return m_severity;
 	}
 
-	const std::string& NotificationSentEventArgs::getAction() const noexcept
+	const std::string& NotificationSentEventArgs::getAction() const
 	{
 		return m_action;
 	}
 
-	const std::string& NotificationSentEventArgs::getActionParam() const noexcept
+	const std::string& NotificationSentEventArgs::getActionParam() const
 	{
 		return m_actionParam;
 	}

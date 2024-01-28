@@ -113,7 +113,7 @@ namespace Nickvision::Notifications
 		}
 	}
 
-	NotifyIcon::~NotifyIcon() noexcept
+	NotifyIcon::~NotifyIcon()
 	{
 		//Destroy NotifyIcon
 		NOTIFYICONDATAA notify{ getBaseNotifyIconData() };
@@ -128,26 +128,26 @@ namespace Nickvision::Notifications
 		UnregisterClassA(m_className.c_str(), nullptr);
 	}
 
-	bool NotifyIcon::hide() noexcept
+	bool NotifyIcon::hide()
 	{
 		m_isHidden = true;
 		NOTIFYICONDATAA notify{ getBaseNotifyIconData() };
 		return Shell_NotifyIconA(NIM_MODIFY, &notify) == TRUE;
 	}
 
-	bool NotifyIcon::show() noexcept
+	bool NotifyIcon::show()
 	{
 		m_isHidden = false;
 		NOTIFYICONDATAA notify{ getBaseNotifyIconData() };
 		return Shell_NotifyIconA(NIM_MODIFY, &notify) == TRUE;
 	}
 
-	const std::string& NotifyIcon::getTooltip() const noexcept
+	const std::string& NotifyIcon::getTooltip() const
 	{
 		return m_tooltip;
 	}
 
-	bool NotifyIcon::setTooltip(const std::string& tooltip) noexcept
+	bool NotifyIcon::setTooltip(const std::string& tooltip)
 	{
 		m_tooltip = tooltip;
 		NOTIFYICONDATAA notify{ getBaseNotifyIconData() };
@@ -156,7 +156,7 @@ namespace Nickvision::Notifications
 		return Shell_NotifyIconA(NIM_MODIFY, &notify) == TRUE;
 	}
 
-	bool NotifyIcon::notify(const ShellNotificationSentEventArgs& e) noexcept
+	bool NotifyIcon::notify(const ShellNotificationSentEventArgs& e)
 	{
 		NOTIFYICONDATAA notify{ getBaseNotifyIconData() };
 		notify.uFlags |= NIF_INFO;
@@ -186,7 +186,7 @@ namespace Nickvision::Notifications
 		return Shell_NotifyIconA(NIM_MODIFY, &notify) == TRUE;
 	}
 
-	NOTIFYICONDATAA NotifyIcon::getBaseNotifyIconData() noexcept
+	NOTIFYICONDATAA NotifyIcon::getBaseNotifyIconData()
 	{
 		NOTIFYICONDATAA notify{ 0 };
 		notify.cbSize = sizeof(notify);
@@ -207,7 +207,7 @@ namespace Nickvision::Notifications
 		return notify;
 	}
 
-	LRESULT NotifyIcon::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+	LRESULT NotifyIcon::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		if (uMsg == WM_NOTIFYICON_EVENT)
 		{
@@ -255,7 +255,7 @@ namespace Nickvision::Notifications
 		return DefWindowProcA(m_hwnd, uMsg, wParam, lParam);
 	}
 
-	LRESULT NotifyIcon::notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+	LRESULT NotifyIcon::notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		if (m_icons.contains(hwnd))
 		{

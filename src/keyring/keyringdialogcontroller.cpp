@@ -3,29 +3,29 @@
 
 namespace Nickvision::Keyring
 {
-	KeyringDialogController::KeyringDialogController(const std::string& name, const std::optional<Keyring>& keyring) noexcept
+	KeyringDialogController::KeyringDialogController(const std::string& name, const std::optional<Keyring>& keyring)
 		: m_name{ name },
 		m_keyring{ keyring }
 	{
 
 	}
 
-	const std::optional<Keyring>& KeyringDialogController::getKeyring() noexcept
+	const std::optional<Keyring>& KeyringDialogController::getKeyring()
 	{
 		return m_keyring;
 	}
 
-	bool KeyringDialogController::isEnabled() const noexcept
+	bool KeyringDialogController::isEnabled() const
 	{
 		return m_keyring.has_value();
 	}
 
-	bool KeyringDialogController::isValid() const noexcept
+	bool KeyringDialogController::isValid() const
 	{
 		return !(!m_keyring && Keyring::exists(m_name));
 	}
 
-	bool KeyringDialogController::enableKeyring(const std::string& password) noexcept
+	bool KeyringDialogController::enableKeyring(const std::string& password)
 	{
 		if (!m_keyring)
 		{
@@ -35,7 +35,7 @@ namespace Nickvision::Keyring
 		return false;
 	}
 
-	bool KeyringDialogController::disableKeyring() noexcept
+	bool KeyringDialogController::disableKeyring()
 	{
 		if (m_keyring)
 		{
@@ -46,7 +46,7 @@ namespace Nickvision::Keyring
 		return false;
 	}
 
-	bool KeyringDialogController::resetKeyring() noexcept
+	bool KeyringDialogController::resetKeyring()
 	{
 		if (!m_keyring)
 		{
@@ -55,7 +55,7 @@ namespace Nickvision::Keyring
 		return false;
 	}
 
-	CredentialCheckStatus KeyringDialogController::validateCredential(const Credential& credential) const noexcept
+	CredentialCheckStatus KeyringDialogController::validateCredential(const Credential& credential) const
 	{
 		CredentialCheckStatus result = (CredentialCheckStatus)0;
 		if (credential.getName().empty())
@@ -77,7 +77,7 @@ namespace Nickvision::Keyring
 		return CredentialCheckStatus::Valid;
 	}
 
-	std::vector<Credential> KeyringDialogController::getAllCredentials() const noexcept
+	std::vector<Credential> KeyringDialogController::getAllCredentials() const
 	{
 		if (m_keyring)
 		{
@@ -86,7 +86,7 @@ namespace Nickvision::Keyring
 		return {};
 	}
 
-	bool KeyringDialogController::addCredential(const Credential& credential) noexcept
+	bool KeyringDialogController::addCredential(const Credential& credential)
 	{
 		if (m_keyring && (validateCredential(credential) & CredentialCheckStatus::Valid) == CredentialCheckStatus::Valid)
 		{
@@ -95,7 +95,7 @@ namespace Nickvision::Keyring
 		return false;
 	}
 
-	bool KeyringDialogController::updateCredential(const Credential& credential) noexcept
+	bool KeyringDialogController::updateCredential(const Credential& credential)
 	{
 		if (m_keyring && (validateCredential(credential) & CredentialCheckStatus::Valid) == CredentialCheckStatus::Valid)
 		{
@@ -107,7 +107,7 @@ namespace Nickvision::Keyring
 		return false;
 	}
 
-	bool KeyringDialogController::deleteCredential(int id) noexcept
+	bool KeyringDialogController::deleteCredential(int id)
 	{
 		if (m_keyring)
 		{
