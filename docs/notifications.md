@@ -88,7 +88,6 @@ Path: `Nickvision::Notifications::NotifyIcon`
   ``` 
     - Constructs a NotifyIcon.
     - Accepts: The `HWND` handle for the main application window, hwnd, the context menu model for the icon, contextMenu, and whether or not to hide the icon by default, hidden.
-    - Throws: std::logic_error if Aura::init() was not called yet.
     - Throws: std::runtime_error if unable to create the NotifyIcon.
 - ```cpp
   ~NotifyIcon()
@@ -224,15 +223,13 @@ Path: `Nickvision::Notifications::ShellNotification`
     - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the `HWND` handle for the main application window, hwnd. The hwnd parameter is only used once on the initial creation of the static `NotifyIcon` and then is ignored on future calls.
     - Note: This function is only available on the Windows platform. It uses `Nickvision::Notifications::NotifyIcon`.
     - Note: This function supports the action "open" with action param being a path of a file or folder to open.
-    - Throws: std::logic_error if Aura::init() was not called yet 
 - ```cpp
   void send(const ShellNotificationSentEventArgs& e, const std::string& openText)
   ``` 
     - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the localized text of "Open", openText.
     - Note: This function is only available on the Linux platform.
     - Note: This function supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event.
-    - Throws: std::logic_error if Aura::init() was not called yet 
-
+    
 ## ShellNotificationSentEventArgs
 Description: Event args for when a shell notification is sent.
 

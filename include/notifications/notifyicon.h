@@ -27,7 +27,6 @@ namespace Nickvision::Notifications
 		 * @param hwnd The HWND handle of the main application window
 		 * @param menu The model for the context menu of the NotifyIcon
 		 * @param hidden Whether or not the NotifyIcon should be hidden by default
-		 * @throw std::logic_error Thrown if Aura::init() was not called yet 
 		 * @throw std::runtime_error Thrown if unable to create the NotifyIcon
 		 */
 		NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu = { }, bool hidden = false);

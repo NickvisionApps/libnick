@@ -45,7 +45,7 @@ namespace Nickvision::Keyring
 	std::string PasswordGenerator::next(size_t length)
 	{
 		std::string pass;
-        for(int i = 0; i < length; i++)
+        for(size_t i = 0; i < length; i++)
         {
             pass += m_chars[rand() % m_chars.size()];
         }
