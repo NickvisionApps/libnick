@@ -110,6 +110,7 @@ namespace Nickvision::Taskbar
 		ULONG_PTR m_gdi;
 #elif defined(__linux__)
 		GDBusConnection* m_connection;
+		std::string m_objectPath;
 		std::string m_appUri;
 #endif
 	};

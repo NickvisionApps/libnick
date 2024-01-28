@@ -57,7 +57,7 @@ namespace Nickvision::Taskbar
 #elif defined(__linux__)
 		if (m_connection)
 		{
-			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GDBusMessage* message{ g_dbus_message_new_signal(m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update") };
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress-visible"), g_variant_new_boolean(m_progressState >= ProgressState::Normal)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
@@ -85,7 +85,7 @@ namespace Nickvision::Taskbar
 #elif defined(__linux__)
 		if (m_connection)
 		{
-			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GDBusMessage* message{ g_dbus_message_new_signal(m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update") };
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress"), g_variant_new_double(m_progress)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
@@ -121,7 +121,7 @@ namespace Nickvision::Taskbar
 #elif defined(__linux__)
 		if (m_connection)
 		{
-			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GDBusMessage* message{ g_dbus_message_new_signal(m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update") };
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("urgent"), g_variant_new_boolean(m_urgent)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
@@ -173,7 +173,7 @@ namespace Nickvision::Taskbar
 #elif defined(__linux__)
 		if (m_connection)
 		{
-			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GDBusMessage* message{ g_dbus_message_new_signal(m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update") };
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("count-visible"), g_variant_new_boolean(m_countVisible)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
@@ -196,7 +196,7 @@ namespace Nickvision::Taskbar
 #ifdef __linux__
 		if (m_connection)
 		{
-			GDBusMessage* message{ g_dbus_message_new_signal("/", "com.canonical.Unity.LauncherEntry", "Update") };
+			GDBusMessage* message{ g_dbus_message_new_signal(m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update") };
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("count"), g_variant_new_int64(m_count)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
@@ -242,6 +242,12 @@ namespace Nickvision::Taskbar
 		m_connection = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr); //returns a singleton, no need to manage it
 		if (m_connection)
 		{
+			unsigned long hash{ 5381 };
+			for(char c : desktopFile)
+			{
+				hash = (hash << 5) + hash + c;
+			}
+			m_objectPath = "/com/canonical/unity/launcherentry/" + std::to_string(hash);
 			m_appUri = "application://" + desktopFile;
 			return true;
 		}
