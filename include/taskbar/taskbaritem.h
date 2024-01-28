@@ -109,7 +109,7 @@ namespace Nickvision::Taskbar
 		CComPtr<ITaskbarList3> m_taskbar;
 		ULONG_PTR m_gdi;
 #elif defined(__linux__)
-		std::shared_ptr<GDBusConnection> m_connection;
+		GDBusConnection* m_connection;
 		std::string m_appUri;
 #endif
 	};

@@ -1,5 +1,4 @@
 #include "taskbar/taskbaritem.h"
-#include <array>
 #include <limits>
 #ifdef _WIN32
 #include <dwmapi.h>
@@ -62,9 +61,8 @@ namespace Nickvision::Taskbar
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress-visible"), g_variant_new_boolean(m_progressState >= ProgressState::Normal)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_dbus_connection_send_message(m_connection.get(), message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
-			g_object_unref(G_OBJECT(tuple));
 		}
 #endif
 	}
@@ -91,9 +89,8 @@ namespace Nickvision::Taskbar
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("progress"), g_variant_new_double(m_progress)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_dbus_connection_send_message(m_connection.get(), message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
-			g_object_unref(G_OBJECT(tuple));
 		}
 #endif
 		lock.unlock();
@@ -128,9 +125,8 @@ namespace Nickvision::Taskbar
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("urgent"), g_variant_new_boolean(m_urgent)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_dbus_connection_send_message(m_connection.get(), message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
-			g_object_unref(G_OBJECT(tuple));
 		}
 #endif
 	}
@@ -181,9 +177,8 @@ namespace Nickvision::Taskbar
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("count-visible"), g_variant_new_boolean(m_countVisible)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_dbus_connection_send_message(m_connection.get(), message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
-			g_object_unref(G_OBJECT(tuple));
 		}
 #endif
 	}
@@ -205,9 +200,8 @@ namespace Nickvision::Taskbar
 			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new_dict_entry(g_variant_new_string("count"), g_variant_new_int64(m_count)) };
 			GVariant* tuple{ g_variant_new_tuple(params, 2) };
 			g_dbus_message_set_body(message, tuple);
-			g_dbus_connection_send_message(m_connection.get(), message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
+			g_dbus_connection_send_message(m_connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, nullptr, nullptr);
 			g_object_unref(G_OBJECT(message));
-			g_object_unref(G_OBJECT(tuple));
 		}
 #endif
 		lock.unlock();
@@ -245,11 +239,7 @@ namespace Nickvision::Taskbar
 		{
 			return false;
 		}
-		m_connection = { g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr), [](GDBusConnection* connection)
-		{
-			g_dbus_connection_close_sync(connection, nullptr, nullptr);
-			g_object_unref(G_OBJECT(connection));
-		}};
+		m_connection = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr); //returns a singleton, no need to manage it
 		if (m_connection)
 		{
 			m_appUri = "application://" + desktopFile;
