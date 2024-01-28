@@ -240,7 +240,6 @@ namespace Nickvision::Taskbar
 		GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_builder_end(&builder) };
 		GVariant* tuple{ g_variant_new_tuple(params, 2) };
 		g_dbus_connection_emit_signal(m_connection, nullptr, m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update", tuple, nullptr);
-		g_variant_unref(tuple);
 	}
 #endif
 }
