@@ -230,7 +230,8 @@ namespace Nickvision::Taskbar
 
 	void TaskbarItem::sendDBusUpdate()
 	{
-		GVariantBuilder* builder{ g_variant_builder_new(G_VARIANT_TYPE("a{sv}")) };
+		GVariantBuilder builder;
+		g_variant_builder_init(&builder, G_VARIANT_TYPE("a{sv}"));
 		g_variant_builder_add(builder, "{sv}", "progress-visible", g_variant_new_boolean(m_progressState >= ProgressState::Normal));
 		g_variant_builder_add(builder, "{sv}", "progress", g_variant_new_double(m_progress));
 		g_variant_builder_add(builder, "{sv}", "urgent", g_variant_new_boolean(m_urgent));
@@ -240,7 +241,6 @@ namespace Nickvision::Taskbar
 		GVariant* tuple{ g_variant_new_tuple(params, 2) };
 		g_dbus_connection_emit_signal(m_connection, nullptr, m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update", tuple, nullptr);
 		g_variant_unref(tuple);
-		g_variant_builder_unref(builder);
 	}
 #endif
 }
