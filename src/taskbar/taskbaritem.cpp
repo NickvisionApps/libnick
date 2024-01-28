@@ -25,6 +25,7 @@ namespace Nickvision::Taskbar
 		m_taskbar = nullptr;
 #elif defined(__linux__)
 		m_connection = nullptr;
+		m_objectPath = "";
 		m_appUri = "";
 #endif
 	}
@@ -75,7 +76,8 @@ namespace Nickvision::Taskbar
 
 	void TaskbarItem::setProgress(double progress)
 	{
-		std::unique_lock<std::mutex> lock{ m_mutex };
+		setProgressState(progress == 0 ? ProgressState::NoProgress : ProgressState::Normal);
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_progress = progress;
 #ifdef _WIN32
 		if (m_taskbar)
@@ -93,8 +95,6 @@ namespace Nickvision::Taskbar
 			g_object_unref(G_OBJECT(message));
 		}
 #endif
-		lock.unlock();
-		setProgressState(progress == 0 ? ProgressState::NoProgress : ProgressState::Normal);
 	}
 
 	bool TaskbarItem::getUrgent() const
@@ -191,7 +191,8 @@ namespace Nickvision::Taskbar
 
 	void TaskbarItem::setCount(long count)
 	{
-		std::unique_lock<std::mutex> lock{ m_mutex };
+		setCountVisible(count > 0);
+		std::lock_guard<std::mutex> lock{ m_mutex };
 		m_count = count;
 #ifdef __linux__
 		if (m_connection)
@@ -204,8 +205,6 @@ namespace Nickvision::Taskbar
 			g_object_unref(G_OBJECT(message));
 		}
 #endif
-		lock.unlock();
-		setCountVisible(count > 0);
 	}
 
 #ifdef _WIN32
