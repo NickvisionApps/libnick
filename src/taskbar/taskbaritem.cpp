@@ -58,10 +58,7 @@ namespace Nickvision::Taskbar
 #elif defined(__linux__)
 		if (m_connection)
 		{
-			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new("a{sv}", "progress-visible", m_progressState >= ProgressState::Normal) };
-			GVariant* tuple{ g_variant_new_tuple(params, 2) };
-			g_dbus_connection_emit_signal(m_connection, nullptr, m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update", tuple, nullptr);
-			g_variant_unref(tuple);
+			sendDBusUpdate();
 		}
 #endif
 	}
@@ -85,10 +82,7 @@ namespace Nickvision::Taskbar
 #elif defined(__linux__)
 		if (m_connection)
 		{
-			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new("a{sv}", "progress", m_progress) };
-			GVariant* tuple{ g_variant_new_tuple(params, 2) };
-			g_dbus_connection_emit_signal(m_connection, nullptr, m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update", tuple, nullptr);
-			g_variant_unref(tuple);
+			sendDBusUpdate();
 		}
 #endif
 	}
@@ -117,10 +111,7 @@ namespace Nickvision::Taskbar
 #elif defined(__linux__)
 		if (m_connection)
 		{
-			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new("a{sv}", "urgent", m_urgent) };
-			GVariant* tuple{ g_variant_new_tuple(params, 2) };
-			g_dbus_connection_emit_signal(m_connection, nullptr, m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update", tuple, nullptr);
-			g_variant_unref(tuple);
+			sendDBusUpdate();
 		}
 #endif
 	}
@@ -167,10 +158,7 @@ namespace Nickvision::Taskbar
 #elif defined(__linux__)
 		if (m_connection)
 		{
-			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new("a{sv}", "count-visible", m_countVisible) };
-			GVariant* tuple{ g_variant_new_tuple(params, 2) };
-			g_dbus_connection_emit_signal(m_connection, nullptr, m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update", tuple, nullptr);
-			g_variant_unref(tuple);
+			sendDBusUpdate();
 		}
 #endif
 	}
@@ -189,10 +177,7 @@ namespace Nickvision::Taskbar
 #ifdef __linux__
 		if (m_connection)
 		{
-			GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_new("a{sv}", "count", m_count) };
-			GVariant* tuple{ g_variant_new_tuple(params, 2) };
-			g_dbus_connection_emit_signal(m_connection, nullptr, m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update", tuple, nullptr);
-			g_variant_unref(tuple);
+			sendDBusUpdate();
 		}
 #endif
 	}
@@ -241,6 +226,21 @@ namespace Nickvision::Taskbar
 			return true;
 		}
 		return false;
+	}
+
+	void TaskbarItem::sendDBusUpdate()
+	{
+		GVariantBuilder* builder{ g_variant_builder_new(G_VARIANT_TYPE("a{sv}")) };
+		g_variant_builder_add(builder, "{sv}", "progress-visible", g_variant_new_boolean(m_progressState >= ProgressState::Normal));
+		g_variant_builder_add(builder, "{sv}", "progress", g_variant_new_double(m_progress));
+		g_variant_builder_add(builder, "{sv}", "urgent", g_variant_new_boolean(m_urgent));
+		g_variant_builder_add(builder, "{sv}", "count-visible", g_variant_new_boolean(m_countVisible));
+		g_variant_builder_add(builder, "{sv}", "count", g_variant_new_int64(m_count));
+		GVariant* params[2]{ g_variant_new_string(m_appUri.c_str()), g_variant_builder_end(builder) };
+		GVariant* tuple{ g_variant_new_tuple(params, 2) };
+		g_dbus_connection_emit_signal(m_connection, nullptr, m_objectPath.c_str(), "com.canonical.Unity.LauncherEntry", "Update", tuple, nullptr);
+		g_variant_unref(tuple);
+		g_variant_builder_unref(builder);
 	}
 #endif
 }

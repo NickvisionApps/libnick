@@ -109,6 +109,10 @@ namespace Nickvision::Taskbar
 		CComPtr<ITaskbarList3> m_taskbar;
 		ULONG_PTR m_gdi;
 #elif defined(__linux__)
+		/**
+		 * @brief Sends the com.canonical.Unity.LauncherEntry.Update signal over the session dbus.
+		 */
+		void sendDBusUpdate();
 		GDBusConnection* m_connection;
 		std::string m_objectPath;
 		std::string m_appUri;
