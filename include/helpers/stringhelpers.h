@@ -9,107 +9,116 @@
 
 namespace Nickvision::StringHelpers
 {
-	template<typename T>
-	concept StringImplicitlyConstructible = std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>;
+    template<typename T>
+    concept StringImplicitlyConstructible = std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>;
 
-	/**
-	 * @brief Gets whether or not the provided string is a valid url
-	 * @param s The string to check
-	 * @return True if the string is a valid url, else false
-	 */
-	bool isValidUrl(const std::string& s);
     /**
-	 * @brief Concatenates the elements of a string list using the specified separator between each element.
-	 * @param values The list of strings to join
-	 * @param delimiter The string to use as a separator between each element
-	 * @param delimitLast Whether or not to include the separator for the last joined element
-	 * @return A single string that consists of all elements of the string list separated by the delimiter
-	 */
-	std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true);
-	/**
-	 * @brief Generates a new guid (uuid v4) value.
-	 * @return The guid value
-	 */
-	std::string newGuid();
-	/**
-	 * @brief Replaces a substring within a string with a new string.
-	 * @param s The string to work on
-	 * @param toRepalce The substring to be replaced
-	 * @param replace The new string to replace with
-	 * @return The new replaced string
-	 */
-	std::string replace(std::string s, const std::string& toReplace, const std::string& replace);
-	/**
-	 * @brief Splits a string based on a delimiter.
-	 * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)
-	 * @param s The string to split
-	 * @param delimiter The delimiter to split the string on
-	 * @return The splits of the string
-	 */
-	template<StringImplicitlyConstructible T = std::string>
-	std::vector<T> split(std::string s, const std::string& delimiter)
-	{
-		std::vector<T> splits;
-		size_t pos{ 0 };
-		while ((pos = s.find(delimiter)) != std::string::npos)
-		{
-			std::string split{ s.substr(0, pos) };
-			splits.push_back(split);
-			s.erase(0, pos + 1);
-		}
-		if (!s.empty())
-		{
-			splits.push_back(s);
-		}
-		return splits;
-	}
-    	/**
-	 * @brief Converts a string to an unsigned int
-	 * @param s The string to convert
-	 * @param idx The address of a size_t to store the number of characters processed
-	 * @param base The number base
-	 * @return The unsigned int version of the string
-	 * @return UINT_MAX if the converted string is too long
-	 * @return 0 if error
-	 */
-	unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10);
-	/**
-	 * @brief Gets a fully lowercase string from the provided string.
-	 * @param s The string to get lowercase
-	 * @return The new lowercase string
-	 */
-	std::string toLower(std::string s);
+     * @brief Gets whether or not the provided string is a valid url
+     * @param s The string to check
+     * @return True if the string is a valid url, else false
+     */
+    bool isValidUrl(const std::string& s);
     /**
-	 * @brief Converts the wstring to a string.
-	 * @param s The wstring to convert
-	 * @return The string version of the wstring
-	 */
-	std::string toString(const std::wstring& s);
-	/**
-	 * @brief Gets a fully uppercase string from the provided string.
-	 * @param s The string to get uppercase
-	 * @return The new uppercase string
-	 */
-	std::string toUpper(std::string s);
+     * @brief Concatenates the elements of a string list using the specified separator between each element.
+     * @param values The list of strings to join
+     * @param delimiter The string to use as a separator between each element
+     * @param delimitLast Whether or not to include the separator for the last joined element
+     * @return A single string that consists of all elements of the string list separated by the delimiter
+     */
+    std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true);
     /**
-	 * @brief Converts the string to a wstring.
-	 * @param s The string to convert
-	 * @return The wstring version of the string
-	 */
-	std::wstring toWstring(const std::string& s);
-	/**
-	 * @brief Trims whitespace form the beginning and end of a string.
-	 * @param s The string to trim (unmodified)
-	 * @return The new trimmed string
-	 */
-	std::string trim(const std::string& s);
-	/**
-	 * @brief Trims the delimiter character form the beginning and end of a string.
-	 * @param s The string to trim (unmodified)
-	 * @param delimiter The character to trim
-	 * @return The new trimmed string
-	 */
-	std::string trim(const std::string& s, char delimiter);
+     * @brief Generates a new guid (uuid v4) value.
+     * @return The guid value
+     */
+    std::string newGuid();
+    /**
+     * @brief Replaces a substring within a string with a new string.
+     * @param s The string to work on
+     * @param toRepalce The substring to be replaced
+     * @param replace The new string to replace with
+     * @return The new replaced string
+     */
+    std::string replace(std::string s, const std::string& toReplace, const std::string& replace);
+    /**
+     * @brief Splits a string based on a delimiter.
+     * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)
+     * @param s The string to split
+     * @param delimiter The delimiter to split the string on
+     * @return The splits of the string
+     */
+    template<StringImplicitlyConstructible T = std::string>
+    std::vector<T> split(std::string s, const std::string& delimiter)
+    {
+        if(s.empty())
+        {
+            return {};
+        }
+        std::vector<T> splits;
+        if(delimiter.empty())
+        {
+            splits.push_back(s);
+            return splits;
+        }
+        size_t pos{ 0 };
+        while ((pos = s.find(delimiter)) != std::string::npos)
+        {
+            std::string split{ s.substr(0, pos) };
+            splits.push_back(split);
+            s.erase(0, pos + 1);
+        }
+        if (!s.empty())
+        {
+            splits.push_back(s);
+        }
+        return splits;
+    }
+    /**
+     * @brief Converts a string to an unsigned int
+     * @param s The string to convert
+     * @param idx The address of a size_t to store the number of characters processed
+     * @param base The number base
+     * @return The unsigned int version of the string
+     * @return UINT_MAX if the converted string is too long
+     * @return 0 if error
+     */
+    unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10);
+    /**
+     * @brief Gets a fully lowercase string from the provided string.
+     * @param s The string to get lowercase
+     * @return The new lowercase string
+     */
+    std::string toLower(std::string s);
+    /**
+     * @brief Converts the wstring to a string.
+     * @param s The wstring to convert
+     * @return The string version of the wstring
+     */
+    std::string toString(const std::wstring& s);
+    /**
+     * @brief Gets a fully uppercase string from the provided string.
+     * @param s The string to get uppercase
+     * @return The new uppercase string
+     */
+    std::string toUpper(std::string s);
+    /**
+     * @brief Converts the string to a wstring.
+     * @param s The string to convert
+     * @return The wstring version of the string
+     */
+    std::wstring toWstring(const std::string& s);
+    /**
+     * @brief Trims whitespace form the beginning and end of a string.
+     * @param s The string to trim (unmodified)
+     * @return The new trimmed string
+     */
+    std::string trim(const std::string& s);
+    /**
+     * @brief Trims the delimiter character form the beginning and end of a string.
+     * @param s The string to trim (unmodified)
+     * @param delimiter The character to trim
+     * @return The new trimmed string
+     */
+    std::string trim(const std::string& s, char delimiter);
 
 }
 
