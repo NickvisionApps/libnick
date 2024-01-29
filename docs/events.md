@@ -53,6 +53,10 @@ Path: `Nickvision::Events::Event`
   ```
     - Accepts: A `std::function` with signature `void handler(const T&)` to remove as a callback for the event, handler.
 - ```cpp
+  void operator()(const T& param)
+  ```
+    - Accepts: A `T` object to pass as a parameter, param, as all registered callbacks are called on this event.
+- ```cpp
   Event& operator=(const Event& e)
   ```
     - Copies an Event object.

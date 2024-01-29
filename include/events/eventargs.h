@@ -3,17 +3,17 @@
 
 namespace Nickvision::Events
 {
-	/**
-	 * @brief A base class for event arguments.
-	 */
-	class EventArgs
-	{
-	public:
-		/**
-		 * @brief Constructs an EventArgs.
-		 */
-		EventArgs() = default;
-	};
+    /**
+     * @brief A base class for event arguments.
+     */
+    class EventArgs
+    {
+    public:
+        /**
+         * @brief Constructs an EventArgs.
+         */
+        EventArgs() = default;
+    };
 }
 
 #endif //EVENTARGS_H
