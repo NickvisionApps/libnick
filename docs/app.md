@@ -328,10 +328,11 @@ Path: `Nickvision::App::InterProcessCommunicator`
 
 ### Methods
 - ```cpp
-  InterProcessCommunicator()
+  InterProcessCommunicator(const std::string& id)
   ```
     - Constructs an InterProcessCommunicator.
-    - Note: If this is the first IPC instance for all processes of this AppInfo::id, this instance will become an IPC server.
+    - Accepts: The id of the ipc, id. id should be the same value for all instances of ipc that must talk to each other.
+    - Note: If this is the first IPC instance for all processes of id, this instance will become an IPC server.
     - Note: If this is not the first IPC instance, this instance will become an IPC client.
     - Throws: `std::runtime_error` if the client or server IPC cannot be created.
 - ```cpp
@@ -370,7 +371,7 @@ int main(int argc, char*[] argv)
             modernArgs.push_back({ argv[i] });
         }
     }
-    InterProcessCommunicator ipc;
+    InterProcessCommunicator& ipc{ Aura::getActuve().getIPC() };
     ipc.commandReceived() += [](const Events::ParamEventArgs<std::vector<std::string>>& args) { ... };
     ipc.communicate(modernArgs, true);
 }
