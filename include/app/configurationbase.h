@@ -6,7 +6,7 @@
 #include <json/json.h>
 #include "events/event.h"
 
-namespace Nickvision::Aura
+namespace Nickvision::App
 {
 	/**
 	 * A base class for configuration files.

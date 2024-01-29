@@ -1,13 +1,13 @@
-#include "aura/interprocesscommunicator.h"
+#include "app/interprocesscommunicator.h"
 #include <cstdlib>
 #include <stdexcept>
-#include "aura/aura.h"
+#include "app/aura.h"
 #ifdef __linux__
 #include <unistd.h>
 #include <sys/socket.h>
 #endif
 
-namespace Nickvision::Aura
+namespace Nickvision::App
 {
 	InterProcessCommunicator::InterProcessCommunicator()
 		: m_serverRunning{ false }

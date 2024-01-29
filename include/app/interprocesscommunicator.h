@@ -12,7 +12,7 @@
 #include <sys/un.h>
 #endif
 
-namespace Nickvision::Aura
+namespace Nickvision::App
 {
 	/**
 	 * @brief An inter process communicator (server/client). 

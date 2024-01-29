@@ -27,7 +27,7 @@ For example, assume a class has an event defined as `Nickvision::Events::Event<N
 This means that the class provides the following method, allowing consumers to register callbacks to the event using the `+=` operator: `Nickvision::Events::Event<Nickvision::Events::EventArgs>& saved()`.
 
 ## Modules
-- [Nickvision::Aura](aura.md)
+- [Nickvision::App](app.md)
 - [Nickvision::Events](events.md)
 - [Nickvision::Filesystem](filesystem.md)
 - [Nickvision::Helpers](helpers.md)

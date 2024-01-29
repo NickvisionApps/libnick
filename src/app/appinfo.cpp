@@ -1,11 +1,11 @@
-#include "aura/appinfo.h"
+#include "app/appinfo.h"
 #include <sstream>
 #include <maddy/parser.h>
 #include "helpers/stringhelpers.h"
 
 using namespace Nickvision::Update;
 
-namespace Nickvision::Aura
+namespace Nickvision::App
 {
 	const std::string& AppInfo::getId() const
 	{

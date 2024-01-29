@@ -14,7 +14,7 @@
 #include "appinfo.h"
 #include "configurationbase.h"
 
-namespace Nickvision::Aura
+namespace Nickvision::App
 {
 	template<typename T>
 	concept DerivedConfigurationBase = std::is_base_of_v<ConfigurationBase, T>;

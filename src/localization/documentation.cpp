@@ -1,17 +1,19 @@
 #include "localization/documentation.h"
 #include <boost/locale.hpp>
-#include "aura/aura.h"
+#include "app/aura.h"
 #include "helpers/stringhelpers.h"
 #include "localization/gettext.h"
+
+using namespace Nickvision::App;
 
 namespace Nickvision::Localization
 {
     std::string Documentation::getHelpUrl(const std::string& pageName)
     {
 #ifdef __linux__
-        if (Aura::Aura::getActive().getEnvVar("SNAP").empty())
+        if (Aura::getActive().getEnvVar("SNAP").empty())
         {
-            return "help:" + StringHelpers::toLower(Aura::Aura::getActive().getAppInfo().getEnglishShortName()) + "/" + pageName;
+            return "help:" + StringHelpers::toLower(Aura::getActive().getAppInfo().getEnglishShortName()) + "/" + pageName;
         }
 #endif
         std::string lang{ "C" };
@@ -25,7 +27,7 @@ namespace Nickvision::Localization
              * language code) to the list of available translated languages for the app.
              */
             std::vector<std::string> langs;
-            for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(Aura::Aura::getActive().getExecutableDirectory()))
+            for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(Aura::getActive().getExecutableDirectory()))
             {
                 if (e.is_directory() && std::filesystem::exists(e.path() / (Gettext::getDomainName() + ".mo")))
                 {
@@ -49,6 +51,6 @@ namespace Nickvision::Localization
                 }
             }
         }
-        return "https://htmlpreview.github.io/?" + Aura::Aura::getActive().getAppInfo().getHtmlDocsStore() + "/" + lang + "/" + pageName + ".html";
+        return "https://htmlpreview.github.io/?" + Aura::getActive().getAppInfo().getHtmlDocsStore() + "/" + lang + "/" + pageName + ".html";
     }
 }

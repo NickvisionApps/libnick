@@ -2,8 +2,10 @@
 #include "notifications/notifyicon.h"
 #include <stdexcept>
 #include <strsafe.h>
-#include "aura/aura.h"
+#include "app/aura.h"
 #include "helpers/stringhelpers.h"
+
+using namespace Nickvision::App;
 
 namespace Nickvision::Notifications
 {
@@ -12,7 +14,7 @@ namespace Nickvision::Notifications
 	NotifyIcon::NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu, bool hidden)
 		: m_className{ StringHelpers::newGuid() },
 		m_isHidden{ hidden },
-		m_tooltip{ Aura::Aura::getActive().getAppInfo().getName() },
+		m_tooltip{ Aura::getActive().getAppInfo().getName() },
 		m_contextMenu{ contextMenu },
 		m_hwnd{ nullptr }
 	{

@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <vector>
 #include <json/json.h>
-#include "aura/aura.h"
+#include "app/aura.h"
 #include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
 #include "helpers/webhelpers.h"
@@ -12,6 +12,7 @@
 #include <windows.h>
 #endif
 
+using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
 
 namespace Nickvision::Update
@@ -22,7 +23,7 @@ namespace Nickvision::Update
 	{
 		if (!WebHelpers::isValidWebsite(githubRepoUrl))
 		{
-			githubRepoUrl = Aura::Aura::getActive().getAppInfo().getSourceRepo();
+			githubRepoUrl = Aura::getActive().getAppInfo().getSourceRepo();
 			if (!WebHelpers::isValidWebsite(githubRepoUrl))
 			{
 				throw std::invalid_argument("The source repo of the active Aura::AppInfo is invalid.");

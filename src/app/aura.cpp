@@ -1,4 +1,4 @@
-#include "aura/aura.h"
+#include "app/aura.h"
 #include <cstdlib>
 #include <curl/curl.h>
 #include "filesystem/systemdirectories.h"
@@ -12,7 +12,7 @@
 
 using namespace Nickvision::Filesystem;
 
-namespace Nickvision::Aura
+namespace Nickvision::App
 {
 	Aura::Aura()
         : m_initialized{ false }

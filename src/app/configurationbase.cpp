@@ -1,11 +1,11 @@
-#include "aura/configurationbase.h"
+#include "app/configurationbase.h"
 #include <fstream>
 #include <stdexcept>
 #include "filesystem/userdirectories.h"
 
 using namespace Nickvision::Filesystem;
 
-namespace Nickvision::Aura
+namespace Nickvision::App
 {
 	ConfigurationBase::ConfigurationBase(const std::string& key)
 		: m_key{ key }

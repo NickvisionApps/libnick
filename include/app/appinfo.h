@@ -6,7 +6,7 @@
 #include <vector>
 #include "update/version.h"
 
-namespace Nickvision::Aura
+namespace Nickvision::App
 {
 	/**
 	 * @brief A model for the information about an application.

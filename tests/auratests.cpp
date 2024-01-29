@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include "aura/aura.h"
+#include "app/aura.h"
 #include "filesystem/userdirectories.h"
 #include "notifications/shellnotification.h"
 
-using namespace Nickvision::Aura;
+using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
 using namespace Nickvision::Notifications;
 
