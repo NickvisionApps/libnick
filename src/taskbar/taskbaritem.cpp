@@ -173,13 +173,16 @@ namespace Nickvision::Taskbar
 
     void TaskbarItem::drawCountIcon()
     {
-        DWORD accentColor;
         Graphics windowGraphics{ m_hwnd };
-        SolidBrush background{ DwmGetColorizationColor(&accentColor, nullptr) == S_OK ? Color::Color(accentColor) : Color::Color(0, 0, 0) };
+        SolidBrush background{ Color::Color(0, 0, 0) };
         SolidBrush foreground{ Color::Color(255, 255, 255) };
-        Color backgroundColor;
-        background.GetColor(&backgroundColor);
-        background.SetColor({ 255, backgroundColor.GetR(), backgroundColor.GetG(), backgroundColor.GetB() });
+        DWORD accentARGB;
+        BOOL opaque{ FALSE };
+        if(DwmGetColorizationColor(&accentARGB, &opaque) == S_OK)
+        {
+            Color accentColor{ accentARGB };
+            background.SetColor({ 255, accentColor.GetR(), accentColor.GetG(), accentColor.GetB() });
+        }
         Bitmap bitmap{ 16, 16, &windowGraphics };
         Graphics graphics{ &bitmap };
         FontFamily fontFamily{ L"Microsoft Sans Serif" };
