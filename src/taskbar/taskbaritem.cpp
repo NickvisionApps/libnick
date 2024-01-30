@@ -173,29 +173,31 @@ namespace Nickvision::Taskbar
 
     void TaskbarItem::drawCountIcon()
     {
-        Graphics windowGraphics{ m_hwnd };
-        SolidBrush background{ Color::Color(0, 0, 0) };
-        SolidBrush foreground{ Color::Color(255, 255, 255) };
-        DWORD accentARGB;
-        BOOL opaque{ FALSE };
-        if(DwmGetColorizationColor(&accentARGB, &opaque) == S_OK)
+        if (m_taskbar)
         {
-            Color accentColor{ accentARGB };
-            background.SetColor({ 255, accentColor.GetR(), accentColor.GetG(), accentColor.GetB() });
+            Graphics windowGraphics{ m_hwnd };
+            SolidBrush background{ Color::Color(0, 0, 0) };
+            SolidBrush foreground{ Color::Color(255, 255, 255) };
+            DWORD accentARGB;
+            if(DwmGetColorizationColor(&accentARGB, nullptr) == S_OK)
+            {
+                Color accentColor{ accentARGB };
+                background.SetColor({ 255, accentColor.GetR(), accentColor.GetG(), accentColor.GetB() });
+            }
+            Bitmap bitmap{ 16, 16, &windowGraphics };
+            Graphics graphics{ &bitmap };
+            FontFamily fontFamily{ L"Microsoft Sans Serif" };
+            Font font{ &fontFamily, m_count <= 99 ? (m_count < 10 ? 8.0f : 7.5f) : 7.0f };
+            std::wstring countStr{ m_count > 99 ? L"99+" : std::to_wstring(m_count) };
+            SizeF stringSize;
+            graphics.MeasureString(countStr.c_str(), (int)countStr.length(), &font, SizeF(16, 16), StringFormat::GenericDefault(), &stringSize);
+            graphics.FillEllipse(&background, Rect(0, 0, 16, 16));
+            graphics.DrawString(countStr.c_str(), (int)countStr.length(), &font, PointF((16 - stringSize.Width) / 2, (16 - stringSize.Height) / 2), &foreground);
+            HICON icon{ nullptr };
+            bitmap.GetHICON(&icon);
+            m_taskbar->SetOverlayIcon(m_hwnd, icon, std::to_wstring(m_count).c_str());
+            DestroyIcon(icon);
         }
-        Bitmap bitmap{ 16, 16, &windowGraphics };
-        Graphics graphics{ &bitmap };
-        FontFamily fontFamily{ L"Microsoft Sans Serif" };
-        Font font{ &fontFamily, m_count <= 99 ? (m_count < 10 ? 8.0f : 7.5f) : 7.0f };
-        std::wstring countStr{ m_count > 99 ? L"99+" : std::to_wstring(m_count) };
-        SizeF stringSize;
-        graphics.MeasureString(countStr.c_str(), (int)countStr.length(), &font, SizeF(16, 16), StringFormat::GenericDefault(), &stringSize);
-        graphics.FillEllipse(&background, Rect(0, 0, 16, 16));
-        graphics.DrawString(countStr.c_str(), (int)countStr.length(), &font, PointF((16 - stringSize.Width) / 2, (16 - stringSize.Height) / 2), &foreground);
-        HICON icon{ nullptr };
-        bitmap.GetHICON(&icon);
-        m_taskbar->SetOverlayIcon(m_hwnd, icon, std::to_wstring(m_count).c_str());
-        DestroyIcon(icon);
     }
 #elif defined(__linux__)
     bool TaskbarItem::connect(const std::string& desktopFile)
