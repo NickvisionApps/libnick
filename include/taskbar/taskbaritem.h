@@ -105,6 +105,10 @@ namespace Nickvision::Taskbar
         bool m_countVisible;
         long m_count;
 #ifdef _WIN32
+        /**
+         * @brief Draws the icon with the item's count on the TaskbarItem. 
+         */
+        void drawCountIcon();
         HWND m_hwnd;
         CComPtr<ITaskbarList3> m_taskbar;
         ULONG_PTR m_gdi;

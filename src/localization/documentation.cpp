@@ -21,11 +21,11 @@ namespace Nickvision::Localization
         if (!sysLocale.empty() && sysLocale != "C" && sysLocale != "en_US")
         {
             /*
-             * Because the translations of a Nickvision application are stored in the application's running
-             * directory, we can look at the list of directory names and see if they contain a translation
-             * file (.mo). If a directory contains an mo file, we can add that directory name (which is a 
-             * language code) to the list of available translated languages for the app.
-             */
+            * Because the translations of a Nickvision application are stored in the application's running
+            * directory, we can look at the list of directory names and see if they contain a translation
+            * file (.mo). If a directory contains an mo file, we can add that directory name (which is a 
+            * language code) to the list of available translated languages for the app.
+            */
             std::vector<std::string> langs;
             for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(Aura::getActive().getExecutableDirectory()))
             {

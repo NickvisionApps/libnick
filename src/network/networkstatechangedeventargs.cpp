@@ -2,14 +2,14 @@
 
 namespace Nickvision::Network
 {
-	NetworkStateChangedEventArgs::NetworkStateChangedEventArgs(NetworkState state)
-		: m_state{ state }
-	{
+    NetworkStateChangedEventArgs::NetworkStateChangedEventArgs(NetworkState state)
+        : m_state{ state }
+    {
 
-	}
+    }
 
-	NetworkState NetworkStateChangedEventArgs::getState() const
-	{
-		return m_state;
-	}
+    NetworkState NetworkStateChangedEventArgs::getState() const
+    {
+        return m_state;
+    }
 }
