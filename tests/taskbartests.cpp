@@ -50,8 +50,8 @@ TEST_F(TaskbarTest, SetUrgent)
 
 TEST_F(TaskbarTest, SetCount)
 {
- ASSERT_NO_THROW(m_taskbar->setCountVisible(true));
-	ASSERT_NO_THROW(m_taskbar->setCount(5));
+    ASSERT_NO_THROW(m_taskbar->setCountVisible(true));
+	ASSERT_NO_THROW(m_taskbar->setCount(4));
 }
 
 TEST_F(TaskbarTest, Cleanup)

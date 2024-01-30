@@ -181,10 +181,11 @@ namespace Nickvision::Taskbar
             SolidBrush background{ Color::Color(0, 0, 0) };
             SolidBrush foreground{ Color::Color(255, 255, 255) };
             DWORD accentARGB;
-            if(DwmGetColorizationColor(&accentARGB, nullptr) == S_OK)
+            BOOL opaque{ FALSE };
+            if(DwmGetColorizationColor(&accentARGB, &opaque) == S_OK)
             {
                 Color accentColor{ accentARGB };
-                background.SetColor({ 255, accentColor.GetR(), accentColor.GetG(), accentColor.GetB() });
+                background.SetColor({ 230, accentColor.GetR(), accentColor.GetG(), accentColor.GetB() });
             }
             Bitmap bitmap{ 16, 16, &windowGraphics };
             Graphics graphics{ &bitmap };
