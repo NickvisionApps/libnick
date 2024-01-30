@@ -68,7 +68,6 @@ Path: `Nickvision::Taskbar::TaskbarItem`
   long Count: get, set
   ```
     - The count shown on the taskbar item.
-    - Note: Setting the count will set the count visible to true if count > 0, else will set count visible to false.
 
 ### Methods
 - ```cpp

@@ -67,7 +67,7 @@ namespace Nickvision::Taskbar
 
     void TaskbarItem::setProgress(double progress)
     {
-        setProgressState(progress == 0 ? ProgressState::NoProgress : ProgressState::Normal);
+        setProgressState(progress > 0 ? ProgressState::Normal : ProgressState::NoProgress);
         std::lock_guard<std::mutex> lock{ m_mutex };
         m_progress = progress;
 #ifdef _WIN32
@@ -141,11 +141,13 @@ namespace Nickvision::Taskbar
 
     void TaskbarItem::setCount(long count)
     {
-        setCountVisible(count > 0);
         std::lock_guard<std::mutex> lock{ m_mutex };
         m_count = count;
 #ifdef _WIN32
-        drawCountIcon();
+        if(m_countVisible)
+        {
+            drawCountIcon();
+        }
 #elif defined(__linux__)
         sendDBusUpdate();
 #endif

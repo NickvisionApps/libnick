@@ -77,7 +77,7 @@ namespace Nickvision::Taskbar
          */
         long getCount() const;
         /**
-         * @brief Sets the count shown on the taskbar item. Setting the count will set the count visible to true if count > 0, else will set count visible to false.
+         * @brief Sets the count shown on the taskbar item.
          * @param count The new count value
          */
         void setCount(long count);
