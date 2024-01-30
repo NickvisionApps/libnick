@@ -7,31 +7,31 @@
 static_assert(std::is_enum_v<T> == true); \
 inline T operator~(T a) \
 { \
-	return (T)~(int)a; \
+    return (T)~(int)a; \
 } \
 inline T operator|(T a, T b) \
 { \
-	return (T)((int)a | (int)b); \
+    return (T)((int)a | (int)b); \
 } \
 inline T operator&(T a, T b) \
 { \
-	return (T)((int)a & (int)b); \
+    return (T)((int)a & (int)b); \
 } \
 inline T operator^(T a, T b) \
 { \
-	return (T)((int)a ^ (int)b); \
+    return (T)((int)a ^ (int)b); \
 } \
 inline T& operator|=(T& a, T b) \
 { \
-	return (T&)((int&)a |= (int)b); \
+    return (T&)((int&)a |= (int)b); \
 } \
 inline T& operator&=(T& a, T b) \
 { \
-	return (T&)((int&)a &= (int)b); \
+    return (T&)((int&)a &= (int)b); \
 } \
 inline T& operator^=(T& a, T b) \
 { \
-	return (T&)((int&)a ^= (int)b); \
+    return (T&)((int&)a ^= (int)b); \
 }
 
 #endif //ENUMFLAGS_H

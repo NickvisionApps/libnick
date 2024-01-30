@@ -2,11 +2,11 @@
 #include <gtest/gtest.h>
 #include <cstdlib>
 #include <memory>
-#include "aura/aura.h"
+#include "app/aura.h"
 #include "notifications/notifyicon.h"
 #include "notifications/notifyiconmenu.h"
 
-using namespace Nickvision::Aura;
+using namespace Nickvision::App;
 using namespace Nickvision::Notifications;
 
 class NotifyIconTest : public testing::Test

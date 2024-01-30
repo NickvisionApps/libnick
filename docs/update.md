@@ -18,11 +18,11 @@ Path: `Nickvision::Update::Updater`
 
 ### Methods
 - ```cpp
-  Updater(std::string githubRepoUrl = "")
+  Updater(std::string githubRepoUrl)
   ```  
      - Constructs an Updater.
-     - Accepts: The url of a GitHub repo to check for updates, githubRepoUrl. If githubRepoUrl is empty, the url will attempt to be determined from `Aura::getActive().getAppInfo().getSourceRepo()`.
-     - Throws: `std::invalid_argument` if no valid GitHub url can be determined.
+     - Accepts: The url of a GitHub repo to check for updates, githubRepoUrl.
+     - Throws: `std::invalid_argument` if the GitHub url is not of valid format
 - ```cpp
   Nickvision::Version fetchCurrentStableVersion()
   ``` 

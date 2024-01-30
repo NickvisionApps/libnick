@@ -10,5 +10,5 @@ TEST(UpdaterTests, ParabolicStableUpdate)
 	Version stable{ updater.fetchCurrentStableVersion() };
 	ASSERT_TRUE(!stable.empty());
 	ASSERT_TRUE(stable.getVersionType() == VersionType::Stable);
-	ASSERT_TRUE(stable >= Version("2023.11.1"));
+	ASSERT_TRUE(stable >= Version("2023.12.0"));
 }

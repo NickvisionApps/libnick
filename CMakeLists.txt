@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2024.1.13 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2024.2.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -31,10 +31,10 @@ if(LINUX)
 	add_compile_definitions(HAVE_USLEEP)
 endif()
 add_library (${PROJECT_NAME}
-	"src/aura/appinfo.cpp"
-	"src/aura/aura.cpp"
-	"src/aura/configurationbase.cpp"
-	"src/aura/interprocesscommunicator.cpp"
+	"src/app/appinfo.cpp"
+	"src/app/aura.cpp"
+	"src/app/configurationbase.cpp"
+	"src/app/interprocesscommunicator.cpp"
 	"src/filesystem/filesystemchangedeventargs.cpp"
 	"src/filesystem/filesystemwatcher.cpp"
 	"src/filesystem/systemdirectories.cpp"

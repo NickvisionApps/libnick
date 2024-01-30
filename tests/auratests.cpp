@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include "aura/aura.h"
+#include "app/aura.h"
 #include "filesystem/userdirectories.h"
 #include "notifications/shellnotification.h"
 
-using namespace Nickvision::Aura;
+using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
 using namespace Nickvision::Notifications;
 
@@ -97,4 +97,15 @@ TEST_F(AuraTest, DependencyCheck)
 #elif defined(__linux__)
 	ASSERT_NO_THROW(ShellNotification::send(args, "Open"));
 #endif
+}
+
+TEST_F(AuraTest, RunningInformationChecks)
+{
+	ASSERT_TRUE(!Aura::getActive().getExecutableDirectory().empty());
+#ifdef _WIN32
+    ASSERT_TRUE(Aura::getActive().isRunningOnWindows());
+#elif defined(__linux__)
+    ASSERT_TRUE(Aura::getActive().isRunningOnLinux());
+#endif
+    ASSERT_TRUE(Aura::getActive().isRunningViaLocal());
 }

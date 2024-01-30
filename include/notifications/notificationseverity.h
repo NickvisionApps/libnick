@@ -3,16 +3,16 @@
 
 namespace Nickvision::Notifications
 {
-	/**
-	 * @brief Severities for a notification.
-	 */
-	enum class NotificationSeverity
-	{
-		Informational = 0,
-		Success,
-		Warning,
-		Error
-	};
+    /**
+     * @brief Severities for a notification.
+     */
+    enum class NotificationSeverity
+    {
+        Informational = 0,
+        Success,
+        Warning,
+        Error
+    };
 }
 
 #endif //NOTIFICATIONSEVERITY_H

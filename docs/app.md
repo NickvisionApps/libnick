@@ -15,7 +15,7 @@ Interface: [appinfo.h](/include/aura/appinfo.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::AppInfo`
+Path: `Nickvision::App::AppInfo`
 
 ### Member Variables
 - ```
@@ -131,17 +131,37 @@ Interface: [aura.h](/include/aura/aura.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::Aura`
+Path: `Nickvision::App::Aura`
 
 ### Member Variables
 - ```
-  Nickvision::Aura::AppInfo& AppInfo: get
+  Nickvision::App::AppInfo& AppInfo: get
   ```
     - The AppInfo object for the application
 - ```
   std::filesystem::path& ExecutableDirectory: get
   ```
     - The path of the executable's directory.
+- ```
+  bool IsRunningOnWindows: get
+  ```
+    - Whether or not the app is running on Windows
+- ```
+  bool IsRunningOnLinux: get
+  ```
+    - Whether or not the app is running on Linux
+- ```
+  bool IsRunningViaFlatpak: get
+  ```
+    - Whether or not the app is running via Flatpak
+- ```
+  bool IsRunningViaSnap: get
+  ```
+    - Whether or not the app is running via Snap
+- ```
+  bool IsRunningViaLocal: get
+  ```
+    - Whether or not the app is running locally
 
 ### Methods
 - ```cpp
@@ -203,7 +223,7 @@ Interface: [configurationbase.h](/include/aura/configurationbase.h)
 
 Type: `class`
 
-Path: `Nickvision::Aura::ConfigurationBase`
+Path: `Nickvision::App::ConfigurationBase`
 
 ### Member Variables
 - ```
@@ -242,10 +262,13 @@ Here are some key points when defining your own configuration objects:
 
 Here is an example of a custom configuration object using `ConfigurationBase`:
 ```cpp
+using namespace Nickvision::App;
+
 class AppConfig : public ConfigurationBase
 {
 public:
-	AppConfig(const std::string& key) : ConfigurationBase{ key } 
+	AppConfig(const std::string& key) 
+    : ConfigurationBase{ key } 
 	{ 
 
 	}
@@ -264,11 +287,14 @@ public:
 ```
 This object can now be used by an Aura-based application:
 ```cpp
+using namespace Nickvision::App;
+using namespace Nickvision::Events;
+
 int main()
 {
     Aura::getActive().init(...);
     AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
-    config.saved() += [](const Nickvision::Events::EventArgs& e) { std::cout << "Config saved to disk." << std::endl; };
+    config.saved() += [](const EventArgs& e) { std::cout << "Config saved to disk." << std::endl; };
     if(config.getPreviousCount() > 0)
     {
         std::cout << config.getPreviousCount() << std::endl;
@@ -301,7 +327,7 @@ Interface: [interprocesscommunicator.h](/include/aura/interprocesscommunicator.h
 
 Type: `class`
 
-Path: `Nickvision::Aura::InterProcessCommunicator`
+Path: `Nickvision::App::InterProcessCommunicator`
 
 ### Member Variables
 - ```
@@ -322,10 +348,11 @@ Path: `Nickvision::Aura::InterProcessCommunicator`
 
 ### Methods
 - ```cpp
-  InterProcessCommunicator()
+  InterProcessCommunicator(const std::string& id)
   ```
     - Constructs an InterProcessCommunicator.
-    - Note: If this is the first IPC instance for all processes of this AppInfo::id, this instance will become an IPC server.
+    - Accepts: The id of the ipc, id. id should be the same value for all instances of ipc that must talk to each other.
+    - Note: If this is the first IPC instance for all processes of id, this instance will become an IPC server.
     - Note: If this is not the first IPC instance, this instance will become an IPC client.
     - Throws: `std::runtime_error` if the client or server IPC cannot be created.
 - ```cpp
@@ -351,9 +378,11 @@ Let's consider an example scenario for using the `InterProcessCommunicator`. Ass
 
 Here's the code for this:
 ```cpp
+using namespace Nickvision::App;
+
 int main(int argc, char*[] argv)
 {
-    Aura::getActive().init(...); //ensures AppInfo::id
+    Aura::getActive().init(...);
     std::vector<std::string> modernArgs;
     for(int i = 0; i < argc; i++)
     {
@@ -362,7 +391,7 @@ int main(int argc, char*[] argv)
             modernArgs.push_back({ argv[i] });
         }
     }
-    InterProcessCommunicator ipc;
+    InterProcessCommunicator& ipc{ Aura::getActuve().getIPC() };
     ipc.commandReceived() += [](const Events::ParamEventArgs<std::vector<std::string>>& args) { ... };
     ipc.communicate(modernArgs, true);
 }

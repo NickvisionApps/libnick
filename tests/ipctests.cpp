@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <mutex>
-#include "aura/aura.h"
-#include "aura/interprocesscommunicator.h"
+#include "app/aura.h"
+#include "app/interprocesscommunicator.h"
 
-using namespace Nickvision::Aura;
+using namespace Nickvision::App;
 using namespace Nickvision::Events;
 
 static std::vector<std::string> args{ "test1", "test2" };
@@ -11,13 +11,10 @@ static std::vector<std::string> args{ "test1", "test2" };
 class IPCTest : public testing::Test
 {
 public:
-	static std::unique_ptr<InterProcessCommunicator> m_server;
-
 	static void SetUpTestSuite()
 	{
 		Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
-		m_server = std::make_unique<InterProcessCommunicator>();
-		m_server->commandReceived() += onCommandReceived;
+		Aura::getActive().getIPC().commandReceived() += onCommandReceived;
 	}
 
 	static int getReceived()
@@ -39,11 +36,10 @@ private:
 
 std::mutex IPCTest::m_mutex = {};
 int IPCTest::m_received = 0;
-std::unique_ptr<InterProcessCommunicator> IPCTest::m_server = nullptr;
 
 TEST_F(IPCTest, CheckServerStatus)
 {
-	ASSERT_TRUE(m_server->isServer());
+	ASSERT_TRUE(Aura::getActive().getIPC().isServer());
 }
 
 TEST_F(IPCTest, Client1Send)
@@ -53,7 +49,7 @@ TEST_F(IPCTest, Client1Send)
 		ASSERT_TRUE(true);
 		return;
 	}
-	InterProcessCommunicator client;
+	InterProcessCommunicator client{ Aura::getActive().getAppInfo().getId() };
 	ASSERT_TRUE(client.isClient());
 	ASSERT_TRUE(client.communicate(args));
 }
@@ -62,9 +58,4 @@ TEST_F(IPCTest, CheckServerReceived)
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 	ASSERT_TRUE(getReceived() > 0 || Aura::getActive().getEnvVar("GITHUB_ACTIONS") == "true");
-}
-
-TEST_F(IPCTest, Cleanup)
-{
-	ASSERT_NO_THROW(m_server.reset());
 }
