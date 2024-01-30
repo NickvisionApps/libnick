@@ -6,8 +6,6 @@
 #include "helpers/stringhelpers.h"
 #ifdef _WIN32
 #include <windows.h>
-#elif defined(__linux__)
-#include <stdlib.h>
 #endif
 
 using namespace Nickvision::Filesystem;
@@ -72,6 +70,39 @@ namespace Nickvision::App
         return m_executableDirectory;
     }
 
+    bool Aura::isRunningOnWindows() const
+    {
+#ifdef _WIN32
+        return true;
+#else
+        return false;
+#endif
+    }
+
+    bool Aura::isRunningOnLinux() const
+    {
+#ifdef __linux__
+        return true;
+#else
+        return false;
+#endif
+    }
+
+    bool Aura::isRunningViaFlatpak() const
+    {
+        return std::filesystem::exists("/.flatpak-info");
+    }
+
+    bool Aura::isRunningViaSnap() const
+    {
+        return !getEnvVar("SNAP").empty();
+    }
+
+    bool Aura::isRunningViaLocal() const
+    {
+        return !isRunningViaFlatpak() && !isRunningViaSnap();
+    }
+
     AppInfo& Aura::getAppInfo()
     {
         return m_appInfo;
@@ -86,7 +117,7 @@ namespace Nickvision::App
         return *m_ipc;
     }
 
-    std::string Aura::getEnvVar(const std::string& key)
+    std::string Aura::getEnvVar(const std::string& key) const
     {
         char* var{ std::getenv(key.c_str()) };
         if (var)

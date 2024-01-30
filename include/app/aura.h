@@ -51,6 +51,31 @@ namespace Nickvision::App
          */
         const std::filesystem::path& getExecutableDirectory() const;
         /**
+         * @brief Gets whether or not the app is running on Windows.
+         * @return True if running on Windows, else false 
+         */
+        bool isRunningOnWindows() const;
+        /**
+         * @brief Gets whether or not the app is running on Linux.
+         * @return True if running on Linux, else false 
+         */
+        bool isRunningOnLinux() const;
+        /**
+         * @brief Gets whether or not the app is running via Flatpak.
+         * @return True if running via Flatpak, else false 
+         */
+        bool isRunningViaFlatpak() const;
+        /**
+         * @brief Gets whether or not the app is running via Snap.
+         * @return True if running via Snap, else false 
+         */
+        bool isRunningViaSnap() const;
+        /**
+         * @brief Gets whether or not the app is running locally.
+         * @return True if running locally, else false 
+         */
+        bool isRunningViaLocal() const;
+        /**
          * @brief Gets the AppInfo object for the application.
          */
         AppInfo& getAppInfo();
@@ -64,7 +89,7 @@ namespace Nickvision::App
          * @param key The environment variable to get
          * @return The environment variable if found, else empty string
          */
-        std::string getEnvVar(const std::string& key);
+        std::string getEnvVar(const std::string& key) const;
         /**
          * @brief Sets a system environment variable.
          * @param key The environment variable to set

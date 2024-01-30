@@ -1,10 +1,9 @@
 #include "taskbar/taskbaritem.h"
+#include <cstdlib>
 #include <limits>
 #ifdef _WIN32
 #include <dwmapi.h>
 using namespace Gdiplus;
-#elif defined(__linux__)
-#include <stdlib.h>
 #endif
 
 namespace Nickvision::Taskbar

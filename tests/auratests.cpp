@@ -98,3 +98,14 @@ TEST_F(AuraTest, DependencyCheck)
 	ASSERT_NO_THROW(ShellNotification::send(args, "Open"));
 #endif
 }
+
+TEST_F(AuraTest, RunningInformationChecks)
+{
+	ASSERT_TRUE(!Aura::getActive().getExecutableDirectory().empty());
+#ifdef _WIN32
+    ASSERT_TRUE(Aura::getActive().isRunningOnWindows());
+#elif defined(__linux__)
+    ASSERT_TRUE(Aura::getActive().isRunningOnLinux());
+#endif
+    ASSERT_TRUE(Aura::getActive().isRunningViaLocal());
+}

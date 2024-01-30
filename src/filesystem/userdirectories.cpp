@@ -1,4 +1,5 @@
 #include "filesystem/userdirectories.h"
+#include <cstdlib>
 #include <fstream>
 #include <string>
 #include "app/aura.h"
@@ -6,7 +7,6 @@
 #ifdef _WIN32
 #include <shlobj_core.h>
 #elif defined(__linux__)
-#include <stdlib.h>
 #include <pwd.h>
 #include <unistd.h>
 #include <sys/types.h>

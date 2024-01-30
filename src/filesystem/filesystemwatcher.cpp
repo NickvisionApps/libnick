@@ -1,8 +1,8 @@
 #include "filesystem/filesystemwatcher.h"
+#include <cstdlib>
 #include <algorithm>
 #include <stdexcept>
 #ifdef __linux__
-#include <stdlib.h>
 #include <unistd.h>
 #include <sys/inotify.h>
 #endif

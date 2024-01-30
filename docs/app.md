@@ -142,6 +142,26 @@ Path: `Nickvision::App::Aura`
   std::filesystem::path& ExecutableDirectory: get
   ```
     - The path of the executable's directory.
+- ```
+  bool IsRunningOnWindows: get
+  ```
+    - Whether or not the app is running on Windows
+- ```
+  bool IsRunningOnLinux: get
+  ```
+    - Whether or not the app is running on Linux
+- ```
+  bool IsRunningViaFlatpak: get
+  ```
+    - Whether or not the app is running via Flatpak
+- ```
+  bool IsRunningViaSnap: get
+  ```
+    - Whether or not the app is running via Snap
+- ```
+  bool IsRunningViaLocal: get
+  ```
+    - Whether or not the app is running locally
 
 ### Methods
 - ```cpp
