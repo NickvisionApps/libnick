@@ -189,7 +189,7 @@ namespace Nickvision::Taskbar
             }
             Bitmap bitmap{ 16, 16, &windowGraphics };
             Graphics graphics{ &bitmap };
-            FontFamily fontFamily{ L"Microsoft Sans Serif" };
+            FontFamily fontFamily{ L"Segoe UI" };
             Font font{ &fontFamily, m_count <= 99 ? (m_count < 10 ? 8.0f : 7.5f) : 7.0f };
             std::wstring countStr{ m_count > 99 ? L"99+" : std::to_wstring(m_count) };
             SizeF stringSize;
