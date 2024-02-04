@@ -34,10 +34,10 @@ jobs:
         uses: johnwason/vcpkg-action@v5
         id: vcpkg
         with:
-          pkgs: boost-locale curl gettext-libintl gtest jsoncpp maddy openssl
+          pkgs: aklomp-base64 boost-locale curl gettext-libintl gtest jsoncpp maddy openssl
           triplet: x64-windows
           cache-key: ${{ matrix.config.os }}
-          revision: 4a2c30139309a6e4690ce929df33e85a1706a0e2
+          revision: 80403036a665cb8fcc1a1b3e17593d20b03b2489
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: "Build"
         working-directory: ${{github.workspace}}/build

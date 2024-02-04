@@ -14,6 +14,7 @@ Documentation for this library and its modules can be found [here](/docs).
 The following are a list of dependencies used by libnick. 
 
 ### All Platforms
+- aklomp-base64
 - boost
 - gtest
 - jsoncpp
@@ -53,10 +54,10 @@ A C++20 compiler is also required to build libnick.
 1. Set the `VCPKG_ROOT` environment variable to the path of your vcpkg installation's root directory.
 #### Windows
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-windows`
-1. Run `vcpkg install boost-locale curl gettext-libintl gtest jsoncpp maddy openssl`
+1. Run `vcpkg install aklomp-base64 boost-locale curl gettext-libintl gtest jsoncpp maddy openssl`
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
-1. Run `vcpkg install boost-locale curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
+1. Run `vcpkg install aklomp-base64 boost-locale curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
 
 ### Building
 1. First, clone/download the repo.

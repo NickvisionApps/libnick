@@ -10,6 +10,7 @@ if(DEFINED ENV{VCPKG_ROOT})
     endif()
 endif()
 
+find_dependency(base64 CONFIG REQUIRED)
 find_dependency(Boost REQUIRED COMPONENTS locale)
 find_dependency(CURL REQUIRED)
 find_dependency(jsoncpp CONFIG REQUIRED)

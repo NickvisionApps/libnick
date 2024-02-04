@@ -83,6 +83,18 @@ namespace Nickvision::StringHelpers
      */
     unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10);
     /**
+     * @brief Converts a list of bytes into a base64 encoded string.
+     * @param bytes The list of bytes
+     * @return The base64 encoded string of the bytes list
+     */
+    std::string toBase64(const std::vector<char>& bytes);
+    /**
+     * @brief Converts a base64 encoded string into a list of bytes.
+     * @param base64 The base64 encoded string
+     * @return The bytes list from the base64 encoded string, empty list if error
+     */
+    std::vector<char> toByteList(const std::string& base64);
+    /**
      * @brief Gets a fully lowercase string from the provided string.
      * @param s The string to get lowercase
      * @return The new lowercase string

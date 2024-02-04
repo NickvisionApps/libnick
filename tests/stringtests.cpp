@@ -95,3 +95,18 @@ TEST(StringTests, Replace1)
 {
 	ASSERT_EQ(StringHelpers::replace("hello bye hi", "bye", "goodbye"), "hello goodbye hi");
 }
+
+TEST(StringTests, Base64)
+{
+    std::vector<char> s{ 'A', 'B', 'X', 'J', 'K' };
+    std::string base64;
+    ASSERT_NO_THROW(base64 = StringHelpers::toBase64(s));
+    ASSERT_FALSE(base64.empty());
+    std::vector<char> bytes;
+    ASSERT_NO_THROW(bytes = StringHelpers::toByteList(base64));
+    ASSERT_EQ(bytes.size(), s.size());
+    for(size_t i = 0; i < bytes.size(); i++)
+    {
+        ASSERT_EQ(bytes[i], s[i]);
+    }
+}

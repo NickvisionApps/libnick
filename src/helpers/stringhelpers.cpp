@@ -7,6 +7,7 @@
 #include <locale>
 #include <regex>
 #include <sstream>
+#include <libbase64.h>
 #include <curl/curl.h>
 #ifdef _WIN32
 #include <windows.h>
@@ -130,6 +131,28 @@ namespace Nickvision
         {
             return 0;
         }
+    }
+
+    std::string StringHelpers::toBase64(const std::vector<char>& bytes)
+    {
+        std::vector<char> string;
+        size_t outSize{ 0 };
+        string.resize(((4 * bytes.size() / 3) + 3) & ~3);
+        base64_encode(&bytes[0], bytes.size(), &string[0], &outSize, 0);
+        return { &string[0], outSize };
+    }
+
+    std::vector<char> StringHelpers::toByteList(const std::string& base64)
+    {
+        std::vector<char> bytes;
+        size_t outSize{ 0 };
+        bytes.resize(3 * base64.size() / 4);
+        if(base64_decode(base64.c_str(), base64.size(), &bytes[0], &outSize, 0) == 1)
+        {
+            bytes.resize(outSize);
+            return bytes;
+        }
+        return {};
     }
 
     std::string StringHelpers::toLower(std::string s)
