@@ -7,7 +7,6 @@
 #include <locale>
 #include <regex>
 #include <sstream>
-#include <libbase64.h>
 #include <curl/curl.h>
 #ifdef _WIN32
 #include <windows.h>
@@ -133,26 +132,85 @@ namespace Nickvision
         }
     }
 
-    std::string StringHelpers::toBase64(const std::vector<char>& bytes)
+    std::string StringHelpers::toBase64(const std::vector<uint8_t>& bytes)
     {
-        std::vector<char> string;
-        size_t outSize{ 0 };
-        string.resize(((4 * bytes.size() / 3) + 3) & ~3);
-        base64_encode(&bytes[0], bytes.size(), &string[0], &outSize, 0);
-        return { &string[0], outSize };
+        if(bytes.empty())
+        {
+            return "";
+        }
+        static const char lookup[65]{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" };
+        size_t missing{ 0 };
+        size_t stringSize{ bytes.size() };
+        while((stringSize % 3) != 0)
+        {
+            stringSize++;
+            missing++;
+        }
+        stringSize = 4 * stringSize / 3;
+        std::string string;
+        string.reserve(stringSize);
+        for(size_t i = 0; i < stringSize / 4; i++)
+        {
+            size_t index{ i * 3 };
+            uint8_t b1{ index < bytes.size() ? bytes[index] : static_cast<uint8_t>(0) };
+            uint8_t b2{ index + 1 < bytes.size() ? bytes[index + 1] : static_cast<uint8_t>(0) };
+            uint8_t b3{ index + 2 < bytes.size() ? bytes[index + 2] : static_cast<uint8_t>(0) };
+            uint8_t b641{ static_cast<uint8_t>((b1 & 0xfc) >> 2) };
+            uint8_t b642{ static_cast<uint8_t>(((b1 & 0x03) << 4) + ((b2 & 0xf0) >> 4)) };
+            uint8_t b643{ static_cast<uint8_t>(((b2 & 0x0f) << 2) + ((b3 & 0xc0) >> 6)) };
+            uint8_t b644{ static_cast<uint8_t>(b3 & 0x3f) };
+            string.push_back(lookup[b641]);
+            string.push_back(lookup[b642]);
+            string.push_back(lookup[b643]);
+            string.push_back(lookup[b644]);
+        }
+        for(size_t i = 0; i != missing; i++)
+        {
+            string[stringSize - i - 1] = '=';
+        }
+        return string;
     }
 
-    std::vector<char> StringHelpers::toByteList(const std::string& base64)
+    std::vector<uint8_t> StringHelpers::toByteList(const std::string& base64)
     {
-        std::vector<char> bytes;
-        size_t outSize{ 0 };
-        bytes.resize(3 * base64.size() / 4);
-        if(base64_decode(base64.c_str(), base64.size(), &bytes[0], &outSize, 0) == 1)
+        if(base64.empty() || base64.size() % 4 != 0)
         {
-            bytes.resize(outSize);
-            return bytes;
+            return {};
         }
-        return {};
+        static const uint8_t lookup[128]{ 
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,  62, 255,  62, 255,  63,
+        52,  53,  54,  55,  56,  57,  58,  59,  60,  61, 255, 255, 255, 255, 255, 255,
+        255,   0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,
+        15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25, 255, 255, 255, 255,  63,
+        255,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,
+        41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51, 255, 255, 255, 255, 255 };
+        std::vector<uint8_t> bytes;
+        bytes.reserve(3 * base64.size() / 4);
+        for(size_t i = 0; i < base64.size(); i += 4)
+        {
+            uint8_t b641{ base64[i] <= 122 ? lookup[base64[i]] : static_cast<uint8_t>(0xff) };
+            uint8_t b642{ base64[i + 1] <= 122 ? lookup[base64[i + 1]] : static_cast<uint8_t>(0xff) };
+            uint8_t b643{ base64[i + 2] <= 122 ? lookup[base64[i + 2]] : static_cast<uint8_t>(0xff) };
+            uint8_t b644{ base64[i + 3] <= 122 ? lookup[base64[i + 3]] : static_cast<uint8_t>(0xff) };
+            uint8_t b1{ static_cast<uint8_t>(((b641 & 0x3f) << 2) + ((b642 & 0x30) >> 4)) };
+            uint8_t b2{ static_cast<uint8_t>(((b642 & 0x0f) << 4) + ((b643 & 0x3c) >> 2)) };
+            uint8_t b3{ static_cast<uint8_t>(((b643 & 0x03) << 6) + (b644 & 0x3f)) };
+            if(b642 != static_cast<uint8_t>(0xff))
+            {
+                bytes.push_back(b1);
+            }
+            if(b643 != static_cast<uint8_t>(0xff))
+            {
+                bytes.push_back(b2);
+            }
+            if(b644 != static_cast<uint8_t>(0xff))
+            {
+                bytes.push_back(b3);
+            }
+        }
+        return bytes;
     }
 
     std::string StringHelpers::toLower(std::string s)
