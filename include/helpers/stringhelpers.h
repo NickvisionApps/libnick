@@ -3,6 +3,7 @@
 
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 
+#include <cstdint>
 #include <string>
 #include <type_traits>
 #include <vector>
@@ -87,13 +88,13 @@ namespace Nickvision::StringHelpers
      * @param bytes The list of bytes
      * @return The base64 encoded string of the bytes list
      */
-    std::string toBase64(const std::vector<uint8_t>& bytes);
+    std::string toBase64(const std::vector<std::uint8_t>& bytes);
     /**
      * @brief Converts a base64 encoded string into a list of bytes.
      * @param base64 The base64 encoded string
      * @return The bytes list from the base64 encoded string, empty list if error
      */
-    std::vector<uint8_t> toByteList(const std::string& base64);
+    std::vector<std::uint8_t> toByteList(const std::string& base64);
     /**
      * @brief Gets a fully lowercase string from the provided string.
      * @param s The string to get lowercase

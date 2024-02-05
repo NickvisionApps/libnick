@@ -57,12 +57,12 @@ Path: `Nickvision::StringHelpers`
     - Out: If idx != nullptr, the number of characters parsed will be stored in idx.
     - Ex: `StringHelpers::stoui("2837914")` will return `2837914`.
 - ```cpp
-  std::string toBase64(const std::vector<uint8_t>& bytes)
+  std::string toBase64(const std::vector<std::uint8_t>& bytes)
   ```
     - Accepts: A list of bytes (char)
     - Returns: The base64 encoded string of the bytes list.
 - ```cpp
-  std::vector<uint8_t> toByteList(const std::string& base64)
+  std::vector<std::uint8_t> toByteList(const std::string& base64)
   ```
     - Accepts: A base64 encoded string
     - Returns: The list of bytes from the base64 encoded string.

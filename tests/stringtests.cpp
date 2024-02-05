@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
+#include <fstream>
+#include <iterator>
 #include "helpers/stringhelpers.h"
+#include "helpers/webhelpers.h"
 
 using namespace Nickvision;
 
@@ -124,4 +127,23 @@ TEST(StringTests, Base642)
     {
         ASSERT_EQ(bytes[i], s[i]);
     }
+}
+
+TEST(StringTests, Base643)
+{
+    WebHelpers::downloadFile("https://www.freeiconspng.com/thumbs/pin-png/pin-png-24.png", "img.png");
+    std::ifstream img{ "img.png", std::ios_base::binary };
+    std::vector<unsigned char> s{ std::istreambuf_iterator<char>(img), std::istreambuf_iterator<char>() };
+    std::string base64;
+    ASSERT_NO_THROW(base64 = StringHelpers::toBase64(s));
+    ASSERT_FALSE(base64.empty());
+    std::vector<unsigned char> bytes;
+    ASSERT_NO_THROW(bytes = StringHelpers::toByteList(base64));
+    ASSERT_EQ(bytes.size(), s.size());
+    for(size_t i = 0; i < bytes.size(); i++)
+    {
+        ASSERT_EQ(bytes[i], s[i]);
+    }
+    img.close();
+    std::filesystem::remove("img.png");
 }
