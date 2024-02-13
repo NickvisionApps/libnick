@@ -58,7 +58,7 @@ namespace Nickvision::Database
         /**
          * @brief Changes the database's password.
          * @brief Passing an empty string will unencrypt the database.
-         * @brief Changing the password on an encrypted database requires that the database be unlocked first.
+         * @brief Changing the password on an encrypted database requires that the database be unlocked first, even if removing the password.
          * @param password The new database password
          * @return True if password changed, else false
          * @throw std::runtime_error Thrown if error in executing sql statement 
@@ -98,6 +98,7 @@ namespace Nickvision::Database
     private:
         mutable std::mutex m_mutex;
         std::filesystem::path m_path;
+        int m_flags;
         bool m_isEncrypted;
         std::shared_ptr<sqlite3> m_database;
         bool m_isUnlocked;

@@ -53,7 +53,7 @@ Path: `Nickvision::Database::SqlDatabase`
     - Returns: True if password changed.
     - Returns: False if password not changed.
     - Note: Passing an empty string for the password will unencrypt the database.
-    - Note: Changing the password on an encrypted database requires that the database be unlocked first.
+    - Note: Changing the password on an encrypted database requires that the database be unlocked first, even if removing the password.
 - ```cpp
   bool exec(const std::string& command)
   ```
