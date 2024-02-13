@@ -1,18 +1,13 @@
 #ifndef STORE_H
 #define STORE_H
 
-#ifndef SQLITE_HAS_CODEC
-#define SQLITE_HAS_CODEC
-#endif
-
 #include <filesystem>
 #include <memory>
-#include <mutex>
 #include <optional>
 #include <string>
 #include <vector>
 #include "credential.h"
-#include "sqlite3.h"
+#include "../database/sqldatabase.h"
 
 namespace Nickvision::Keyring
 {
@@ -29,16 +24,6 @@ namespace Nickvision::Keyring
          * @throw std::runtime_error Thrown if the store is unable to be created
          */
         Store(const std::string& name, const std::string& password);
-        /**
-         * @brief Copies a Store object.
-         * @param store The object to move
-         */
-        Store(const Store& store);
-        /**
-         * @brief Moves a Store object.
-         * @param store The object to move
-         */
-        Store(Store&& store) noexcept;
         /**
          * @brief Gets the name of the store.
          * @return The name of the store
@@ -85,29 +70,16 @@ namespace Nickvision::Keyring
          */
         bool deleteCredential(int id);
         /**
-         * @brief Destroys the store and all of its data from disk. Once this method is called, the object should no longer be referenced, with or without success.
+         * @brief Destroys the store and all of its data from disk. 
+         * @brief  this method is called, the object should no longer be referenced, with or without success.
          * @return True if successful, else false
          */
         bool destroy();
-        /**
-         * @brief Copies a Store object.
-         * @param store The Store to copy
-         * @return this
-         */
-        Store& operator=(const Store& store);
-        /**
-         * @brief Moves a Store object.
-         * @param store The Store to move
-         * @return this
-         */
-        Store& operator=(Store&& store) noexcept;
 
     private:
-        mutable std::mutex m_mutex;
         std::string m_name;
         std::string m_password;
-        std::shared_ptr<sqlite3> m_database;
-        std::filesystem::path m_path;
+        std::shared_ptr<Database::SqlDatabase> m_database;
 
     public:
         /**

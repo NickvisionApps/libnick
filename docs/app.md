@@ -82,25 +82,25 @@ Path: `Nickvision::App::AppInfo`
     - The application html docs store url.
     - Ex: `"https://raw.githubusercontent.com/NickvisionApps/Tagger/main/NickvisionTagger.Shared/Docs/html/"`
 - ```
-  std::map<std::string, std::string>& ExtraLinks: get
+  std::unordered_map<std::string, std::string>& ExtraLinks: get
   ```
     - Extra links for the application.
     - Key: Name of the link.
     - Value: URL of the link.
 - ```
-  std::map<std::string, std::string>& Developers: get
+  std::unordered_map<std::string, std::string>& Developers: get
   ```
     - The application developers.
     - Key: Name of the developer.
     - Value: URL or email of the developer.
 - ```
-  std::map<std::string, std::string>& Designers: get
+  std::unordered_map<std::string, std::string>& Designers: get
   ```
     - The application designers.
     - Key: Name of the designer.
     - Value: URL or email of the designer.
 - ```
-  std::map<std::string, std::string>& Artists: get
+  std::unordered_map<std::string, std::string>& Artists: get
   ```
     - The application artists.
     - Key: Name of the artist.
@@ -118,7 +118,7 @@ Path: `Nickvision::App::AppInfo`
 
 ### Static Functions
 - ```cpp
-  std::vector<<std::string> convertUrlMapToVector(const std::map<std::string, std::string>& urls)
+  std::vector<<std::string> convertUrlMapToVector(const std::unordered_map<std::string, std::string>& urls)
   ```
     - Accepts: A map with keys of type string and values of type string, urls.
     - Returns: A list of entries in the following format: `"{key} {value}"`.

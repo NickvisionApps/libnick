@@ -372,14 +372,6 @@ Path: `Nickvision::Keyring::Store`
     - Constructs a Store.
     - Accepts: The name of the store, name, and the password for the store, password.
 - ```cpp
-  Store(const Store& store)
-  ```
-    - Copies a store.
-- ```cpp
-  Store(Store&& store)
-  ```
-    - Moves a store.
-- ```cpp
   std::vector<Credential> getAllCredentials() const
   ``` 
     - Returns: The list of all credentials stored in the store.
@@ -418,14 +410,6 @@ Path: `Nickvision::Keyring::Store`
     - Returns: `true` if the store and all of its data from disk were deleted.
     - Returns: `false` if destroying the store failed.
     - Note: Once this method is called, the object should no longer be referenced, regardless of what was returned.
-- ```cpp
-  Store& operator=(const Store& store)
-  ```
-    - Copies a store.
-- ```cpp
-  Store& operator=(Store&& store)
-  ```
-    - Moves a store.
 
 ### Static Functions
 - ```cpp

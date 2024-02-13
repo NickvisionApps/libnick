@@ -7,7 +7,7 @@
 #define IDM_CONTEXT_MENU (WM_APP + 200)
 
 #include <filesystem>
-#include <map>
+#include <unordered_map>
 #include <windows.h>
 #include <shellapi.h>
 #include "notifyiconmenu.h"
@@ -86,7 +86,7 @@ namespace Nickvision::Notifications
         std::filesystem::path m_openPath;
 
     private:
-        static std::map<HWND, NotifyIcon*> m_icons;
+        static std::unordered_map<HWND, NotifyIcon*> m_icons;
         /**
          * @brief The window procedure for NotifyIcons
          * @param hwnd HWND

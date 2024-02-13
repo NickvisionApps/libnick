@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2024.2.1 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2024.2.2 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -31,36 +31,38 @@ if(LINUX)
 	add_compile_definitions(HAVE_USLEEP)
 endif()
 add_library (${PROJECT_NAME}
-	"src/app/appinfo.cpp"
-	"src/app/aura.cpp"
-	"src/app/configurationbase.cpp"
-	"src/app/interprocesscommunicator.cpp"
-	"src/filesystem/filesystemchangedeventargs.cpp"
-	"src/filesystem/filesystemwatcher.cpp"
-	"src/filesystem/systemdirectories.cpp"
-	"src/filesystem/userdirectories.cpp"
-	"src/helpers/stringhelpers.cpp"
-	"src/helpers/webhelpers.cpp"
-	"src/keyring/credential.cpp"
-	"src/keyring/keyring.cpp"
-	"src/keyring/keyringdialogcontroller.cpp"
-	"src/keyring/passwordgenerator.cpp"
-	"src/keyring/passwordstrength.cpp"
-	"src/keyring/store.cpp"
-	"src/keyring/systemcredentials.cpp"
-	"src/localization/documentation.cpp"
-	"src/localization/gettext.cpp"
-	"src/network/networkmonitor.cpp"
-	"src/network/networkstatechangedeventargs.cpp"
-	"src/notifications/notificationsenteventargs.cpp"
-	"src/notifications/notifyicon.cpp"
-	"src/notifications/notifyiconmenu.cpp"
-	"src/notifications/shellnotification.cpp"
-	"src/notifications/shellnotificationsenteventargs.cpp"
-	"src/taskbar/taskbaritem.cpp"
-	"src/update/updater.cpp"
-	"src/update/version.cpp"
-	"src/sqlite3.c")
+    "src/app/appinfo.cpp"
+    "src/app/aura.cpp"
+    "src/app/configurationbase.cpp"
+    "src/app/interprocesscommunicator.cpp"
+    "src/database/sqldatabase.cpp"
+    "src/database/sqlite3.c"
+    "src/database/sqlstatement.cpp"
+    "src/filesystem/filesystemchangedeventargs.cpp"
+    "src/filesystem/filesystemwatcher.cpp"
+    "src/filesystem/systemdirectories.cpp"
+    "src/filesystem/userdirectories.cpp"
+    "src/helpers/stringhelpers.cpp"
+    "src/helpers/webhelpers.cpp"
+    "src/keyring/credential.cpp"
+    "src/keyring/keyring.cpp"
+    "src/keyring/keyringdialogcontroller.cpp"
+    "src/keyring/passwordgenerator.cpp"
+    "src/keyring/passwordstrength.cpp"
+    "src/keyring/store.cpp"
+    "src/keyring/systemcredentials.cpp"
+    "src/localization/documentation.cpp"
+    "src/localization/gettext.cpp"
+    "src/network/networkmonitor.cpp"
+    "src/network/networkstatechangedeventargs.cpp"
+    "src/notifications/notificationsenteventargs.cpp"
+    "src/notifications/notifyicon.cpp"
+    "src/notifications/notifyiconmenu.cpp"
+    "src/notifications/shellnotification.cpp"
+    "src/notifications/shellnotificationsenteventargs.cpp"
+    "src/taskbar/taskbaritem.cpp"
+    "src/update/updater.cpp"
+    "src/update/version.cpp")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>" "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>")
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION "${PROJECT_VERSION}" SOVERSION "${PROJECT_VERSION}")
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING "${PROJECT_VERSION}")
