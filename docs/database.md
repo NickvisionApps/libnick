@@ -1,4 +1,4 @@
-# Nickvision::Datbase
+# Nickvision::Database
 
 This module provides object-oriented wrappers for working with sqlite3/sqlcipher.
 
