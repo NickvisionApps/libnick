@@ -28,6 +28,7 @@ This means that the class provides the following method, allowing consumers to r
 
 ## Modules
 - [Nickvision::App](app.md)
+- [Nickvision::Database](database.md)
 - [Nickvision::Events](events.md)
 - [Nickvision::Filesystem](filesystem.md)
 - [Nickvision::Helpers](helpers.md)
