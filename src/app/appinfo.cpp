@@ -154,42 +154,42 @@ namespace Nickvision::App
         m_htmlDocsStore = htmlDocsStore;
     }
 
-    std::map<std::string, std::string>& AppInfo::getExtraLinks()
+    std::unordered_map<std::string, std::string>& AppInfo::getExtraLinks()
     {
         return m_extraLinks;
     }
 
-    const std::map<std::string, std::string>& AppInfo::getExtraLinks() const
+    const std::unordered_map<std::string, std::string>& AppInfo::getExtraLinks() const
     {
         return m_extraLinks;
     }
 
-    std::map<std::string, std::string>& AppInfo::getDevelopers()
+    std::unordered_map<std::string, std::string>& AppInfo::getDevelopers()
     {
         return m_developers;
     }
 
-    const std::map<std::string, std::string>& AppInfo::getDevelopers() const
+    const std::unordered_map<std::string, std::string>& AppInfo::getDevelopers() const
     {
         return m_developers;
     }
 
-    std::map<std::string, std::string>& AppInfo::getDesigners()
+    std::unordered_map<std::string, std::string>& AppInfo::getDesigners()
     {
         return m_designers;
     }
 
-    const std::map<std::string, std::string>& AppInfo::getDesigners() const
+    const std::unordered_map<std::string, std::string>& AppInfo::getDesigners() const
     {
         return m_designers;
     }
 
-    std::map<std::string, std::string>& AppInfo::getArtists()
+    std::unordered_map<std::string, std::string>& AppInfo::getArtists()
     {
         return m_artists;
     }
 
-    const std::map<std::string, std::string>& AppInfo::getArtists() const
+    const std::unordered_map<std::string, std::string>& AppInfo::getArtists() const
     {
         return m_artists;
     }
@@ -230,7 +230,7 @@ namespace Nickvision::App
         return vec;
     }
 
-    std::vector<std::string> AppInfo::convertUrlMapToVector(const std::map<std::string, std::string>& urls)
+    std::vector<std::string> AppInfo::convertUrlMapToVector(const std::unordered_map<std::string, std::string>& urls)
     {
         std::vector<std::string> vec;
         for (const std::pair<const std::string, std::string>& pair : urls)

@@ -9,7 +9,7 @@ using namespace Nickvision::App;
 
 namespace Nickvision::Notifications
 {
-    std::map<HWND, NotifyIcon*> NotifyIcon::m_icons = {};
+    std::unordered_map<HWND, NotifyIcon*> NotifyIcon::m_icons = {};
 
     NotifyIcon::NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu, bool hidden)
         : m_className{ StringHelpers::newGuid() },

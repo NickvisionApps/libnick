@@ -6,11 +6,11 @@
 #define AURA_H
 
 #include <filesystem>
-#include <map>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <unordered_map>
 #include "appinfo.h"
 #include "configurationbase.h"
 #include "interprocesscommunicator.h"
@@ -133,8 +133,8 @@ namespace Nickvision::App
         std::filesystem::path m_executableDirectory;
         AppInfo m_appInfo;
         std::unique_ptr<InterProcessCommunicator> m_ipc;
-        std::map<std::string, std::filesystem::path> m_dependencies;
-        std::map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
+        std::unordered_map<std::string, std::filesystem::path> m_dependencies;
+        std::unordered_map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
 
     public:
         /**

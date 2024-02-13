@@ -1,8 +1,8 @@
 #ifndef APPINFO_H
 #define APPINFO_H
 
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include "update/version.h"
 
@@ -143,42 +143,42 @@ namespace Nickvision::App
          * @brief Gets the extra links for the application
          * @return The extra links for the application
          */
-        std::map<std::string, std::string>& getExtraLinks();
+        std::unordered_map<std::string, std::string>& getExtraLinks();
         /**
          * @brief Gets the extra links for the application
          * @return The extra links for the application
          */
-        const std::map<std::string, std::string>& getExtraLinks() const;
+        const std::unordered_map<std::string, std::string>& getExtraLinks() const;
         /**
          * @brief Gets the application developers
          * @return The application developers
          */
-        std::map<std::string, std::string>& getDevelopers();
+        std::unordered_map<std::string, std::string>& getDevelopers();
         /**
          * @brief Gets the application developers
          * @return The application developers
          */
-        const std::map<std::string, std::string>& getDevelopers() const;
+        const std::unordered_map<std::string, std::string>& getDevelopers() const;
         /**
          * @brief Gets the application designers
          * @return The application designers
          */
-        std::map<std::string, std::string>& getDesigners();
+        std::unordered_map<std::string, std::string>& getDesigners();
         /**
          * @brief Gets the application designers
          * @return The application designers
          */
-        const std::map<std::string, std::string>& getDesigners() const;
+        const std::unordered_map<std::string, std::string>& getDesigners() const;
         /**
          * @brief Gets the application artists
          * @return The application artists
          */
-        std::map<std::string, std::string>& getArtists();
+        std::unordered_map<std::string, std::string>& getArtists();
         /**
          * @brief Gets the application artists
          * @return The application artists
          */
-        const std::map<std::string, std::string>& getArtists() const;
+        const std::unordered_map<std::string, std::string>& getArtists() const;
         /**
          * @brief Gets the application translator credits
          * @return The application translator credits
@@ -208,10 +208,10 @@ namespace Nickvision::App
         std::string m_issueTracker;
         std::string m_supportUrl;
         std::string m_htmlDocsStore;
-        std::map<std::string, std::string> m_extraLinks;
-        std::map<std::string, std::string> m_developers;
-        std::map<std::string, std::string> m_designers;
-        std::map<std::string, std::string> m_artists;
+        std::unordered_map<std::string, std::string> m_extraLinks;
+        std::unordered_map<std::string, std::string> m_developers;
+        std::unordered_map<std::string, std::string> m_designers;
+        std::unordered_map<std::string, std::string> m_artists;
         std::string m_translatorCredits;
 
     public:
@@ -220,7 +220,7 @@ namespace Nickvision::App
          * @param urls The map of URLs
          * @return The vector of URLs
          */
-        static std::vector<std::string> convertUrlMapToVector(const std::map<std::string, std::string>& urls);
+        static std::vector<std::string> convertUrlMapToVector(const std::unordered_map<std::string, std::string>& urls);
     };
 }
 
