@@ -56,6 +56,11 @@ namespace Nickvision::Database
         return m_isEncrypted;
     }
 
+    sqlite3* SqlDatabase::c_obj()
+    {
+        return m_database.get();
+    }
+
     bool SqlDatabase::unlock(const std::string& password)
     {
         std::unique_lock<std::mutex> lock{ m_mutex };
@@ -167,6 +172,17 @@ namespace Nickvision::Database
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return { m_database, command };
+    }
+
+    void SqlDatabase::registerFunction(const std::string& name, const SqliteCustomFunction& func, int expectedArgs)
+    {
+        m_custom[name] = func;
+        sqlite3_create_function(m_database.get(), name.c_str(), expectedArgs, SQLITE_UTF8, &m_custom[name], +[](sqlite3_context* ctx, int argc, sqlite3_value** argv)
+        {
+            SqlContext context{ ctx, argc, argv };
+            SqliteCustomFunction& func{ *(static_cast<SqliteCustomFunction*>(context.getUserData())) };
+            func(context);
+        }, nullptr, nullptr);
     }
 
     SqlDatabase& SqlDatabase::operator=(const SqlDatabase& database)

@@ -74,34 +74,34 @@ namespace Nickvision::Database
         return res == SQLITE_ROW;
     }
 
-    int SqlStatement::getColumnInt(int index)
+    int SqlStatement::getColumnInt(int index) const
     {
         return sqlite3_column_int(m_statement.get(), index);
     }
 
-    sqlite3_int64 SqlStatement::getColumnInt64(int index)
+    sqlite3_int64 SqlStatement::getColumnInt64(int index) const
     {
         return sqlite3_column_int64(m_statement.get(), index);
     }
 
-    double SqlStatement::getColumnDouble(int index)
+    double SqlStatement::getColumnDouble(int index) const
     {
         return sqlite3_column_double(m_statement.get(), index);
     }
     
-    bool SqlStatement::getColumnBool(int index)
+    bool SqlStatement::getColumnBool(int index) const
     {
         return static_cast<bool>(sqlite3_column_int(m_statement.get(), index));
     }
 
-    std::string SqlStatement::getColumnString(int index)
+    std::string SqlStatement::getColumnString(int index) const
     {
         return { (const char*)sqlite3_column_text(m_statement.get(), index), static_cast<size_t>(sqlite3_column_bytes(m_statement.get(), index)) };
     }
 
-    std::pair<const void*, int> SqlStatement::getColumnBlob(int index)
+    std::pair<const void*, size_t> SqlStatement::getColumnBlob(int index) const
     {
-        return { sqlite3_column_blob(m_statement.get(), index), sqlite3_column_bytes(m_statement.get(), index) };
+        return { sqlite3_column_blob(m_statement.get(), index), static_cast<size_t>(sqlite3_column_bytes(m_statement.get(), index)) };
     }
 
     SqlStatement::operator bool() const

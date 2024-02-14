@@ -3,11 +3,73 @@
 This module provides object-oriented wrappers for working with sqlite3/sqlcipher.
 
 ## Table of Contents
+- [SqlContext](#sqlcontext)
 - [SqlDatabase](#sqldatabase)
 - [SqlStatement](#sqlstatement)
+- [SqlValue](#sqlvalue)
+
+## SqlContext
+Description: A sqlite function context.
+
+Interface: [sqlcontent.h](/include/database/sqlcontent.h)
+
+Path: `Nickvision::Database::SqlContext`
+
+### Member Variables
+- ```
+  void* userData: get
+  ```
+    - The user data associated with the context.
+- ```
+  std::vector<SqlValue> args: get
+  ```
+    - The list of SqlValue arguments passed to the function.
+
+### Methods
+- ```cpp
+  SqlContext(sqlite3_context* ctx, int argc, sqlite3_value** argv)
+  ```
+    - Constructs a SqlContext.
+    - Accepts: The sqlite3 context pointer, ctx, the number of received arguments, argc, and the pointer to the list of sqlite3 values, argv.
+- ```cpp
+  void result()
+  ```
+    - Note: Returns a NULL value from the sql function.
+- ```cpp
+  void result(int value)
+  ```
+    - Accepts: An int value to return from the sql function, value.
+- ```cpp
+  void result(sqlite3_int64 value)
+  ```
+    - Accepts: An int64 value to return from the sql function, value.
+- ```cpp
+  void result(double value)
+  ```
+    - Accepts: A double value to return from the sql function, value.
+- ```cpp
+  void result(bool value)
+  ```
+    - Accepts: A bool value to return from the sql function, value.
+- ```cpp
+  void result(const std::string& value)
+  ```
+    - Accepts: A string value to return from the sql function, value.
+- ```cpp
+  void result(void* value, int n)
+  ```
+    - Accepts: A blob value to return from the sql function, value, and the size of said blob value, n.
+- ```cpp
+  void error(const std::string& err)
+  ```
+    - Accepts: An error message to return from the sql function, err.
+- ```cpp
+  void error(int err)
+  ```
+    - Accepts: An error cpode to return from the sql function, err.
 
 ## SqlDatabase
-Description: An sqlite (sqlcipher) database.
+Description: A sqlite (sqlcipher) database.
 
 Interface: [sqldatabase.h](/include/database/sqldatabase.h)
 
@@ -39,6 +101,11 @@ Path: `Nickvision::Database::SqlDatabase`
   ```
     - Moves a SqlDatabase.
 - ```cpp
+  sqlite3* c_obj()
+  ```
+    - Returns: The underlying sqlite3 object pointer for the database.
+    - Note: Using this method is strongly discouraged, as you can break the state of this object.
+- ```cpp
   bool unlock(const std::string& password)
   ```
     - Accepts: The password of the database, password.
@@ -67,6 +134,10 @@ Path: `Nickvision::Database::SqlDatabase`
     - Returns: The new SqlStatement.
     - Throws: `std::runtime_error` if there is an error in executing the sql statement.
 - ```cpp
+  void registerFunction(const std::string& name, const std::function<void(const SqlContext&)>& func, int expectedArgs = -1)
+  ```
+    - Accepts: The name of the sql function, name, the actual sql function, func, and the number of arguments the sql function expects to receive, expectedArgs (specify -1 for unlimited number of args).
+- ```cpp
   SqlDatabase& operator=(const SqlDatabase& database)
   ```
     - Copies a SqlDatabase.
@@ -81,7 +152,7 @@ Path: `Nickvision::Database::SqlDatabase`
     - Returns: False if the object is not valid.
 
 ## SqlStatement
-Description: An sqlite (sqlcipher) statement.
+Description: A sqlite statement.
 
 Interface: [sqldstatement.h](/include/database/sqlstatement.h)
 
@@ -134,29 +205,29 @@ Path: `Nickvision::Database::SqlStatement`
   int getColumnInt(int index)
   ```
     - Accepts: The index of the column to get an int value from, index.
-    - Return The int value from the column.
+    - Returns: The int value from the column.
 - ```cpp
   sqlite3_int64 getColumnInt64(int index)
   ```
     - Accepts: The index of the column to get an int64 value from, index.
-    - Return The int64 value from the column.
+    - Returns: The int64 value from the column.
 - ```cpp
   double getColumnDouble(int index)
   ```
     - Accepts: The index of the column to get a double value from, index.
-    - Return The double value from the column.
+    - Returns: The double value from the column.
 - ```cpp
   bool getColumnBool(int index)
   ```
     - Accepts: The index of the column to get a bool value from, index.
-    - Return The bool value from the column.
+    - Returns: The bool value from the column.
 - ```cpp
   std::string getColumnString(int index)
   ```
     - Accepts: The index of the column to get a string value from, index.
-    - Return The string value from the column.
+    - Returns: The string value from the column.
 - ```cpp
-  std::pair<const void*, int> getColumnBlob(int index)
+  std::pair<const void*, size_t> getColumnBlob(int index)
   ```
     - Accepts: The index of the column to get a blob value from, index.
     - Returns: A pair of the blob value from the column and the blob's size.
@@ -165,3 +236,41 @@ Path: `Nickvision::Database::SqlStatement`
   ```
     - Returns: True if the object is valid.
     - Returns: False if the object is not valid.
+
+## SqlValue
+Description: A sqlite value.
+
+Interface: [sqlvalue.h](/include/database/sqlvalue.h)
+
+Path: `Nickvision::Database::SqlValue`
+
+### Methods
+- ```cpp
+  SqlValue(sqlite3_value* value)
+  ```
+    - Constructs a SqlValue.
+    - Accepts: The sqlite3 value pointer, value.
+- ```cpp
+  int getInt()
+  ```
+    - Returns: The int from the value.
+- ```cpp
+  sqlite3_int64 getInt64()
+  ```
+    - Returns: The int64 from the value.
+- ```cpp
+  double getDouble()
+  ```
+    - Returns: The double from the value.
+- ```cpp
+  bool getBool()
+  ```
+    - Returns: The bool from the value.
+- ```cpp
+  std::string getString()
+  ```
+    - Returns: The string from the value.
+- ```cpp
+  std::pair<const void*, size_t> getBlob()
+  ```
+    - Returns: A pair of the blob from the value and the blob's size.

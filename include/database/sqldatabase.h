@@ -6,16 +6,21 @@
 #endif
 
 #include <filesystem>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <string>
+#include <unordered_map>
+#include "sqlcontext.h"
 #include "sqlite3.h"
 #include "sqlstatement.h"
 
 namespace Nickvision::Database
 {
+    typedef std::function<void(const SqlContext&)> SqliteCustomFunction;
+
     /**
-     * @brief An sqlite (sqlcipher) database. 
+     * @brief A sqlite (sqlcipher) database. 
      */
     class SqlDatabase
     {
@@ -48,6 +53,12 @@ namespace Nickvision::Database
          */
         bool isEncrypted() const;
         /**
+         * @brief Returns the underlying sqlite3 object pointer for the database.
+         * @brief Using this method is strongly discouraged, as you can break the state of this object.
+         * @return sqlite3* 
+         */
+        sqlite3* c_obj();
+        /**
          * @brief Unlocks the database.
          * @brief If the database is not encrypted and is newly created, this will encrypt and set its password.
          * @param password The password of the database
@@ -78,6 +89,13 @@ namespace Nickvision::Database
          */
         SqlStatement createStatement(const std::string& command);
         /**
+         * @brief Registers a custom sql function to the database.
+         * @param name The name of the sql function
+         * @param expectedArgs The number of args the sql function expects to receive (specify -1 for unlimited number of args)
+         * @param func The sql function
+         */
+        void registerFunction(const std::string& name, const SqliteCustomFunction& func, int expectedArgs = -1);
+        /**
          * @brief Copies a SqlDatabase object.
          * @param database The SqlDatabase to copy
          * @return this
@@ -102,6 +120,7 @@ namespace Nickvision::Database
         bool m_isEncrypted;
         std::shared_ptr<sqlite3> m_database;
         bool m_isUnlocked;
+        std::unordered_map<std::string, SqliteCustomFunction> m_custom;
     };
 }
 
