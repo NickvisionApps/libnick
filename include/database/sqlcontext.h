@@ -27,7 +27,7 @@ namespace Nickvision::Database
          * @brief Gets the pointer to the user data for the context.
          * @return The user data pointer
          */
-        void* getUserData();
+        void* getUserData() const;
         /**
          * @brief Gets the list of SqlValue arguments passed to the function.
          * @return The list of arguments

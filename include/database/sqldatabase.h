@@ -17,7 +17,7 @@
 
 namespace Nickvision::Database
 {
-    typedef std::function<void(const SqlContext&)> SqliteCustomFunction;
+    typedef std::function<void(SqlContext&)> SqliteCustomFunction;
 
     /**
      * @brief A sqlite (sqlcipher) database. 
@@ -93,6 +93,7 @@ namespace Nickvision::Database
          * @param name The name of the sql function
          * @param expectedArgs The number of args the sql function expects to receive (specify -1 for unlimited number of args)
          * @param func The sql function
+         * @throw std::runtime_error Thrown if error in executing sql statement 
          */
         void registerFunction(const std::string& name, const SqliteCustomFunction& func, int expectedArgs = -1);
         /**

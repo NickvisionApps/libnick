@@ -66,7 +66,7 @@ Path: `Nickvision::Database::SqlContext`
 - ```cpp
   void error(int err)
   ```
-    - Accepts: An error cpode to return from the sql function, err.
+    - Accepts: An error code to return from the sql function, err.
 
 ## SqlDatabase
 Description: A sqlite (sqlcipher) database.
@@ -137,6 +137,7 @@ Path: `Nickvision::Database::SqlDatabase`
   void registerFunction(const std::string& name, const std::function<void(const SqlContext&)>& func, int expectedArgs = -1)
   ```
     - Accepts: The name of the sql function, name, the actual sql function, func, and the number of arguments the sql function expects to receive, expectedArgs (specify -1 for unlimited number of args).
+    - Throws: `std::runtime_error` if there is an error in executing the sql statement.
 - ```cpp
   SqlDatabase& operator=(const SqlDatabase& database)
   ```

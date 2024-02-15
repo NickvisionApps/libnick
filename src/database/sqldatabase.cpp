@@ -177,12 +177,15 @@ namespace Nickvision::Database
     void SqlDatabase::registerFunction(const std::string& name, const SqliteCustomFunction& func, int expectedArgs)
     {
         m_custom[name] = func;
-        sqlite3_create_function(m_database.get(), name.c_str(), expectedArgs, SQLITE_UTF8, &m_custom[name], +[](sqlite3_context* ctx, int argc, sqlite3_value** argv)
+        if(sqlite3_create_function(m_database.get(), name.c_str(), expectedArgs, SQLITE_UTF8, &m_custom[name], +[](sqlite3_context* ctx, int argc, sqlite3_value** argv)
         {
             SqlContext context{ ctx, argc, argv };
             SqliteCustomFunction& func{ *(static_cast<SqliteCustomFunction*>(context.getUserData())) };
             func(context);
-        }, nullptr, nullptr);
+        }, nullptr, nullptr) != SQLITE_OK)
+        {
+            throw std::runtime_error("Unable to register sql function.");
+        }
     }
 
     SqlDatabase& SqlDatabase::operator=(const SqlDatabase& database)

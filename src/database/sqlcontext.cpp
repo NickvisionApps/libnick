@@ -12,7 +12,7 @@ namespace Nickvision::Database
         }
     }
 
-    void* SqlContext::getUserData()
+    void* SqlContext::getUserData() const
     {
         return sqlite3_user_data(m_context);
     }
