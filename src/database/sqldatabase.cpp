@@ -72,10 +72,13 @@ namespace Nickvision::Database
         {
             if(sqlite3_key(m_database.get(), password.c_str(), static_cast<int>(password.size())) != SQLITE_OK)
             {
-                throw std::runtime_error("Unable to key sql database.");
+                m_isUnlocked = false;
             }
-            lock.unlock();
-            m_isUnlocked = exec("PRAGMA schema_version");
+            else
+            {
+                lock.unlock();
+                m_isUnlocked = exec("PRAGMA schema_version");
+            }
         }
         return m_isUnlocked;
     }
@@ -148,7 +151,7 @@ namespace Nickvision::Database
             {
                 throw std::runtime_error("Unable to open sql database.");
             }
-            if(sqlite3_key(m_database.get(), password.c_str(), static_cast<int>(password.size())) != SQLITE_OK)
+            if(sqlite3_key(database, password.c_str(), static_cast<int>(password.size())) != SQLITE_OK)
             {
                 throw std::runtime_error("Unable to key sql database.");
             }
