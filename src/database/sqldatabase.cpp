@@ -104,7 +104,6 @@ namespace Nickvision::Database
                 lock.lock();
                 //Remove old encrypted database
                 m_database.reset();
-                m_database = nullptr;
                 std::filesystem::remove(m_path);
                 std::filesystem::rename(tempPath, m_path);
                 //Open new decrypted database
@@ -142,7 +141,6 @@ namespace Nickvision::Database
             lock.lock();
             //Remove old encrypted database
             m_database.reset();
-            m_database = nullptr;
             std::filesystem::remove(m_path);
             std::filesystem::rename(tempPath, m_path);
             //Open new encrypted database
@@ -159,7 +157,7 @@ namespace Nickvision::Database
             {
                 sqlite3_close(sql);
             } };
-            m_isEncrypted = false;
+            m_isEncrypted = true;
             m_isUnlocked = true;
         }
         return true;

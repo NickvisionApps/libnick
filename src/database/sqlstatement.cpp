@@ -6,7 +6,7 @@ namespace Nickvision::Database
     SqlStatement::SqlStatement(const std::shared_ptr<sqlite3>& database, const std::string& command)
     {
         sqlite3_stmt* statement;
-        if(sqlite3_prepare_v2(database.get(), command.c_str(), -1, &statement, nullptr) != SQLITE_OK)
+        if(sqlite3_prepare_v2(database.get(), command.c_str(), static_cast<int>(command.size()), &statement, nullptr) != SQLITE_OK)
         {
             throw std::runtime_error("Unable to create sql statement.");
         }
