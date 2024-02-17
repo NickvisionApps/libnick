@@ -26,6 +26,7 @@ The following are a list of dependencies used by libnick.
 ### Linux Only
 The above dependencies must be installed, plus the following for linux systems:
 - glib
+- libayatana-appindicator
 - libsecret
 - libuuid
 
