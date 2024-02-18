@@ -1,8 +1,10 @@
 #include "notifications/notifyicon.h"
 #include <stdexcept>
-#include <strsafe.h>
 #include "app/aura.h"
 #include "helpers/stringhelpers.h"
+#ifdef _WIN32
+#include <strsafe.h>
+#endif
 
 using namespace Nickvision::App;
 
