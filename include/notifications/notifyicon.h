@@ -1,27 +1,32 @@
-#ifdef _WIN32
 #ifndef NOTIFYICON_H
 #define NOTIFYICON_H
 
 #define _CRT_SECURE_NO_WARNINGS
+#ifdef _WIN32
 #define WM_NOTIFYICON_EVENT (WM_APP + 100)
 #define IDM_CONTEXT_MENU (WM_APP + 200)
+#endif
 
 #include <filesystem>
 #include <unordered_map>
-#include <windows.h>
-#include <shellapi.h>
 #include "notifyiconmenu.h"
 #include "shellnotificationsenteventargs.h"
+#ifdef _WIN32
+#include <windows.h>
+#include <shellapi.h>
+#elif defined(__linux__)
+#include <libayatana-appindicator3-0.1/libayatana-appindicator/app-indicator.h>
+#endif
 
 namespace Nickvision::Notifications
 {
     /**
      * @brief An icon for the system tray.
-     * @brief This API is only available on Windows.
      */
     class NotifyIcon
     {	
     public:
+#ifdef _WIN32
         /**
          * @brief Constructs a NotifyIcon.
          * @param hwnd The HWND handle of the main application window
@@ -29,7 +34,15 @@ namespace Nickvision::Notifications
          * @param hidden Whether or not the NotifyIcon should be hidden by default
          * @throw std::runtime_error Thrown if unable to create the NotifyIcon
          */
-        NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu = { }, bool hidden = false);
+        NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu, bool hidden = false);
+#elif defined(__linux__)
+        /**
+         * @brief Constructs a NotifyIcon (AppIndicator icon).
+         * @param menu The model for the context menu of the NotifyIcon
+         * @param hidden Whether or not the NotifyIcon should be hidden by default
+         */
+        NotifyIcon(const NotifyIconMenu& contextMenu, bool hidden = false);
+#endif
         /**
          * @brief Destructs a NotifyIcon. 
          */
@@ -55,6 +68,7 @@ namespace Nickvision::Notifications
          * @return True if the tooltip was updated, else false
          */
         bool setTooltip(const std::string& tooltip);
+#ifdef _WIN32
         /**
          * @brief Shows a notification from the icon.
          * @brief Supports the action "open" with action param being a path of a file or folder to open.
@@ -62,8 +76,13 @@ namespace Nickvision::Notifications
          * @return True if notification was shown from the icon
          */
         bool notify(const ShellNotificationSentEventArgs& e);
+#endif
 
     private:
+        bool m_isHidden;
+        std::string m_tooltip;
+        NotifyIconMenu m_contextMenu;
+#ifdef _WIN32
         /**
          * @brief Gets a basic NOTIFYICONDATAA struct for this NotifyIcon.
          * @return NOTIFYICONDATAA
@@ -77,15 +96,16 @@ namespace Nickvision::Notifications
          */
         LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
         std::string m_className;
-        bool m_isHidden;
-        std::string m_tooltip;
-        NotifyIconMenu m_contextMenu;
         HWND m_hwnd;
         GUID m_guid;
         HMENU m_hmenu;
         std::filesystem::path m_openPath;
+#elif defined(__linux__)
+        AppIndicator* m_appIndicator;
+#endif
 
     private:
+#ifdef _WIN32
         static std::unordered_map<HWND, NotifyIcon*> m_icons;
         /**
          * @brief The window procedure for NotifyIcons
@@ -95,8 +115,8 @@ namespace Nickvision::Notifications
          * @param lParam LPARAM
          */
         static LRESULT notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+#endif
     };
 }
 
 #endif //NOTIFYICON_H
-#endif

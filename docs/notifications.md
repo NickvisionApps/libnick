@@ -74,8 +74,6 @@ Path: `Nickvision::Notifications::NotificationSeverity`
 ## NotifyIcon
 Description: An icon for the system tray.
 
-Note: This API is only available on the Windows platform.
-
 Interface: [notifyicon.h](/include/notifications/notifyicon.h)
 
 Type: `class`
@@ -84,11 +82,17 @@ Path: `Nickvision::Notifications::NotifyIcon`
 
 ### Methods
 - ```cpp
-  NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu = { }, bool hidden = false);
+  NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu, bool hidden = false)
   ``` 
     - Constructs a NotifyIcon.
     - Accepts: The `HWND` handle for the main application window, hwnd, the context menu model for the icon, contextMenu, and whether or not to hide the icon by default, hidden.
     - Throws: std::runtime_error if unable to create the NotifyIcon.
+    - Note: This method is only available on Windows.
+- ```cpp
+  NotifyIcon(const NotifyIconMenu& contextMenu, bool hidden = false)
+  ```
+    - Constructs a NotifyIcon.
+    - Accepts: The context menu model for the icon, contextMenu, and whether or not to hide the icon by default, hidden.
 - ```cpp
   ~NotifyIcon()
   ``` 
@@ -120,11 +124,10 @@ Path: `Nickvision::Notifications::NotifyIcon`
     - Returns: `true` if the notification was shown from the NotifyIcon.
     - Returns: `false` if the notification was not shown from the NotifyIcon.
     - Note: Supports the action "open" with action param being a path of a file or folder to open.
+    - Note: This method is only available on Windows.
 
 ## NotifyIconMenu
 Description: A menu for a NotifyIcon.
-
-Note: This API is only available on the Windows platform.
 
 Interface: [notifyiconmenu.h](/include/notifications/notifyiconmenu.h)
 

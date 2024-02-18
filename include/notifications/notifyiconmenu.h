@@ -1,4 +1,3 @@
-#ifdef _WIN32
 #ifndef NOTIFYICONMENU_H
 #define NOTIFYICONMENU_H
 
@@ -156,4 +155,3 @@ namespace Nickvision::Notifications
 }
 
 #endif //NOTIFYICONMENU_H
-#endif
