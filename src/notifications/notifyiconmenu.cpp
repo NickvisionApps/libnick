@@ -1,4 +1,3 @@
-#ifdef _WIN32
 #include "notifications/notifyiconmenu.h"
 
 namespace Nickvision::Notifications
@@ -128,5 +127,3 @@ namespace Nickvision::Notifications
         return true;
     }
 }
-
-#endif
