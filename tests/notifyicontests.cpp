@@ -1,4 +1,3 @@
-#ifdef _WIN32
 #include <gtest/gtest.h>
 #include <cstdlib>
 #include <memory>
@@ -32,22 +31,29 @@ TEST_F(NotifyIconTest, CreateIcon)
 		{
 				waiting = false;
 		});
+#ifdef _WIN32
 		ASSERT_NO_THROW(m_notifyIcon = std::make_unique<NotifyIcon>(GetConsoleWindow(), contextMenu));
+#elif defined(__linux__)
+        ASSERT_NO_THROW(m_notifyIcon = std::make_unique<NotifyIcon>(contextMenu));
+#endif
 		std::cout << "Click \"Continue\" via the context menu of the NotifyIcon to continue..." << std::endl;
 		while (waiting)
 		{
+#ifdef _WIN32
 			MSG msg = { };
 			if(PeekMessageA(&msg, nullptr, 0, 0, PM_REMOVE) > 0)
 			{
 				TranslateMessage(&msg);
 				DispatchMessageA(&msg);
 			}
+#endif
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		}
 	}
 	ASSERT_TRUE(true);
 }
 
+#ifdef _WIN32
 TEST_F(NotifyIconTest, ShowShellNotification)
 {
 	if (m_notifyIcon)
@@ -56,5 +62,4 @@ TEST_F(NotifyIconTest, ShowShellNotification)
 	}
 	ASSERT_TRUE(true);
 }
-
 #endif

@@ -101,6 +101,7 @@ namespace Nickvision::Notifications
         HMENU m_hmenu;
         std::filesystem::path m_openPath;
 #elif defined(__linux__)
+        GtkBuilder* m_builder;
         AppIndicator* m_appIndicator;
 #endif
 

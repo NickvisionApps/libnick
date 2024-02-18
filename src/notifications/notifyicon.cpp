@@ -121,9 +121,10 @@ namespace Nickvision::Notifications
         : m_isHidden{ hidden },
         m_tooltip{ Aura::getActive().getAppInfo().getName() },
         m_contextMenu{ contextMenu },
-        m_appIndicator{ app_indicator_new(Aura::getActive().getAppInfo().getId() + ".indicator", Aura::getActive().getAppInfo().getId(), APP_INDICATOR_CATEGORY_APPLICATION_STATUS) }
+        m_builder{ nullptr },
+        m_appIndicator{ app_indicator_new(std::string(Aura::getActive().getAppInfo().getId() + ".indicator").c_str(), Aura::getActive().getAppInfo().getId().c_str(), APP_INDICATOR_CATEGORY_APPLICATION_STATUS) }
     {
-        GApplication* application{ a_application_get_default() };
+        GApplication* application{ g_application_get_default() };
         std::string menuModel{ "<menu id='notify-menu'>\n" };
         menuModel += "<section>\n";
         for (size_t i = 0; i < m_contextMenu.size(); i++)
@@ -133,7 +134,7 @@ namespace Nickvision::Notifications
             {
                 NotifyIconActionMenuItem* action{ static_cast<NotifyIconActionMenuItem*>(item.get()) };
                 std::string id{ "n" + std::to_string(i) };
-                menuModel += "<item action='app." + id + "' label='" + action->getLabel() + "'/>";
+                menuModel += "<item action='app." + id + "' label='" + action->getLabel() + "' />";
                 GSimpleAction* simpleAction{ g_simple_action_new(id.c_str(), nullptr) };
                 g_signal_connect(simpleAction, "activate", G_CALLBACK(+[](GSimpleAction*, GVariant*, gpointer data){ reinterpret_cast<NotifyIconActionMenuItem*>(data)->invoke(); }), action);
                 g_action_map_add_action(G_ACTION_MAP(application), G_ACTION(simpleAction));
@@ -144,11 +145,10 @@ namespace Nickvision::Notifications
             }
         }
         menuModel += "</section>\n</menu>";
-        GtkBuilder* builder{ gtk_builder_new_from_string(menuModel.c_str(), static_cast<int>(menuModel.size())) };
+        m_builder = gtk_builder_new_from_string(menuModel.c_str(), static_cast<int>(menuModel.size()));
         app_indicator_set_label(m_appIndicator, m_tooltip.c_str(), nullptr);
         app_indicator_set_status(m_appIndicator, m_isHidden ? APP_INDICATOR_STATUS_PASSIVE : APP_INDICATOR_STATUS_ACTIVE);
-        app_indicator_set_menu(GTK_MENU(gtk_menu_new_from_model(G_MENU_MODEL(gtk_builder_get_object(builder, "notify-menu")))));
-        g_object_unref(G_OBJECT(builder));
+        app_indicator_set_menu(m_appIndicator, GTK_MENU(gtk_menu_new_from_model(G_MENU_MODEL(gtk_builder_get_object(m_builder, "notify-menu")))));
     }
 #endif
 
@@ -168,6 +168,7 @@ namespace Nickvision::Notifications
         UnregisterClassA(m_className.c_str(), nullptr);
 #elif defined(__linux__)
         g_object_unref(G_OBJECT(m_appIndicator));
+        g_object_unref(G_OBJECT(m_builder));
 #endif
     }
 
@@ -322,5 +323,5 @@ namespace Nickvision::Notifications
         }
         return DefWindowProcA(hwnd, uMsg, wParam, lParam);
     }
-}
 #endif
+}
