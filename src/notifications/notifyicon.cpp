@@ -19,6 +19,7 @@ namespace Nickvision::Notifications
         m_hwnd{ nullptr }
     {
         CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+        //Get app icons
         HICON icon{ (HICON)GetClassLongPtrA(hwnd, GCLP_HICON) };
         if (!icon)
         {
@@ -113,6 +114,15 @@ namespace Nickvision::Notifications
                 }
             }
         }
+        //Use dark mode if needed
+        HMODULE uxTheme{ LoadLibraryExA("uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32) };
+        bool(WINAPI* ShouldAppsUseDarkMode)(){ (bool(WINAPI*)())GetProcAddress(uxTheme, MAKEINTRESOURCEA(132)) };
+        int(WINAPI* SetPreferredAppMode)(int){ (int(WINAPI*)(int))GetProcAddress(uxTheme, MAKEINTRESOURCEA(135)) };
+        if(ShouldAppsUseDarkMode())
+        {
+            SetPreferredAppMode(2); //2 == ForceDark
+        }
+        FreeLibrary(uxTheme);
     }
 
     NotifyIcon::~NotifyIcon()
@@ -120,11 +130,12 @@ namespace Nickvision::Notifications
         //Destroy NotifyIcon
         NOTIFYICONDATAA notify{ getBaseNotifyIconData() };
         Shell_NotifyIconA(NIM_DELETE, &notify);
-        //Destroy window for NotifyIcon
+        //Destroy context menu
         if (m_hmenu)
         {
             DestroyMenu(m_hmenu);
         }
+        //Destroy window
         m_icons.erase(m_hwnd);
         DestroyWindow(m_hwnd);
         UnregisterClassA(m_className.c_str(), nullptr);
@@ -211,10 +222,11 @@ namespace Nickvision::Notifications
 
     LRESULT NotifyIcon::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        if (uMsg == WM_NOTIFYICON_EVENT)
+        if (uMsg == WM_NOTIFYICON_EVENT) //NotifyIcon event
         {
-            if (LOWORD(lParam) == NIN_SELECT || LOWORD(lParam) == WM_CONTEXTMENU)
+            if (LOWORD(lParam) == NIN_SELECT || LOWORD(lParam) == WM_CONTEXTMENU) //Icon clicked or right-clicked
             {
+                //Attach context menu to NotifyIcon window
                 POINT point{ LOWORD(wParam), HIWORD(wParam) };
                 SetForegroundWindow(m_hwnd);
                 UINT flags{ TPM_RIGHTBUTTON };
@@ -229,9 +241,9 @@ namespace Nickvision::Notifications
                 TrackPopupMenuEx(m_hmenu, flags, point.x, point.y, m_hwnd, nullptr);
                 return 0;
             }
-            else if (LOWORD(lParam) == NIN_BALLOONUSERCLICK)
+            else if (LOWORD(lParam) == NIN_BALLOONUSERCLICK) //Ballon clicked ("open" event)
             {
-                if (!m_openPath.empty() && std::filesystem::exists(m_openPath))
+                if (std::filesystem::exists(m_openPath))
                 {
                     ShellExecuteA(nullptr, "open", m_openPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
                 }
@@ -240,7 +252,7 @@ namespace Nickvision::Notifications
             Shell_NotifyIconA(NIM_MODIFY, &notify);
             return 0;
         }
-        else if (uMsg == WM_COMMAND)
+        else if (uMsg == WM_COMMAND) //ContextMenu event
         {
             int index{ LOWORD(wParam) - IDM_CONTEXT_MENU };
             if (m_contextMenu.size() != 0 && index >= 0 && index < m_contextMenu.size())
