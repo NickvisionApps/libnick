@@ -7,13 +7,13 @@ using namespace Nickvision::Network;
 
 TEST(NetworkTests, ConnectedGlobal)
 {
-	NetworkMonitor netmon;
-	ASSERT_EQ(netmon.getConnectionState(), NetworkState::ConnectedGlobal);
+    NetworkMonitor netmon;
+    ASSERT_EQ(netmon.getConnectionState(), NetworkState::ConnectedGlobal);
 }
 
 TEST(NetworkTests, DisableNetCheck)
 {
-	ASSERT_TRUE(Aura::getActive().setEnvVar("AURA_DISABLE_NETCHECK", "true"));
-	NetworkMonitor netmon;
-	ASSERT_EQ(netmon.getConnectionState(), NetworkState::ConnectedGlobal);
+    ASSERT_TRUE(Aura::getActive().setEnvVar("AURA_DISABLE_NETCHECK", "true"));
+    NetworkMonitor netmon;
+    ASSERT_EQ(netmon.getConnectionState(), NetworkState::ConnectedGlobal);
 }
