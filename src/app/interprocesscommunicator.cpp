@@ -1,6 +1,7 @@
 #include "app/interprocesscommunicator.h"
 #include <cstdlib>
 #include <stdexcept>
+#include "helpers/stringhelpers.h"
 #ifdef __linux__
 #include <unistd.h>
 #include <sys/socket.h>
@@ -14,11 +15,12 @@ namespace Nickvision::App
 #ifdef _WIN32
         m_path = "\\\\.\\pipe\\" + id;
         m_serverPipe = nullptr;
-        WIN32_FIND_DATAA fd;
-        HANDLE find{ FindFirstFileA(m_path.c_str(), &fd) };
+        WIN32_FIND_DATAW fd;
+        std::wstring wPath{ StringHelpers::toWstring(m_path) };
+        HANDLE find{ FindFirstFileW(wPath.c_str(), &fd) };
         if (find == INVALID_HANDLE_VALUE) //no server exists
         {
-            m_serverPipe = CreateNamedPipeA(m_path.c_str(), PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, 1, 0, 0, NMPWAIT_USE_DEFAULT_WAIT, nullptr);
+            m_serverPipe = CreateNamedPipeW(wPath.c_str(), PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, 1, 0, 0, NMPWAIT_USE_DEFAULT_WAIT, nullptr);
             if (m_serverPipe == INVALID_HANDLE_VALUE)
             {
                 throw std::runtime_error("Unable to start IPC server.");
@@ -107,7 +109,8 @@ namespace Nickvision::App
         {
             std::string argc{ std::to_string(args.size()) };
 #ifdef _WIN32
-            HANDLE clientPipe{ CreateFileA(m_path.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
+            std::wstring wPath{ StringHelpers::toWstring(m_path) };
+            HANDLE clientPipe{ CreateFileW(wPath.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
             if (clientPipe == INVALID_HANDLE_VALUE)
             {
                 return false;

@@ -88,8 +88,8 @@ namespace Nickvision::Update
                         std::filesystem::path setup{ UserDirectories::getApplicationCache() / name };
                         if (WebHelpers::downloadFile(asset.get("browser_download_url", "").asString(), setup))
                         {
-                            std::string cmd{ "\"" + setup.string() + "\"" };
-                            if ((INT_PTR)ShellExecuteA(nullptr, "open", cmd.c_str(), nullptr, nullptr, SW_SHOWDEFAULT) > 32)
+                            std::wstring cmd{ L"\"" + setup.wstring() + L"\"" };
+                            if ((INT_PTR)ShellExecuteW(nullptr, L"open", cmd.c_str(), nullptr, nullptr, SW_SHOWDEFAULT) > 32)
                             {
                                 std::exit(0);
                                 return true;

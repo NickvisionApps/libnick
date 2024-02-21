@@ -16,7 +16,7 @@ namespace Nickvision::Filesystem
         m_watching{ true }
     {
 #ifdef _WIN32
-        m_terminateEvent = CreateEventA(nullptr, 1, 0, nullptr);
+        m_terminateEvent = CreateEventW(nullptr, 1, 0, nullptr);
         if (!m_terminateEvent)
         {
             throw std::runtime_error("Unable to create event.");

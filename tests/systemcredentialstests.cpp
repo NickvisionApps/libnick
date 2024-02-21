@@ -10,7 +10,7 @@ TEST(SystemCredentialsTests, AddRandCredential)
 {
     std::optional<Credential> cred{ SystemCredentials::addCredential(randCredentialName) };
     ASSERT_TRUE(cred.has_value());
-    ASSERT_TRUE(cred.value().getName() == randCredentialName);
+    ASSERT_EQ(cred.value().getName(), randCredentialName);
     ASSERT_TRUE(!cred.value().getPassword().empty());
 }
 
@@ -18,7 +18,7 @@ TEST(SystemCredentialsTests, FetchRandCredential)
 {
     std::optional<Credential> cred{ SystemCredentials::getCredential(randCredentialName) };
     ASSERT_TRUE(cred.has_value());
-    ASSERT_TRUE(cred.value().getName() == randCredentialName);
+    ASSERT_EQ(cred.value().getName(), randCredentialName);
     ASSERT_TRUE(!cred.value().getPassword().empty());
 }
 
@@ -28,8 +28,8 @@ TEST(SystemCredentialsTests, UpdateRandCredential)
     ASSERT_TRUE(SystemCredentials::updateCredential(updatedCred));
     std::optional<Credential> cred{ SystemCredentials::getCredential(randCredentialName) };
     ASSERT_TRUE(cred.has_value());
-    ASSERT_TRUE(cred.value().getName() == randCredentialName);
-    ASSERT_TRUE(cred.value().getPassword() == "abc123");
+    ASSERT_EQ(cred.value().getName(), randCredentialName);
+    ASSERT_EQ(cred.value().getPassword(), "abc123");
 }
 
 TEST(SystemCredentialsTest, DeleteRandCredential)

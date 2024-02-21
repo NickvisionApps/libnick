@@ -1,5 +1,6 @@
 #include "keyring/systemcredentials.h"
 #include <vector>
+#include "helpers/stringhelpers.h"
 #include "keyring/passwordgenerator.h"
 #ifdef _WIN32
 #include <windows.h>
@@ -17,17 +18,18 @@ namespace Nickvision::Keyring
     std::optional<Credential> SystemCredentials::getCredential(const std::string& name)
     {
 #ifdef _WIN32
-        CREDENTIALA* cred{ nullptr };
-        if (CredReadA(name.c_str(), CRED_TYPE_GENERIC, 0, &cred))
+        CREDENTIALW* cred{ nullptr };
+        std::wstring wName{ StringHelpers::toWstring(name) };
+        if (CredReadW(wName.c_str(), CRED_TYPE_GENERIC, 0, &cred))
         {
             if (cred->CredentialBlob)
             {
-                std::string credName{ cred->TargetName ? cred->TargetName : "" };
-                std::string credUrl{ cred->Comment ? cred->Comment : "" };
-                std::string credUsername{ cred->UserName ? cred->UserName : "" };
-                std::string credPassword{ LPCSTR(cred->CredentialBlob), cred->CredentialBlobSize };
+                std::wstring credName{ cred->TargetName ? cred->TargetName : L"" };
+                std::wstring credUrl{ cred->Comment ? cred->Comment : L"" };
+                std::wstring credUsername{ cred->UserName ? cred->UserName : L"" };
+                std::wstring credPassword{ (const wchar_t*)cred->CredentialBlob, static_cast<size_t>(cred->CredentialBlobSize / sizeof(wchar_t)) };
                 CredFree(cred);
-                return { { credName, credUrl, credUsername, credPassword } };
+                return Credential{ StringHelpers::toString(credName), StringHelpers::toString(credUrl), StringHelpers::toString(credUsername), StringHelpers::toString(credPassword) };
             }
         }
 #elif defined(__linux__)
@@ -61,17 +63,21 @@ namespace Nickvision::Keyring
     bool SystemCredentials::addCredential(const Credential& credential)
     {
 #ifdef _WIN32
-        CREDENTIALA* cred{ new CREDENTIALA() };
+        std::wstring name{ StringHelpers::toWstring(credential.getName()) };
+        std::wstring uri{ StringHelpers::toWstring(credential.getUri()) };
+        std::wstring username{ StringHelpers::toWstring(credential.getUsername()) };
+        std::wstring password{ StringHelpers::toWstring(credential.getPassword()) };
+        CREDENTIALW* cred{ new CREDENTIALW() };
         cred->AttributeCount = 0;
         cred->Attributes = nullptr;
-        cred->Comment = nullptr;
         cred->Type = CRED_TYPE_GENERIC;
         cred->Persist = CRED_PERSIST_LOCAL_MACHINE;
-        cred->TargetName = LPSTR(credential.getName().c_str());
-        cred->UserName = LPSTR(credential.getUsername().c_str());
-        cred->CredentialBlobSize = (unsigned long)credential.getPassword().size();
-        cred->CredentialBlob = LPBYTE(credential.getPassword().c_str());
-        bool res = CredWriteA(cred, 0);
+        cred->TargetName = LPWSTR(name.c_str());
+        cred->Comment = LPWSTR(uri.c_str());
+        cred->UserName = LPWSTR(username.c_str());
+        cred->CredentialBlobSize = static_cast<unsigned long>(password.size() * sizeof(wchar_t));
+        cred->CredentialBlob = LPBYTE(password.c_str());
+        bool res = CredWriteW(cred, 0);
         CredFree(cred);
         return res;
 #elif defined(__linux__)
@@ -89,19 +95,23 @@ namespace Nickvision::Keyring
     bool SystemCredentials::updateCredential(const Credential& credential)
     {
 #ifdef _WIN32
-        CREDENTIALA* cred{ nullptr };
-        if (CredReadA(credential.getName().c_str(), CRED_TYPE_GENERIC, 0, &cred))
+        CREDENTIALW* cred{ nullptr };
+        std::wstring name{ StringHelpers::toWstring(credential.getName()) };
+        std::wstring uri{ StringHelpers::toWstring(credential.getUri()) };
+        std::wstring username{ StringHelpers::toWstring(credential.getUsername()) };
+        std::wstring password{ StringHelpers::toWstring(credential.getPassword()) };
+        if (CredReadW(name.c_str(), CRED_TYPE_GENERIC, 0, &cred))
         {
             cred->AttributeCount = 0;
             cred->Attributes = nullptr;
-            cred->Comment = nullptr;
             cred->Type = CRED_TYPE_GENERIC;
             cred->Persist = CRED_PERSIST_LOCAL_MACHINE;
-            cred->TargetName = LPSTR(credential.getName().c_str());
-            cred->UserName = LPSTR(credential.getUsername().c_str());
-            cred->CredentialBlobSize = (unsigned long)credential.getPassword().size();
-            cred->CredentialBlob = LPBYTE(credential.getPassword().c_str());
-            bool res = CredWriteA(cred, 0);
+            cred->TargetName = LPWSTR(name.c_str());
+            cred->Comment = LPWSTR(uri.c_str());
+            cred->UserName = LPWSTR(username.c_str());
+            cred->CredentialBlobSize = static_cast<unsigned long>(password.size() * sizeof(wchar_t));
+            cred->CredentialBlob = LPBYTE(password.c_str());
+            bool res = CredWriteW(cred, 0);
             CredFree(cred);
             return res;
         }
@@ -130,7 +140,8 @@ namespace Nickvision::Keyring
     bool SystemCredentials::deleteCredential(const std::string& name)
     {
 #ifdef _WIN32
-        return CredDeleteA(name.c_str(), CRED_TYPE_GENERIC, 0);
+        std::wstring wName{ StringHelpers::toWstring(name) };
+        return CredDeleteW(wName.c_str(), CRED_TYPE_GENERIC, 0);
 #elif defined(__linux__)
         GError* error{ nullptr };
         bool res{ secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };

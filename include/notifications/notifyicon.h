@@ -48,13 +48,13 @@ namespace Nickvision::Notifications
          * @brief Gets the tooltip text of the icon.
          * @return The tooltip text
          */
-        const std::string& getTooltip() const;
+        const std::wstring& getTooltip() const;
         /**
          * @brief Sets the tooltip text of the icon.
          * @param tooltip The toolip text
          * @return True if the tooltip was updated, else false
          */
-        bool setTooltip(const std::string& tooltip);
+        bool setTooltip(const std::wstring& tooltip);
         /**
          * @brief Shows a notification from the icon.
          * @brief Supports the action "open" with action param being a path of a file or folder to open.
@@ -65,10 +65,10 @@ namespace Nickvision::Notifications
 
     private:
         /**
-         * @brief Gets a basic NOTIFYICONDATAA struct for this NotifyIcon.
-         * @return NOTIFYICONDATAA
+         * @brief Gets a basic NOTIFYICONDATAW struct for this NotifyIcon.
+         * @return NOTIFYICONDATAW
          */
-        NOTIFYICONDATAA getBaseNotifyIconData();
+        NOTIFYICONDATAW getBaseNotifyIconData();
         /**
          * @brief Handles a WM_NOTIFYICON_EVENT message.
          * @param wParam WPARAM
@@ -76,9 +76,9 @@ namespace Nickvision::Notifications
          * @return LRESULT
          */
         LRESULT handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-        std::string m_className;
+        std::wstring m_className;
         bool m_isHidden;
-        std::string m_tooltip;
+        std::wstring m_tooltip;
         NotifyIconMenu m_contextMenu;
         HWND m_hwnd;
         GUID m_guid;
