@@ -104,11 +104,11 @@ Path: `Nickvision::Notifications::NotifyIcon`
     - Returns: `true` if the icon was shown.
     - Returns: `false` if the icon was not shown.
 - ```cpp
-  const std::string& getTooltip() const
+  const std::wstring& getTooltip() const
   ```
     - Returns: The tooltip text of the icon.
 - ```cpp
-  bool setTooltip(const std::string& tooltip)
+  bool setTooltip(const std::wstring& tooltip)
   ```
     - Accepts: The tooltip text to show on the icon, tooltip.
     - Returns: `true` if the tooltip was updated.
