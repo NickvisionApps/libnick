@@ -32,11 +32,11 @@ namespace Nickvision::App
         {
             //Get executable's directory path
 #ifdef _WIN32
-            char pth[MAX_PATH];
-            DWORD len{ GetModuleFileNameA(nullptr, pth, sizeof(pth)) };
+            wchar_t pth[MAX_PATH];
+            DWORD len{ GetModuleFileNameW(nullptr, pth, sizeof(pth)) };
             if(len > 0)
             {
-                m_executableDirectory = std::filesystem::path(std::string(pth, len)).parent_path();
+                m_executableDirectory = std::filesystem::path(std::wstring(pth, len)).parent_path();
             }
             else
             {

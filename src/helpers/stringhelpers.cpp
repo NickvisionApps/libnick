@@ -221,7 +221,7 @@ namespace Nickvision
 
     std::string StringHelpers::toString(const std::wstring& s)
     {
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
         return converter.to_bytes(s);
     }
 
@@ -233,7 +233,7 @@ namespace Nickvision
 
     std::wstring StringHelpers::toWstring(const std::string& s)
     {
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
         return converter.from_bytes(s);
     }
 

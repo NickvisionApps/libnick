@@ -39,10 +39,10 @@ TEST_F(NotifyIconTest, CreateIcon)
         while (waiting)
         {
             MSG msg = { };
-            if(PeekMessageA(&msg, nullptr, 0, 0, PM_REMOVE) > 0)
+            if(PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE) > 0)
             {
                 TranslateMessage(&msg);
-                DispatchMessageA(&msg);
+                DispatchMessageW(&msg);
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
