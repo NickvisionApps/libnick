@@ -52,6 +52,10 @@ Path: `Nickvision::Database::SqlContext`
   ```
     - Accepts: A bool value to return from the sql function, value.
 - ```cpp
+  void result(char value)
+  ```
+    - Accepts: A char value to return from the sql function, value.
+- ```cpp
   void result(const std::string& value)
   ```
     - Accepts: A string value to return from the sql function, value.
@@ -187,6 +191,11 @@ Path: `Nickvision::Database::SqlStatement`
     - Accepts: The index of the parameter to bind to, index, and the bool value to bind to the parameter, value.
     - Throws: `std::runtime_error` if there is an error in executing the sql statement.
 - ```cpp
+  void bind(int index, char value)
+  ```
+    - Accepts: The index of the parameter to bind to, index, and the char value to bind to the parameter, value.
+    - Throws: `std::runtime_error` if there is an error in executing the sql statement.
+- ```cpp
   void bind(int index, const std::string& value)
   ```
     - Accepts: The index of the parameter to bind to, index, and the string value to bind to the parameter, value.
@@ -222,6 +231,11 @@ Path: `Nickvision::Database::SqlStatement`
   ```
     - Accepts: The index of the column to get a bool value from, index.
     - Returns: The bool value from the column.
+- ```cpp
+  char getColumnChar(int index)
+  ```
+    - Accepts: The index of the column to get a char value from, index.
+    - Returns: The char value from the column.
 - ```cpp
   std::string getColumnString(int index)
   ```
@@ -267,6 +281,10 @@ Path: `Nickvision::Database::SqlValue`
   bool getBool()
   ```
     - Returns: The bool from the value.
+- ```cpp
+  char getChar()
+  ```
+    - Returns: The char from the value.
 - ```cpp
   std::string getString()
   ```

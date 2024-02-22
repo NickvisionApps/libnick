@@ -48,6 +48,14 @@ namespace Nickvision::Database
         }
     }
 
+    void SqlStatement::bind(int index, char value)
+    {
+        if(sqlite3_bind_int(m_statement.get(), index, static_cast<int>(value)) != SQLITE_OK)
+        {
+            throw std::runtime_error("Unable to bind char in sql statement.");
+        }
+    }
+
     void SqlStatement::bind(int index, const std::string& value)
     {
         if(sqlite3_bind_text(m_statement.get(), index, value.c_str(), static_cast<int>(value.size()), SQLITE_TRANSIENT) != SQLITE_OK)
@@ -92,6 +100,11 @@ namespace Nickvision::Database
     bool SqlStatement::getColumnBool(int index) const
     {
         return static_cast<bool>(sqlite3_column_int(m_statement.get(), index));
+    }
+
+    char SqlStatement::getColumnChar(int index) const
+    {
+        return static_cast<char>(sqlite3_column_int(m_statement.get(), index));
     }
 
     std::string SqlStatement::getColumnString(int index) const
