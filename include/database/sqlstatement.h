@@ -54,13 +54,6 @@ namespace Nickvision::Database
          */
         void bind(int index, bool value);
         /**
-         * @brief Binds a char to a parameter.
-         * @param index The index of the parameter
-         * @param value The char to bind 
-         * @throw std::runtime_error Thrown if error in executing sql statement 
-         */
-        void bind(int index, char value);
-        /**
          * @brief Binds a string to a parameter.
          * @param index The index of the parameter
          * @param value The string to bind
@@ -105,12 +98,6 @@ namespace Nickvision::Database
          * @return The bool from the column 
          */
         bool getColumnBool(int index) const;
-        /**
-         * @brief Gets a char from a column.
-         * @param index The index of the column
-         * @return The char from the column 
-         */
-        char getColumnChar(int index) const;
         /**
          * @brief Gets a string from a column.
          * @param index The index of the column

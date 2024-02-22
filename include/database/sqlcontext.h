@@ -58,11 +58,6 @@ namespace Nickvision::Database
          */
         void result(bool value);
         /**
-         * @brief Returns a char value from the sql function.
-         * @param value The char value to return 
-         */
-        void result(char value);
-        /**
          * @brief Returns a string value from the sql function. 
          * @param value The string value to return
          */

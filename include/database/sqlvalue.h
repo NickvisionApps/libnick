@@ -43,11 +43,6 @@ namespace Nickvision::Database
          */
         bool getBool() const;
         /**
-         * @brief Gets a char from a value.
-         * @return The char from the value  
-         */
-        char getChar() const;
-        /**
          * @brief Gets a string from a value.
          * @return The string from the value 
          */

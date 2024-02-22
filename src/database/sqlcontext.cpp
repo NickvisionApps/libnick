@@ -47,11 +47,6 @@ namespace Nickvision::Database
         sqlite3_result_int(m_context, static_cast<int>(value));
     }
 
-    void SqlContext::result(char value)
-    {
-        sqlite3_result_int(m_context, static_cast<int>(value));
-    }
-
     void SqlContext::result(const std::string& value)
     {
         sqlite3_result_text(m_context, value.c_str(), static_cast<int>(value.size()), SQLITE_TRANSIENT);
