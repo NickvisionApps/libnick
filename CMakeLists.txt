@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2024.2.6 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2024.2.7 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -75,12 +75,11 @@ else()
 endif()
 
 #libnick Packages
-find_package(Boost REQUIRED COMPONENTS locale)
 find_package(CURL REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
 find_package(Intl REQUIRED)
 find_package(OpenSSL REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost Boost::locale CURL::libcurl JsonCpp::JsonCpp Intl::Intl OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(${PROJECT_NAME} PUBLIC CURL::libcurl JsonCpp::JsonCpp Intl::Intl OpenSSL::SSL OpenSSL::Crypto)
 if(USING_VCPKG)
     find_package(unofficial-maddy CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME} PUBLIC unofficial::maddy::maddy)
