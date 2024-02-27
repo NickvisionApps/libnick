@@ -107,12 +107,13 @@ namespace Nickvision
         {
             return s;
         }
-        size_t r{ s.find(toReplace) };
-        if (r == std::string::npos)
+        size_t pos{ 0 };
+        while((pos = s.find(toReplace, pos)) != std::string::npos)
         {
-            return s;
+            s.replace(pos, toReplace.size(), replace);
+            pos += replace.size();
         }
-        return s.replace(r, toReplace.size(), replace);
+        return s;
     }
 
     unsigned int StringHelpers::stoui(const std::string& s, size_t* idx, int base)

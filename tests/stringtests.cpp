@@ -99,6 +99,11 @@ TEST(StringTests, Replace1)
     ASSERT_EQ(StringHelpers::replace("hello bye hi", "bye", "goodbye"), "hello goodbye hi");
 }
 
+TEST(StringTests, Replace2)
+{
+    ASSERT_EQ(StringHelpers::replace("hello bye hi bye", "bye", "goodbye"), "hello goodbye hi goodbye");
+}
+
 TEST(StringTests, Base641)
 {
     std::vector<unsigned char> s{ 'A', 'B', 'X', 'J', 'K' };
