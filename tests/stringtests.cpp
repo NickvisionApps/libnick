@@ -152,3 +152,23 @@ TEST(StringTests, Base643)
     img.close();
     std::filesystem::remove("img.png");
 }
+
+TEST(StringTests, SToW1)
+{
+    ASSERT_EQ(StringHelpers::toWstring("hello"), L"hello");
+}
+
+TEST(StringTests, SToW2)
+{
+    ASSERT_EQ(StringHelpers::toWstring("goodbye my friend"), L"goodbye my friend");
+}
+
+TEST(StringTests, WToS1)
+{
+    ASSERT_EQ(StringHelpers::toString(L"hello"), "hello");
+}
+
+TEST(StringTests, WToS2)
+{
+    ASSERT_EQ(StringHelpers::toString(L"goodbye my friend"), "goodbye my friend");
+}

@@ -194,6 +194,12 @@ Path: `Nickvision::App::Aura`
     - Returns: `false` if setting the environment variable failed.
     - Ex: `Aura::setEnvVar("AURA", "true")` will set `"$AURA:true"`.
 - ```cpp
+  std::string sysExec(const std::string& command)
+  ```
+    - Accepts: The command to executed, command.
+    - Returns: The output of the executed command.
+    - Ex: `Aura::sysExec("echo Hello World")` will return `"Hello World"`.
+- ```cpp
   const std::filesystem::path& findDependency(std::string dependency)
   ```
     - Accepts: The name of a dependency to find, dependency.

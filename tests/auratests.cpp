@@ -109,3 +109,12 @@ TEST_F(AuraTest, RunningInformationChecks)
 #endif
     ASSERT_TRUE(Aura::getActive().isRunningViaLocal());
 }
+
+TEST_F(AuraTest, SysExec)
+{
+#ifdef _WIN32
+    ASSERT_EQ(Aura::getActive().sysExec("echo Hello World"), "Hello World\r\n");
+#elif defined(__linux__)
+    ASSERT_EQ(Aura::getActive().sysExec("echo Hello World"), "Hello World\n");
+#endif
+}

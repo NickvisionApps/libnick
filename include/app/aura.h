@@ -98,6 +98,12 @@ namespace Nickvision::App
          */
         bool setEnvVar(const std::string& key, const std::string& value);
         /**
+         * @brief Executes a system command.
+         * @param command The command to execute
+         * @return The output of the command
+         */
+        std::string sysExec(const std::string& command);
+        /**
          * @brief Finds the path of a given dependency.
          * @param dependency The name of the dependency to find
          * @return The path of the dependency if found, else empty path
