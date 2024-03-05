@@ -150,15 +150,15 @@ namespace Nickvision::App
         HANDLE write;
         if(CreatePipe(&read, &write, &sa, 0))
         {
-            STARTUPINFOA si{ 0 };
+            STARTUPINFOW si{ 0 };
             PROCESS_INFORMATION pi{ 0 };
-            std::string commandCopy{ "cmd.exe /C \"" + command + "\"" };
-            si.cb = sizeof(STARTUPINFOA);
+            std::wstring commandCopy{ L"cmd.exe /C \"" + StringHelpers::toWstring(command) + L"\"" };
+            si.cb = sizeof(STARTUPINFOW);
             si.hStdError = write;
             si.hStdOutput = write;
             si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
             si.wShowWindow = SW_HIDE;
-            if(CreateProcessA(nullptr, LPSTR(commandCopy.c_str()), nullptr, nullptr, TRUE, CREATE_NEW_CONSOLE, nullptr, nullptr, &si, &pi))
+            if(CreateProcessW(nullptr, LPWSTR(commandCopy.c_str()), nullptr, nullptr, TRUE, CREATE_NEW_CONSOLE, nullptr, nullptr, &si, &pi))
             {
                 bool ended{ false };
                 while(!ended)
