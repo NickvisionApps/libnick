@@ -1,4 +1,4 @@
-# Nickvision
+# Nickvision::App
 
 This module contains types and functions for creating Nickvision applications.
 
