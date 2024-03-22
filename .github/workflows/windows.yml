@@ -37,7 +37,7 @@ jobs:
           pkgs: curl gettext-libintl gtest jsoncpp maddy openssl
           triplet: x64-windows
           cache-key: ${{ matrix.config.os }}
-          revision: 7f9f0e44db287e8e67c0e888141bfa200ab45121
+          revision: 936588e23157b56507069ad664b020881c119e54
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: "Build"
         working-directory: ${{github.workspace}}/build
