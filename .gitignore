@@ -44,6 +44,7 @@ out-linux/
 out-windows/
 build/
 bin/
+.cache/
 .vs/
 .vscode/
 .idea/
@@ -54,6 +55,7 @@ _nickbuild/
 
 # CMake
 CMakeUserPresets.json
+compile_commands.json
 
 # UI Files
 *.ui
