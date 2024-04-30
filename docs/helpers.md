@@ -3,8 +3,25 @@
 This module contains various helper namespaces that making working with C++ a bit less painful.
 
 ## Table of Contents
+- [CodeHelpers](#codehelpers)
 - [StringHelpers](#stringhelpers)
 - [WebHelpers](#webhelpers)
+
+## CodeHelpers
+Description: Helper functions for working with C++
+
+Interface: [codehelpers.h](/include/helpers/codehelpers.h)
+
+Type: `namespace`
+
+Path: `Nickvision::CodeHelpers`
+
+### Functions
+- ```cpp
+  const T& unmove(T&& t)
+  ```
+    - Accepts: An rvalue, t
+    - Returns: The lvalue of t.
 
 ## StringHelpers
 Description: Helper functions for working with std::string
