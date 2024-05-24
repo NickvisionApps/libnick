@@ -30,7 +30,7 @@ namespace Nickvision::App
         }
     }
 
-    bool Aura::init(const std::string& id, const std::string& name, const std::string& englishShortName)
+    bool Aura::init(const std::string& id, const std::string& name, const std::string& englishShortName, LogLevel logLevel)
     {
         if(!m_initialized)
         {
@@ -70,7 +70,7 @@ namespace Nickvision::App
             {
                 std::filesystem::remove(logPath);
             }
-            m_logger = std::make_unique<Logger>(logPath);
+            m_logger = std::make_unique<Logger>(logPath, logLevel);
             m_initialized = true;
         }
         return m_initialized;

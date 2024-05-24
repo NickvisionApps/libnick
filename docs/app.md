@@ -178,9 +178,9 @@ Path: `Nickvision::App::Aura`
     - Destructs an Aura
     - Note: This also called curl_global_clean().
 - ```cpp
-  bool init(const std::string& id, const std::string& name, const std::string& englishShortName)
+  bool init(const std::string& id, const std::string& name, const std::string& englishShortName, Logging:LogLevel logLevel)
   ```
-    - Accepts: An application id, id, an application name, name, and an application english short name, englishShortName.
+    - Accepts: An application id, id, an application name, name, an application english short name, englishShortName, and the application log level, logLevel.
     - Returns: True if initialized, else false
     - Throws: `std::runtime_error` if libcurl fails to initialize
     - Throws: `std::runtime_error` if the gettext system fails to initialize

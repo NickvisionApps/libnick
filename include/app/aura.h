@@ -40,12 +40,13 @@ namespace Nickvision::App
          * @param id The application id
          * @param name The application name
          * @param englishShortName The application short name in English
+         * @param logLevel The application log level
          * @throw std::runtime_error Thrown if unable to get the executable directory path
          * @throw std::runtime_error Thrown if libcurl fails to initialize
          * @throw std::runtime_error Thrown if the gettext system fails to initialize
          * @return True if initialized, else false
          */
-        bool init(const std::string& id, const std::string& name, const std::string& englishShortName);
+        bool init(const std::string& id, const std::string& name, const std::string& englishShortName, Logging::LogLevel logLevel = Logging::LogLevel::Info);
         /**
          * @brief Gets the path of the executable's directory.
          * @return The executable's directory path
