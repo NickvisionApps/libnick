@@ -68,8 +68,10 @@ namespace Nickvision::Logging
         case LogLevel::Debug:
         case LogLevel::Info:
             std::cout << log << std::endl;
+            break;
         default:
             std::cerr << log << std::endl;
+            break;
         }
     }
 }
