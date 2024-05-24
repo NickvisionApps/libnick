@@ -139,6 +139,14 @@ Path: `Nickvision::App::Aura`
   ```
     - The AppInfo object for the application
 - ```
+  InterProcessCommunicator& IPC: get
+  ```
+    - The application's inter process communicator
+- ```
+  const Logger& Logger: get
+  ```
+    - The application's logger
+- ```
   std::filesystem::path& ExecutableDirectory: get
   ```
     - The path of the executable's directory.

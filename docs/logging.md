@@ -15,18 +15,25 @@ Type: `class`
 
 Path: `Nickvision::Logging::Logger`
 
+### Member Variables
+- ```
+  const std::filesystem::path& Path: get
+  ```
+    - The path to the logs file, if available
+
 ### Methods
 - ```cpp
     Logger(LogLevel minimum);
   ```
     - Constructs a Logger.
     - Accepts: The minimum log level of messages to accept, minimum.
-    - Note: This object will log everything to std::cerr.
+    - Note: This object will log everything to standard outputs.
 - ```cpp
     Logger(const std::filesystem::path& path, LogLevel minimum);
   ```
     - Constructs a Logger.
     - Accepts: The path of the file to write logs to, path, and the minimum log level of messages to accept, minimum.
+    - Note: This object will log everything to standard outputs AND the provided file.
 - ```cpp
   bool log(LogLevel level, const std::string& message, const std::source_location& source) const
   ```
