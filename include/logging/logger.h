@@ -10,12 +10,15 @@
 
 namespace Nickvision::Logging
 {
+    /**
+     * @brief A model of an object that logs application messages.
+     */
     class Logger
     {
     public:
         /**
          * @brief Constructs a Logger.
-         * @brief All messages are sent to std::err.
+         * @brief All messages are sent to std::cerr.
          * @param minimum The minimum supported LogLevel
          */
         Logger(LogLevel minimum = LogLevel::Debug);

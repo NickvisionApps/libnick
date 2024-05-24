@@ -34,6 +34,7 @@ This means that the class provides the following method, allowing consumers to r
 - [Nickvision::Helpers](helpers.md)
 - [Nickvision::Keyring](keyring.md)
 - [Nickvision::Localization](localization.md)
+- [Nickvision::Logging](logging.md)
 - [Nickvision::Network](network.md)
 - [Nickvision::Notifications](notifications.md)
 - [Nickvision::Taskbar](taskbar.md)
