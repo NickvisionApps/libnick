@@ -32,7 +32,7 @@ namespace Nickvision::Logging
          * @param message The message to log
          * @param source The code location of the log message
          */
-        void log(LogLevel level, const std::string& message, const std::source_location& source = std::source_location::current());
+        void log(LogLevel level, const std::string& message, const std::source_location& source = std::source_location::current()) const;
 
     private:
         mutable std::mutex m_mutex;

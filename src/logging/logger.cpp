@@ -37,7 +37,7 @@ namespace Nickvision::Logging
 
     }
 
-    void Logger::log(LogLevel level, const std::string& message, const std::source_location& source)
+    void Logger::log(LogLevel level, const std::string& message, const std::source_location& source) const
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if(level < m_minimum)

@@ -14,6 +14,7 @@
 #include "appinfo.h"
 #include "configurationbase.h"
 #include "interprocesscommunicator.h"
+#include "logging/logger.h"
 
 namespace Nickvision::App
 {
@@ -85,6 +86,11 @@ namespace Nickvision::App
          */
         InterProcessCommunicator& getIPC();
         /**
+         * @brief Gets the application's Logger object.
+         * @return The Logger
+         */
+        const Logging::Logger& getLogger() const;
+        /**
          * @brief Gets a system environment variable.
          * @param key The environment variable to get
          * @return The environment variable if found, else empty string
@@ -141,6 +147,7 @@ namespace Nickvision::App
         std::unique_ptr<InterProcessCommunicator> m_ipc;
         std::unordered_map<std::string, std::filesystem::path> m_dependencies;
         std::unordered_map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
+        std::unique_ptr<Logging::Logger> m_logger;
 
     public:
         /**
