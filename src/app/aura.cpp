@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <curl/curl.h>
 #include "filesystem/systemdirectories.h"
+#include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
 #include "localization/gettext.h"
 #ifdef _WIN32
@@ -11,6 +12,7 @@
 #endif
 
 using namespace Nickvision::Filesystem;
+using namespace Nickvision::Logging;
 
 namespace Nickvision::App
 {
@@ -62,6 +64,13 @@ namespace Nickvision::App
             {
                 throw std::runtime_error("Unable to initialize gettext.");
             }
+            //Setup logger
+            std::filesystem::path logPath{ UserDirectories::getApplicationCache() / "log.txt" };
+            if(std::filesystem::exists(logPath))
+            {
+                std::filesystem::remove(logPath);
+            }
+            m_logger = std::make_unique<Logger>(logPath);
             m_initialized = true;
         }
         return m_initialized;
@@ -117,6 +126,11 @@ namespace Nickvision::App
             m_ipc = std::make_unique<InterProcessCommunicator>(m_appInfo.getId());
         }
         return *m_ipc;
+    }
+
+    const Logger& Aura::getLogger() const
+    {
+        return *m_logger;
     }
 
     std::string Aura::getEnvVar(const std::string& key) const

@@ -34,13 +34,14 @@ jobs:
       - name: "Setup Environment"
         run: |
           mkdir build
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
-          sudo apt-get update
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+          sudo apt-get update -y
           sudo apt-get install g++-13 gcc-13 xdg-user-dirs gettext tzdata locales -y
           xdg-user-dirs-update
           sudo locale-gen en_US.UTF-8
           sudo update-locale LANG=en_US.UTF-8
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
       - name: "Unlock Keyring"
         uses: t1m0thyj/unlock-keyring@v1
       - name: "Vcpkg"
@@ -50,7 +51,7 @@ jobs:
           pkgs: curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl
           triplet: x64-linux
           cache-key: ${{ matrix.config.os }}
-          revision: 4af63c6f3ed667437b8fe0789a7fbc29936c9802
+          revision: 59aeb8fe8fe1c980de6bd5ba634cf21024522d81
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: "Build"
         working-directory: ${{github.workspace}}/build
