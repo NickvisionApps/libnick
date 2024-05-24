@@ -130,6 +130,7 @@ if (BUILD_TESTING)
         "tests/filewatchertests.cpp"
         "tests/ipctests.cpp"
         "tests/keyringtests.cpp"
+        "tests/loggingtests.cpp"
         "tests/main.cpp"
         "tests/networktests.cpp"
         "tests/notifyicontests.cpp"
