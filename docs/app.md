@@ -7,11 +7,12 @@ This module contains types and functions for creating Nickvision applications.
 - [Aura](#aura)
 - [ConfigurationBase](#configurationbase)
 - [InterProcessCommunicator](#interprocesscommunicator)
+- [WindowGeometry](#windowgeometry)
 
 ## AppInfo
 Description: A model for the information about an application.
 
-Interface: [appinfo.h](/include/aura/appinfo.h)
+Interface: [appinfo.h](/include/app/appinfo.h)
 
 Type: `class`
 
@@ -127,7 +128,7 @@ Path: `Nickvision::App::AppInfo`
 ## Aura
 Description: An application base.
 
-Interface: [aura.h](/include/aura/aura.h)
+Interface: [aura.h](/include/app/aura.h)
 
 Type: `class`
 
@@ -233,7 +234,7 @@ Path: `Nickvision::App::Aura`
 ## ConfigurationBase
 Description: A base class for configuration files.
 
-Interface: [configurationbase.h](/include/aura/configurationbase.h)
+Interface: [configurationbase.h](/include/app/configurationbase.h)
 
 Type: `class`
 
@@ -337,7 +338,7 @@ Type: `file`
 ## InterProcessCommunicator
 Description: An inter process communicator (server/client).
 
-Interface: [interprocesscommunicator.h](/include/aura/interprocesscommunicator.h)
+Interface: [interprocesscommunicator.h](/include/app/interprocesscommunicator.h)
 
 Type: `class`
 
@@ -414,3 +415,49 @@ If this program is ran for the first time, ipc will be the server instance. `han
 
 If this program is ran not for the first time, its arguments will be sent to the first instance and this instance itself will close. The first instance's `handleArguments` function will be called as a result of `CommandReceived` being invoked by the ipc server receiving the command. 
 
+## WindowGeometry
+Description: A model of a window's geometry.
+
+Interface: [windowgeometry.h](/include/app/windowgeometry.h)
+
+Type: `class`
+
+Path: `Nickvision::App::WindowGeometry`
+
+### Member Variables
+- ```
+  long Width: get, set
+  ```
+    - The window's width.
+- ```
+  long Height: get, set
+  ```
+    - The window's height.
+- ```
+  bool IsMaximized: get, set
+  ```
+    - Whether or not the window is maximized.
+
+### Methods
+- ```cpp
+  WindowGeometry()
+  ```
+    - Constructs a WindowGeometry.
+    - Note: Uses default values: 800 width, 600 height, not maximized.
+- ```cpp
+  WindowGeometry(long width, long height, bool isMaximized)
+  ```
+    - Constructs a WindowGeometry.
+    - Accepts: The window's width, width, the window's height, height, and whether or not the window is maximized, isMaximized.
+- ```cpp
+  WindowGeometry(HWND hwnd)
+  ```
+    - Constructs a WindowGeometry.
+    - Accepts: The window handle to get the geometry from, hwnd.
+    - Note: This function is only available on Windows.
+- ```cpp
+  bool apply(HWND hwnd)
+  ```
+    - Accepts: The window handle to apply the geometry to, hwnd.
+    - Returns: True if successful.
+    - Returns: False if unsuccessful.

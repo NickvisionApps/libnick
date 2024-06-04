@@ -35,6 +35,7 @@ add_library (${PROJECT_NAME}
     "src/app/aura.cpp"
     "src/app/configurationbase.cpp"
     "src/app/interprocesscommunicator.cpp"
+    "src/app/windowgeometry.cpp"
     "src/database/sqlcontext.cpp"
     "src/database/sqldatabase.cpp"
     "src/database/sqlite3.c"
