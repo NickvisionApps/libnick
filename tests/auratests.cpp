@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "app/aura.h"
+#include "app/windowgeometry.h"
 #include "filesystem/userdirectories.h"
 #include "notifications/shellnotification.h"
 
@@ -25,12 +26,29 @@ public:
 
     Theme getTheme() const
     {
-        return (Theme)m_json.get("Theme", (int)Theme::System).asInt();
+        return static_cast<Theme>(m_json.get("Theme", (int)Theme::System).asInt());
     }
 
     void setTheme(Theme theme)
     {
-        m_json["Theme"] = (int)theme;
+        m_json["Theme"] = static_cast<int>(theme);
+    }
+
+    WindowGeometry getWindowGeometry()
+    {
+        WindowGeometry geometry;
+        const Json::Value json{ m_json["WindowGeometry"] };
+        geometry.setWidth(json.get("Width", 800).asInt64());
+        geometry.setHeight(json.get("Height", 600).asInt64());
+        geometry.setIsMaximized(json.get("IsMaximized", false).asBool());
+        return geometry;
+    }
+
+    void setWindowGeometry(const WindowGeometry& geometry)
+    {
+        m_json["WindowGeometry"]["Width"] = static_cast<Json::Int64>(geometry.getWidth());
+        m_json["WindowGeometry"]["Height"] = static_cast<Json::Int64>(geometry.getHeight());
+        m_json["WindowGeometry"]["IsMaximized"] = geometry.isMaximized();
     }
 };
 
@@ -57,21 +75,29 @@ TEST_F(AuraTest, SetAppInfo)
 TEST_F(AuraTest, EnsureDefaultAppConfig)
 {
     AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
+    WindowGeometry geometry{ config.getWindowGeometry() };
     ASSERT_EQ(config.getTheme(), Theme::System);
+    ASSERT_EQ(geometry.getWidth(), 800);
+    ASSERT_EQ(geometry.getHeight(), 600);
+    ASSERT_EQ(geometry.isMaximized(), false);
 }
 
 TEST_F(AuraTest, ChangeAppConfig)
 {
     AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
     config.setTheme(Theme::Light);
+    config.setWindowGeometry(WindowGeometry{ 1920, 1080, true });
     ASSERT_TRUE(config.save());
-    ASSERT_EQ(config.getTheme(), Theme::Light);
 }
 
 TEST_F(AuraTest, EnsureChangeInAppConfig)
 {
     AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
     ASSERT_EQ(config.getTheme(), Theme::Light);
+    WindowGeometry geometry{ config.getWindowGeometry() };
+    ASSERT_EQ(geometry.getWidth(), 1920);
+    ASSERT_EQ(geometry.getHeight(), 1080);
+    ASSERT_EQ(geometry.isMaximized(), true);
 }
 
 TEST_F(AuraTest, ResetAppConfig)
