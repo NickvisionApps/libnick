@@ -29,7 +29,7 @@ namespace Nickvision::App
     }
 #endif
 
-    long WindowGeometry::getWidth()
+    long WindowGeometry::getWidth() const
     {
         return m_width;
     }
@@ -39,7 +39,7 @@ namespace Nickvision::App
         m_width = width;
     }
 
-    long WindowGeometry::getHeight()
+    long WindowGeometry::getHeight() const
     {
         return m_height;
     }
@@ -49,7 +49,7 @@ namespace Nickvision::App
         m_height = height;
     }
 
-    bool WindowGeometry::isMaximized()
+    bool WindowGeometry::isMaximized() const
     {
         return m_isMaximized;
     }
@@ -60,7 +60,7 @@ namespace Nickvision::App
     }
 
 #ifdef _WIN32
-    bool WindowGeometry::apply(HWND hwnd)
+    bool WindowGeometry::apply(HWND hwnd) const
     {
         WINDOWPLACEMENT placement;
         GetWindowPlacement(hwnd, &placement);

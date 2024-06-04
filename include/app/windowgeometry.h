@@ -35,7 +35,7 @@ namespace Nickvision::App
          * @brief Gets the width of the window.
          * @return The width of the window 
          */
-        long getWidth();
+        long getWidth() const;
         /**
          * @brief Sets the width of the window.
          * @param width The new width of the window
@@ -45,7 +45,7 @@ namespace Nickvision::App
          * @brief Gets the height of the window.
          * @return The height of the window 
          */
-        long getHeight();
+        long getHeight() const;
         /**
          * @brief Sets the height of the window.
          * @param height The new height of the window
@@ -55,7 +55,7 @@ namespace Nickvision::App
          * @brief Gets whether or not the window is maximized.
          * @return True if maximized, else false
          */
-        bool isMaximized();
+        bool isMaximized() const;
         /**
          * @brief Sets whether or not the window is maximized.
          * @param isMaximized True if maximized, else false
@@ -67,7 +67,7 @@ namespace Nickvision::App
          * @param hwnd The window handle to apply the geometry to
          * @return True if successful, else false
          */
-        bool apply(HWND hwnd);
+        bool apply(HWND hwnd) const;
 #endif
 
     private:
