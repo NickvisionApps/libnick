@@ -112,25 +112,41 @@ namespace Nickvision::Update
 
     bool Version::operator<(const Version& compare) const
     {
-        if (m_major < compare.m_major)
+        if(m_major > compare.m_major)
+        {
+            return false;
+        }
+        else if(m_major < compare.m_major)
         {
             return true;
         }
         else
         {
-            if (m_minor < compare.m_minor)
+            if(m_minor > compare.m_minor)
+            {
+                return false;
+            }
+            else if(m_minor < compare.m_minor)
             {
                 return true;
             }
             else
             {
-                if (m_build < compare.m_build)
+                if(m_build > compare.m_build)
+                {
+                    return false;
+                }
+                else if(m_build < compare.m_build)
                 {
                     return true;
                 }
                 else
                 {
-                    if (!m_dev.empty() && compare.m_dev.empty()) //dev < stable
+                    if(m_dev.empty() && !compare.m_dev.empty())
+                    {
+                        return false;
+                    }
+                    else if(!m_dev.empty() && compare.m_dev.empty())
                     {
                         return true;
                     }
@@ -142,32 +158,48 @@ namespace Nickvision::Update
 
     bool Version::operator<=(const Version& compare) const
     {
-        return operator>(compare) || operator==(compare);
+        return operator<(compare) || operator==(compare);
     }
 
     bool Version::operator>(const Version& compare) const
     {
-        if (m_major > compare.m_major)
+        if(m_major > compare.m_major)
         {
             return true;
         }
+        else if(m_major < compare.m_major)
+        {
+            return false;
+        }
         else
         {
-            if (m_minor > compare.m_minor)
+            if(m_minor > compare.m_minor)
             {
                 return true;
             }
+            else if(m_minor < compare.m_minor)
+            {
+                return false;
+            }
             else
             {
-                if (m_build > compare.m_build)
+                if(m_build > compare.m_build)
                 {
                     return true;
                 }
+                else if(m_build < compare.m_build)
+                {
+                    return false;
+                }
                 else
                 {
-                    if (m_dev.empty() && !compare.m_dev.empty()) //stable > dev
+                    if(m_dev.empty() && !compare.m_dev.empty())
                     {
                         return true;
+                    }
+                    else if(!m_dev.empty() && compare.m_dev.empty())
+                    {
+                        return false;
                     }
                 }
             }
@@ -177,7 +209,7 @@ namespace Nickvision::Update
 
     bool Version::operator>=(const Version& compare) const
     {
-        return operator<(compare) || operator==(compare);
+        return operator>(compare) || operator==(compare);
     }
 
     bool Version::operator==(const Version& compare) const
