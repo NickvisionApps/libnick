@@ -55,14 +55,37 @@ namespace Nickvision::Update
         m_latestPreviewReleaseId = std::move(u.m_latestPreviewReleaseId);
     }
 
-    Version Updater::fetchCurrentStableVersion()
+    Version Updater::fetchCurrentVersion(VersionType versionType)
     {
-        return fetchCurrentVersion(VersionType::Stable);
-    }
-
-    Version Updater::fetchCurrentPreviewVersion()
-    {
-        return fetchCurrentVersion(VersionType::Preview);
+        std::lock_guard<std::mutex> lock{ m_mutex };
+        std::string releases{ WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
+        if (!releases.empty())
+        {
+            Json::Value root;
+            Json::Reader reader;
+            if (reader.parse(releases, root, false))
+            {
+                for (const Json::Value& release : root)
+                {
+                    std::string version{ release.get("tag_name", "NULL").asString() };
+                    if (version == "NULL")
+                    {
+                        return {};
+                    }
+                    if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
+                    {
+                        m_latestStableReleaseId = release.get("id", -1).asInt();
+                        return version;
+                    }
+                    if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
+                    {
+                        m_latestPreviewReleaseId = release.get("id", -1).asInt();
+                        return version;
+                    }
+                }
+            }
+        }
+        return {};
     }
 
 #ifdef _WIN32
@@ -85,17 +108,16 @@ namespace Nickvision::Update
                     std::string name{ asset.get("name", "").asString() };
                     if (StringHelpers::toLower(name).find("setup.exe") != std::string::npos)
                     {
-                        std::filesystem::path setup{ UserDirectories::getApplicationCache() / name };
-                        if (WebHelpers::downloadFile(asset.get("browser_download_url", "").asString(), setup))
+                        std::filesystem::path setupPath{ UserDirectories::getCache() / name };
+                        std::wstring quotedSetupPath{ L"\"" + setupPath.wstring() + L"\""};
+                        if (WebHelpers::downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
                         {
-                            std::wstring cmd{ L"\"" + setup.wstring() + L"\"" };
-                            if ((INT_PTR)ShellExecuteW(nullptr, L"open", cmd.c_str(), nullptr, nullptr, SW_SHOWDEFAULT) > 32)
+                            if ((INT_PTR)ShellExecuteW(nullptr, L"open", quotedSetupPath.c_str(), nullptr, nullptr, SW_SHOWDEFAULT) > 32)
                             {
-                                std::exit(0);
                                 return true;
                             }
-                            return false;
                         }
+                        return false;
                     }
                 }
             }
@@ -130,38 +152,5 @@ namespace Nickvision::Update
             m_latestPreviewReleaseId = std::move(u.m_latestPreviewReleaseId);
         }
         return *this;
-    }
-
-    Version Updater::fetchCurrentVersion(VersionType versionType)
-    {
-        std::lock_guard<std::mutex> lock{ m_mutex };
-        std::string releases{ WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
-        if (!releases.empty())
-        {
-            Json::Value root;
-            Json::Reader reader;
-            if (reader.parse(releases, root, false))
-            {
-                for (const Json::Value& release : root)
-                {
-                    std::string version{ release.get("tag_name", "NULL").asString() };
-                    if (version == "NULL")
-                    {
-                        return {};
-                    }
-                    if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
-                    {
-                        m_latestStableReleaseId = release.get("id", -1).asInt();
-                        return version;
-                    }
-                    if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
-                    {
-                        m_latestPreviewReleaseId = release.get("id", -1).asInt();
-                        return version;
-                    }
-                }
-            }
-        }
-        return {};
     }
 }

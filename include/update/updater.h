@@ -30,18 +30,16 @@ namespace Nickvision::Update
          */
         Updater(Updater&& u) noexcept;
         /**
-         * @brief Gets the latest stable version from the GitHub repo.
-         * @return The current stable version if available, else empty Version
+         * @brief Gets the latest version of the provided type from the GitHub repo.
+         * @brief This method looks for tags in the format major.minor.build-dev for preview versions and major.minor.build for stable versions.
+         * @param versionType The type of the version to get
+         * @return The current version of the provided type if available, else empty Version
          */
-        Version fetchCurrentStableVersion();
-        /**
-         * @brief Gets the latest preview version from the GitHub repo.
-         * @return The current preview version if available, else empty Version
-         */
-        Version fetchCurrentPreviewVersion();
+        Version fetchCurrentVersion(VersionType versionType);
 #ifdef _WIN32
         /**
-         * @brief Downloads and installs an application update for Windows. getCurrentStableVersion or getCurrentPreviewVersion should be called first before running this method. This method will force quit the current running application to install the update.
+         * @brief Downloads and installs an application update for Windows. 
+         * @brief fetchCurrentVersion should be called first before running this method.
          * @param versionType The type of version update to install
          * @return True if successful, else false
          */
@@ -61,12 +59,6 @@ namespace Nickvision::Update
         Updater& operator=(Updater&& u) noexcept;
 
     private:
-        /**
-         * @brief Gets the latest version of the provided type from the GitHub repo
-         * @param versionType The type of the version to get
-         * @return The current version of the proivded type if available, else empty Version
-         */
-        Version fetchCurrentVersion(VersionType versionType);
         mutable std::mutex m_mutex;
         std::string m_repoOwner;
         std::string m_repoName;

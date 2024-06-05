@@ -24,17 +24,12 @@ Path: `Nickvision::Update::Updater`
      - Accepts: The url of a GitHub repo to check for updates, githubRepoUrl.
      - Throws: `std::invalid_argument` if the GitHub url is not of valid format
 - ```cpp
-  Nickvision::Version fetchCurrentStableVersion()
+  Nickvision::Version fetchCurrentVersion(VersionType type)
   ``` 
-    - Returns: The latest stable Version found in the repo.
+    - Accepts: The type of version to fetch, type.
+    - Returns: The latest Version of type found in the repo.
     - Returns: An empty version on error.
     - Note: This method scans the tags of the repo and parses versions in the format `major.minor.build`.
-- ```cpp
-  Nickvision::Version fetchCurrentPreviewVersion()
-  ``` 
-    - Returns: The latest preview (dev) Version found in the repo.
-    - Returns: An empty version on error.
-    - Note: This method scans the tags of the repo and parses versions in the format `major.minor.build-dev`.
 - ```cpp
   bool windowsUpdate(VersionType versionType)
   ``` 
