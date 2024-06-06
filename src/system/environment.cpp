@@ -2,6 +2,7 @@
 #include <array>
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 #include "helpers/stringhelpers.h"
 #ifdef _WIN32
 #include <windows.h>

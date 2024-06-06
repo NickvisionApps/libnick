@@ -197,6 +197,12 @@ Path: `Nickvision::App::Aura`
     - Ex: `Aura::findDependency("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
     - Ex: `Aura::findDependency("bash")` on Linux will return `/usr/bin/bash`.
 - ```cpp
+  std::string getHelpUrl(const std::string& pageName)
+  ``` 
+    - Accepts: The name of the documentation page to get the help url for, pageName.
+    - Returns: The url for the documentation page. This will be a yelp url for Linux and a website url for Windows and Linux snaps.
+    - Note: HtmlDocsStore should be set for Aura::getActive()::getAppInfo(). For Nickvision apps, this will be: `https://raw.githubusercontent.com/NickvisionApps/SHORT_APP_NAME/main/APP_NAME.Shared/Docs/html`, but can be customized for any app.
+- ```cpp
   T& getConfig<T>(const std::string& key)
   ```
     - Accepts: The string key of the config file, key.

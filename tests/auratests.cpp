@@ -59,7 +59,8 @@ class AuraTest : public testing::Test
 public:
     static void SetUpTestSuite()
     {
-        Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
+        Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura");
+        Aura::getActive().getAppInfo().setHtmlDocsStore("https://github.com/NickvisionApps/Denaro/blob/main/NickvisionMoney.Shared/Docs/html");
     }
 };
 
@@ -138,3 +139,11 @@ TEST_F(AuraTest, RunningInformationChecks)
     ASSERT_TRUE(Aura::getActive().isRunningViaLocal());
 }
 
+TEST_F(AuraTest, HelpUrlChecks)
+{
+#ifdef _WIN32
+    ASSERT_EQ(Aura::getActive().getHelpUrl("index"), "https://htmlpreview.github.io/?https://github.com/NickvisionApps/Denaro/blob/main/NickvisionMoney.Shared/Docs/html/C/index.html");
+#elif defined(__linux__)
+    ASSERT_EQ(Aura::getActive().getHelpUrl("index"), "help:aura/index");
+#endif
+}

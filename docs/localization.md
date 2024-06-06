@@ -3,25 +3,7 @@
 This module contains functions for working with translations and other localization aspects of Nickvision applications.
 
 ## Table of Contents
-- [Documentation](#documentation)
 - [Gettext](#gettext)
-
-## Documentation
-Description: Functions for managing credentials in the system's credential (secret) store.
-
-Interface: [documentation.h](/include/localization/documentation.h)
-
-Type: `namespace`
-
-Path: `Nickvision::Localization::Documentation`
-
-### Functions
-- ```cpp
-  std::string getHelpUrl(const std::string& pageName)
-  ``` 
-    - Accepts: The name of the documentation page to get the help url for, pageName.
-    - Returns: The url for the documentation page. This will be a yelp url for Linux and a website url for Windows and Linux snaps.
-    - Note: HtmlDocsStore should be set for Aura::getActive()::getAppInfo(). For Nickvision apps, this will be: `https://raw.githubusercontent.com/NickvisionApps/SHORT_APP_NAME/main/APP_NAME.Shared/Docs/html`, but can be customized for any app.
 
 ## Gettext
 Description: Functions for managing credentials in the system's credential (secret) store.

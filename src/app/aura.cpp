@@ -1,4 +1,5 @@
 #include "app/aura.h"
+#include <locale>
 #include <curl/curl.h>
 #include "filesystem/systemdirectories.h"
 #include "filesystem/userdirectories.h"
@@ -10,6 +11,7 @@
 #endif
 
 using namespace Nickvision::Filesystem;
+using namespace Nickvision::Localization;
 using namespace Nickvision::Logging;
 using namespace Nickvision::System;
 
@@ -154,7 +156,7 @@ namespace Nickvision::App
             }
         }
         m_dependencies[dependency] = std::filesystem::path();
-        std::filesystem::path path{ getExecutableDirectory() / dependency };
+        std::filesystem::path path{ m_executableDirectory / dependency };
         if (std::filesystem::exists(path))
         {
             m_dependencies[dependency] = path;
@@ -172,6 +174,54 @@ namespace Nickvision::App
             }
         }
         return m_dependencies[dependency];
+    }
+
+    std::string Aura::getHelpUrl(const std::string& pageName)
+    {
+#ifdef __linux__
+        if (Environment::getVariable("SNAP").empty())
+        {
+            return "help:" + StringHelpers::toLower(m_appInfo.getEnglishShortName()) + "/" + pageName;
+        }
+#endif
+        std::string lang{ "C" };
+#ifdef _WIN32
+        LCID lcid{ GetThreadLocale() };
+        wchar_t name[LOCALE_NAME_MAX_LENGTH];
+        std::string sysLocale;
+        if(LCIDToLocaleName(lcid, name, LOCALE_NAME_MAX_LENGTH, 0) > 0)
+        {
+            sysLocale = StringHelpers::toString(name);
+            sysLocale = StringHelpers::replace(sysLocale, "-", "_");
+        }
+#elif defined(__linux__)
+        std::string sysLocale{ StringHelpers::split(std::locale("").name(), ".")[0] }; //split to remove the .UTF-8
+#endif
+        if (!sysLocale.empty() && sysLocale != "C" && sysLocale != "en_US" && sysLocale != "*")
+        {
+            /*
+            * Because the translations of a Nickvision application are stored in the application's running
+            * directory, we can look at the list of directory names and see if they contain a translation
+            * file (.mo) for the sysLocale string. If a directory contains an mo file, we can set the 
+            * documentation lang to the sysLocale. If no directory contains an mo file for the sysLocale, 
+            * we can try to match using the two-letter language code. If that doesn't work, the default
+            * English docs will be used.
+            */
+            std::string twoLetter{ StringHelpers::split(sysLocale, "_")[0] };
+            for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(m_executableDirectory))
+            {
+                if (e.is_directory() && std::filesystem::exists(e.path() / (Gettext::getDomainName() + ".mo")))
+                {
+                    std::string l{ e.path().filename().string() };
+                    if(l == sysLocale || l == twoLetter)
+                    {
+                        lang = l;
+                        break;
+                    }
+                }
+            }
+        }
+        return "https://htmlpreview.github.io/?" + m_appInfo.getHtmlDocsStore() + "/" + lang + "/" + pageName + ".html";
     }
 
     Aura::operator bool() const

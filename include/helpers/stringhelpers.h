@@ -52,7 +52,7 @@ namespace Nickvision::StringHelpers
     {
         if(s.empty())
         {
-            return {};
+            return { "" };
         }
         std::vector<T> splits;
         if(delimiter.empty())

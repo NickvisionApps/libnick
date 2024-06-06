@@ -4,7 +4,6 @@
 #include <codecvt>
 #include <iomanip>
 #include <limits>
-#include <locale>
 #include <regex>
 #include <sstream>
 #include <curl/curl.h>
