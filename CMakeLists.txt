@@ -64,6 +64,7 @@ add_library (${PROJECT_NAME}
     "src/notifications/notifyiconmenu.cpp"
     "src/notifications/shellnotification.cpp"
     "src/notifications/shellnotificationsenteventargs.cpp"
+    "src/system/environment.cpp"
     "src/taskbar/taskbaritem.cpp"
     "src/update/updater.cpp"
     "src/update/version.cpp")
@@ -139,6 +140,7 @@ if (BUILD_TESTING)
         "tests/storetests.cpp"
         "tests/stringtests.cpp"
         "tests/systemcredentialstests.cpp"
+        "tests/systemtests.cpp"
         "tests/taskbartests.cpp"
         "tests/updatertests.cpp"
         "tests/versiontests.cpp"

@@ -189,26 +189,6 @@ Path: `Nickvision::App::Aura`
     - Note: This also calls curl_global_init().
     - Note: This also calls Localization::Gettext::init().
 - ```cpp
-  std::string getEnvVar(const std::string& key)
-  ```
-    - Accepts: The name of the environment variable, key.
-    - Returns: The value of the environment variable with name key.
-    - Returns: An empty string if no environment variable with the name key was found.
-    - Ex: `Aura::getEnvVar("PATH")` will return the value of the system's path variable.
-- ```cpp
-  bool setEnvVar(const std::string& key, const std::string& value)
-  ```
-    - Accepts: The name of the environment variable, key, and the value to set said variable to, value.
-    - Returns: `true` if the environment variable of name key was set to value.
-    - Returns: `false` if setting the environment variable failed.
-    - Ex: `Aura::setEnvVar("AURA", "true")` will set `"$AURA:true"`.
-- ```cpp
-  std::string sysExec(const std::string& command)
-  ```
-    - Accepts: The command to executed, command.
-    - Returns: The output of the executed command.
-    - Ex: `Aura::sysExec("echo Hello World")` will return `"Hello World"`.
-- ```cpp
   const std::filesystem::path& findDependency(std::string dependency)
   ```
     - Accepts: The name of a dependency to find, dependency.

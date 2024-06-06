@@ -1,14 +1,14 @@
 #include "filesystem/systemdirectories.h"
-#include "app/aura.h"
 #include "helpers/stringhelpers.h"
+#include "system/environment.h"
 
-using namespace Nickvision::App;
+using namespace Nickvision::System;
 
 namespace Nickvision::Filesystem
 {
     static std::vector<std::filesystem::path> getFromVar(const std::string& var)
     {
-        std::string env{ Aura::getActive().getEnvVar(var) };
+        std::string env{ Environment::getVariable(var) };
         if (!env.empty())
         {
 #ifdef _WIN32

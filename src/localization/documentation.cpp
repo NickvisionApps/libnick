@@ -3,15 +3,17 @@
 #include "app/aura.h"
 #include "helpers/stringhelpers.h"
 #include "localization/gettext.h"
+#include "system/environment.h"
 
 using namespace Nickvision::App;
+using namespace Nickvision::System;
 
 namespace Nickvision::Localization
 {
     std::string Documentation::getHelpUrl(const std::string& pageName)
     {
 #ifdef __linux__
-        if (Aura::getActive().getEnvVar("SNAP").empty())
+        if (Environment::getVariable("SNAP").empty())
         {
             return "help:" + StringHelpers::toLower(Aura::getActive().getAppInfo().getEnglishShortName()) + "/" + pageName;
         }

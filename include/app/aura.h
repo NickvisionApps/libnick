@@ -1,7 +1,3 @@
-#if (defined(_WIN32) && !defined(_CRT_SECURE_NO_WARNINGS))
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 #ifndef AURA_H
 #define AURA_H
 
@@ -48,6 +44,11 @@ namespace Nickvision::App
          */
         bool init(const std::string& id, const std::string& name, const std::string& englishShortName, Logging::LogLevel logLevel = Logging::LogLevel::Info);
         /**
+         * @brief Gets whether or not the object is valid.
+         * @return True if valid, else false
+         */
+        bool isValid() const;
+        /**
          * @brief Gets the path of the executable's directory.
          * @return The executable's directory path
          */
@@ -92,30 +93,16 @@ namespace Nickvision::App
          */
         const Logging::Logger& getLogger() const;
         /**
-         * @brief Gets a system environment variable.
-         * @param key The environment variable to get
-         * @return The environment variable if found, else empty string
-         */
-        std::string getEnvVar(const std::string& key) const;
-        /**
-         * @brief Sets a system environment variable.
-         * @param key The environment variable to set
-         * @param value The value for the environment variable
-         * @return True if set, else false
-         */
-        bool setEnvVar(const std::string& key, const std::string& value);
-        /**
-         * @brief Executes a system command.
-         * @param command The command to execute
-         * @return The output of the command
-         */
-        std::string sysExec(const std::string& command);
-        /**
          * @brief Finds the path of a given dependency.
          * @param dependency The name of the dependency to find
          * @return The path of the dependency if found, else empty path
          */
         const std::filesystem::path& findDependency(std::string dependency);
+        /**
+         * @brief Checks if the object is valid.
+         * @return True if valid, else false
+         */
+        operator bool() const;
         /**
          * @brief Gets a config object.
          * @tparam T Derived type of ConfigurationBase

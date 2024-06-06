@@ -2,9 +2,11 @@
 #include <mutex>
 #include "app/aura.h"
 #include "app/interprocesscommunicator.h"
+#include "system/environment.h"
 
 using namespace Nickvision::App;
 using namespace Nickvision::Events;
+using namespace Nickvision::System;
 
 static std::vector<std::string> args{ "test1", "test2" };
 
@@ -44,7 +46,7 @@ TEST_F(IPCTest, CheckServerStatus)
 
 TEST_F(IPCTest, Client1Send)
 {
-    if (Aura::getActive().getEnvVar("GITHUB_ACTIONS") == "true")
+    if (Environment::getVariable("GITHUB_ACTIONS") == "true")
     {
         ASSERT_TRUE(true);
         return;
@@ -57,5 +59,5 @@ TEST_F(IPCTest, Client1Send)
 TEST_F(IPCTest, CheckServerReceived)
 {
     std::this_thread::sleep_for(std::chrono::seconds(5));
-    ASSERT_TRUE(getReceived() > 0 || Aura::getActive().getEnvVar("GITHUB_ACTIONS") == "true");
+    ASSERT_TRUE(getReceived() > 0 || Environment::getVariable("GITHUB_ACTIONS") == "true");
 }

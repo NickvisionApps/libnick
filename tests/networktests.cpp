@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include "app/aura.h"
 #include "network/networkmonitor.h"
+#include "system/environment.h"
 
-using namespace Nickvision::App;
 using namespace Nickvision::Network;
+using namespace Nickvision::System;
 
 TEST(NetworkTests, ConnectedGlobal)
 {
@@ -13,7 +13,7 @@ TEST(NetworkTests, ConnectedGlobal)
 
 TEST(NetworkTests, DisableNetCheck)
 {
-    ASSERT_TRUE(Aura::getActive().setEnvVar("AURA_DISABLE_NETCHECK", "true"));
+    ASSERT_TRUE(Environment::setVariable("AURA_DISABLE_NETCHECK", "true"));
     NetworkMonitor netmon;
     ASSERT_EQ(netmon.getConnectionState(), NetworkState::ConnectedGlobal);
 }

@@ -5,9 +5,11 @@
 #include "app/aura.h"
 #include "notifications/notifyicon.h"
 #include "notifications/notifyiconmenu.h"
+#include "system/environment.h"
 
 using namespace Nickvision::App;
 using namespace Nickvision::Notifications;
+using namespace Nickvision::System;
 
 class NotifyIconTest : public testing::Test
 {
@@ -24,7 +26,7 @@ std::unique_ptr<NotifyIcon> NotifyIconTest::m_notifyIcon = nullptr;
 
 TEST_F(NotifyIconTest, CreateIcon)
 {
-    if (Aura::getActive().getEnvVar("GITHUB_ACTIONS").empty())
+    if (Environment::getVariable("GITHUB_ACTIONS").empty())
     {
         bool waiting{ true };
         NotifyIconMenu contextMenu;

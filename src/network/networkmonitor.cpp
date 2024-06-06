@@ -1,12 +1,12 @@
 #include "network/networkmonitor.h"
 #include <stdexcept>
-#include "app/aura.h"
 #include "helpers/stringhelpers.h"
+#include "system/environment.h"
 #ifdef __linux__
 #include <gio/gio.h>
 #endif
 
-using namespace Nickvision::App;
+using namespace Nickvision::System;
 
 namespace Nickvision::Network
 {
@@ -126,7 +126,7 @@ namespace Nickvision::Network
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         NetworkState newState{ NetworkState::Disconnected };
-        std::string noNetCheck{ StringHelpers::toLower(Aura::getActive().getEnvVar("AURA_DISABLE_NETCHECK")) };
+        std::string noNetCheck{ StringHelpers::toLower(Environment::getVariable("AURA_DISABLE_NETCHECK")) };
         if (!noNetCheck.empty() && (noNetCheck == "true" || noNetCheck == "t" || noNetCheck == "yes" || noNetCheck == "y" || noNetCheck == "1"))
         {
             newState = NetworkState::ConnectedGlobal;

@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include "app/aura.h"
+#include "system/environment.h"
 #ifdef _WIN32
 #include "notifications/notifyicon.h"
 #include "notifications/notifyiconmenu.h"
@@ -11,6 +12,7 @@
 #endif
 
 using namespace Nickvision::App;
+using namespace Nickvision::System;
 
 namespace Nickvision::Notifications
 {
@@ -30,14 +32,14 @@ namespace Nickvision::Notifications
             GIcon* icon{ nullptr };
             GFile* fileIcon{ nullptr };
             std::string appId{ Aura::getActive().getAppInfo().getId() };
-            if (Aura::getActive().getEnvVar("SNAP").empty())
+            if (Environment::getVariable("SNAP").empty())
             {
                 std::string name{ appId + "-symbolic" };
                 icon = g_themed_icon_new(name.c_str());
             }
             else
             {
-                std::string path{ Aura::getActive().getEnvVar("SNAP") + "/usr/share/icons/hicolor/symbolic/apps/" + appId + "-symbolic.svg"};
+                std::string path{ Environment::getVariable("SNAP") + "/usr/share/icons/hicolor/symbolic/apps/" + appId + "-symbolic.svg"};
                 fileIcon = g_file_new_for_path(path.c_str());
                 icon = g_file_icon_new(fileIcon);
             }

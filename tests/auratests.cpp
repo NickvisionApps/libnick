@@ -3,10 +3,12 @@
 #include "app/windowgeometry.h"
 #include "filesystem/userdirectories.h"
 #include "notifications/shellnotification.h"
+#include "system/environment.h"
 
 using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
 using namespace Nickvision::Notifications;
+using namespace Nickvision::System;
 
 enum class Theme
 {
@@ -116,7 +118,7 @@ TEST_F(AuraTest, DependencyCheck)
     ASSERT_TRUE(std::filesystem::exists(dependency));
     ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), NotificationSeverity::Success, "open", dependency.string() };
 #ifdef _WIN32
-    if (Aura::getActive().getEnvVar("GITHUB_ACTIONS").empty())
+    if (Environment::getVariable("GITHUB_ACTIONS").empty())
     {
         ASSERT_NO_THROW(ShellNotification::send(args, GetConsoleWindow()));
     }
@@ -136,11 +138,3 @@ TEST_F(AuraTest, RunningInformationChecks)
     ASSERT_TRUE(Aura::getActive().isRunningViaLocal());
 }
 
-TEST_F(AuraTest, SysExec)
-{
-#ifdef _WIN32
-    ASSERT_EQ(Aura::getActive().sysExec("echo Hello World"), "Hello World\r\n");
-#elif defined(__linux__)
-    ASSERT_EQ(Aura::getActive().sysExec("echo Hello World"), "Hello World\n");
-#endif
-}
