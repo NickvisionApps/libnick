@@ -64,6 +64,8 @@ add_library (${PROJECT_NAME}
     "src/notifications/shellnotification.cpp"
     "src/notifications/shellnotificationsenteventargs.cpp"
     "src/system/environment.cpp"
+    "src/system/process.cpp"
+    "src/system/processexitedeventargs.cpp"
     "src/taskbar/taskbaritem.cpp"
     "src/update/updater.cpp"
     "src/update/version.cpp")

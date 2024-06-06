@@ -4,6 +4,8 @@ This module contains various helper namespaces and objects for working with the 
 
 ## Table of Contents
 - [Environment](#environment)
+- [Process](#process)
+- [ProcessExitedEventArgs](#processexitedeventargs)
 
 ## Environment
 Description: Helper functions for working with the system shell environment.
@@ -41,3 +43,94 @@ Path: `Nickvision::System::Environment`
     - Accepts: The command to executed, command.
     - Returns: The output of the executed command.
     - Ex: `Environment::exec("echo Hello World")` will return `"Hello World"`.
+
+## Process
+Description: A managed process.
+
+Interface: [process.h](/include/system/process.h)
+
+Type: `class`
+
+Path: `Nickvision::System::Process`
+
+### Member Variables
+- ```cpp
+  std::filesystem::path Path: get
+  ```
+    - The path of the process.
+- ```cpp
+  bool IsRunning: get
+  ```
+    - Whether or not the process is running
+- ```cpp
+  bool HasCompleted: get
+  ```
+    - Whether or not the process has completed
+- ```cpp
+  int ExitCode: get
+  ```
+    - The exit code of the process.
+    - NOTE: Will be -1 if the process has not completed.
+- ```cpp
+  std::string Output: get
+  ```
+    - The console output of the process.
+
+### Events
+- ```cpp
+  Event<Nickvision::System::ProcessExitedEventArgs> Exited
+  ```
+    - Invoked when the process has exited
+
+### Methods
+- ```cpp
+  Process(const std::filesystem::path& path, const std::vector<std::string>& args)
+  ```
+    - Constructs a Process.
+    - Accepts: The path of the process to run, path, and optional command line arguments to pass to the process, args
+    - Throws: std::runtime_error if the process could not be created
+- ```cpp
+  ~Process()
+  ```
+    - Destructs a Process.
+    - NOTE: This method will wait fo the process to exit if it is still running.
+- ```cpp
+  bool start()
+  ```
+    - Returns: True if the process was started.
+    - Returns: False if the process was not started.
+- ```cpp
+  bool kill()
+  ```
+    - Returns: True if the process was killed.
+    - Returns: False if the process was not killed.
+- ```cpp
+  int waitForExit()
+  ```
+    - Returns: The exit code of the process after it was waited to have completed.
+
+## ProcessExitedEventArgs
+Description: Event args for when a process has exited.
+
+Interface: [processexitedeventargs.h](/include/system/processexitedeventargs.h)
+
+Type: `class`
+
+Path: `Nickvision::System::ProcessExitedEventArgs`
+
+### Member Variables
+- ```cpp
+  int ExitCode: get
+  ```
+    - The exit code of the process
+- ```cpp
+  std::string Output: get
+  ```
+    - The console output of the process
+
+### Methods
+- ```cpp
+  ProcessExitedEventArgs(int exitCode, const std::string& output)
+  ``` 
+    - Constructs a ProcessExitedEventArgs.
+    - Accepts: The exit code of the process, exitCode, and the console output of the process, output.

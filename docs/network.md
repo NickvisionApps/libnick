@@ -23,7 +23,7 @@ Path: `Nickvision::Network::NetworkMonitor`
     - The state of the system's network connection.
 
 ### Events
-- ```
+- ```cpp
   Event<Nickvision::Network::NetworkStateChangedEventArgs> StateChanged
   ```
     - Invoked when the system's network state is changed.

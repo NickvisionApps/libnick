@@ -80,7 +80,7 @@ Path: `Nickvision::Filesystem::FileSystemWatcher`
     - Whether or not subdirectories of the folder are watched.
 
 ### Events
-- ```
+- ```cpp
   Event<Nickvision::Filesystem::FileSystemChangedEventArgs> Changed
   ``` 
     - Invoked when a watched flag of the folder is changed.

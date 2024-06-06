@@ -233,7 +233,7 @@ Path: `Nickvision::App::ConfigurationBase`
     - The key of the configuration file.
 
 ### Events
-- ```
+- ```cpp
   Event<Nickvision::Events::EventArgs> Saved
   ```
     - Invoked when the configuration file is saved to disk
@@ -341,7 +341,7 @@ Path: `Nickvision::App::InterProcessCommunicator`
     - Whether or not this instance is an IPC client.
 
 ### Events
-- ```
+- ```cpp
   Event<Nickvision::Events::ParamEventArgs<std::vector<std::string>>> CommandReceived
   ```
     - Invoked when this IPC server instance received a command from a client instance.
