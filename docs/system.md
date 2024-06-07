@@ -93,7 +93,7 @@ Path: `Nickvision::System::Process`
   ~Process()
   ```
     - Destructs a Process.
-    - NOTE: This method will wait fo the process to exit if it is still running.
+    - NOTE: This method will wait for the process to exit if it is still running.
 - ```cpp
   bool start()
   ```

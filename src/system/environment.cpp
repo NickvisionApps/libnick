@@ -34,10 +34,17 @@ namespace Nickvision::System
 
     std::string Environment::exec(const std::string& command)
     {
+        if(command.empty())
+        {
+            return "";
+        }
 #ifdef _WIN32
         Process process{ "cmd.exe", { "/C", "\"" + command + "\"" } };
 #elif defined(__linux__)
-        Process process{ command };
+        std::vector<std::string> args{ StringHelpers::split(command, " ") };
+        std::string cmd{ args[0] };
+        args.erase(args.begin());
+        Process process{ cmd, args };
 #endif
         if(process.start())
         {
