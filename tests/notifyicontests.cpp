@@ -26,7 +26,7 @@ std::unique_ptr<NotifyIcon> NotifyIconTest::m_notifyIcon = nullptr;
 
 TEST_F(NotifyIconTest, CreateIcon)
 {
-    if (Environment::getVariable("GITHUB_ACTIONS").empty())
+    if (Environment::getVariable("GITHUB_ACTIONS").empty() && GetConsoleWindow())
     {
         bool waiting{ true };
         NotifyIconMenu contextMenu;

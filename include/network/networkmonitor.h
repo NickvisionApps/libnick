@@ -15,7 +15,11 @@ namespace Nickvision::Network
     /**
      * @brief An object to monitor the state of the system's network connection. 
      */
+#ifdef _WIN32
+    class NetworkMonitor : public INetworkListManagerEvents
+#else
     class NetworkMonitor
+#endif
     {
     public:
         /**
@@ -37,6 +41,13 @@ namespace Nickvision::Network
          * @return NetworkState
          */
         NetworkState getConnectionState() const;
+#ifdef _WIN32
+        ULONG AddRef() override;
+        ULONG Release() override;
+        HRESULT QueryInterface(REFIID riid, void** ppvObject) override;
+        HRESULT ConnectivityChanged(NLM_CONNECTIVITY newConnectivity) override;
+        HRESULT NetworkConnectionPropertyChanged(GUID connectionId, NLM_CONNECTION_PROPERTY_CHANGE newProperty);
+#endif
 
     private:
         /**
@@ -47,13 +58,9 @@ namespace Nickvision::Network
         Events::Event<NetworkStateChangedEventArgs> m_stateChanged;
         NetworkState m_connectionState;
 #ifdef _WIN32
-        void* m_netListManagerEvents;
         CComPtr<INetworkListManager> m_netListManager;
-        CComPtr<IConnectionPointContainer> m_connectionPointContainer;
         CComPtr<IConnectionPoint> m_connectionPoint;
-        CComPtr<IUnknown> m_sink;
         DWORD m_cookie;
-        friend class NetworkListManagerEvents;
 #elif defined(__linux__)
         unsigned long m_networkChangedHandlerId;
 #endif

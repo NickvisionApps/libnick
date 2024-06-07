@@ -119,7 +119,7 @@ TEST_F(AuraTest, DependencyCheck)
     ASSERT_TRUE(std::filesystem::exists(dependency));
     ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), NotificationSeverity::Success, "open", dependency.string() };
 #ifdef _WIN32
-    if (Environment::getVariable("GITHUB_ACTIONS").empty())
+    if (Environment::getVariable("GITHUB_ACTIONS").empty() && GetConsoleWindow())
     {
         ASSERT_NO_THROW(ShellNotification::send(args, GetConsoleWindow()));
     }
