@@ -37,5 +37,6 @@ This means that the class provides the following method, allowing consumers to r
 - [Nickvision::Logging](logging.md)
 - [Nickvision::Network](network.md)
 - [Nickvision::Notifications](notifications.md)
+- [Nickvision::System](system.md)
 - [Nickvision::Taskbar](taskbar.md)
 - [Nickvision::Update](update.md)

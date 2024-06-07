@@ -62,6 +62,11 @@ public:
         Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura");
         Aura::getActive().getAppInfo().setHtmlDocsStore("https://github.com/NickvisionApps/Denaro/blob/main/NickvisionMoney.Shared/Docs/html");
     }
+
+    static void TearDownTestSuite()
+    {
+        std::filesystem::remove(UserDirectories::getApplicationConfig() / ("config.json"));
+    }
 };
 
 TEST_F(AuraTest, EnsureAura)
@@ -101,11 +106,6 @@ TEST_F(AuraTest, EnsureChangeInAppConfig)
     ASSERT_EQ(geometry.getWidth(), 1920);
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
-}
-
-TEST_F(AuraTest, ResetAppConfig)
-{
-    ASSERT_TRUE(std::filesystem::remove(UserDirectories::getApplicationConfig() / ("config.json")));
 }
 
 TEST_F(AuraTest, DependencyCheck)
