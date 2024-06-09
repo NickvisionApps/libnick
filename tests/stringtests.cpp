@@ -8,22 +8,22 @@ using namespace Nickvision;
 
 TEST(StringTests, Upper1)
 {
-    ASSERT_EQ(StringHelpers::toUpper("abc"), "ABC");
+    ASSERT_EQ(StringHelpers::upper("abc"), "ABC");
 }
 
 TEST(StringTests, Upper2)
 {
-    ASSERT_EQ(StringHelpers::toUpper("uy7tG8"), "UY7TG8");
+    ASSERT_EQ(StringHelpers::upper("uy7tG8"), "UY7TG8");
 }
 
 TEST(StringTests, Lower1)
 {
-    ASSERT_EQ(StringHelpers::toLower("DEF"), "def");
+    ASSERT_EQ(StringHelpers::lower("DEF"), "def");
 }
 
 TEST(StringTests, Lower2)
 {
-    ASSERT_EQ(StringHelpers::toLower("uy7tG8"), "uy7tg8");
+    ASSERT_EQ(StringHelpers::lower("uy7tG8"), "uy7tg8");
 }
 
 TEST(StringTests, Trim1)
@@ -108,10 +108,10 @@ TEST(StringTests, Base641)
 {
     std::vector<unsigned char> s{ 'A', 'B', 'X', 'J', 'K' };
     std::string base64;
-    ASSERT_NO_THROW(base64 = StringHelpers::toBase64(s));
+    ASSERT_NO_THROW(base64 = StringHelpers::encode(s));
     ASSERT_FALSE(base64.empty());
     std::vector<unsigned char> bytes;
-    ASSERT_NO_THROW(bytes = StringHelpers::toByteList(base64));
+    ASSERT_NO_THROW(bytes = StringHelpers::decode(base64));
     ASSERT_EQ(bytes.size(), s.size());
     for(size_t i = 0; i < bytes.size(); i++)
     {
@@ -123,10 +123,10 @@ TEST(StringTests, Base642)
 {
     std::vector<unsigned char> s{ 5, 89, 34, 112, 9, 34, 12, 7, 32, 67, 98, 45, 67, 234 };
     std::string base64;
-    ASSERT_NO_THROW(base64 = StringHelpers::toBase64(s));
+    ASSERT_NO_THROW(base64 = StringHelpers::encode(s));
     ASSERT_FALSE(base64.empty());
     std::vector<unsigned char> bytes;
-    ASSERT_NO_THROW(bytes = StringHelpers::toByteList(base64));
+    ASSERT_NO_THROW(bytes = StringHelpers::decode(base64));
     ASSERT_EQ(bytes.size(), s.size());
     for(size_t i = 0; i < bytes.size(); i++)
     {
@@ -140,10 +140,10 @@ TEST(StringTests, Base643)
     std::ifstream img{ "img.png", std::ios_base::binary };
     std::vector<unsigned char> s{ std::istreambuf_iterator<char>(img), std::istreambuf_iterator<char>() };
     std::string base64;
-    ASSERT_NO_THROW(base64 = StringHelpers::toBase64(s));
+    ASSERT_NO_THROW(base64 = StringHelpers::encode(s));
     ASSERT_FALSE(base64.empty());
     std::vector<unsigned char> bytes;
-    ASSERT_NO_THROW(bytes = StringHelpers::toByteList(base64));
+    ASSERT_NO_THROW(bytes = StringHelpers::decode(base64));
     ASSERT_EQ(bytes.size(), s.size());
     for(size_t i = 0; i < bytes.size(); i++)
     {
@@ -155,20 +155,20 @@ TEST(StringTests, Base643)
 
 TEST(StringTests, SToW1)
 {
-    ASSERT_EQ(StringHelpers::toWstring("hello"), L"hello");
+    ASSERT_EQ(StringHelpers::wstr("hello"), L"hello");
 }
 
 TEST(StringTests, SToW2)
 {
-    ASSERT_EQ(StringHelpers::toWstring("goodbye my friend"), L"goodbye my friend");
+    ASSERT_EQ(StringHelpers::wstr("goodbye my friend"), L"goodbye my friend");
 }
 
 TEST(StringTests, WToS1)
 {
-    ASSERT_EQ(StringHelpers::toString(L"hello"), "hello");
+    ASSERT_EQ(StringHelpers::str(L"hello"), "hello");
 }
 
 TEST(StringTests, WToS2)
 {
-    ASSERT_EQ(StringHelpers::toString(L"goodbye my friend"), "goodbye my friend");
+    ASSERT_EQ(StringHelpers::str(L"goodbye my friend"), "goodbye my friend");
 }

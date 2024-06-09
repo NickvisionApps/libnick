@@ -100,7 +100,7 @@ namespace Nickvision::Update
         return m_dev.empty() ? VersionType::Stable : VersionType::Preview;
     }
 
-    const std::string& Version::toString() const
+    const std::string& Version::str() const
     {
         return m_str;
     }
@@ -224,7 +224,7 @@ namespace Nickvision::Update
 
     std::ostream& operator<<(std::ostream& os, const Version& version)
     {
-        os << version.toString();
+        os << version.str();
         return os;
     }
 }

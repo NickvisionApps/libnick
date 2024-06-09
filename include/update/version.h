@@ -68,7 +68,7 @@ namespace Nickvision::Update
          * @brief Gets a string representation of the Version.
          * @return The string representation of the Version
          */
-        const std::string& toString() const;
+        const std::string& str() const;
         /**
          * @brief Gets whether or not the Version object is empty
          * @return True if empty, else false

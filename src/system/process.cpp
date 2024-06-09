@@ -68,7 +68,7 @@ namespace Nickvision::System
         std::wstring appArgs{ L"\"" + m_path.wstring() + L"\"" };
         for(const std::string& arg : m_args)
         {
-            appArgs += L" " + StringHelpers::toWstring(arg);
+            appArgs += L" " + StringHelpers::wstr(arg);
         }
         STARTUPINFOW si{ 0 };
         si.cb = sizeof(STARTUPINFOW);

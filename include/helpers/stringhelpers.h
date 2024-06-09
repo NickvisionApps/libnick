@@ -14,6 +14,18 @@ namespace Nickvision::StringHelpers
     concept StringImplicitlyConstructible = std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>;
 
     /**
+     * @brief Converts a base64 encoded string into a list of bytes.
+     * @param base64 The base64 encoded string
+     * @return The bytes list from the base64 encoded string, empty list if error
+     */
+    std::vector<std::uint8_t> decode(const std::string& base64);
+    /**
+     * @brief Converts a list of bytes into a base64 encoded string.
+     * @param bytes The list of bytes
+     * @return The base64 encoded string of the bytes list
+     */
+    std::string encode(const std::vector<std::uint8_t>& bytes);
+    /**
      * @brief Gets whether or not the provided string is a valid url
      * @param s The string to check
      * @return True if the string is a valid url, else false
@@ -27,6 +39,12 @@ namespace Nickvision::StringHelpers
      * @return A single string that consists of all elements of the string list separated by the delimiter
      */
     std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true);
+    /**
+     * @brief Gets a fully lowercase string from the provided string.
+     * @param s The string to get lowercase
+     * @return The new lowercase string
+     */
+    std::string lower(std::string s);
     /**
      * @brief Generates a new guid (uuid v4) value.
      * @return The guid value
@@ -74,6 +92,12 @@ namespace Nickvision::StringHelpers
         return splits;
     }
     /**
+     * @brief Converts the wstring to a string.
+     * @param s The wstring to convert
+     * @return The string version of the wstring
+     */
+    std::string str(const std::wstring& s);
+    /**
      * @brief Converts a string to an unsigned int
      * @param s The string to convert
      * @param idx The address of a size_t to store the number of characters processed
@@ -83,42 +107,6 @@ namespace Nickvision::StringHelpers
      * @return 0 if error
      */
     unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10);
-    /**
-     * @brief Converts a list of bytes into a base64 encoded string.
-     * @param bytes The list of bytes
-     * @return The base64 encoded string of the bytes list
-     */
-    std::string toBase64(const std::vector<std::uint8_t>& bytes);
-    /**
-     * @brief Converts a base64 encoded string into a list of bytes.
-     * @param base64 The base64 encoded string
-     * @return The bytes list from the base64 encoded string, empty list if error
-     */
-    std::vector<std::uint8_t> toByteList(const std::string& base64);
-    /**
-     * @brief Gets a fully lowercase string from the provided string.
-     * @param s The string to get lowercase
-     * @return The new lowercase string
-     */
-    std::string toLower(std::string s);
-    /**
-     * @brief Converts the wstring to a string.
-     * @param s The wstring to convert
-     * @return The string version of the wstring
-     */
-    std::string toString(const std::wstring& s);
-    /**
-     * @brief Gets a fully uppercase string from the provided string.
-     * @param s The string to get uppercase
-     * @return The new uppercase string
-     */
-    std::string toUpper(std::string s);
-    /**
-     * @brief Converts the string to a wstring.
-     * @param s The string to convert
-     * @return The wstring version of the string
-     */
-    std::wstring toWstring(const std::string& s);
     /**
      * @brief Trims whitespace form the beginning and end of a string.
      * @param s The string to trim (unmodified)
@@ -132,7 +120,18 @@ namespace Nickvision::StringHelpers
      * @return The new trimmed string
      */
     std::string trim(const std::string& s, char delimiter);
-
+    /**
+     * @brief Gets a fully uppercase string from the provided string.
+     * @param s The string to get uppercase
+     * @return The new uppercase string
+     */
+    std::string upper(std::string s);
+    /**
+     * @brief Converts the string to a wstring.
+     * @param s The string to convert
+     * @return The wstring version of the string
+     */
+    std::wstring wstr(const std::string& s);
 }
 
 #endif // STRINGHELPERS_H

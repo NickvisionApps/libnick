@@ -34,6 +34,17 @@ Path: `Nickvision::StringHelpers`
 
 ### Functions
 - ```cpp
+  std::vector<std::uint8_t> decode(const std::string& base64)
+  ```
+    - Accepts: A base64 encoded string
+    - Returns: The list of bytes from the base64 encoded string.
+    - Returns: An empty list on error.
+- ```cpp
+  std::string encode(const std::vector<std::uint8_t>& bytes)
+  ```
+    - Accepts: A list of bytes (char)
+    - Returns: The base64 encoded string of the bytes list.
+- ```cpp
   bool isValidUrl(const std::string& s)
   ```
     - Accepts: A string parameter, s.
@@ -47,6 +58,12 @@ Path: `Nickvision::StringHelpers`
     - Accepts: The list of strings to join, values, the string to insert as a separator between each value, separator, and whether or not to include the separator for the last element, separateLast.
     - Returns: A single string that consists of all elements of values separated by delimiter.
     - Ex: `StringHelpers::join({ "hi", "bye" }, "|")` will return `"hi|bye"`.
+- ```cpp 
+  std::string lower(std::string s)
+  ```
+    - Accepts: A string parameter, s.
+    - Returns: The lowercase version of s. 
+    - Ex: `StringHelpers::lower("aBC")` will return `"abc"`.
 - ```cpp
   std::string newGuid()
   ```
@@ -66,6 +83,12 @@ Path: `Nickvision::StringHelpers`
     - Note: T requires the `StringImplicitlyConstructible` concept defined as: `std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>`.
     - Ex: `StringHelpers::split<std::string>("1,2,3,4", ",")` will return `std::vector<std::string>{ "1", "2", "3", "4" }`.
 - ```cpp
+  std::string str(const std::wstring& s)
+  ```
+    - Accepts: A wide string parameter, s.
+    - Returns: s as a non-wide string.
+    - Ex: `StringHelpers::str(L"abc")` will return `"abc"`.
+- ```cpp
   unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10)
   ```
     - Accepts: A string parameter, s, a pointer to size_t, idx, and a number base, base.
@@ -73,41 +96,6 @@ Path: `Nickvision::StringHelpers`
     - Returns: UINT_MAX if s as an unsigned int exceeds the bounds of an unsigned int.
     - Out: If idx != nullptr, the number of characters parsed will be stored in idx.
     - Ex: `StringHelpers::stoui("2837914")` will return `2837914`.
-- ```cpp
-  std::string toBase64(const std::vector<std::uint8_t>& bytes)
-  ```
-    - Accepts: A list of bytes (char)
-    - Returns: The base64 encoded string of the bytes list.
-- ```cpp
-  std::vector<std::uint8_t> toByteList(const std::string& base64)
-  ```
-    - Accepts: A base64 encoded string
-    - Returns: The list of bytes from the base64 encoded string.
-    - Returns: An empty list on error.
-- ```cpp 
-  std::string toLower(std::string s)
-  ```
-    - Accepts: A string parameter, s.
-    - Returns: The lowercase version of s. 
-    - Ex: `StringHelpers::toLower("aBC")` will return `"abc"`.
-- ```cpp
-  std::string toString(const std::wstring& s)
-  ```
-    - Accepts: A wide string parameter, s.
-    - Returns: s as a non-wide string.
-    - Ex: `StringHelpers::toString(L"abc")` will return `"abc"`.
-- ```cpp
-  std::string toUpper(std::string s)
-  ```
-    - Accepts: A string parameter, s.
-    - Returns: The uppercase version of s. 
-    - Ex: `StringHelpers::toUpper("uoP")` will return `"UOP"`.
-- ```cpp
-  std::wstring toWstring(const std::string& s)
-  ```
-    - Accepts: A non-wide string parameter, s.
-    - Returns: s as a wide string.
-    - Ex: `StringHelpers::toWstring("abc")` will return `L"abc"`.
 - ```cpp
   std::string trim(const std::string& s)
   ```
@@ -120,6 +108,18 @@ Path: `Nickvision::StringHelpers`
     - Accepts: A string parameter, s, and a character delimiter, delimiter. 
     - Returns: A new string with delimiter removed from the beginning and the end of s.
     - Ex: `StringHelpers::trim("---bye-", '-')` will return `"bye"`.
+- ```cpp
+  std::string upper(std::string s)
+  ```
+    - Accepts: A string parameter, s.
+    - Returns: The uppercase version of s. 
+    - Ex: `StringHelpers::upper("uoP")` will return `"UOP"`.
+- ```cpp
+  std::wstring wstr(const std::string& s)
+  ```
+    - Accepts: A non-wide string parameter, s.
+    - Returns: s as a wide string.
+    - Ex: `StringHelpers::wstr("abc")` will return `L"abc"`.
 
 ## WebHelpers
 Description: Helper functions for working with websites

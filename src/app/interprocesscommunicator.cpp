@@ -16,7 +16,7 @@ namespace Nickvision::App
         m_path = "\\\\.\\pipe\\" + id;
         m_serverPipe = nullptr;
         WIN32_FIND_DATAW fd;
-        std::wstring wPath{ StringHelpers::toWstring(m_path) };
+        std::wstring wPath{ StringHelpers::wstr(m_path) };
         HANDLE find{ FindFirstFileW(wPath.c_str(), &fd) };
         if (find == INVALID_HANDLE_VALUE) //no server exists
         {
@@ -109,7 +109,7 @@ namespace Nickvision::App
         {
             std::string argc{ std::to_string(args.size()) };
 #ifdef _WIN32
-            std::wstring wPath{ StringHelpers::toWstring(m_path) };
+            std::wstring wPath{ StringHelpers::wstr(m_path) };
             HANDLE clientPipe{ CreateFileW(wPath.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
             if (clientPipe == INVALID_HANDLE_VALUE)
             {

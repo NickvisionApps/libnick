@@ -12,9 +12,9 @@ namespace Nickvision::Notifications
     std::unordered_map<HWND, NotifyIcon*> NotifyIcon::m_icons = {};
 
     NotifyIcon::NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu, bool hidden)
-        : m_className{ StringHelpers::toWstring(StringHelpers::newGuid()) },
+        : m_className{ StringHelpers::wstr(StringHelpers::newGuid()) },
         m_isHidden{ hidden },
-        m_tooltip{ StringHelpers::toWstring(Aura::getActive().getAppInfo().getName()) },
+        m_tooltip{ StringHelpers::wstr(Aura::getActive().getAppInfo().getName()) },
         m_contextMenu{ contextMenu },
         m_hwnd{ nullptr }
     {
@@ -94,7 +94,7 @@ namespace Nickvision::Notifications
                 if (item->getType() == NotifyIconMenuItemType::Action)
                 {
                     const NotifyIconActionMenuItem* action{ static_cast<NotifyIconActionMenuItem*>(item.get()) };
-                    std::wstring label{ StringHelpers::toWstring(action->getLabel()) };
+                    std::wstring label{ StringHelpers::wstr(action->getLabel()) };
                     MENUITEMINFOW actionItem{ 0 };
                     actionItem.cbSize = sizeof(actionItem);
                     actionItem.fMask = MIIM_ID | MIIM_FTYPE | MIIM_STRING;
@@ -172,8 +172,8 @@ namespace Nickvision::Notifications
 
     bool NotifyIcon::notify(const ShellNotificationSentEventArgs& e)
     {
-        std::wstring message{ StringHelpers::toWstring(e.getMessage()) };
-        std::wstring title{ StringHelpers::toWstring(e.getTitle()) };
+        std::wstring message{ StringHelpers::wstr(e.getMessage()) };
+        std::wstring title{ StringHelpers::wstr(e.getTitle()) };
         NOTIFYICONDATAW notify{ getBaseNotifyIconData() };
         notify.uFlags |= NIF_INFO;
         StringCchCopyW(notify.szInfo, ARRAYSIZE(notify.szInfo), message.c_str());

@@ -92,7 +92,7 @@ Path: `Nickvision::Update::Version`
   ```
     - Returns: The dev string of the version.
 - ```cpp
-  const std::string& toString() const
+  const std::string& str() const
   ```
     - Returns: The string representation of the Version
 - ```cpp

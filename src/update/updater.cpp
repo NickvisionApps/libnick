@@ -106,7 +106,7 @@ namespace Nickvision::Update
                 for (const Json::Value& asset : root.get("assets", {}))
                 {
                     std::string name{ asset.get("name", "").asString() };
-                    if (StringHelpers::toLower(name).find("setup.exe") != std::string::npos)
+                    if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
                     {
                         std::filesystem::path setupPath{ UserDirectories::getCache() / name };
                         std::wstring quotedSetupPath{ L"\"" + setupPath.wstring() + L"\""};

@@ -60,7 +60,7 @@ namespace Nickvision::App
                 throw std::runtime_error("Unable to initialize curl.");
             }
             //Setup gettext
-            std::string domainName{ StringHelpers::toLower(StringHelpers::replace(m_appInfo.getEnglishShortName(), " ", "")) };
+            std::string domainName{ StringHelpers::lower(StringHelpers::replace(m_appInfo.getEnglishShortName(), " ", "")) };
             if (!Localization::Gettext::init(domainName))
             {
                 throw std::runtime_error("Unable to initialize gettext.");
@@ -181,7 +181,7 @@ namespace Nickvision::App
 #ifdef __linux__
         if (Environment::getVariable("SNAP").empty())
         {
-            return "help:" + StringHelpers::toLower(m_appInfo.getEnglishShortName()) + "/" + pageName;
+            return "help:" + StringHelpers::lower(m_appInfo.getEnglishShortName()) + "/" + pageName;
         }
 #endif
         std::string lang{ "C" };
@@ -191,7 +191,7 @@ namespace Nickvision::App
         std::string sysLocale;
         if(LCIDToLocaleName(lcid, name, LOCALE_NAME_MAX_LENGTH, 0) > 0)
         {
-            sysLocale = StringHelpers::toString(name);
+            sysLocale = StringHelpers::str(name);
             sysLocale = StringHelpers::replace(sysLocale, "-", "_");
         }
 #elif defined(__linux__)
