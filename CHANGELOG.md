@@ -1,5 +1,18 @@
 # Changelog
 
+## 2024.6.4 (next)
+### Breaking Changes
+#### App
+- `Nickvision::App::Aura::init()` will no longer initialize `libcurl`
+#### Helpers
+- Removed `Nickvision::WebHelpers` namespace
+### New APIs
+#### Network
+- `Nickvision::Network::CurlEasy` class
+- `Nickvision::Network::WebClient` class
+### Fixes
+None
+
 ## 2024.6.3
 ### Breaking Changes
 - Removed `enumflags.h`

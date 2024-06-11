@@ -7,7 +7,6 @@
 #include "app/aura.h"
 #include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
-#include "helpers/webhelpers.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -58,7 +57,7 @@ namespace Nickvision::Update
     Version Updater::fetchCurrentVersion(VersionType versionType)
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        std::string releases{ WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
+        std::string releases{ m_webClient.fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
         if (!releases.empty())
         {
             Json::Value root;
@@ -96,7 +95,7 @@ namespace Nickvision::Update
         {
             return false;
         }
-        std::string release{ WebHelpers::fetchJsonString("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId)) };
+        std::string release{ m_webClient.fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId)) };
         if (!release.empty())
         {
             Json::Value root;
@@ -110,7 +109,7 @@ namespace Nickvision::Update
                     {
                         std::filesystem::path setupPath{ UserDirectories::getCache() / name };
                         std::wstring quotedSetupPath{ L"\"" + setupPath.wstring() + L"\""};
-                        if (WebHelpers::downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
+                        if (m_webClient.downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
                         {
                             if ((INT_PTR)ShellExecuteW(nullptr, L"open", quotedSetupPath.c_str(), nullptr, nullptr, SW_SHOWDEFAULT) > 32)
                             {

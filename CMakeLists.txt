@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2024.6.3 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2024.6.4 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -46,7 +46,6 @@ add_library (${PROJECT_NAME}
     "src/filesystem/systemdirectories.cpp"
     "src/filesystem/userdirectories.cpp"
     "src/helpers/stringhelpers.cpp"
-    "src/helpers/webhelpers.cpp"
     "src/keyring/credential.cpp"
     "src/keyring/keyring.cpp"
     "src/keyring/keyringdialogcontroller.cpp"
@@ -56,8 +55,10 @@ add_library (${PROJECT_NAME}
     "src/keyring/systemcredentials.cpp"
     "src/localization/gettext.cpp"
     "src/logging/logger.cpp"
+    "src/network/curleasy.cpp"
     "src/network/networkmonitor.cpp"
     "src/network/networkstatechangedeventargs.cpp"
+    "src/network/webclient.cpp"
     "src/notifications/notificationsenteventargs.cpp"
     "src/notifications/notifyicon.cpp"
     "src/notifications/notifyiconmenu.cpp"
@@ -145,8 +146,7 @@ if (BUILD_TESTING)
         "tests/systemtests.cpp"
         "tests/taskbartests.cpp"
         "tests/updatertests.cpp"
-        "tests/versiontests.cpp"
-        "tests/webtests.cpp")
+        "tests/versiontests.cpp")
 	find_package(GTest CONFIG REQUIRED)
 	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main ${PROJECT_NAME})
 endif()

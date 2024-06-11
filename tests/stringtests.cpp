@@ -2,9 +2,10 @@
 #include <fstream>
 #include <iterator>
 #include "helpers/stringhelpers.h"
-#include "helpers/webhelpers.h"
+#include "network/webclient.h"
 
 using namespace Nickvision;
+using namespace Nickvision::Network;
 
 TEST(StringTests, Upper1)
 {
@@ -136,7 +137,8 @@ TEST(StringTests, Base642)
 
 TEST(StringTests, Base643)
 {
-    WebHelpers::downloadFile("https://www.freeiconspng.com/thumbs/pin-png/pin-png-24.png", "img.png");
+    WebClient client;
+    client.downloadFile("https://www.freeiconspng.com/thumbs/pin-png/pin-png-24.png", "img.png");
     std::ifstream img{ "img.png", std::ios_base::binary };
     std::vector<unsigned char> s{ std::istreambuf_iterator<char>(img), std::istreambuf_iterator<char>() };
     std::string base64;
