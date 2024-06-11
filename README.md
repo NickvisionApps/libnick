@@ -19,9 +19,6 @@ The following are a list of dependencies used by libnick.
 - libcurl
 - libintl
 - maddy
-
-### Windows Only
-The above dependencies must be installed, plus the following for Windows systems:
 - sqlcipher
 
 ### Linux Only
@@ -29,8 +26,6 @@ The above dependencies must be installed, plus the following for Linux systems:
 - glib
 - libsecret
 - libuuid
-- openssl
-    - Used for sqlcipher, as libnick manually builds sqlcipher on Linux as the vcpkg port is broken.
 
 ## Consuming libnick via vcpkg
 libnick is available through `vcpkg`. 
@@ -59,7 +54,7 @@ A C++20 compiler is also required to build libnick.
 1. Run `vcpkg install curl gettext-libintl gtest jsoncpp maddy sqlcipher`
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
+1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy sqlcipher`
 
 ### Building
 1. First, clone/download the repo.

@@ -36,7 +36,7 @@ jobs:
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl
+          pkgs: curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy sqlcipher
           triplet: x64-linux
           revision: b27651341123a59f7187b42ef2bc476284afb310
           token: ${{ secrets.GITHUB_TOKEN }}

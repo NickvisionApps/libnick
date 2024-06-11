@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2024.6.3 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES CXX VERSION 2024.6.3 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -38,7 +38,6 @@ add_library (${PROJECT_NAME}
     "src/app/windowgeometry.cpp"
     "src/database/sqlcontext.cpp"
     "src/database/sqldatabase.cpp"
-    "src/database/sqlite3.c"
     "src/database/sqlstatement.cpp"
     "src/database/sqlvalue.cpp"
     "src/filesystem/filesystemchangedeventargs.cpp"
@@ -82,18 +81,17 @@ endif()
 find_package(CURL REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
 find_package(Intl REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC CURL::libcurl JsonCpp::JsonCpp Intl::Intl)
+find_package(sqlcipher CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC CURL::libcurl JsonCpp::JsonCpp Intl::Intl sqlcipher::sqlcipher)
 if(USING_VCPKG)
     find_package(unofficial-maddy CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME} PUBLIC unofficial::maddy::maddy)
 endif()
 if(WIN32)
-    find_package(sqlcipher CONFIG REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dwmapi Gdiplus Kernel32 Shell32 UxTheme)
+    target_link_libraries(${PROJECT_NAME} PUBLIC Advapi32 Dwmapi Gdiplus Kernel32 Shell32 UxTheme)
 elseif(LINUX)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)
-    find_package(OpenSSL REQUIRED)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(glib REQUIRED IMPORTED_TARGET glib-2.0)
     pkg_check_modules(gio REQUIRED IMPORTED_TARGET gio-2.0)
@@ -101,7 +99,7 @@ elseif(LINUX)
     pkg_check_modules(gobject REQUIRED IMPORTED_TARGET gobject-2.0)
     pkg_check_modules(gthread REQUIRED IMPORTED_TARGET gthread-2.0)
     pkg_check_modules(libsecret REQUIRED IMPORTED_TARGET libsecret-1)
-    target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads OpenSSL::SSL OpenSSL::Crypto PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret)
+    target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret)
     if(USING_VCPKG)
         find_package(unofficial-libuuid CONFIG REQUIRED)
         target_link_libraries(${PROJECT_NAME} PUBLIC unofficial::UUID::uuid)
