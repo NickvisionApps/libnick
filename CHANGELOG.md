@@ -6,6 +6,8 @@
 - Removed `Nickvision::App::Aura::getEnvVar()`
 - Removed `Nickvision::App::Aura::setEnvVar()`
 - Removed `Nickvision::App::Aura::sysExec()`
+#### Events
+- `Nickvision::Events::Event::subscribe()` and `Nickvision::Events::Event::operator+=()`will now return a `Nickvision::Events::HandlerId` that must be passed to `Nickvision::Events::Event::unsubscribe()` and `Nickvision::Events::Event::operator-=()` to remove a handler.
 #### Localization
 - Removed `Nickvision::Localization::Documentation` namespace
 #### StringHelpers
@@ -35,6 +37,8 @@
 #### Keyring
 - Fixed an issue where `Nickvision::Keyring::SystemCredentials::addCredential` freed memory incorrectly on Windows
 - Improved the memory usage of `Nickvision::Network::NetworkMonitor` on Windows
+#### Tests
+- Improved test code
 
 ## 2024.6.2
 ### Breaking Changes

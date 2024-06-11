@@ -13,6 +13,8 @@ namespace Nickvision::Events
     template<typename T>
     concept DerivedEventArgs = std::is_base_of_v<EventArgs, T>;
 
+    using HandlerId = size_t;
+
     /**
      * @brief An event that can have handlers subscribe to it, which in turn will be called when the event is invoked.
      * @tparam T Derived type of EventArgs
@@ -46,28 +48,26 @@ namespace Nickvision::Events
         /**
          * @brief Subscribes a handler to the event.
          * @param handler The handler function
+         * @return The handler id
          */
-        void subscribe(const std::function<void(const T&)>& handler)
+        HandlerId subscribe(const std::function<void(const T&)>& handler)
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
             m_handlers.push_back(handler);
+            return m_handlers.size() - 1;
         }
         /**
          * @brief Unsubscribes a handler from the event.
-         * @param handler The handler function
+         * @param id The handler id
          */
-        void unsubscribe(const std::function<void(const T&)>& handler)
+        void unsubscribe(HandlerId id)
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
-            if (m_handlers.size() == 0)
+            if (id < 0 || id >= m_handlers.size())
             {
                 return;
             }
-            auto it{ std::find(m_handlers.begin(), m_handlers.end(), handler) };
-            if (it != m_handlers.end())
-            {
-                m_handlers.erase(it);
-            }
+            m_handlers.erase(m_handlers.begin() + id);
         }
         /**
          * @brief Invokes the event, calling all handlers.
@@ -84,18 +84,19 @@ namespace Nickvision::Events
         /**
          * @brief Subscribes a handler to the event.
          * @param handler The handler function
+         * @return The handler id
          */
-        void operator+=(const std::function<void(const T&)>& handler)
+        HandlerId operator+=(const std::function<void(const T&)>& handler)
         {
-            subscribe(handler);
+            return subscribe(handler);
         }
         /**
          * @brief Unsubscribes a handler from the event.
-         * @param handler The handler function
+         * @param id The handler id
          */
-        void operator-=(const std::function<void(const T&)>& handler)
+        void operator-=(HandlerId id)
         {
-            unsubscribe(handler);
+            unsubscribe(id);
         }
         /**
          * @brief Invokes the event, calling all handlers.
