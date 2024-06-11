@@ -30,7 +30,7 @@ The above dependencies must be installed, plus the following for Linux systems:
 - libsecret
 - libuuid
 - openssl
-    - Used for sqlcipher, as libnick manually includes and compiles sqlcipher on Linux as the vcpkg version is broken.
+    - Used for sqlcipher, as libnick manually builds sqlcipher on Linux as the vcpkg port is broken.
 
 ## Consuming libnick via vcpkg
 libnick is available through `vcpkg`. 

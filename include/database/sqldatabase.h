@@ -21,7 +21,7 @@
 
 namespace Nickvision::Database
 {
-    typedef std::function<void(SqlContext&)> SqliteCustomFunction;
+    using SqliteCustomFunction = std::function<void(SqlContext&)>;
 
     /**
      * @brief A sqlite (sqlcipher) database. 
