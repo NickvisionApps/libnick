@@ -35,7 +35,7 @@ jobs:
       - name: "Build"
         working-directory: ${{github.workspace}}/build
         run: |
-          cmake -G "Visual Studio 17 2022" .. -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
+          cmake -G "Visual Studio 16 2019" .. -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
           cmake --build . --config Release
       - name: "Install"
         working-directory: ${{github.workspace}}/build
