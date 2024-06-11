@@ -10,19 +10,12 @@ permissions:
   id-token: write
   contents: read
 env:
-  BUILD_TYPE: Release
   GITHUB_ACTIONS: true
   VCPKG_ROOT: ${{github.workspace}}/vcpkg
 jobs:
   build:
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
-    strategy:
-      matrix:
-        config:
-        - name: "Build on x64"
-          os: windows-latest
-      fail-fast: false
+    name: "Build on x64"
+    runs-on: windows-2019
     steps:
       - name: "Checkout"  
         uses: actions/checkout@v4
@@ -36,21 +29,21 @@ jobs:
         with:
           pkgs: curl gettext-libintl gtest jsoncpp maddy openssl
           triplet: x64-windows
-          cache-key: ${{ matrix.config.os }}
-          revision: 6f1ddd6b6878e7e66fcc35c65ba1d8feec2e01f8
+          revision: b27651341123a59f7187b42ef2bc476284afb310
           token: ${{ secrets.GITHUB_TOKEN }}
+          github-binarycache: true
       - name: "Build"
         working-directory: ${{github.workspace}}/build
         run: |
           cmake -G "Visual Studio 17 2022" .. -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
-          cmake --build . --config ${{env.BUILD_TYPE}}
+          cmake --build . --config Release
       - name: "Install"
         working-directory: ${{github.workspace}}/build
         run: cmake --install .
       - name: "Test"
         run: ${{github.workspace}}/build/Release/libnick_test.exe
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{github.workspace}}/install
           name: Windows-x64-${{env.BUILD_TYPE}}
