@@ -6,13 +6,12 @@
 #include <iostream>
 #include <stdexcept>
 #include "filesystem/userdirectories.h"
+#include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
 #ifdef __linux__
-#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <signal.h>
-#include <string.h>
 #include <sys/wait.h>
 #endif
 
@@ -22,24 +21,6 @@ using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
 {
-    static std::string getLastErrorAsString()
-    {
-#ifdef _WIN32
-        DWORD errorMessageID{ GetLastError() };
-        if(errorMessageID == 0) 
-        {
-            return std::string();
-        }
-        LPSTR messageBuffer{ nullptr };
-        size_t size{ FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, nullptr) };
-        std::string message(messageBuffer, size);
-        LocalFree(messageBuffer);
-        return message;
-#elif defined(__linux__)
-        return std::string(strerror(errno));
-#endif
-    }
-
     Process::Process(const std::filesystem::path& path, const std::vector<std::string>& args)
         : m_path{ path },
         m_args{ args },
@@ -80,7 +61,7 @@ namespace Nickvision::System
         //Create process
         if(!CreateProcessW(nullptr, LPWSTR(appArgs.c_str()), nullptr, nullptr, TRUE, CREATE_SUSPENDED | CREATE_NEW_CONSOLE, nullptr, nullptr, &si, &m_pi))
         {
-            std::cerr << getLastErrorAsString() << std::endl;
+            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             CloseHandle(m_read);
             CloseHandle(m_write);
             throw std::runtime_error("Failed to create process.");
@@ -89,7 +70,7 @@ namespace Nickvision::System
         //Fork
         if((m_pid = fork()) < 0)
         {
-            std::cerr << getLastErrorAsString() << std::endl;
+            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             throw std::runtime_error("Failed to create fork.");
         }
         else if(m_pid == 0) //child
@@ -107,7 +88,7 @@ namespace Nickvision::System
             int fd{ open(m_consoleFilePath.string().c_str(), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) };
             if(fd < 0)
             {
-                std::cerr << getLastErrorAsString() << std::endl;
+                std::cerr << CodeHelpers::getLastSystemError() << std::endl;
                 throw std::runtime_error("Failed to create file.");
             }
             dup2(fd, STDERR_FILENO);
@@ -116,7 +97,7 @@ namespace Nickvision::System
             raise(SIGSTOP);
             if(execvp(m_path.string().c_str(), appArgs.data()) < 0)
             {
-                std::cerr << getLastErrorAsString() << std::endl;
+                std::cerr << CodeHelpers::getLastSystemError() << std::endl;
                 m_completed = true;
                 m_exitCode = 1;
                 exit(1);
@@ -191,7 +172,7 @@ namespace Nickvision::System
         if(::kill(m_pid, SIGCONT) < 0)
 #endif
         {
-            std::cerr << getLastErrorAsString() << std::endl;
+            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
         m_watchThread = std::jthread(&Process::watch, this);
@@ -212,7 +193,7 @@ namespace Nickvision::System
         if(::kill(m_pid, SIGTERM) < 0)
 #endif
         {
-            std::cerr << getLastErrorAsString() << std::endl;
+            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
         m_exitCode = -1;

@@ -45,6 +45,7 @@ add_library (${PROJECT_NAME}
     "src/filesystem/filesystemwatcher.cpp"
     "src/filesystem/systemdirectories.cpp"
     "src/filesystem/userdirectories.cpp"
+    "src/helpers/codehelpers.cpp"
     "src/helpers/stringhelpers.cpp"
     "src/keyring/credential.cpp"
     "src/keyring/keyring.cpp"

@@ -9,6 +9,8 @@
 - Renamed `Nickvision::StringHelpers` namespace to `Nickvision::Helpers::StringHelpers`
 - Removed `Nickvision::WebHelpers` namespace
 ### New APIs
+#### Helpers
+- `Nickvision::Helpers::CodeHelpers::getLastSystemError()`
 #### Network
 - `Nickvision::Network::CurlEasy` class
 - `Nickvision::Network::WebClient` class

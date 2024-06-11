@@ -17,6 +17,10 @@ Path: `Nickvision::Helpers::CodeHelpers`
 
 ### Functions
 - ```cpp
+  std::string getLastSystemError();
+  ```
+    - Returns: The last system api call error message.
+- ```cpp
   const T& unmove(T&& t)
   ```
     - Accepts: An rvalue, t
