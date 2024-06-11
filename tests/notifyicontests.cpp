@@ -15,18 +15,13 @@ class NotifyIconTest : public testing::Test
 {
 public:
     static std::unique_ptr<NotifyIcon> m_notifyIcon;
-
-    static void SetUpTestSuite()
-    {
-        Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
-    }
 };
 
 std::unique_ptr<NotifyIcon> NotifyIconTest::m_notifyIcon = nullptr;
 
 TEST_F(NotifyIconTest, CreateIcon)
 {
-    if (Environment::getVariable("GITHUB_ACTIONS").empty() && GetConsoleWindow())
+    if (GetConsoleWindow())
     {
         bool waiting{ true };
         NotifyIconMenu contextMenu;

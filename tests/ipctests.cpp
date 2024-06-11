@@ -15,8 +15,12 @@ class IPCTest : public testing::Test
 public:
     static void SetUpTestSuite()
     {
-        Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura Tests");
-        Aura::getActive().getIPC().commandReceived() += onCommandReceived;
+        m_handlerId = Aura::getActive().getIPC().commandReceived() += onCommandReceived;
+    }
+
+    static void TearDownTestSuite()
+    {
+        Aura::getActive().getIPC().commandReceived() -= m_handlerId;
     }
 
     static int getReceived()
@@ -28,6 +32,7 @@ public:
 private:
     static std::mutex m_mutex;
     static int m_received;
+    static HandlerId m_handlerId;
 
     static void onCommandReceived(const ParamEventArgs<std::vector<std::string>>& e)
     {
@@ -38,6 +43,7 @@ private:
 
 std::mutex IPCTest::m_mutex = {};
 int IPCTest::m_received = 0;
+HandlerId IPCTest::m_handlerId = 0;
 
 TEST_F(IPCTest, CheckServerStatus)
 {
@@ -46,11 +52,6 @@ TEST_F(IPCTest, CheckServerStatus)
 
 TEST_F(IPCTest, Client1Send)
 {
-    if (!Environment::getVariable("GITHUB_ACTIONS").empty())
-    {
-        ASSERT_TRUE(true);
-        return;
-    }
     InterProcessCommunicator client{ Aura::getActive().getAppInfo().getId() };
     ASSERT_TRUE(client.isClient());
     ASSERT_TRUE(client.communicate(args));
@@ -59,5 +60,5 @@ TEST_F(IPCTest, Client1Send)
 TEST_F(IPCTest, CheckServerReceived)
 {
     std::this_thread::sleep_for(std::chrono::seconds(5));
-    ASSERT_TRUE(getReceived() > 0 || !Environment::getVariable("GITHUB_ACTIONS").empty());
+    ASSERT_TRUE(getReceived() > 0);
 }

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "app/aura.h"
+#include "app/configurationbase.h"
 #include "app/windowgeometry.h"
 #include "filesystem/userdirectories.h"
 #include "notifications/shellnotification.h"
@@ -59,12 +60,6 @@ class AuraTest : public testing::Test
 public:
     static void SetUpTestSuite()
     {
-        Aura::getActive().init("org.nickvision.aura.test", "Nickvision Aura Tests", "Aura");
-        Aura::getActive().getAppInfo().setHtmlDocsStore("https://github.com/NickvisionApps/Denaro/blob/main/NickvisionMoney.Shared/Docs/html");
-    }
-
-    static void TearDownTestSuite()
-    {
         std::filesystem::remove(UserDirectories::getApplicationConfig() / ("config.json"));
     }
 };
@@ -119,7 +114,7 @@ TEST_F(AuraTest, DependencyCheck)
     ASSERT_TRUE(std::filesystem::exists(dependency));
     ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), NotificationSeverity::Success, "open", dependency.string() };
 #ifdef _WIN32
-    if (Environment::getVariable("GITHUB_ACTIONS").empty() && GetConsoleWindow())
+    if (GetConsoleWindow())
     {
         ASSERT_NO_THROW(ShellNotification::send(args, GetConsoleWindow()));
     }
