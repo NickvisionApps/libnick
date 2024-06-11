@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace Nickvision::StringHelpers
+namespace Nickvision::Helpers::StringHelpers
 {
     template<typename T>
     concept StringImplicitlyConstructible = std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>;

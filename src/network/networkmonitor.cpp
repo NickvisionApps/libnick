@@ -6,6 +6,7 @@
 #include <gio/gio.h>
 #endif
 
+using namespace Nickvision::Helpers;
 using namespace Nickvision::System;
 
 namespace Nickvision::Network

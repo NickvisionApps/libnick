@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <string>
+#include "network/webclient.h"
 #include "version.h"
 
 namespace Nickvision::Update
@@ -60,6 +61,7 @@ namespace Nickvision::Update
 
     private:
         mutable std::mutex m_mutex;
+        Network::WebClient m_webClient;
         std::string m_repoOwner;
         std::string m_repoName;
         int m_latestStableReleaseId;

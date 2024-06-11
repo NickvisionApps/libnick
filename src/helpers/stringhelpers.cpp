@@ -13,7 +13,7 @@
 #include <uuid/uuid.h>
 #endif
 
-namespace Nickvision
+namespace Nickvision::Helpers
 {
     std::vector<std::uint8_t> StringHelpers::decode(const std::string& base64)
     {

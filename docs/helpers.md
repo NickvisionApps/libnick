@@ -5,7 +5,6 @@ This module contains various helper namespaces that making working with C++ a bi
 ## Table of Contents
 - [CodeHelpers](#codehelpers)
 - [StringHelpers](#stringhelpers)
-- [WebHelpers](#webhelpers)
 
 ## CodeHelpers
 Description: Helper functions for working with C++
@@ -14,7 +13,7 @@ Interface: [codehelpers.h](/include/helpers/codehelpers.h)
 
 Type: `namespace`
 
-Path: `Nickvision::CodeHelpers`
+Path: `Nickvision::Helpers::CodeHelpers`
 
 ### Functions
 - ```cpp
@@ -30,7 +29,7 @@ Interface: [stringhelpers.h](/include/helpers/stringhelpers.h)
 
 Type: `namespace`
 
-Path: `Nickvision::StringHelpers`
+Path: `Nickvision::Helpers::StringHelpers`
 
 ### Functions
 - ```cpp
@@ -120,38 +119,3 @@ Path: `Nickvision::StringHelpers`
     - Accepts: A non-wide string parameter, s.
     - Returns: s as a wide string.
     - Ex: `StringHelpers::wstr("abc")` will return `L"abc"`.
-
-## WebHelpers
-Description: Helper functions for working with websites
-
-Interface: [webhelpers.h](/include/helpers/webhelpers.h)
-
-Type: `namespace`
-
-Path: `Nickvision::WebHelpers`
-
-### Functions
-- ```cpp
-  bool downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress = {}, bool overwrite = true)
-  ```
-    - Accepts: A url string, url, a path of disk, path, a CurlProgressFunction, progress, and a overwrite boolean, overwrite. 
-    - Returns: `true` if the file provided by url was successfully downloaded to path.
-    - Returns: `false` if the download failed. 
-    - Note: If progress points to a valid CurlProgressFunction, progress will be called as the file is downloaded to provide the caller with download progress. 
-    - Note: If a file at path exists and overwrite is true, the file will be overwritten, else downloadFile will fail and return false.
-    - Note: `CurlProgressFunction` is a `std::function` with the signature `int func(curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)`
-    - Ex: `WebHelpers::downloadFile(https://raw.githubusercontent.com/nlogozzo/nlogozzo/main/README.md, "readme.md")` will return `true` and download the file to path `./readme.md`.
-- ```cpp
-  std::string fetchJsonString(const std::string& url)
-  ```
-    - Accepts: A url string, url.
-    - Returns: The json string hosted at url. 
-    - Note: If this function fails, an empty string will be returned.
-    - Ex: `WebHelpers::fetchJsonString("https://api.github.com/repos/nickvisionapps/denaro/tags")` will return [this json string](https://api.github.com/repos/nickvisionapps/denaro/tags).
-- ```cpp
-  bool isValidWebsite(const std::string& url)
-  ```
-    - Accepts: A url string, url.
-    - Returns: `true` if url points to a valid, live website.
-    - Returns: `false` if url does not point to a valid website. 
-    - Ex: `WebHelpers::isValidWebsite("https://www.sdfhjsdkfhsjdf.dfh")` will return `false`.

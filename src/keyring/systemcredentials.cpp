@@ -9,6 +9,8 @@
 #include <libsecret/secret.h>
 #endif
 
+using namespace Nickvision::Helpers;
+
 namespace Nickvision::Keyring
 {
 #ifdef __linux__

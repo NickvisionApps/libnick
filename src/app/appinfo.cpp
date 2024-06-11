@@ -3,6 +3,7 @@
 #include <maddy/parser.h>
 #include "helpers/stringhelpers.h"
 
+using namespace Nickvision::Helpers;
 using namespace Nickvision::Update;
 
 namespace Nickvision::App

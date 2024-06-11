@@ -1,6 +1,8 @@
 #include "keyring/keyringdialogcontroller.h"
 #include "helpers/stringhelpers.h"
 
+using namespace Nickvision::Helpers;
+
 namespace Nickvision::Keyring
 {
     KeyringDialogController::KeyringDialogController(const std::string& name, const std::optional<Keyring>& keyring)

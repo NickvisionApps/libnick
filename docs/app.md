@@ -183,7 +183,6 @@ Path: `Nickvision::App::Aura`
   ```
     - Accepts: An application id, id, an application name, name, an application english short name, englishShortName, and the application log level, logLevel.
     - Returns: True if initialized, else false
-    - Throws: `std::runtime_error` if libcurl fails to initialize
     - Throws: `std::runtime_error` if the gettext system fails to initialize
     - Throws: `std::runtime_error` if unable to get the executable directory path
     - Note: This also calls curl_global_init().

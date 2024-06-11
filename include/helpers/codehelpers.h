@@ -1,7 +1,7 @@
 #ifndef CODEHELPERS_H
 #define CODEHELPERS_H
 
-namespace Nickvision::CodeHelpers
+namespace Nickvision::Helpers::CodeHelpers
 {
     template<typename T>
     const T& unmove(T&& t)

@@ -18,6 +18,7 @@
 
 using namespace Nickvision::Filesystem;
 using namespace Nickvision::Events;
+using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
 {

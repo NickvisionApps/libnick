@@ -1,6 +1,5 @@
 #include "app/aura.h"
 #include <locale>
-#include <curl/curl.h>
 #include "filesystem/systemdirectories.h"
 #include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
@@ -11,6 +10,7 @@
 #endif
 
 using namespace Nickvision::Filesystem;
+using namespace Nickvision::Helpers;
 using namespace Nickvision::Localization;
 using namespace Nickvision::Logging;
 using namespace Nickvision::System;
@@ -25,10 +25,6 @@ namespace Nickvision::App
 
     Aura::~Aura()
     {
-        if(m_initialized)
-        {
-            curl_global_cleanup();
-        }
     }
 
     bool Aura::init(const std::string& id, const std::string& name, const std::string& englishShortName, LogLevel logLevel)
@@ -54,11 +50,6 @@ namespace Nickvision::App
             m_appInfo.setId(id);
             m_appInfo.setName(name);
             m_appInfo.setEnglishShortName(englishShortName);
-            //Setup curl
-            if (curl_global_init(CURL_GLOBAL_DEFAULT) != 0)
-            {
-                throw std::runtime_error("Unable to initialize curl.");
-            }
             //Setup gettext
             std::string domainName{ StringHelpers::lower(StringHelpers::replace(m_appInfo.getEnglishShortName(), " ", "")) };
             if (!Localization::Gettext::init(domainName))
