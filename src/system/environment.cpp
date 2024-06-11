@@ -6,6 +6,8 @@
 #include <windows.h>
 #endif
 
+using namespace Nickvision::Helpers;
+
 namespace Nickvision::System
 {
     std::string Environment::getVariable(const std::string& key)

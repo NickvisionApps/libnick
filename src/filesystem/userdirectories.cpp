@@ -14,6 +14,7 @@
 #endif 
 
 using namespace Nickvision::App;
+using namespace Nickvision::Helpers;
 using namespace Nickvision::System;
 
 namespace Nickvision::Filesystem
