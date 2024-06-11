@@ -33,25 +33,27 @@ Path: `Nickvision::Events::Event`
   ```
     - Moves an Event object.
 - ```cpp
-  void subscribe(const std::function<void(const T&)>& handler)
+  HandlerId subscribe(const std::function<void(const T&)>& handler)
   ```
     - Accepts: A `std::function` with signature `void handler(const T&)` to register as a callback for the event, handler.
+    - Returns: The id of the newly subscribed handler.
 - ```cpp
-  void unsubscribe(const std::function<void(const T&)>& handler)
+  void unsubscribe(HandlerId id)
   ```
-    - Accepts: A `std::function` with signature `void handler(const T&)` to remove as a callback for the event, handler.
+    - Accepts: The id of a subscribed handler, id
 - ```cpp
   void invoke(const T& param) const
   ```
     - Accepts: A `T` object to pass as a parameter, param, as all registered callbacks are called on this event.
 - ```cpp
-  void operator+=(const std::function<void(const T&)>& handler)
+  HandlerId operator+=(const std::function<void(const T&)>& handler)
   ```
-    - Accepts: A `std::function` with signature `void handler(const T&)` to register as a callback for the event, handler. 
+    - Accepts: A `std::function` with signature `void handler(const T&)` to register as a callback for the event, handler.
+    - Returns: The id of the newly subscribed handler.
 - ```cpp
-  void operator-=(const std::function<void(const T&)>& handler)
+  void operator-=(HandlerId id)
   ```
-    - Accepts: A `std::function` with signature `void handler(const T&)` to remove as a callback for the event, handler.
+    - Accepts: The id of a subscribed handler, id
 - ```cpp
   void operator()(const T& param)
   ```

@@ -82,7 +82,7 @@ Description: Flags to describe the status of a validated credential.
 
 Interface: [credentialcheckstatus.h](/include/keyring/credentialcheckstatus.h)
 
-Type: `enum class` with `DEFINE_ENUM_FLAG_OPERATORS`
+Type: `enum class`
 
 Path: `Nickvision::Keyring::CredentialCheckStatus`
 
@@ -255,7 +255,7 @@ Description: Flags to describe the content of a password.
 
 Interface: [passwordcontent.h](/include/keyring/passwordcontent.h)
 
-Type: `enum class` with `DEFINE_ENUM_FLAG_OPERATORS`
+Type: `enum class`
 
 Path: `Nickvision::Keyring::PasswordContent`
 

@@ -11,8 +11,12 @@
 #include <mutex>
 #include <string>
 #include <unordered_map>
-#include "sqlcontext.h"
+#ifdef _WIN32
+#include <sqlcipher/sqlite3.h>
+#elif defined(__linux__)
 #include "sqlite3.h"
+#endif
+#include "sqlcontext.h"
 #include "sqlstatement.h"
 
 namespace Nickvision::Database

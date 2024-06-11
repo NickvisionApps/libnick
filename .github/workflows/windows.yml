@@ -24,10 +24,10 @@ jobs:
       - name: "Setup Environment"
         run: mkdir build
       - name: "Vcpkg"
-        uses: johnwason/vcpkg-action@v5
+        uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: curl gettext-libintl gtest jsoncpp maddy openssl
+          pkgs: curl gettext-libintl gtest jsoncpp maddy sqlcipher
           triplet: x64-windows
           revision: b27651341123a59f7187b42ef2bc476284afb310
           token: ${{ secrets.GITHUB_TOKEN }}

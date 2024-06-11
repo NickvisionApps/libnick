@@ -7,7 +7,11 @@
 
 #include <string>
 #include <utility>
+#ifdef _WIN32
+#include <sqlcipher/sqlite3.h>
+#elif defined(__linux__)
 #include "sqlite3.h"
+#endif
 
 namespace Nickvision::Database
 {

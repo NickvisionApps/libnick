@@ -246,7 +246,7 @@ Description: Flags to describe properties of a file system object that can chang
 
 Interface: [watcherflags.h](/include/filesystem/watcherflags.h)
 
-Type: `enum class` with `DEFINE_ENUM_FLAG_OPERATORS`
+Type: `enum class`
 
 Path: `Nickvision::Filesystem::WatcherFlags`
 

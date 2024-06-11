@@ -1,8 +1,6 @@
 #ifndef WATCHERFLAGS_H
 #define WATCHERFLAGS_H
 
-#include "enumflags.h"
-
 namespace Nickvision::Filesystem
 {
     /**
@@ -18,7 +16,40 @@ namespace Nickvision::Filesystem
         LastAccess = 32
     };
 
-    DEFINE_ENUM_FLAG_OPERATORS(WatcherFlags);
+    inline WatcherFlags operator~(WatcherFlags a)
+    {
+        return static_cast<WatcherFlags>(~static_cast<int>(a));
+    }
+
+    inline WatcherFlags operator|(WatcherFlags a, WatcherFlags b)
+    {
+        return static_cast<WatcherFlags>(static_cast<int>(a) | static_cast<int>(b));
+    }
+
+    inline WatcherFlags operator&(WatcherFlags a, WatcherFlags b)
+    {
+        return static_cast<WatcherFlags>(static_cast<int>(a) & static_cast<int>(b));
+    }
+
+    inline WatcherFlags operator^(WatcherFlags a, WatcherFlags b)
+    {
+        return static_cast<WatcherFlags>(static_cast<int>(a) ^ static_cast<int>(b));
+    }
+
+    inline WatcherFlags& operator|=(WatcherFlags& a, WatcherFlags b)
+    {
+        return reinterpret_cast<WatcherFlags&>(reinterpret_cast<int&>(a) |= static_cast<int>(b));
+    }
+
+    inline WatcherFlags& operator&=(WatcherFlags& a, WatcherFlags b)
+    {
+        return reinterpret_cast<WatcherFlags&>(reinterpret_cast<int&>(a) &= static_cast<int>(b));
+    }
+
+    inline WatcherFlags& operator^=(WatcherFlags& a, WatcherFlags b)
+    {
+        return reinterpret_cast<WatcherFlags&>(reinterpret_cast<int&>(a) ^= static_cast<int>(b));
+    }
 }
 
 #endif

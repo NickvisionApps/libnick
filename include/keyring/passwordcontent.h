@@ -1,8 +1,6 @@
 #ifndef PASSWORDCONTENT_H
 #define PASSWORDCONTENT_H
 
-#include "enumflags.h"
-
 namespace Nickvision::Keyring
 {
     /**
@@ -16,7 +14,40 @@ namespace Nickvision::Keyring
         Special = 8
     };
 
-    DEFINE_ENUM_FLAG_OPERATORS(PasswordContent);
+    inline PasswordContent operator~(PasswordContent a)
+    {
+        return static_cast<PasswordContent>(~static_cast<int>(a));
+    }
+
+    inline PasswordContent operator|(PasswordContent a, PasswordContent b)
+    {
+        return static_cast<PasswordContent>(static_cast<int>(a) | static_cast<int>(b));
+    }
+
+    inline PasswordContent operator&(PasswordContent a, PasswordContent b)
+    {
+        return static_cast<PasswordContent>(static_cast<int>(a) & static_cast<int>(b));
+    }
+
+    inline PasswordContent operator^(PasswordContent a, PasswordContent b)
+    {
+        return static_cast<PasswordContent>(static_cast<int>(a) ^ static_cast<int>(b));
+    }
+
+    inline PasswordContent& operator|=(PasswordContent& a, PasswordContent b)
+    {
+        return reinterpret_cast<PasswordContent&>(reinterpret_cast<int&>(a) |= static_cast<int>(b));
+    }
+
+    inline PasswordContent& operator&=(PasswordContent& a, PasswordContent b)
+    {
+        return reinterpret_cast<PasswordContent&>(reinterpret_cast<int&>(a) &= static_cast<int>(b));
+    }
+
+    inline PasswordContent& operator^=(PasswordContent& a, PasswordContent b)
+    {
+        return reinterpret_cast<PasswordContent&>(reinterpret_cast<int&>(a) ^= static_cast<int>(b));
+    }
 }
 
 #endif //PASSWORDCONTENT_H

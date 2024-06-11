@@ -304,22 +304,6 @@ int main()
     config.save(); //lambda will be invoked on success
 }
 ```
-
-## EnumFlags
-Description: Macros for working with enums to be used as flags.
-
-Interface: [enumflags.h](/include/enumflags.h)
-
-Type: `file`
-
-### Macros
-- ```cpp
-  #define DEFINE_ENUM_FLAG_OPERATORS(T)
-  ```
-    - Accepts: The type name of an `enum class` to be used as flags, T.
-    - Defines: Operators `~`, `|`, `&`, `^`, `|=`, `&=`, `^=` for T.
-    - Note: T must be of type `enum class`.
-    - Note: T's values must be separate by bits, i.e. values must be 1, 2, 4, 8, 16, and so on.
  
 ## InterProcessCommunicator
 Description: An inter process communicator (server/client).

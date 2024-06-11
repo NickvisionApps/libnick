@@ -2,6 +2,9 @@
 
 ## 2024.6.3 (next)
 ### Breaking Changes
+- Removed `enumflags.h`
+- Added `sqlcipher` as a dependency for Windows build
+  - `sqlcipher` will continue to be built manually on Linux until the `vcpkg` port is fixed for Linux
 #### App
 - Removed `Nickvision::App::Aura::getEnvVar()`
 - Removed `Nickvision::App::Aura::setEnvVar()`

@@ -1,8 +1,6 @@
 #ifndef CREDENTIALCHECKSTATUS_H
 #define CREDENTIALCHECKSTATUS_H
 
-#include "enumflags.h"
-
 namespace Nickvision::Keyring
 {
     /**
@@ -16,7 +14,40 @@ namespace Nickvision::Keyring
         InvalidUri = 8
     };
 
-    DEFINE_ENUM_FLAG_OPERATORS(CredentialCheckStatus);
+    inline CredentialCheckStatus operator~(CredentialCheckStatus a)
+    {
+        return static_cast<CredentialCheckStatus>(~static_cast<int>(a));
+    }
+
+    inline CredentialCheckStatus operator|(CredentialCheckStatus a, CredentialCheckStatus b)
+    {
+        return static_cast<CredentialCheckStatus>(static_cast<int>(a) | static_cast<int>(b));
+    }
+
+    inline CredentialCheckStatus operator&(CredentialCheckStatus a, CredentialCheckStatus b)
+    {
+        return static_cast<CredentialCheckStatus>(static_cast<int>(a) & static_cast<int>(b));
+    }
+
+    inline CredentialCheckStatus operator^(CredentialCheckStatus a, CredentialCheckStatus b)
+    {
+        return static_cast<CredentialCheckStatus>(static_cast<int>(a) ^ static_cast<int>(b));
+    }
+
+    inline CredentialCheckStatus& operator|=(CredentialCheckStatus& a, CredentialCheckStatus b)
+    {
+        return reinterpret_cast<CredentialCheckStatus&>(reinterpret_cast<int&>(a) |= static_cast<int>(b));
+    }
+
+    inline CredentialCheckStatus& operator&=(CredentialCheckStatus& a, CredentialCheckStatus b)
+    {
+        return reinterpret_cast<CredentialCheckStatus&>(reinterpret_cast<int&>(a) &= static_cast<int>(b));
+    }
+
+    inline CredentialCheckStatus& operator^=(CredentialCheckStatus& a, CredentialCheckStatus b)
+    {
+        return reinterpret_cast<CredentialCheckStatus&>(reinterpret_cast<int&>(a) ^= static_cast<int>(b));
+    }
 }
 
 #endif //CREDENTIALCHECKSTATUS_H
