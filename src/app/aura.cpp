@@ -10,6 +10,7 @@
 #endif
 
 using namespace Nickvision::Filesystem;
+using namespace Nickvision::Helpers;
 using namespace Nickvision::Localization;
 using namespace Nickvision::Logging;
 using namespace Nickvision::System;

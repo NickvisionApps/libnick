@@ -13,7 +13,7 @@ Interface: [codehelpers.h](/include/helpers/codehelpers.h)
 
 Type: `namespace`
 
-Path: `Nickvision::CodeHelpers`
+Path: `Nickvision::Helpers::CodeHelpers`
 
 ### Functions
 - ```cpp
@@ -29,7 +29,7 @@ Interface: [stringhelpers.h](/include/helpers/stringhelpers.h)
 
 Type: `namespace`
 
-Path: `Nickvision::StringHelpers`
+Path: `Nickvision::Helpers::StringHelpers`
 
 ### Functions
 - ```cpp

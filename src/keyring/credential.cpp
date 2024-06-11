@@ -2,6 +2,8 @@
 #include "keyring/passwordstrength.h"
 #include "helpers/stringhelpers.h"
 
+using namespace Nickvision::Helpers;
+
 namespace Nickvision::Keyring
 {
     Credential::Credential(int id, const std::string& name, const std::string& uri, const std::string& username, const std::string& password)

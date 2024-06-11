@@ -2,6 +2,7 @@
 #include "helpers/stringhelpers.h"
 #include "system/environment.h"
 
+using namespace Nickvision::Helpers;
 using namespace Nickvision::System;
 
 namespace Nickvision::Filesystem

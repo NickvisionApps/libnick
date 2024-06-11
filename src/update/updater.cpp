@@ -13,6 +13,7 @@
 
 using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
+using namespace Nickvision::Helpers;
 
 namespace Nickvision::Update
 {

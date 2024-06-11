@@ -5,6 +5,8 @@
 #### App
 - `Nickvision::App::Aura::init()` will no longer initialize `libcurl`
 #### Helpers
+- Renamed `Nickvision::CodeHelpers` namespace to `Nickvision::Helpers::CodeHelpers`
+- Renamed `Nickvision::StringHelpers` namespace to `Nickvision::Helpers::StringHelpers`
 - Removed `Nickvision::WebHelpers` namespace
 ### New APIs
 #### Network

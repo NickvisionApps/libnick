@@ -4,7 +4,7 @@
 #include "helpers/stringhelpers.h"
 #include "network/webclient.h"
 
-using namespace Nickvision;
+using namespace Nickvision::Helpers;
 using namespace Nickvision::Network;
 
 TEST(StringTests, Upper1)

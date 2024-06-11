@@ -6,6 +6,7 @@
 #include "helpers/stringhelpers.h"
 
 using namespace Nickvision::App;
+using namespace Nickvision::Helpers;
 
 namespace Nickvision::Notifications
 {

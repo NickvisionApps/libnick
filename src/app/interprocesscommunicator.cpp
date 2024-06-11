@@ -7,6 +7,8 @@
 #include <sys/socket.h>
 #endif
 
+using namespace Nickvision::Helpers;
+
 namespace Nickvision::App
 {
     InterProcessCommunicator::InterProcessCommunicator(const std::string& id)
