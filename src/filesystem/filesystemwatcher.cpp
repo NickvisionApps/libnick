@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <stdexcept>
-#ifndef _WIN32
+#ifdef __linux__
 #include <unistd.h>
 #include <sys/inotify.h>
 #endif
@@ -21,7 +21,7 @@ namespace Nickvision::Filesystem
         {
             throw std::runtime_error("Unable to create event.");
         }
-#else
+#elif defined(__linux__)
         m_notify = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
         if (m_notify == -1)
         {
@@ -37,7 +37,7 @@ namespace Nickvision::Filesystem
 #ifdef _WIN32
         SetEvent(m_terminateEvent);
         CloseHandle(m_terminateEvent);
-#else
+#elif defined(__linux__)
         close(m_notify);
 #endif
         if(m_watchThread.joinable())
@@ -165,7 +165,7 @@ namespace Nickvision::Filesystem
             GetOverlappedResult(folder, &overlapped, &bytes, TRUE);
         }
         CloseHandle(folder);
-#else
+#elif defined(__linux__)
         int mask{ 0 };
         if ((m_watcherFlags & WatcherFlags::FileName) == WatcherFlags::FileName)
         {
