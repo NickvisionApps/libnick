@@ -14,7 +14,7 @@ env:
   VCPKG_ROOT: ${{github.workspace}}/vcpkg
 jobs:
   build:
-    name: "Build on x64"
+    name: "Build on arm64"
     runs-on: macos-latest
     steps:
       - name: "Checkout"  
@@ -27,8 +27,8 @@ jobs:
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl
-          triplet: x64-osx
+          pkgs: curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl
+          triplet: arm64-osx
           revision: b27651341123a59f7187b42ef2bc476284afb310
           token: ${{ secrets.GITHUB_TOKEN }}
           github-binarycache: true
