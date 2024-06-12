@@ -1,6 +1,6 @@
 # Nickvision::Network
 
-This module contains objects for managing a system's network state.
+This module contains objects for working with the network and internet.
 
 ## Table of Contents
 - [CurlEasy](#curleasy)
