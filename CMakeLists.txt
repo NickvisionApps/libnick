@@ -27,7 +27,7 @@ include(CTest)
 
 #libnick Setup
 add_compile_definitions(SQLITE_HAS_CODEC)
-if(LINUX)
+if(NOT WIN32)
     add_compile_definitions(HAVE_USLEEP)
 endif()
 add_library (${PROJECT_NAME}
@@ -92,7 +92,7 @@ endif()
 if(WIN32)
     find_package(sqlcipher CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dwmapi Gdiplus Kernel32 Shell32 UxTheme)
-elseif(LINUX)
+else()
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)
     find_package(OpenSSL REQUIRED)

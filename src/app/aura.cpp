@@ -43,7 +43,7 @@ namespace Nickvision::App
             {
                 throw std::runtime_error("Unable to get executable directory.");
             }
-#elif defined(__linux__)
+#else
             m_executableDirectory = std::filesystem::canonical("/proc/self/exe").parent_path();
 #endif
             //Setup AppInfo
@@ -90,6 +90,15 @@ namespace Nickvision::App
     bool Aura::isRunningOnLinux() const
     {
 #ifdef __linux__
+        return true;
+#else
+        return false;
+#endif
+    }
+
+    bool Aura::isRunningOnMac() const
+    {
+#ifdef __APPLE__
         return true;
 #else
         return false;
@@ -185,7 +194,7 @@ namespace Nickvision::App
             sysLocale = StringHelpers::str(name);
             sysLocale = StringHelpers::replace(sysLocale, "-", "_");
         }
-#elif defined(__linux__)
+#else
         std::string sysLocale{ StringHelpers::split(std::locale("").name(), ".")[0] }; //split to remove the .UTF-8
 #endif
         if (!sysLocale.empty() && sysLocale != "C" && sysLocale != "en_US" && sysLocale != "*")

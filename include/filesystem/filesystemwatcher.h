@@ -92,7 +92,7 @@ namespace Nickvision::Filesystem
         std::jthread m_watchThread;
 #ifdef _WIN32
         HANDLE m_terminateEvent;
-#elif defined(__linux__)
+#else
         int m_notify;
 #endif
     };

@@ -5,7 +5,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <wincred.h>
-#elif defined(__linux__)
+#else
 #include <libsecret/secret.h>
 #endif
 
@@ -13,7 +13,7 @@ using namespace Nickvision::Helpers;
 
 namespace Nickvision::Keyring
 {
-#ifdef __linux__
+#ifndef _WIN32
     static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
 #endif
 
@@ -34,7 +34,7 @@ namespace Nickvision::Keyring
                 return Credential{ StringHelpers::str(credName), StringHelpers::str(credUrl), StringHelpers::str(credUsername), StringHelpers::str(credPassword) };
             }
         }
-#elif defined(__linux__)
+#else
         GError* error{ nullptr };
         char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };
         if (!error && password)
@@ -80,7 +80,7 @@ namespace Nickvision::Keyring
         cred.CredentialBlobSize = static_cast<unsigned long>(password.size() * sizeof(wchar_t));
         cred.CredentialBlob = LPBYTE(password.c_str());
         return CredWriteW(&cred, 0);
-#elif defined(__linux__)
+#else
         GError* error{ nullptr };
         secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
         if (error)
@@ -115,7 +115,7 @@ namespace Nickvision::Keyring
             CredFree(cred);
             return res;
         }
-#elif defined(__linux__)
+#else
         GError* error{ nullptr };
         char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), NULL) };
         if (!error && password)
@@ -142,7 +142,7 @@ namespace Nickvision::Keyring
 #ifdef _WIN32
         std::wstring wName{ StringHelpers::wstr(name) };
         return CredDeleteW(wName.c_str(), CRED_TYPE_GENERIC, 0);
-#elif defined(__linux__)
+#else
         GError* error{ nullptr };
         bool res{ secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };
         if (!error)

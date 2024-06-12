@@ -1,7 +1,7 @@
 #include "helpers/codehelpers.h"
 #ifdef _WIN32
 #include <windows.h>
-#elif defined(__linux__)
+#else
 #include <errno.h>
 #include <string.h>
 #endif
@@ -21,7 +21,7 @@ namespace Nickvision::Helpers
         std::string message(messageBuffer, size);
         LocalFree(messageBuffer);
         return message;
-#elif defined(__linux__)
+#else
         return std::string(strerror(errno));
 #endif
     }

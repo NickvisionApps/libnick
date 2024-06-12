@@ -107,7 +107,7 @@ TEST_F(AuraTest, DependencyCheck)
 {
 #ifdef _WIN32
     std::filesystem::path dependency{ Aura::getActive().findDependency("cmd") };
-#elif defined(__linux__)
+#else
     std::filesystem::path dependency{ Aura::getActive().findDependency("ls") };
 #endif
     ASSERT_TRUE(!dependency.empty());
@@ -118,7 +118,7 @@ TEST_F(AuraTest, DependencyCheck)
     {
         ASSERT_NO_THROW(ShellNotification::send(args, GetConsoleWindow()));
     }
-#elif defined(__linux__)
+#else
     ASSERT_NO_THROW(ShellNotification::send(args, "Open"));
 #endif
 }
@@ -128,7 +128,7 @@ TEST_F(AuraTest, RunningInformationChecks)
     ASSERT_TRUE(!Aura::getActive().getExecutableDirectory().empty());
 #ifdef _WIN32
     ASSERT_TRUE(Aura::getActive().isRunningOnWindows());
-#elif defined(__linux__)
+#else
     ASSERT_TRUE(Aura::getActive().isRunningOnLinux());
 #endif
     ASSERT_TRUE(Aura::getActive().isRunningViaLocal());
@@ -138,7 +138,7 @@ TEST_F(AuraTest, HelpUrlChecks)
 {
 #ifdef _WIN32
     ASSERT_EQ(Aura::getActive().getHelpUrl("index"), "https://htmlpreview.github.io/?https://github.com/NickvisionApps/Denaro/blob/main/NickvisionMoney.Shared/Docs/html/C/index.html");
-#elif defined(__linux__)
+#else
     ASSERT_EQ(Aura::getActive().getHelpUrl("index"), "help:aura/index");
 #endif
 }

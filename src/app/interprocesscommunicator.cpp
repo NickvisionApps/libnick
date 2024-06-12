@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include "helpers/stringhelpers.h"
-#ifdef __linux__
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/socket.h>
 #endif
@@ -30,7 +30,7 @@ namespace Nickvision::App
             m_serverRunning = true;
             FindClose(find);
         }
-#elif defined(__linux__)
+#else
         m_path = "/tmp/" + id;
         if (m_path.size() >= 108)
         {
@@ -73,7 +73,7 @@ namespace Nickvision::App
             CancelSynchronousIo(m_serverPipe);
             CloseHandle(m_serverPipe);
         }
-#elif defined(__linux__)
+#else
         if (m_serverSocket != -1)
         {
             int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
@@ -123,7 +123,7 @@ namespace Nickvision::App
                 WriteFile(clientPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
             }
             CloseHandle(clientPipe);
-#elif defined(__linux__)
+#else
             int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
             if (connect(clientSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) == -1)
             {
@@ -163,7 +163,7 @@ namespace Nickvision::App
                 m_commandReceived({ args });
                 DisconnectNamedPipe(m_serverPipe);
             }
-#elif defined(__linux__)
+#else
             int clientSocket{ accept(m_serverSocket, nullptr, nullptr) };
             if (!m_serverRunning)
             {

@@ -8,7 +8,7 @@
 #include "filesystem/userdirectories.h"
 #include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
-#ifdef __linux__
+#ifndef _WIN32
 #include <fcntl.h>
 #include <unistd.h>
 #include <signal.h>
@@ -31,7 +31,7 @@ namespace Nickvision::System
         m_read{ nullptr },
         m_write{ nullptr },
         m_pi{ 0 }
-#elif defined(__linux__)
+#else
         m_pid{ -1 },
         m_consoleFilePath{ UserDirectories::getCache() / (StringHelpers::newGuid() + ".lnproc") }
 #endif
@@ -66,7 +66,7 @@ namespace Nickvision::System
             CloseHandle(m_write);
             throw std::runtime_error("Failed to create process.");
         }
-#elif defined(__linux__)
+#else
         //Fork
         if((m_pid = fork()) < 0)
         {
@@ -113,7 +113,7 @@ namespace Nickvision::System
         CloseHandle(m_write);
         CloseHandle(m_pi.hProcess);
         CloseHandle(m_pi.hThread);
-#elif defined(__linux__)
+#else
         std::filesystem::remove(m_consoleFilePath);
 #endif
     }
@@ -167,7 +167,7 @@ namespace Nickvision::System
         }
 #ifdef _WIN32
         if(!ResumeThread(m_pi.hThread))
-#elif defined(__linux__)
+#else
         waitpid(m_pid, nullptr, WUNTRACED);
         if(::kill(m_pid, SIGCONT) < 0)
 #endif
@@ -189,7 +189,7 @@ namespace Nickvision::System
         }
 #ifdef _WIN32
         if(!TerminateProcess(m_pi.hProcess, 0))
-#elif defined(__linux__)
+#else
         if(::kill(m_pid, SIGTERM) < 0)
 #endif
         {
@@ -248,7 +248,7 @@ namespace Nickvision::System
         }
         DWORD exitCode{ 0 };
         GetExitCodeProcess(m_pi.hProcess, &exitCode);
-#elif defined(__linux__)
+#else
         int status{ 0 };
         bool ended{ false };
         while(!ended)

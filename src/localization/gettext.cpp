@@ -19,7 +19,7 @@ namespace Nickvision::Localization
             m_domainName = domainName;
 #ifdef _WIN32
             res = res && (wbindtextdomain(m_domainName.c_str(), Aura::getActive().getExecutableDirectory().c_str()) != nullptr);
-#elif defined(__linux__)
+#else
             res = res && (bindtextdomain(m_domainName.c_str(), Aura::getActive().getExecutableDirectory().c_str()) != nullptr);
             res = res && (bind_textdomain_codeset(m_domainName.c_str(), "UTF-8") != nullptr);
 #endif

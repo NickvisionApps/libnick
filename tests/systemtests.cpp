@@ -27,7 +27,7 @@ TEST(SystemTests, Exec)
 {
 #ifdef _WIN32
     ASSERT_EQ(Environment::exec("echo Hello World"), "Hello World\r\n");
-#elif defined(__linux__)
+#else
     ASSERT_EQ(Environment::exec("echo Hello World"), "Hello World\n");
 #endif
 }

@@ -12,7 +12,7 @@
 #include "processexitedeventargs.h"
 #ifdef _WIN32
 #include <windows.h>
-#elif defined(__linux__)
+#else
 #include <sys/types.h>
 #endif
 
@@ -102,7 +102,7 @@ namespace Nickvision::System
         HANDLE m_read;
         HANDLE m_write;
         PROCESS_INFORMATION m_pi;
-#elif defined(__linux__)
+#else
         pid_t m_pid;
         std::filesystem::path m_consoleFilePath;
 #endif

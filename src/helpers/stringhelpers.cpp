@@ -9,7 +9,7 @@
 #include <curl/curl.h>
 #ifdef _WIN32
 #include <windows.h>
-#elif defined(__linux__)
+#else
 #include <uuid/uuid.h>
 #endif
 
@@ -154,7 +154,7 @@ namespace Nickvision::Helpers
             (unsigned char)win.Data4[6],
             (unsigned char)win.Data4[7]
         };
-    #elif defined(__linux__)
+    #else
         uuid_generate(guid.data());
     #endif
         std::ostringstream out;

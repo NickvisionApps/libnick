@@ -160,6 +160,10 @@ Path: `Nickvision::App::Aura`
   ```
     - Whether or not the app is running on Linux
 - ```
+  bool IsRunningOnMac: get
+  ```
+    - Whether or not the app is running on macOS
+- ```
   bool IsRunningViaFlatpak: get
   ```
     - Whether or not the app is running via Flatpak

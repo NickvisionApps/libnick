@@ -1,4 +1,4 @@
-#ifdef __linux__
+#ifndef _WIN32
 
 /*
 ** 2001-09-15
@@ -12897,4 +12897,4 @@ struct fts5_api {
 
 /******** End of fts5.h *********/
 
-#endif //__linux__
+#endif //_WIN32

@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include "helpers/stringhelpers.h"
 #include "system/environment.h"
-#ifdef __linux__
+#ifndef _WIN32
 #include <gio/gio.h>
 #endif
 
@@ -17,7 +17,7 @@ namespace Nickvision::Network
         m_netListManager{ nullptr },
         m_connectionPoint{ nullptr },
         m_cookie{ 0 }
-#elif defined(__linux__)
+#else
         m_networkChangedHandlerId{ 0 }
 #endif
     {
@@ -45,7 +45,7 @@ namespace Nickvision::Network
         {
             throw std::runtime_error("Unable to get advice connection point.");
         }
-#elif defined(__linux__)
+#else
         m_networkChangedHandlerId = g_signal_connect_data(G_OBJECT(g_network_monitor_get_default()), "network-changed", G_CALLBACK((void(*)(GNetworkMonitor*, bool, void*))([](GNetworkMonitor*, bool, void* data)
         {
             static_cast<NetworkMonitor*>(data)->checkConnectionState();
@@ -62,7 +62,7 @@ namespace Nickvision::Network
     {
 #ifdef _WIN32
         m_connectionPoint->Unadvise(m_cookie);
-#elif defined(__linux__)
+#else
         g_signal_handler_disconnect(G_OBJECT(g_network_monitor_get_default()), m_networkChangedHandlerId);
 #endif
     }
@@ -106,7 +106,7 @@ namespace Nickvision::Network
                     newState = NetworkState::ConnectedLocal;
                 }
             }
-#elif defined(__linux__)
+#else
             GNetworkConnectivity connection{ g_network_monitor_get_connectivity(g_network_monitor_get_default()) };
             if (connection == G_NETWORK_CONNECTIVITY_LOCAL)
             {

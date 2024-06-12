@@ -14,7 +14,7 @@ namespace Nickvision::Filesystem
         {
 #ifdef _WIN32
             return StringHelpers::split<std::filesystem::path>(env, ";");
-#elif defined(__linux__)
+#else
             return StringHelpers::split<std::filesystem::path>(env, ":");
 #endif
         }
