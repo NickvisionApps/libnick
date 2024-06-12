@@ -30,13 +30,15 @@ namespace Nickvision::Filesystem
 #elif defined(__APPLE__)
         std::string pathString{ path.string() };
         FSEventStreamContext context{ 0, this, nullptr, nullptr, nullptr };
-        m_stream = FSEventStreamCreate(nullptr, &callback, &context, CFArrayCreate(nullptr, static_cast<const void**>(&pathString), 1, nullptr), kFSEventStreamEventIdSinceNow, 1.0, kFSEventStreamCreateFlagFileEvents);
+        CFStringRef paths[1];
+        paths[0] = CFStringCreateWithCString(NULL, pathString.c_str(), kCFStringEncodingUTF8)
+        m_stream = FSEventStreamCreate(nullptr, &callback, &context, CFArrayCreate(nullptr, static_cast<const void**>(paths), 1, nullptr), kFSEventStreamEventIdSinceNow, 1.0, kFSEventStreamCreateFlagFileEvents);
         if (!m_stream)
         {
             throw std::runtime_error("Unable to create event stream.");
         }
-        FSEventStreamScheduleWithRunLoop(eventStream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-        FSEventStreamStart(eventStream);
+        FSEventStreamScheduleWithRunLoop(m_stream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+        FSEventStreamStart(m_stream);
 #endif
 #ifndef __APPLE__
         m_watchThread = std::thread(&FileSystemWatcher::watch, this);
