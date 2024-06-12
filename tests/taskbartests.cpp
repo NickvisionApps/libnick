@@ -25,7 +25,7 @@ TEST_F(TaskbarTest, ConnectWindows)
         ASSERT_TRUE(m_taskbar->connect(hwnd));
     }
 }
-#else
+#elif defined(__linux__)
 TEST_F(TaskbarTest, ConnectLinux)
 {
     ASSERT_TRUE(m_taskbar->connect("firefox.desktop"));
