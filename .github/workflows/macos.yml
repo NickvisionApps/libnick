@@ -22,7 +22,9 @@ jobs:
         with:
           submodules: recursive
       - name: "Setup Environment"
-        run: mkdir build
+        run: |
+          mkdir build
+          brew install python-setuptools
       - name: "Vcpkg"
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
