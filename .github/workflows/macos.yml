@@ -25,6 +25,9 @@ jobs:
         run: |
           mkdir build
           brew install python-setuptools
+          brew install gcc@14
+          sudo ln -s $(which gcc-14) /usr/local/bin/gcc
+          sudo ln -s $(which g++-14) /usr/local/bin/g++
       - name: "Vcpkg"
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
@@ -37,7 +40,7 @@ jobs:
       - name: "Build"
         working-directory: ${{github.workspace}}/build
         run: |
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
+          cmake .. -DCMAKE_C_COMPILER=/usr/local/bin/gcc -DCMAKE_CXX_COMPILER=/usr/local/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
           cmake --build .
       - name: "Install"
         working-directory: ${{github.workspace}}/build
