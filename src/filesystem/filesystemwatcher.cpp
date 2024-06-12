@@ -28,7 +28,7 @@ namespace Nickvision::Filesystem
             throw std::runtime_error("Unable to init inotify.");
         }
 #endif
-        m_watchThread = std::jthread(&FileSystemWatcher::watch, this);
+        m_watchThread = std::thread(&FileSystemWatcher::watch, this);
     }
 
     FileSystemWatcher::~FileSystemWatcher()
@@ -40,6 +40,10 @@ namespace Nickvision::Filesystem
 #else
         close(m_notify);
 #endif
+        if(m_watchThread.joinable())
+        {
+            m_watchThread.join();
+        }
     }
 
     const std::filesystem::path& FileSystemWatcher::getPath() const

@@ -97,7 +97,7 @@ namespace Nickvision::System
         bool m_completed;
         int m_exitCode;
         std::string m_output;
-        std::jthread m_watchThread;
+        std::thread m_watchThread;
 #ifdef _WIN32
         HANDLE m_read;
         HANDLE m_write;

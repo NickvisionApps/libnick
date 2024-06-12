@@ -116,6 +116,10 @@ namespace Nickvision::System
 #else
         std::filesystem::remove(m_consoleFilePath);
 #endif
+        if(m_watchThread.joinable())
+        {
+            m_watchThread.join();
+        }
     }
 
     const std::filesystem::path& Process::getPath() const
@@ -175,7 +179,7 @@ namespace Nickvision::System
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
-        m_watchThread = std::jthread(&Process::watch, this);
+        m_watchThread = std::thread(&Process::watch, this);
         m_running = true;
         return true;
     }

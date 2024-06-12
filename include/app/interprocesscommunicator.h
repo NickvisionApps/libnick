@@ -63,7 +63,7 @@ namespace Nickvision::App
         void runServer();
         bool m_serverRunning;
         Events::Event<Events::ParamEventArgs<std::vector<std::string>>> m_commandReceived;
-        std::jthread m_server;
+        std::thread m_server;
         std::string m_path;
 #ifdef _WIN32
         HANDLE m_serverPipe;

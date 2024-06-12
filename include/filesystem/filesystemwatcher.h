@@ -89,7 +89,7 @@ namespace Nickvision::Filesystem
         Events::Event<FileSystemChangedEventArgs> m_changed;
         bool m_watching;
         std::vector<std::filesystem::path> m_extensionFilters;
-        std::jthread m_watchThread;
+        std::thread m_watchThread;
 #ifdef _WIN32
         HANDLE m_terminateEvent;
 #else

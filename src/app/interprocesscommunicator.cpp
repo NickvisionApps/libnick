@@ -60,7 +60,7 @@ namespace Nickvision::App
 #endif
         if (m_serverRunning)
         {
-            m_server = std::jthread(&InterProcessCommunicator::runServer, this);
+            m_server = std::thread(&InterProcessCommunicator::runServer, this);
         }
     }
 
@@ -83,6 +83,10 @@ namespace Nickvision::App
             unlink(m_path.c_str());
         }
 #endif
+        if (m_server.joinable())
+        {
+            m_server.join();
+        }
     }
 
     Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& InterProcessCommunicator::commandReceived()
