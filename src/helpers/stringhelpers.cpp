@@ -9,8 +9,10 @@
 #include <curl/curl.h>
 #ifdef _WIN32
 #include <windows.h>
-#else
+#elif defined(__linux__)
 #include <uuid/uuid.h>
+#elif defined(__APPLE__)
+#include "system/environment.h"
 #endif
 
 namespace Nickvision::Helpers
@@ -125,8 +127,9 @@ namespace Nickvision::Helpers
 
     std::string StringHelpers::newGuid()
     {
+#ifndef __APPLE__
         std::array<unsigned char, 16> guid;
-    #ifdef _WIN32
+#ifdef _WIN32
         GUID win;
         CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         if (CoCreateGuid(&win) != S_OK)
@@ -154,9 +157,9 @@ namespace Nickvision::Helpers
             (unsigned char)win.Data4[6],
             (unsigned char)win.Data4[7]
         };
-    #else
+#elif defined(__linux__)
         uuid_generate(guid.data());
-    #endif
+#endif
         std::ostringstream out;
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[0]);
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[1]);
@@ -179,6 +182,9 @@ namespace Nickvision::Helpers
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[14]);
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[15]);
         return out.str();
+#else
+        return System::Environment::exec("uuidgen");
+#endif
     }
 
     std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace)

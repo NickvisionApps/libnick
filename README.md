@@ -24,13 +24,20 @@ The following are a list of dependencies used by libnick.
 The above dependencies must be installed, plus the following for Windows systems:
 - sqlcipher
 
-### Linux/macOS Only
-The above dependencies must be installed, plus the following for Linux/macOS systems:
+### Linux
+The above dependencies must be installed, plus the following for Linux systems:
 - glib
 - libsecret
 - libuuid
 - openssl
     - Used for sqlcipher, as libnick manually builds sqlcipher on Linux as the vcpkg port is broken.
+
+### macOS
+The above dependencies must be installed, plus the following for macOS systems:
+- glib
+- libsecret
+- openssl
+    - Used for sqlcipher, as libnick manually builds sqlcipher on macOS as the vcpkg port is broken.
 
 ## Consuming libnick via vcpkg
 libnick is available through `vcpkg`. 
@@ -62,7 +69,7 @@ A C++20 compiler is also required to build libnick.
 1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
 #### macOS
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-osx`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
+1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl`
 
 ### Building
 1. First, clone/download the repo.
@@ -74,7 +81,13 @@ A C++20 compiler is also required to build libnick.
     - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
 1. From the `build` folder, run `cmake --build . --config Release`.
 1. After these commands complete, libnick will be successfully built and its binaries can be found in the `Release` folder of the `build` folder.
-#### Linux/macOS
+#### Linux
+1. From the `build` folder, run `cmake .. -DCMAKE_BUILD_TYPE=Release`.
+    - To skip building libnick's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
+    - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
+1. From the `build` folder, run `cmake --build .`.
+1. After these commands complete, libnick will be successfully built and its binaries can be found in the `build` folder.
+#### macOS
 1. From the `build` folder, run `cmake .. -DCMAKE_BUILD_TYPE=Release`.
     - To skip building libnick's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
     - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
