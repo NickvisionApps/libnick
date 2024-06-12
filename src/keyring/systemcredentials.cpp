@@ -118,7 +118,7 @@ namespace Nickvision::Keyring
         CFDictionaryAddValue(attributes, kSecClass, kSecClassGenericPassword);
         CFDictionaryAddValue(attributes, kSecAttrService, CFStringCreateWithCString(NULL, credential.getName().c_str(), kCFStringEncodingUTF8));
         CFDictionaryAddValue(attributes, kSecAttrAccount, CFStringCreateWithCString(NULL, credential.getUsername().c_str(), kCFStringEncodingUTF8));
-        CFDictionaryAddValue(attributes, kSecValueData, CFDataCreate(NULL, reinterpret_cast<const UInt8*>(credential.getPassword().c_str()), strlen(password)));
+        CFDictionaryAddValue(attributes, kSecValueData, CFDataCreate(NULL, reinterpret_cast<const UInt8*>(credential.getPassword().c_str()), credential.getPassword().length()));
         CFDictionaryAddValue(attributes, kSecAttrComment, CFStringCreateWithCString(NULL, credential.getUri().c_str(), kCFStringEncodingUTF8));
         OSStatus status{ SecItemAdd(attributes, nullptr) };
         CFRelease(attributes);
@@ -170,7 +170,7 @@ namespace Nickvision::Keyring
 #elif defined(__APPLE__)
         CFMutableDictionaryRef query{ CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
         CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
-        CFDictionaryAddValue(query, kSecAttrService, CFStringCreateWithCString(NULL, name.c_str(), kCFStringEncodingUTF8));
+        CFDictionaryAddValue(query, kSecAttrService, CFStringCreateWithCString(NULL, credential.getName().c_str(), kCFStringEncodingUTF8));
         CFDictionaryAddValue(query, kSecMatchLimit, kSecMatchLimitOne);
         CFDictionaryAddValue(query, kSecReturnAttributes, kCFBooleanTrue);
         CFDictionaryAddValue(query, kSecReturnData, kCFBooleanTrue);
@@ -180,7 +180,7 @@ namespace Nickvision::Keyring
             CFDictionaryRef attributes{ reinterpret_cast<CFDictionaryRef>(result) };
             CFMutableDictionaryRef updatedAttributes{ CFDictionaryCreateMutableCopy(NULL, 0, attributes) };
             CFDictionaryAddValue(updatedAttributes, kSecAttrAccount, CFStringCreateWithCString(NULL, credential.getUsername().c_str(), kCFStringEncodingUTF8));
-            CFDictionaryAddValue(updatedAttributes, kSecValueData, CFDataCreate(NULL, reinterpret_cast<const UInt8*>(credential.getPassword().c_str()), strlen(password)));
+            CFDictionaryAddValue(updatedAttributes, kSecValueData, CFDataCreate(NULL, reinterpret_cast<const UInt8*>(credential.getPassword().c_str()), credential.getPassword().length()));
             CFDictionaryAddValue(updatedAttributes, kSecAttrComment, CFStringCreateWithCString(NULL, credential.getUri().c_str(), kCFStringEncodingUTF8));
             OSStatus status{ SecItemUpdate(attributes, updatedAttributes) };
             CFRelease(updatedAttributes);
