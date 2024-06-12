@@ -1,5 +1,13 @@
 # Changelog
 
+## 2024.6.5
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+- Fixed cmake config file
+
 ## 2024.6.4
 ### Breaking Changes
 #### App
