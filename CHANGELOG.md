@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.6.4 (next)
+## 2024.6.4
 ### Breaking Changes
 #### App
 - `Nickvision::App::Aura::init()` will no longer initialize `libcurl`
