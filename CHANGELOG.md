@@ -1,5 +1,13 @@
 # Changelog
 
+## 2024.6.6 (next)
+### Breaking Changes
+None
+### New APIs
+- Added support for `macOS` across the library
+### Fixes
+None
+
 ## 2024.6.5
 ### Breaking Changes
 None

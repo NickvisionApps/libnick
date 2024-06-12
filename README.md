@@ -4,7 +4,7 @@
 
 **A cross-platform base for native Nickvision applications.**
 
-libnick provides Nickvision apps with a common set of cross-platform (Windows and Linux) APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
+libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
 ## Documentation
 
@@ -24,8 +24,8 @@ The following are a list of dependencies used by libnick.
 The above dependencies must be installed, plus the following for Windows systems:
 - sqlcipher
 
-### Linux Only
-The above dependencies must be installed, plus the following for Linux systems:
+### Linux/macOS Only
+The above dependencies must be installed, plus the following for Linux/macOS systems:
 - glib
 - libsecret
 - libuuid
@@ -60,6 +60,9 @@ A C++20 compiler is also required to build libnick.
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
 1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
+#### macOS
+1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-osx`
+1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
 
 ### Building
 1. First, clone/download the repo.
@@ -71,7 +74,7 @@ A C++20 compiler is also required to build libnick.
     - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
 1. From the `build` folder, run `cmake --build . --config Release`.
 1. After these commands complete, libnick will be successfully built and its binaries can be found in the `Release` folder of the `build` folder.
-#### Linux
+#### Linux/macOS
 1. From the `build` folder, run `cmake .. -DCMAKE_BUILD_TYPE=Release`.
     - To skip building libnick's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
     - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
