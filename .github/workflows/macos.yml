@@ -27,7 +27,7 @@ jobs:
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl
+          pkgs: curl gettext-libintl glib gtest jsoncpp maddy openssl
           triplet: arm64-osx
           revision: b27651341123a59f7187b42ef2bc476284afb310
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -46,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: ${{github.workspace}}/install
-          name: macOS-x64-Release
+          name: macOS-arm64-Release
