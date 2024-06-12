@@ -31,8 +31,8 @@ namespace Nickvision::Filesystem
         std::string pathString{ path.string() };
         FSEventStreamContext context{ 0, this, nullptr, nullptr, nullptr };
         CFStringRef paths[1];
-        paths[0] = CFStringCreateWithCString(NULL, pathString.c_str(), kCFStringEncodingUTF8)
-        m_stream = FSEventStreamCreate(nullptr, &callback, &context, CFArrayCreate(nullptr, static_cast<const void**>(paths), 1, nullptr), kFSEventStreamEventIdSinceNow, 1.0, kFSEventStreamCreateFlagFileEvents);
+        paths[0] = CFStringCreateWithCString(NULL, pathString.c_str(), kCFStringEncodingUTF8);
+        m_stream = FSEventStreamCreate(nullptr, &callback, &context, CFArrayCreate(nullptr, reinterpret_cast<const void**>(paths), 1, nullptr), kFSEventStreamEventIdSinceNow, 1.0, kFSEventStreamCreateFlagFileEvents);
         if (!m_stream)
         {
             throw std::runtime_error("Unable to create event stream.");
