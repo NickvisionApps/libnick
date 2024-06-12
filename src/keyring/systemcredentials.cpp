@@ -5,15 +5,18 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <wincred.h>
-#else
+#elif defined(__linux__)
 #include <libsecret/secret.h>
+#elif defined(__APPLE__)
+#include <CoreFoundation/CoreFoundation.h>
+#include <Security/Security.h>
 #endif
 
 using namespace Nickvision::Helpers;
 
 namespace Nickvision::Keyring
 {
-#ifndef _WIN32
+#ifdef __linux__
     static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
 #endif
 
@@ -34,7 +37,7 @@ namespace Nickvision::Keyring
                 return Credential{ StringHelpers::str(credName), StringHelpers::str(credUrl), StringHelpers::str(credUsername), StringHelpers::str(credPassword) };
             }
         }
-#else
+#elif defined(__linux__)
         GError* error{ nullptr };
         char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };
         if (!error && password)
@@ -47,6 +50,27 @@ namespace Nickvision::Keyring
         {
             g_error_free(error);
         }
+#elif defined(__APPLE__)
+        CFMutableDictionaryRef query{ CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
+        CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
+        CFDictionaryAddValue(query, kSecAttrService, CFStringCreateWithCString(NULL, name.c_str(), kCFStringEncodingUTF8));
+        CFDictionaryAddValue(query, kSecMatchLimit, kSecMatchLimitOne);
+        CFDictionaryAddValue(query, kSecReturnAttributes, kCFBooleanTrue);
+        CFDictionaryAddValue(query, kSecReturnData, kCFBooleanTrue);
+        CFTypeRef result{ nullptr };
+        if(SecItemCopyMatching(query, &result) == errSecSuccess)
+        {
+            CFDictionaryRef attributes{ reinterpret_cast<CFDictionaryRef>(result) };
+            CFStringRef username{ reinterpret_cast<CFStringRef>(CFDictionaryGetValue(attributes, kSecAttrAccount)) };
+            CFDataRef passwordData{ reinterpret_cast<CFDataRef>(CFDictionaryGetValue(attributes, kSecValueData)) };
+            const char* password{ reinterpret_cast<const char*>(CFDataGetBytePtr(passwordData)) };
+            CFStringRef uri{ reinterpret_cast<CFStringRef>(CFDictionaryGetValue(attributes, kSecAttrComment)) };
+            Credential cred{ name, CFStringGetCStringPtr(uri, kCFStringEncodingUTF8), CFStringGetCStringPtr(username, kCFStringEncodingUTF8), password };
+            CFRelease(query);
+            CFRelease(result);
+            return cred;
+        }
+        CFRelease(query);
 #endif
         return std::nullopt;
     }
@@ -80,7 +104,7 @@ namespace Nickvision::Keyring
         cred.CredentialBlobSize = static_cast<unsigned long>(password.size() * sizeof(wchar_t));
         cred.CredentialBlob = LPBYTE(password.c_str());
         return CredWriteW(&cred, 0);
-#else
+#elif defined(__linux__)
         GError* error{ nullptr };
         secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
         if (error)
@@ -89,6 +113,16 @@ namespace Nickvision::Keyring
             return false;
         }
         return true;
+#elif defined(__APPLE__)
+        CFMutableDictionaryRef attributes{ CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
+        CFDictionaryAddValue(attributes, kSecClass, kSecClassGenericPassword);
+        CFDictionaryAddValue(attributes, kSecAttrService, CFStringCreateWithCString(NULL, credential.getName().c_str(), kCFStringEncodingUTF8));
+        CFDictionaryAddValue(attributes, kSecAttrAccount, CFStringCreateWithCString(NULL, credential.getUsername().c_str(), kCFStringEncodingUTF8));
+        CFDictionaryAddValue(attributes, kSecValueData, CFDataCreate(NULL, reinterpret_cast<const UInt8*>(credential.getPassword().c_str()), strlen(password)));
+        CFDictionaryAddValue(attributes, kSecAttrComment, CFStringCreateWithCString(NULL, credential.getUri().c_str(), kCFStringEncodingUTF8));
+        OSStatus status{ SecItemAdd(attributes, nullptr) };
+        CFRelease(attributes);
+        return status == errSecSuccess;
 #endif
     }
 
@@ -115,7 +149,7 @@ namespace Nickvision::Keyring
             CredFree(cred);
             return res;
         }
-#else
+#elif defined(__linux__)
         GError* error{ nullptr };
         char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), NULL) };
         if (!error && password)
@@ -133,6 +167,28 @@ namespace Nickvision::Keyring
         {
             g_error_free(error);
         }
+#elif defined(__APPLE__)
+        CFMutableDictionaryRef query{ CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
+        CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
+        CFDictionaryAddValue(query, kSecAttrService, CFStringCreateWithCString(NULL, name.c_str(), kCFStringEncodingUTF8));
+        CFDictionaryAddValue(query, kSecMatchLimit, kSecMatchLimitOne);
+        CFDictionaryAddValue(query, kSecReturnAttributes, kCFBooleanTrue);
+        CFDictionaryAddValue(query, kSecReturnData, kCFBooleanTrue);
+        CFTypeRef result{ nullptr };
+        if(SecItemCopyMatching(query, &result) == errSecSuccess)
+        {
+            CFDictionaryRef attributes{ reinterpret_cast<CFDictionaryRef>(result) };
+            CFMutableDictionaryRef updatedAttributes{ CFDictionaryCreateMutableCopy(NULL, 0, attributes) };
+            CFDictionaryAddValue(updatedAttributes, kSecAttrAccount, CFStringCreateWithCString(NULL, credential.getUsername().c_str(), kCFStringEncodingUTF8));
+            CFDictionaryAddValue(updatedAttributes, kSecValueData, CFDataCreate(NULL, reinterpret_cast<const UInt8*>(credential.getPassword().c_str()), strlen(password)));
+            CFDictionaryAddValue(updatedAttributes, kSecAttrComment, CFStringCreateWithCString(NULL, credential.getUri().c_str(), kCFStringEncodingUTF8));
+            OSStatus status{ SecItemUpdate(attributes, updatedAttributes) };
+            CFRelease(updatedAttributes);
+            CFRelease(query);
+            CFRelease(result);
+            return status == errSecSuccess;
+        }
+        CFRelease(query);
 #endif
         return false;
     }
@@ -142,7 +198,7 @@ namespace Nickvision::Keyring
 #ifdef _WIN32
         std::wstring wName{ StringHelpers::wstr(name) };
         return CredDeleteW(wName.c_str(), CRED_TYPE_GENERIC, 0);
-#else
+#elif defined(__linux__)
         GError* error{ nullptr };
         bool res{ secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };
         if (!error)
@@ -154,6 +210,13 @@ namespace Nickvision::Keyring
             g_error_free(error);
         }
         return false;
+#elif defined(__APPLE__)
+        CFMutableDictionaryRef query{ CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
+        CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
+        CFDictionaryAddValue(query, kSecAttrService, CFStringCreateWithCString(NULL, name.c_str(), kCFStringEncodingUTF8));
+        OSStatus status{ SecItemDelete(query) };
+        CFRelease(query);
+        return status == errSecSuccess;
 #endif
     }
 }
