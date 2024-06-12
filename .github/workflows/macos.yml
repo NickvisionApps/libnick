@@ -25,9 +25,9 @@ jobs:
         run: |
           mkdir build
           brew install python-setuptools
-          brew install gcc@14
-          sudo ln -s $(which gcc-14) /usr/local/bin/gcc
-          sudo ln -s $(which g++-14) /usr/local/bin/g++
+          brew install gcc@13
+          sudo ln -s $(which gcc-13) /usr/local/bin/gcc
+          sudo ln -s $(which g++-13) /usr/local/bin/g++
       - name: "Vcpkg"
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
