@@ -19,9 +19,11 @@ namespace Nickvision::Network
     CurlEasy::CurlEasy(const std::string& url)
         : m_curl{ curl_easy_init() },
         m_headersList{ nullptr },
-        m_url{ url }
+        m_url{ url },
+        m_noBody{ false },
+        m_stream{ nullptr }
     {
-        init(url);
+        init();
     }
     
     CurlEasy::~CurlEasy()
@@ -44,14 +46,26 @@ namespace Nickvision::Network
         curl_easy_setopt(m_curl, CURLOPT_URL, m_url.c_str());
     }
 
-    void CurlEasy::setNoBody(bool value)
+    bool CurlEasy::getNoBody() const
     {
-        curl_easy_setopt(m_curl, CURLOPT_NOBODY, value);
+        return m_noBody;
+    }
+
+    void CurlEasy::setNoBody(bool noBody)
+    {
+        m_noBody = noBody;
+        curl_easy_setopt(m_curl, CURLOPT_NOBODY, m_noBody);
+    }
+
+    const std::vector<std::string>& CurlEasy::getHeaders() const
+    {
+        return m_headers;
     }
 
     void CurlEasy::setHeaders(const std::vector<std::string>& headers)
     {
-        for(const std::string& header : headers)
+        m_headers = headers;
+        for(const std::string& header : m_headers)
         {
             struct curl_slist* temp{ curl_slist_append(m_headersList, header.c_str()) };
             if(!temp)
@@ -63,16 +77,28 @@ namespace Nickvision::Network
         curl_easy_setopt(m_curl, CURLOPT_HTTPHEADER, m_headersList);
     }
 
+    const std::string& CurlEasy::getUserAgent() const
+    {
+        return m_userAgent;
+    }
+
     void CurlEasy::setUserAgent(const std::string& userAgent)
     {
-        curl_easy_setopt(m_curl, CURLOPT_USERAGENT, userAgent.c_str());
+        m_userAgent = userAgent;
+        curl_easy_setopt(m_curl, CURLOPT_USERAGENT, m_userAgent.c_str());
+    }
+
+    std::basic_ostream<char>* CurlEasy::getStream() const
+    {
+        return m_stream;
     }
 
     void CurlEasy::setStream(std::basic_ostream<char>* stream)
     {
-        if(stream)
+        m_stream = stream;
+        if(m_stream)
         {
-            curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, stream);
+            curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, m_stream);
             curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, writeDataCallback);
         }
         else
@@ -80,6 +106,11 @@ namespace Nickvision::Network
             curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, nullptr);
             curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, nullptr);
         }
+    }
+
+    const CurlProgressFunction& CurlEasy::getProgressFunction() const
+    {
+        return m_progress;
     }
 
     void CurlEasy::setProgressFunction(const CurlProgressFunction& progress)
@@ -106,9 +137,14 @@ namespace Nickvision::Network
             curl_slist_free_all(m_headersList);
             m_headersList = nullptr;
         }
+        m_url = url;
+        m_noBody = false;
+        m_headers.clear();
+        m_userAgent = "";
+        m_stream = nullptr;
         m_progress = {};
         curl_easy_reset(m_curl);
-        init(url);
+        init();
     }
 
     CURLcode CurlEasy::perform()
@@ -116,7 +152,7 @@ namespace Nickvision::Network
         return curl_easy_perform(m_curl);
     }
 
-    void CurlEasy::init(const std::string& url)
+    void CurlEasy::init()
     {
         if(!m_curl)
         {

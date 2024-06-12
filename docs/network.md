@@ -24,23 +24,23 @@ Path: `Nickvision::Network::CurlEasy`
   ```
     - The url to make requests to.
 - ```
-  bool NoBody: set
+  bool NoBody: get, set
   ```
     - Whether or not to include the body in the response.
 - ```
-  std::vector<std::string> Headers: set
+  std::vector<std::string> Headers: get, set
   ```
     - The headers to include in the request.
 - ```
-  std::string UserAgent: set
+  std::string UserAgent: get, set
   ```
     - The user agent to use in the request.
 - ```
-  std::basic_ostream<char>* Stream: set
+  std::basic_ostream<char>* Stream: get, set
   ```
     - The stream to write the response to.
 - ```
-  std::function<int(curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)> Progress: set
+  std::function<int(curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)> Progress: get, set
   ```
     - The progress function to use during the request.
 

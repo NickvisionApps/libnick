@@ -38,10 +38,20 @@ namespace Nickvision::Network
          */
         void setUrl(const std::string& url);
         /**
-         * @brief Sets whether or not to include the body in the response.
-         * @param value True to exclude the body, else false
+         * @brief Gets whether or not to include the body in the response.
+         * @return True to exclude the body, else false
          */
-        void setNoBody(bool value);
+        bool getNoBody() const;
+        /**
+         * @brief Sets whether or not to include the body in the response.
+         * @param noBody True to exclude the body, else false
+         */
+        void setNoBody(bool noBody);
+        /**
+         * @brief Gets the headers to include in the request.
+         * @return The headers to include
+         */
+        const std::vector<std::string>& getHeaders() const;
         /**
          * @brief Sets the headers to include in the request.
          * @param headers The headers to include
@@ -49,15 +59,30 @@ namespace Nickvision::Network
          */
         void setHeaders(const std::vector<std::string>& headers);
         /**
+         * @brief Gets the user agent to use in the request.
+         * @return The user agent to use
+         */
+        const std::string& getUserAgent() const;
+        /**
          * @brief Sets the user agent to use in the request.
          * @param userAgent The user agent to use
          */
         void setUserAgent(const std::string& userAgent);
         /**
+         * @brief Gets the stream to write the response to.
+         * @return The stream to write the response to
+         */
+        std::basic_ostream<char>* getStream() const;
+        /**
          * @brief Sets the stream to write the response to.
          * @param stream The stream to write the response to
          */
         void setStream(std::basic_ostream<char>* stream);
+        /**
+         * @brief Gets the progress function to use during the request.
+         * @return The progress function to use
+         */
+        const CurlProgressFunction& getProgressFunction() const;
         /**
          * @brief Sets the progress function to use during the request.
          * @param progress The progress function to use
@@ -78,13 +103,16 @@ namespace Nickvision::Network
     private:
         /**
          * @brief Initializes the curl request handle.
-         * @param url The url to make requests to
          * @throw std::runtime_error If curl fails to initialize
          */
-        void init(const std::string& url);
+        void init();
         CURL* m_curl;
         struct curl_slist* m_headersList;
         std::string m_url;
+        bool m_noBody;
+        std::vector<std::string> m_headers;
+        std::string m_userAgent;
+        std::basic_ostream<char>* m_stream;
         CurlProgressFunction m_progress;
     };
 }
