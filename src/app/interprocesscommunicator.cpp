@@ -182,7 +182,7 @@ namespace Nickvision::App
 #else
             struct sockaddr_un addr;
             socklen_t addrLen{ sizeof(addr) };
-            int clientSocket{ accept(m_serverSocket, &addr, &addrLen) };
+            int clientSocket{ accept(m_serverSocket, reinterpret_cast<struct sockaddr*>(&addr), &addrLen) };
             if (!m_serverRunning)
             {
                 break;
