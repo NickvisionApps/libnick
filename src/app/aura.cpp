@@ -7,6 +7,9 @@
 #include "system/environment.h"
 #ifdef _WIN32
 #include <windows.h>
+#elif defined(__APPLE__)
+#include <libproc.h>
+#include <unistd.h>
 #endif
 
 using namespace Nickvision::Filesystem;
@@ -43,8 +46,19 @@ namespace Nickvision::App
             {
                 throw std::runtime_error("Unable to get executable directory.");
             }
-#else
+#elif defined(__linux__)
             m_executableDirectory = std::filesystem::canonical("/proc/self/exe").parent_path();
+#elif defined(__APPLE__)
+            char pth[PROC_PIDPATHINFO_MAXSIZE];
+            int len{ proc_pidpath(getpid(), pth, sizeof(pth)) };
+            if(len > 0)
+            {
+                m_executableDirectory = std::filesystem::path(std::string(pth, len)).parent_path();
+            }
+            else
+            {
+                throw std::runtime_error("Unable to get executable directory.");
+            }
 #endif
             //Setup AppInfo
             m_appInfo.setId(id);
