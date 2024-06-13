@@ -37,12 +37,8 @@ namespace Nickvision::Filesystem
         {
             throw std::runtime_error("Unable to create event stream.");
         }
-        FSEventStreamScheduleWithRunLoop(m_stream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-        FSEventStreamStart(m_stream);
 #endif
-#ifndef __APPLE__
         m_watchThread = std::thread(&FileSystemWatcher::watch, this);
-#endif
     }
 
     FileSystemWatcher::~FileSystemWatcher()
@@ -55,15 +51,14 @@ namespace Nickvision::Filesystem
         close(m_notify);
 #elif defined(__APPLE__)
         FSEventStreamStop(m_stream);
+        CFRunLoopStop(m_runLoop);
         FSEventStreamInvalidate(m_stream);
         FSEventStreamRelease(m_stream);
 #endif
-#ifndef __APPLE__
         if(m_watchThread.joinable())
         {
             m_watchThread.join();
         }
-#endif
     }
 
     const std::filesystem::path& FileSystemWatcher::getPath() const
@@ -126,7 +121,6 @@ namespace Nickvision::Filesystem
         return true;
     }
 
-#ifndef __APPLE__
     void FileSystemWatcher::watch()
     {
 #ifdef _WIN32
@@ -269,9 +263,15 @@ namespace Nickvision::Filesystem
         {
             inotify_rm_watch(m_notify, watch);
         }
+#elif defined(__APPLE__)
+        m_runLoop = CFRunLoopGetCurrent();
+        FSEventStreamScheduleWithRunLoop(m_stream, m_runLoop, kCFRunLoopDefaultMode);
+        FSEventStreamStart(m_stream);
+        CFRunLoopRun();
 #endif
     }
-#else
+
+#ifdef __APPLE__
     void FileSystemWatcher::callback(ConstFSEventStreamRef stream, void* clientCallBackInfo, size_t numEvents, void* eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[])
     {
         FileSystemWatcher* watcher{ static_cast<FileSystemWatcher*>(clientCallBackInfo) };

@@ -39,14 +39,14 @@ namespace Nickvision::App
         memset(&m_sockaddr, 0, sizeof(m_sockaddr));
         m_sockaddr.sun_family = AF_UNIX;
         strcpy(m_sockaddr.sun_path, m_path.c_str());
-        m_serverSocket = socket(AF_UNIX, SOCK_SEQPACKET, 0);
+        m_serverSocket = socket(AF_UNIX, SOCK_STREAM, 0);
         if (m_serverSocket == -1)
         {
             throw std::runtime_error("Unable to check IPC server.");
         }
         if (bind(m_serverSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) != -1) //no server exists
         {
-            if (listen(m_serverSocket, 5) == -1)
+            if (listen(m_serverSocket, 1) == -1)
             {
                 throw std::runtime_error("Unable to listen to IPC socket.");
             }
@@ -128,7 +128,7 @@ namespace Nickvision::App
             }
             CloseHandle(clientPipe);
 #else
-            int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+            int clientSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
             if (connect(clientSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) == -1)
             {
                 return false;
@@ -175,12 +175,12 @@ namespace Nickvision::App
             }
             if (clientSocket != -1)
             {
-                ssize_t r{ read(clientSocket, &buffer[0], buffer.size()) };
-                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) }));
+                ssize_t bytesRead{ read(clientSocket, &buffer[0], buffer.size()) };
+                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(bytesRead < 0 ? 0 : bytesRead) }));
                 for (size_t i = 0; i < args.size(); i++)
                 {
-                    r = read(clientSocket, &buffer[0], buffer.size());
-                    args[i] = { &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) };
+                    bytesRead = read(clientSocket, &buffer[0], buffer.size());
+                    args[i] = { &buffer[0], static_cast<size_t>(bytesRead < 0 ? 0 : bytesRead) };
                 }
                 m_commandReceived({ args });
                 close(clientSocket);

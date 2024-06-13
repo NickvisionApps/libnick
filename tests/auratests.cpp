@@ -128,15 +128,17 @@ TEST_F(AuraTest, RunningInformationChecks)
     ASSERT_TRUE(!Aura::getActive().getExecutableDirectory().empty());
 #ifdef _WIN32
     ASSERT_TRUE(Aura::getActive().isRunningOnWindows());
-#else
+#elif defined(__linux__)
     ASSERT_TRUE(Aura::getActive().isRunningOnLinux());
+#elif defined(__APPLE__)
+    ASSERT_TRUE(Aura::getActive().isRunningOnMac());
 #endif
     ASSERT_TRUE(Aura::getActive().isRunningViaLocal());
 }
 
 TEST_F(AuraTest, HelpUrlChecks)
 {
-#ifdef _WIN32
+#ifndef __linux__
     ASSERT_EQ(Aura::getActive().getHelpUrl("index"), "https://htmlpreview.github.io/?https://github.com/NickvisionApps/Denaro/blob/main/NickvisionMoney.Shared/Docs/html/C/index.html");
 #else
     ASSERT_EQ(Aura::getActive().getHelpUrl("index"), "help:aura/index");

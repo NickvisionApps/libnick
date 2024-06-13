@@ -80,15 +80,11 @@ namespace Nickvision::Filesystem
         bool clearExtensionFilters();
 
     private:
-#ifndef __APPLE__
         /**
          * @brief Runs the loop to watch a folder for changes.
          */
         void watch();
         std::thread m_watchThread;
-#else
-        static void callback(ConstFSEventStreamRef stream, void* clientCallBackInfo, size_t numEvents, void* eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]);
-#endif
         mutable std::mutex m_mutex;
         std::filesystem::path m_path;
         bool m_includeSubdirectories;
@@ -101,7 +97,9 @@ namespace Nickvision::Filesystem
 #elif defined(__linux__)
         int m_notify;
 #elif defined(__APPLE__)
+        static void callback(ConstFSEventStreamRef stream, void* clientCallBackInfo, size_t numEvents, void* eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]);
         FSEventStreamRef m_stream;
+        CFRunLoopRef m_runLoop;
 #endif
     };
 }
