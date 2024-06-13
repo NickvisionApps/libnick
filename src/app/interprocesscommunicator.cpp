@@ -32,9 +32,13 @@ namespace Nickvision::App
         }
 #else
         m_path = "/tmp/" + id;
+#ifdef __linux__
         if (m_path.size() >= 108)
+#else
+        if (m_path.size() >= 104)
+#endif
         {
-            throw std::runtime_error("Unable to create IPC server. Application ID is too long. Must be < 103 characters.");
+            throw std::runtime_error("Unable to create IPC server. Application ID is too long.");
         }
         memset(&m_sockaddr, 0, sizeof(m_sockaddr));
         m_sockaddr.sun_family = AF_UNIX;
@@ -48,13 +52,9 @@ namespace Nickvision::App
         {
             throw std::runtime_error("Unable to check IPC server.");
         }
-        if (bind(m_serverSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) != -1) //no server exists
+        if (bind(m_serverSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == 0) //no server exists
         {
-#ifdef __linux__
             if (listen(m_serverSocket, 5) == -1)
-#else
-            if (listen(m_serverSocket, 1) == -1)
-#endif
             {
                 throw std::runtime_error("Unable to listen to IPC socket.");
             }
@@ -180,7 +180,9 @@ namespace Nickvision::App
                 DisconnectNamedPipe(m_serverPipe);
             }
 #else
-            int clientSocket{ accept(m_serverSocket, nullptr, nullptr) };
+            struct sockaddr_un addr;
+            socklen_t addrLen{ sizeof(addr) };
+            int clientSocket{ accept(m_serverSocket, &addr, &addrLen) };
             if (!m_serverRunning)
             {
                 break;
