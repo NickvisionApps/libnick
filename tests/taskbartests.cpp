@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <thread>
 #include "taskbar/taskbaritem.h"
 
 using namespace Nickvision::Taskbar;

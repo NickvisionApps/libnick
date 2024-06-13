@@ -36,7 +36,7 @@ namespace Nickvision::Keyring
         }
 #elif defined(__linux__)
         GError* error{ nullptr };
-        char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };
+        char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), nullptr) };
         if (!error && password)
         {
             Credential c{ name, "", "default", password };
@@ -82,7 +82,7 @@ namespace Nickvision::Keyring
         return CredWriteW(&cred, 0);
 #elif defined(__linux__)
         GError* error{ nullptr };
-        secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
+        secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), nullptr);
         if (error)
         {
             g_error_free(error);
@@ -117,11 +117,11 @@ namespace Nickvision::Keyring
         }
 #elif defined(__linux__)
         GError* error{ nullptr };
-        char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), NULL) };
+        char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), nullptr) };
         if (!error && password)
         {
             secret_password_free(password);
-            secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), NULL);
+            secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), nullptr);
             if (error)
             {
                 g_error_free(error);
@@ -144,7 +144,7 @@ namespace Nickvision::Keyring
         return CredDeleteW(wName.c_str(), CRED_TYPE_GENERIC, 0);
 #elif defined(__linux__)
         GError* error{ nullptr };
-        bool res{ secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), NULL) };
+        bool res{ secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), nullptr) };
         if (!error)
         {
             return res;

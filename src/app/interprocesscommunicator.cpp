@@ -44,7 +44,7 @@ namespace Nickvision::App
         {
             throw std::runtime_error("Unable to check IPC server.");
         }
-        if (bind(m_serverSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) != -1) //no server exists
+        if (bind(m_serverSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == 0) //no server exists
         {
             if (listen(m_serverSocket, 5) == -1)
             {
@@ -77,7 +77,7 @@ namespace Nickvision::App
         if (m_serverSocket != -1)
         {
             int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
-            connect(clientSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr));
+            connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr));
             close(clientSocket);
             close(m_serverSocket);
             unlink(m_path.c_str());
@@ -125,14 +125,14 @@ namespace Nickvision::App
             CloseHandle(clientPipe);
 #elif defined(__linux__)
             int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
-            if (connect(clientSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) == -1)
+            if (connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == -1)
             {
                 return false;
             }
-            write(clientSocket, argc.c_str(), argc.size());
+            send(clientSocket, argc.c_str(), argc.size(), 0);
             for (const std::string& arg : args)
             {
-                write(clientSocket, arg.c_str(), arg.size());
+                send(clientSocket, arg.c_str(), arg.size(), 0);
             }
             close(clientSocket);
 #endif
@@ -171,12 +171,12 @@ namespace Nickvision::App
             }
             if (clientSocket != -1)
             {
-                ssize_t r{ read(clientSocket, &buffer[0], buffer.size()) };
-                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) }));
+                ssize_t bytes{ recv(clientSocket, &buffer[0], buffer.size(), 0) };
+                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(bytes < 0 ? 0 : bytes) }));
                 for (size_t i = 0; i < args.size(); i++)
                 {
-                    r = read(clientSocket, &buffer[0], buffer.size());
-                    args[i] = { &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) };
+                    bytes = recv(clientSocket, &buffer[0], buffer.size(), 0);
+                    args[i] = { &buffer[0], static_cast<size_t>(bytes < 0 ? 0 : bytes) };
                 }
                 m_commandReceived({ args });
                 close(clientSocket);
