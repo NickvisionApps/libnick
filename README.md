@@ -20,12 +20,12 @@ The following are a list of dependencies used by libnick.
 - libintl
 - maddy
 
-### Windows Only
-The above dependencies must be installed, plus the following for Windows systems:
+### Windows
+The above dependencies must be installed, *plus* the following for Windows systems:
 - sqlcipher
 
 ### Linux
-The above dependencies must be installed, plus the following for Linux systems:
+The above dependencies must be installed, *plus* the following for Linux systems:
 - glib
 - libsecret
 - libuuid
@@ -33,7 +33,7 @@ The above dependencies must be installed, plus the following for Linux systems:
     - Used for sqlcipher, as libnick manually builds sqlcipher on Linux as the vcpkg port is broken.
 
 ### macOS
-The above dependencies must be installed, plus the following for macOS systems:
+The above dependencies must be installed, *plus* the following for macOS systems:
 - glib
 - libsecret
 - openssl

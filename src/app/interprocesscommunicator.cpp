@@ -39,14 +39,22 @@ namespace Nickvision::App
         memset(&m_sockaddr, 0, sizeof(m_sockaddr));
         m_sockaddr.sun_family = AF_UNIX;
         strcpy(m_sockaddr.sun_path, m_path.c_str());
+#ifdef __linux__
+        m_serverSocket = socket(AF_UNIX, SOCK_SEQPACKET, 0);
+#else
         m_serverSocket = socket(AF_UNIX, SOCK_STREAM, 0);
+#endif
         if (m_serverSocket == -1)
         {
             throw std::runtime_error("Unable to check IPC server.");
         }
-        if (bind(m_serverSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) != -1) //no server exists
+        if (bind(m_serverSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) != -1) //no server exists
         {
+#ifdef __linux__
+            if (listen(m_serverSocket, 5) == -1)
+#else
             if (listen(m_serverSocket, 1) == -1)
+#endif
             {
                 throw std::runtime_error("Unable to listen to IPC socket.");
             }
@@ -128,8 +136,12 @@ namespace Nickvision::App
             }
             CloseHandle(clientPipe);
 #else
+#ifdef __linux__
+            int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+#else
             int clientSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
-            if (connect(clientSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr)) == -1)
+#endif
+            if (connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == -1)
             {
                 return false;
             }
@@ -175,12 +187,12 @@ namespace Nickvision::App
             }
             if (clientSocket != -1)
             {
-                ssize_t bytesRead{ read(clientSocket, &buffer[0], buffer.size()) };
-                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(bytesRead < 0 ? 0 : bytesRead) }));
+                ssize_t r{ read(clientSocket, &buffer[0], buffer.size()) };
+                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) }));
                 for (size_t i = 0; i < args.size(); i++)
                 {
-                    bytesRead = read(clientSocket, &buffer[0], buffer.size());
-                    args[i] = { &buffer[0], static_cast<size_t>(bytesRead < 0 ? 0 : bytesRead) };
+                    r = read(clientSocket, &buffer[0], buffer.size());
+                    args[i] = { &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) };
                 }
                 m_commandReceived({ args });
                 close(clientSocket);
