@@ -84,7 +84,11 @@ namespace Nickvision::App
 #else
         if (m_serverSocket != -1)
         {
+#ifdef __linux__
             int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+#else
+            int clientSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
+#endif
             connect(clientSocket, (const struct sockaddr*)&m_sockaddr, sizeof(m_sockaddr));
             close(clientSocket);
             close(m_serverSocket);
@@ -180,21 +184,19 @@ namespace Nickvision::App
                 DisconnectNamedPipe(m_serverPipe);
             }
 #else
-            struct sockaddr_un addr;
-            socklen_t addrLen{ sizeof(addr) };
-            int clientSocket{ accept(m_serverSocket, reinterpret_cast<struct sockaddr*>(&addr), &addrLen) };
+            int clientSocket{ accept(m_serverSocket, nullptr, nullptr) };
             if (!m_serverRunning)
             {
                 break;
             }
             if (clientSocket != -1)
             {
-                ssize_t r{ recv(clientSocket, &buffer[0], buffer.size(), 0) };
-                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) }));
+                ssize_t bytes{ recv(clientSocket, &buffer[0], buffer.size(), 0) };
+                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(bytes < 0 ? 0 : bytes) }));
                 for (size_t i = 0; i < args.size(); i++)
                 {
-                    r = recv(clientSocket, &buffer[0], buffer.size(), 0);
-                    args[i] = { &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) };
+                    bytes = recv(clientSocket, &buffer[0], buffer.size(), 0);
+                    args[i] = { &buffer[0], static_cast<size_t>(bytes < 0 ? 0 : bytes) };
                 }
                 m_commandReceived({ args });
                 close(clientSocket);

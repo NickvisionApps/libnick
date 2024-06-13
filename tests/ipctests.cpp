@@ -45,19 +45,19 @@ std::mutex IPCTest::m_mutex = {};
 bool IPCTest::m_received = false;
 HandlerId IPCTest::m_handlerId = 0;
 
-TEST_F(IPCTest, CheckServerStatus)
+TEST_F(IPCTest, EnsureServerStart)
 {
     ASSERT_TRUE(m_ipc->isServer());
 }
 
-TEST_F(IPCTest, Client1Send)
+TEST_F(IPCTest, ClientSend)
 {
     InterProcessCommunicator client{ "org.nickvision.aura.test" };
     ASSERT_TRUE(client.isClient());
     ASSERT_TRUE(client.communicate({ "test1", "test2" }));
 }
 
-TEST_F(IPCTest, CheckServerReceived)
+TEST_F(IPCTest, EnsureServerReceived)
 {
     while(!getReceived())
     {
