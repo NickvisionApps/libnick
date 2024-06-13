@@ -25,6 +25,9 @@ jobs:
         run: |
           mkdir build
           brew install python-setuptools
+          security create-keychain -p abc123 build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p abc123 build.keychain
       - name: "Vcpkg"
         uses: johnwason/vcpkg-action@v6
         id: vcpkg

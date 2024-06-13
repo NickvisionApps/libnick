@@ -19,7 +19,7 @@ public:
         m_handlerId = m_ipc->commandReceived() += [](const ParamEventArgs<std::vector<std::string>>& e) 
         { 
             std::lock_guard<std::mutex> lock{ m_mutex };
-            m_received += (e.getParam()[0] == "test1" && e.getParam()[1] == "test2" ? 1 : 0);
+            m_received = (e.getParam()[0] == "test1" && e.getParam()[1] == "test2" ? true : false);
         };
     }
 
@@ -28,7 +28,7 @@ public:
         m_ipc->commandReceived() -= m_handlerId;
     }
 
-    static int getReceived()
+    static bool getReceived()
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_received;
@@ -36,13 +36,13 @@ public:
 
 private:
     static std::mutex m_mutex;
-    static int m_received;
+    static bool m_received;
     static HandlerId m_handlerId;
 };
 
 std::unique_ptr<InterProcessCommunicator> IPCTest::m_ipc = nullptr;
 std::mutex IPCTest::m_mutex = {};
-int IPCTest::m_received = 0;
+bool IPCTest::m_received = false;
 HandlerId IPCTest::m_handlerId = 0;
 
 TEST_F(IPCTest, CheckServerStatus)
@@ -59,6 +59,9 @@ TEST_F(IPCTest, Client1Send)
 
 TEST_F(IPCTest, CheckServerReceived)
 {
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    ASSERT_TRUE(getReceived() > 0);
+    while(!getReceived())
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    ASSERT_TRUE(getReceived());
 }

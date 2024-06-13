@@ -145,10 +145,10 @@ namespace Nickvision::App
             {
                 return false;
             }
-            write(clientSocket, argc.c_str(), argc.size());
+            send(clientSocket, argc.c_str(), argc.size(), 0);
             for (const std::string& arg : args)
             {
-                write(clientSocket, arg.c_str(), arg.size());
+                send(clientSocket, arg.c_str(), arg.size(), 0);
             }
             close(clientSocket);
 #endif
@@ -187,11 +187,11 @@ namespace Nickvision::App
             }
             if (clientSocket != -1)
             {
-                ssize_t r{ read(clientSocket, &buffer[0], buffer.size()) };
+                ssize_t r{ recv(clientSocket, &buffer[0], buffer.size(), 0) };
                 std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) }));
                 for (size_t i = 0; i < args.size(); i++)
                 {
-                    r = read(clientSocket, &buffer[0], buffer.size());
+                    r = recv(clientSocket, &buffer[0], buffer.size(), 0);
                     args[i] = { &buffer[0], static_cast<size_t>(r < 0 ? 0 : r) };
                 }
                 m_commandReceived({ args });

@@ -114,14 +114,14 @@ namespace Nickvision::Keyring
         }
         return true;
 #elif defined(__APPLE__)
-        CFMutableDictionaryRef attributes{ CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
-        CFDictionaryAddValue(attributes, kSecClass, kSecClassGenericPassword);
-        CFDictionaryAddValue(attributes, kSecAttrService, CFStringCreateWithCString(nullptr, credential.getName().c_str(), kCFStringEncodingUTF8));
-        CFDictionaryAddValue(attributes, kSecAttrAccount, CFStringCreateWithCString(nullptr, credential.getUsername().c_str(), kCFStringEncodingUTF8));
-        CFDictionaryAddValue(attributes, kSecValueData, CFDataCreate(nullptr, reinterpret_cast<const UInt8*>(credential.getPassword().c_str()), credential.getPassword().length()));
-        CFDictionaryAddValue(attributes, kSecAttrComment, CFStringCreateWithCString(nullptr, credential.getUri().c_str(), kCFStringEncodingUTF8));
-        OSStatus status{ SecItemAdd(attributes, nullptr) };
-        CFRelease(attributes);
+        CFMutableDictionaryRef query{ CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
+        CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
+        CFDictionaryAddValue(query, kSecAttrService, CFStringCreateWithCString(nullptr, credential.getName().c_str(), kCFStringEncodingUTF8));
+        CFDictionaryAddValue(query, kSecAttrAccount, CFStringCreateWithCString(nullptr, credential.getUsername().c_str(), kCFStringEncodingUTF8));
+        CFDictionaryAddValue(query, kSecValueData, CFDataCreate(nullptr, reinterpret_cast<const UInt8*>(credential.getPassword().c_str()), credential.getPassword().length()));
+        CFDictionaryAddValue(query, kSecAttrComment, CFStringCreateWithCString(nullptr, credential.getUri().c_str(), kCFStringEncodingUTF8));
+        OSStatus status{ SecItemAdd(query, nullptr) };
+        CFRelease(query);
         return status == errSecSuccess;
 #endif
     }
