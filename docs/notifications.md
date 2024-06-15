@@ -114,6 +114,16 @@ Path: `Nickvision::Notifications::NotifyIcon`
     - Returns: `true` if the tooltip was updated.
     - Returns: `false` if the tooltip was not updated.
 - ```cpp
+  const NotifyIconMenu& getContextMenu() const
+  ```
+    - Returns: The model for the context menu of the icon.
+- ```cpp
+  bool setContextMenu(const NotifyIconMenu& menu) const
+  ```
+    - Accepts: The menu for the context menu of the icon, menu.
+    - Returns: `true` if the context menu was updated.
+    - Returns: `false` if the context menu was not updated
+- ```cpp
   bool notify(const ShellNotificationSentEventArgs& e)
   ``` 
     - Accepts: The `ShellNotificationSentEventArgs` containing the information to show on the NotifyIcon, e.
@@ -144,6 +154,12 @@ Note: There are other classes, notably: `NotifyIconMenuItem`, `NotifyIconSeparat
   ```
     - Returns: `true` if the menu is empty.
     - Returns: `false` if the menu is not empty.
+- ```cpp
+  const std::shared_ptr<NotifyIconMenuItem>& get(size_t index) const
+  ```
+    - Accepts: The index of a menu item to get, index.
+    - Returns: The NotifyIconMenuItem pointer at the given index.
+    - Returns: nullptr if the index is invalid.
 - ```cpp
   size_t addSeparator()
   ```
@@ -177,6 +193,13 @@ Note: There are other classes, notably: `NotifyIconMenuItem`, `NotifyIconSeparat
     - Accepts: The index at which to remove an action item, index.
     - Returns: `true` if the action item was removed.
     - Returns: `false` if the action item was not removed. This could mean that the index was invalid or that the index pointed a menu item that was not an action item.
+- ```cpp
+  const std::shared_ptr<NotifyIconMenuItem>& operator[](size_t index) const
+  ```
+    - Accepts: The index of a menu item to get, index.
+    - Returns: The NotifyIconMenuItem pointer at the given index.
+    - Returns: nullptr if the index is invalid.
+
 
 ### Creating a Context Menu
 The `NotifyMenuItem` provides an easy API for creating context menus for a `NotifyIcon` to use within your app.
@@ -204,7 +227,7 @@ contextMenu.addAction("Exit", [&m_running]()
 {
   m_running = false;
 });
-NotifyIcon icon{ GetConsoleWindow(), contextMenu };
+NotifyIcon icon{ GetConsoleWindow(), "", contextMenu };
 ...
 ```
 ## ShellNotification

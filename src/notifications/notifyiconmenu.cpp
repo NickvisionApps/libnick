@@ -127,6 +127,10 @@ namespace Nickvision::Notifications
         m_items.erase(m_items.begin() + index);
         return true;
     }
-}
 
-#endif
+    const std::shared_ptr<NotifyIconMenuItem>& NotifyIconMenu::operator[](size_t index) const
+    {
+        return get(index);
+    }
+}
+#endif //_WIN32

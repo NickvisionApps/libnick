@@ -1,7 +1,6 @@
 #ifdef _WIN32
 #include <gtest/gtest.h>
-#include <cstdlib>
-#include <memory>
+#include <thread>
 #include "app/aura.h"
 #include "notifications/notifyicon.h"
 #include "notifications/notifyiconmenu.h"
@@ -11,15 +10,7 @@ using namespace Nickvision::App;
 using namespace Nickvision::Notifications;
 using namespace Nickvision::System;
 
-class NotifyIconTest : public testing::Test
-{
-public:
-    static std::unique_ptr<NotifyIcon> m_notifyIcon;
-};
-
-std::unique_ptr<NotifyIcon> NotifyIconTest::m_notifyIcon = nullptr;
-
-TEST_F(NotifyIconTest, CreateIcon)
+TEST(NotifyIconTests, ContextMenu)
 {
     if (GetConsoleWindow())
     {
@@ -27,11 +18,13 @@ TEST_F(NotifyIconTest, CreateIcon)
         NotifyIconMenu contextMenu;
         contextMenu.addAction("Continue", [&waiting]()
         {
-                waiting = false;
+            waiting = false;
         });
         contextMenu.addSeparator();
         contextMenu.addAction("PLACEHOLDER", [](){});
-        ASSERT_NO_THROW(m_notifyIcon = std::make_unique<NotifyIcon>(GetConsoleWindow(), contextMenu));
+        NotifyIcon& notifyIcon{ Aura::getActive().getNotifyIcon(GetConsoleWindow()) };
+        ASSERT_TRUE(notifyIcon.show());
+        ASSERT_TRUE(notifyIcon.setContextMenu(contextMenu));
         std::cout << "Click \"Continue\" via the context menu of the NotifyIcon to continue..." << std::endl;
         while (waiting)
         {
@@ -47,11 +40,12 @@ TEST_F(NotifyIconTest, CreateIcon)
     ASSERT_TRUE(true);
 }
 
-TEST_F(NotifyIconTest, ShowShellNotification)
+TEST(NotifyIconTests, Notify)
 {
-    if (m_notifyIcon)
+    if (GetConsoleWindow())
     {
-        ASSERT_NO_THROW(m_notifyIcon->notify({ "Test", "Hello from Notifications::NotifyIcon::showShellNotification()!", NotificationSeverity::Success }));
+        NotifyIcon& notifyIcon{ Aura::getActive().getNotifyIcon(GetConsoleWindow()) };
+        ASSERT_NO_THROW(notifyIcon.notify({ "Test", "Hello from Notifications::NotifyIcon::notify()!", NotificationSeverity::Success }));
     }
     ASSERT_TRUE(true);
 }

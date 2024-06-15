@@ -11,6 +11,7 @@
 #include "configurationbase.h"
 #include "interprocesscommunicator.h"
 #include "logging/logger.h"
+#include "notifications/notifyicon.h"
 
 namespace Nickvision::App
 {
@@ -130,6 +131,15 @@ namespace Nickvision::App
             }
             return *static_cast<T*>(m_configFiles[key].get());
         }
+#ifdef _WIN32
+        /**
+         * @brief Gets the application's NotifyIcon.
+         * @brief This will create the NotifyIcon on the first call. The icon will be hidden by default.
+         * @param hwnd The window handle. Must be valid for the first call.
+         * @return The NotifyIcon
+         */
+        Notifications::NotifyIcon& getNotifyIcon(HWND hwnd);
+#endif
 
     private:
         /**
@@ -143,6 +153,9 @@ namespace Nickvision::App
         std::unordered_map<std::string, std::filesystem::path> m_dependencies;
         std::unordered_map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
         std::unique_ptr<Logging::Logger> m_logger;
+#ifdef _WIN32
+        std::unique_ptr<Notifications::NotifyIcon> m_notifyIcon;
+#endif
 
     public:
         /**

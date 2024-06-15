@@ -13,6 +13,9 @@ namespace Nickvision::Events
     template<typename T>
     concept DerivedEventArgs = std::is_base_of_v<EventArgs, T>;
 
+    /**
+     * @brief The ID of a handler for an event.
+     */
     enum class HandlerId : size_t {};
 
     /**

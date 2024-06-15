@@ -108,7 +108,9 @@ namespace Nickvision::Notifications
         bool empty() const;
         /**
          * @brief Gets the NotifyIconMenuItem at a given index in the menu.
-         * @returns The NotifyIconMenuItem at the given index. nullptr if the index is invalid;
+         * @param index The index of the item to get
+         * @returns The NotifyIconMenuItem at the given index
+         * @returns nullptr if the index is invalid
          */
         const std::shared_ptr<NotifyIconMenuItem>& get(size_t index) const;
         /**
@@ -149,6 +151,13 @@ namespace Nickvision::Notifications
          * @return True if the action item was successfully removed, else false
          */
         bool removeAction(size_t index);
+        /**
+         * @brief Gets the NotifyIconMenuItem at a given index in the menu.
+         * @param index The index of the item to get
+         * @returns The NotifyIconMenuItem at the given index
+         * @returns nullptr if the index is invalid
+         */
+        const std::shared_ptr<NotifyIconMenuItem>& operator[](size_t index) const;
 
     private:
         std::vector<std::shared_ptr<NotifyIconMenuItem>> m_items;

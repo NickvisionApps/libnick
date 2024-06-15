@@ -25,11 +25,12 @@ namespace Nickvision::Notifications
         /**
          * @brief Constructs a NotifyIcon.
          * @param hwnd The HWND handle of the main application window
+         * @param tooltip The tooltip text of the icon
          * @param menu The model for the context menu of the NotifyIcon
          * @param hidden Whether or not the NotifyIcon should be hidden by default
          * @throw std::runtime_error Thrown if unable to create the NotifyIcon
          */
-        NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu = { }, bool hidden = false);
+        NotifyIcon(HWND hwnd, const std::wstring& tooltip, const NotifyIconMenu& contextMenu = { }, bool hidden = false);
         /**
          * @brief Destructs a NotifyIcon. 
          */
@@ -56,6 +57,17 @@ namespace Nickvision::Notifications
          */
         bool setTooltip(const std::wstring& tooltip);
         /**
+         * @brief Gets the context menu of the icon.
+         * @return The model for the context menu
+         */
+        const NotifyIconMenu& getContextMenu() const;
+        /**
+         * @brief Sets the context menu of the icon.
+         * @param menu The model for the context menu
+         * @return True if the context menu was updated, else false
+         */
+        bool setContextMenu(const NotifyIconMenu& menu);
+        /**
          * @brief Shows a notification from the icon.
          * @brief Supports the action "open" with action param being a path of a file or folder to open.
          * @param e ShellNotificationSentEventArgs
@@ -69,6 +81,11 @@ namespace Nickvision::Notifications
          * @return NOTIFYICONDATAW
          */
         NOTIFYICONDATAW getBaseNotifyIconData();
+        /**
+         * @brief Creates the context menu for the NotifyIcon.
+         * @return True if the context menu was created, else false
+         */
+        bool createContextMenu();
         /**
          * @brief Handles a WM_NOTIFYICON_EVENT message.
          * @param wParam WPARAM

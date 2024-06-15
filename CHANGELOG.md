@@ -7,10 +7,17 @@
 #### Helpers
 - `Nickvision::Helpers::StringHelpers::encode` now accepts `std::vector<std::byte>` instead of `std::vector<std::uint_8>`
 - `Nickvision::Helpers::StringHelpers::decode` now returns `std::vector<std::byte>` instead of `std::vector<std::uint_8>`
+#### Notifications
+- `Nickvision::Notifications::NotifyIcon` constructor now requires specification of the tooltip string
 ### New APIs
+#### App
+- `Nickvision::App::Aura::getNotifyIcon()`
 #### Helpers
 - `Nickvision::Helpers::CodeHelpers::readFileBytes()`
 - `Nickvision::Helpers::CodeHelpers::writeFileBytes()`
+#### Notifications
+- `Nickvision::Notifications::NotifyIcon::getContextMenu()`
+- `Nickvision::Notifications::NotifyIcon::setContextMenu()`
 ### Fixes
 - Enum flag operators are now `constexpr` where applicable
 

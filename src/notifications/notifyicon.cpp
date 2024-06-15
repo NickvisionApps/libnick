@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <strsafe.h>
 #include "app/aura.h"
+#include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
 
 using namespace Nickvision::App;
@@ -12,12 +13,14 @@ namespace Nickvision::Notifications
 {
     std::unordered_map<HWND, NotifyIcon*> NotifyIcon::m_icons = {};
 
-    NotifyIcon::NotifyIcon(HWND hwnd, const NotifyIconMenu& contextMenu, bool hidden)
+    NotifyIcon::NotifyIcon(HWND hwnd, const std::wstring& tooltip, const NotifyIconMenu& contextMenu, bool hidden)
         : m_className{ StringHelpers::wstr(StringHelpers::newGuid()) },
         m_isHidden{ hidden },
-        m_tooltip{ StringHelpers::wstr(Aura::getActive().getAppInfo().getName()) },
+        m_tooltip{ tooltip },
         m_contextMenu{ contextMenu },
-        m_hwnd{ nullptr }
+        m_hwnd{ nullptr },
+        m_guid{ 0 },
+        m_hmenu{ nullptr }
     {
         CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         //Get app icons
@@ -58,18 +61,18 @@ namespace Nickvision::Notifications
         ATOM registeredClass{ RegisterClassExW(&windowClass) };
         if (registeredClass == 0)
         {
-            throw std::runtime_error("Unable to register window class: " + std::to_string(GetLastError()) + ".");
+            throw std::runtime_error("Unable to register window class: " + CodeHelpers::getLastSystemError());
         }
         m_hwnd = CreateWindowExW(0, m_className.c_str(), L"libnickNotifyIcon", WS_CHILD, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd, nullptr, nullptr, nullptr);
         if (!m_hwnd)
         {
-            throw std::runtime_error("Unable to create window: " + std::to_string(GetLastError()) + ".");
+            throw std::runtime_error("Unable to create window: " + CodeHelpers::getLastSystemError());
         }
         m_icons.insert({ m_hwnd, this });
         //Create the NotifyIcon
         if (CoCreateGuid(&m_guid) != S_OK)
         {
-            throw std::runtime_error("Unable to create guid: " + std::to_string(GetLastError()) + ".");
+            throw std::runtime_error("Unable to create guid: " + CodeHelpers::getLastSystemError());
         }
         NOTIFYICONDATAW notify{ getBaseNotifyIconData() };
         notify.uFlags |= NIF_ICON | NIF_TIP;
@@ -78,43 +81,13 @@ namespace Nickvision::Notifications
         notify.uVersion = NOTIFYICON_VERSION_4;
         if (!Shell_NotifyIconW(NIM_ADD, &notify))
         {
-            throw std::runtime_error("Unable to create NotifyIcon: " + std::to_string(GetLastError()) + ".");
+            throw std::runtime_error("Unable to create NotifyIcon: " + CodeHelpers::getLastSystemError());
         }
         Shell_NotifyIconW(NIM_SETVERSION, &notify);
         //Create context menu
-        if (!m_contextMenu.empty())
+        if(!createContextMenu())
         {
-            m_hmenu = CreatePopupMenu();
-            if (!m_hmenu)
-            {
-                throw std::runtime_error("Unable to create menu: " + std::to_string(GetLastError()) + ".");
-            }
-            for (size_t i = 0; i < m_contextMenu.size(); i++)
-            {
-                const std::shared_ptr<NotifyIconMenuItem>& item{ m_contextMenu.get(i) };
-                if (item->getType() == NotifyIconMenuItemType::Action)
-                {
-                    const NotifyIconActionMenuItem* action{ static_cast<NotifyIconActionMenuItem*>(item.get()) };
-                    std::wstring label{ StringHelpers::wstr(action->getLabel()) };
-                    MENUITEMINFOW actionItem{ 0 };
-                    actionItem.cbSize = sizeof(actionItem);
-                    actionItem.fMask = MIIM_ID | MIIM_FTYPE | MIIM_STRING;
-                    actionItem.fType = MFT_STRING;
-                    actionItem.wID = static_cast<unsigned int>(IDM_CONTEXT_MENU + i);
-                    actionItem.dwTypeData = LPWSTR(label.c_str());
-                    actionItem.cch = static_cast<unsigned int>(label.size());
-                    InsertMenuItemW(m_hmenu, static_cast<unsigned int>(i), TRUE, &actionItem);
-                }
-                else if (item->getType() == NotifyIconMenuItemType::Separator)
-                {
-                    MENUITEMINFOW separatorItem{ 0 };
-                    separatorItem.cbSize = sizeof(separatorItem);
-                    separatorItem.fMask = MIIM_ID | MIIM_FTYPE;
-                    separatorItem.fType = MFT_SEPARATOR;
-                    separatorItem.wID = static_cast<unsigned int>(IDM_CONTEXT_MENU + i);
-                    InsertMenuItemW(m_hmenu, static_cast<unsigned int>(i), TRUE, &separatorItem);
-                }
-            }
+            throw std::runtime_error("Unable to create context menu: " + CodeHelpers::getLastSystemError());
         }
         //Use dark mode if needed
         HMODULE uxTheme{ LoadLibraryExA("uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32) };
@@ -171,6 +144,17 @@ namespace Nickvision::Notifications
         return Shell_NotifyIconW(NIM_MODIFY, &notify) == TRUE;
     }
 
+    const NotifyIconMenu& NotifyIcon::getContextMenu() const
+    {
+        return m_contextMenu;
+    }
+
+    bool NotifyIcon::setContextMenu(const NotifyIconMenu& menu)
+    {
+        m_contextMenu = menu;
+        return createContextMenu();
+    }
+
     bool NotifyIcon::notify(const ShellNotificationSentEventArgs& e)
     {
         std::wstring message{ StringHelpers::wstr(e.getMessage()) };
@@ -224,6 +208,51 @@ namespace Nickvision::Notifications
         return notify;
     }
 
+    bool NotifyIcon::createContextMenu()
+    {
+        if(m_hmenu)
+        {
+            DestroyMenu(m_hmenu);
+            m_hmenu = nullptr;
+        }
+        if(!m_contextMenu.empty())
+        {
+            m_hmenu = CreatePopupMenu();
+            if (!m_hmenu)
+            {
+                std::cout << "here1" << std::endl;
+                return false;
+            }
+            for (size_t i = 0; i < m_contextMenu.size(); i++)
+            {
+                const std::shared_ptr<NotifyIconMenuItem>& item{ m_contextMenu[i] };
+                if (item->getType() == NotifyIconMenuItemType::Action)
+                {
+                    const NotifyIconActionMenuItem* action{ static_cast<NotifyIconActionMenuItem*>(item.get()) };
+                    std::wstring label{ StringHelpers::wstr(action->getLabel()) };
+                    MENUITEMINFOW actionItem{ 0 };
+                    actionItem.cbSize = sizeof(actionItem);
+                    actionItem.fMask = MIIM_ID | MIIM_FTYPE | MIIM_STRING;
+                    actionItem.fType = MFT_STRING;
+                    actionItem.wID = static_cast<unsigned int>(IDM_CONTEXT_MENU + i);
+                    actionItem.dwTypeData = LPWSTR(label.c_str());
+                    actionItem.cch = static_cast<unsigned int>(label.size());
+                    InsertMenuItemW(m_hmenu, static_cast<unsigned int>(i), TRUE, &actionItem);
+                }
+                else if (item->getType() == NotifyIconMenuItemType::Separator)
+                {
+                    MENUITEMINFOW separatorItem{ 0 };
+                    separatorItem.cbSize = sizeof(separatorItem);
+                    separatorItem.fMask = MIIM_ID | MIIM_FTYPE;
+                    separatorItem.fType = MFT_SEPARATOR;
+                    separatorItem.wID = static_cast<unsigned int>(IDM_CONTEXT_MENU + i);
+                    InsertMenuItemW(m_hmenu, static_cast<unsigned int>(i), TRUE, &separatorItem);
+                }
+            }
+        }
+        return true;
+    }
+
     LRESULT NotifyIcon::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         if (uMsg == WM_NOTIFYICON_EVENT) //NotifyIcon event
@@ -259,9 +288,9 @@ namespace Nickvision::Notifications
         else if (uMsg == WM_COMMAND) //ContextMenu event
         {
             int index{ LOWORD(wParam) - IDM_CONTEXT_MENU };
-            if (m_contextMenu.size() != 0 && index >= 0 && index < m_contextMenu.size())
+            const std::shared_ptr<NotifyIconMenuItem> item{ m_contextMenu[index] };
+            if(item)
             {
-                const std::shared_ptr<NotifyIconMenuItem> item{ m_contextMenu.get(index) };
                 if (item->getType() == NotifyIconMenuItemType::Action)
                 {
                     const NotifyIconActionMenuItem* action{ static_cast<NotifyIconActionMenuItem*>(item.get()) };
@@ -282,4 +311,4 @@ namespace Nickvision::Notifications
         return DefWindowProcW(hwnd, uMsg, wParam, lParam);
     }
 }
-#endif
+#endif //_WIN32

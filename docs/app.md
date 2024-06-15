@@ -209,6 +209,14 @@ Path: `Nickvision::App::Aura`
     - Throws: `std::invalid_argument` if key is empty
     - Note: T must be a type that derives from `Nickvision::ConfigurationBase`
     - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
+- ```cpp
+  Notifications::NotifyIcon& getNotifyIcon(HWND hwnd)
+  ```
+    - Accepts: The window handle for the notify icon, hwnd.
+    - Returns: The application's NotifyIcon.
+    - Note: The hwnd only needs to be valid on the first call to establish the new NotifyIcon.
+    - Note: The new NotifyIcon will be hidden by default.
+    - Note: This function is only available on Windows.
 
 ### Static Functions
 - ```cpp
