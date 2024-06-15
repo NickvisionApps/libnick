@@ -13,7 +13,7 @@ namespace Nickvision::Events
     template<typename T>
     concept DerivedEventArgs = std::is_base_of_v<EventArgs, T>;
 
-    using HandlerId = size_t;
+    enum class HandlerId : size_t {};
 
     /**
      * @brief An event that can have handlers subscribe to it, which in turn will be called when the event is invoked.
@@ -54,7 +54,7 @@ namespace Nickvision::Events
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
             m_handlers.push_back(handler);
-            return m_handlers.size() - 1;
+            return HandlerId{ m_handlers.size() - 1 };
         }
         /**
          * @brief Unsubscribes a handler from the event.
@@ -63,11 +63,11 @@ namespace Nickvision::Events
         void unsubscribe(HandlerId id)
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
-            if (id < 0 || id >= m_handlers.size())
+            if (static_cast<size_t>(id) < 0 || static_cast<size_t>(id) >= m_handlers.size())
             {
                 return;
             }
-            m_handlers.erase(m_handlers.begin() + id);
+            m_handlers.erase(m_handlers.begin() + static_cast<size_t>(id));
         }
         /**
          * @brief Invokes the event, calling all handlers.

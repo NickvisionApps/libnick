@@ -3,6 +3,7 @@
 
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 
+#include <cstddef>
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -18,13 +19,13 @@ namespace Nickvision::Helpers::StringHelpers
      * @param base64 The base64 encoded string
      * @return The bytes list from the base64 encoded string, empty list if error
      */
-    std::vector<std::uint8_t> decode(const std::string& base64);
+    std::vector<std::byte> decode(const std::string& base64);
     /**
      * @brief Converts a list of bytes into a base64 encoded string.
      * @param bytes The list of bytes
      * @return The base64 encoded string of the bytes list
      */
-    std::string encode(const std::vector<std::uint8_t>& bytes);
+    std::string encode(const std::vector<std::byte>& bytes);
     /**
      * @brief Gets whether or not the provided string is a valid url
      * @param s The string to check

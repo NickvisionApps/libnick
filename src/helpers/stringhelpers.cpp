@@ -15,13 +15,13 @@
 
 namespace Nickvision::Helpers
 {
-    std::vector<std::uint8_t> StringHelpers::decode(const std::string& base64)
+    std::vector<std::byte> StringHelpers::decode(const std::string& base64)
     {
         if(base64.empty() || base64.size() % 4 != 0)
         {
             return {};
         }
-        static const std::uint8_t lookup[128]{ 
+        static const unsigned char lookup[128]{ 
         255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
         255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
         255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,  62, 255,  62, 255,  63,
@@ -30,26 +30,26 @@ namespace Nickvision::Helpers
         15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25, 255, 255, 255, 255,  63,
         255,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,
         41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51, 255, 255, 255, 255, 255 };
-        std::vector<std::uint8_t> bytes;
+        std::vector<std::byte> bytes;
         bytes.reserve(3 * base64.size() / 4);
         for(size_t i = 0; i < base64.size(); i += 4)
         {
-            std::uint8_t b641{ base64[i] <= 122 ? lookup[static_cast<std::uint8_t>(base64[i])] : static_cast<std::uint8_t>(0xff) };
-            std::uint8_t b642{ base64[i + 1] <= 122 ? lookup[static_cast<std::uint8_t>(base64[i + 1])] : static_cast<std::uint8_t>(0xff) };
-            std::uint8_t b643{ base64[i + 2] <= 122 ? lookup[static_cast<std::uint8_t>(base64[i + 2])] : static_cast<std::uint8_t>(0xff) };
-            std::uint8_t b644{ base64[i + 3] <= 122 ? lookup[static_cast<std::uint8_t>(base64[i + 3])] : static_cast<std::uint8_t>(0xff) };
-            std::uint8_t b1{ static_cast<std::uint8_t>(((b641 & 0x3f) << 2) + ((b642 & 0x30) >> 4)) };
-            std::uint8_t b2{ static_cast<std::uint8_t>(((b642 & 0x0f) << 4) + ((b643 & 0x3c) >> 2)) };
-            std::uint8_t b3{ static_cast<std::uint8_t>(((b643 & 0x03) << 6) + (b644 & 0x3f)) };
-            if(b642 != static_cast<std::uint8_t>(0xff))
+            unsigned char b641{ base64[i] <= 122 ? lookup[base64[i]] : static_cast<unsigned char>(0xff) };
+            unsigned char b642{ base64[i + 1] <= 122 ? lookup[base64[i + 1]] : static_cast<unsigned char>(0xff) };
+            unsigned char b643{ base64[i + 2] <= 122 ? lookup[base64[i + 2]] : static_cast<unsigned char>(0xff) };
+            unsigned char b644{ base64[i + 3] <= 122 ? lookup[base64[i + 3]] : static_cast<unsigned char>(0xff) };
+            std::byte b1{ static_cast<unsigned char>(((b641 & 0x3f) << 2) + ((b642 & 0x30) >> 4)) };
+            std::byte b2{ static_cast<unsigned char>(((b642 & 0x0f) << 4) + ((b643 & 0x3c) >> 2)) };
+            std::byte b3{ static_cast<unsigned char>(((b643 & 0x03) << 6) + (b644 & 0x3f)) };
+            if(b642 != 0xff)
             {
                 bytes.push_back(b1);
             }
-            if(b643 != static_cast<std::uint8_t>(0xff))
+            if(b643 != 0xff)
             {
                 bytes.push_back(b2);
             }
-            if(b644 != static_cast<std::uint8_t>(0xff))
+            if(b644 != 0xff)
             {
                 bytes.push_back(b3);
             }
@@ -57,7 +57,7 @@ namespace Nickvision::Helpers
         return bytes;
     }
 
-    std::string StringHelpers::encode(const std::vector<std::uint8_t>& bytes)
+    std::string StringHelpers::encode(const std::vector<std::byte>& bytes)
     {
         if(bytes.empty())
         {
@@ -77,13 +77,13 @@ namespace Nickvision::Helpers
         for(size_t i = 0; i < stringSize / 4; i++)
         {
             size_t index{ i * 3 };
-            std::uint8_t b1{ index < bytes.size() ? bytes[index] : static_cast<std::uint8_t>(0) };
-            std::uint8_t b2{ index + 1 < bytes.size() ? bytes[index + 1] : static_cast<std::uint8_t>(0) };
-            std::uint8_t b3{ index + 2 < bytes.size() ? bytes[index + 2] : static_cast<std::uint8_t>(0) };
-            std::uint8_t b641{ static_cast<std::uint8_t>((b1 & 0xfc) >> 2) };
-            std::uint8_t b642{ static_cast<std::uint8_t>(((b1 & 0x03) << 4) + ((b2 & 0xf0) >> 4)) };
-            std::uint8_t b643{ static_cast<std::uint8_t>(((b2 & 0x0f) << 2) + ((b3 & 0xc0) >> 6)) };
-            std::uint8_t b644{ static_cast<std::uint8_t>(b3 & 0x3f) };
+            unsigned char b1{ index < bytes.size() ? static_cast<unsigned char>(bytes[index]) : static_cast<unsigned char>(0) };
+            unsigned char b2{ index + 1 < bytes.size() ? static_cast<unsigned char>(bytes[index + 1]) : static_cast<unsigned char>(0) };
+            unsigned char b3{ index + 2 < bytes.size() ? static_cast<unsigned char>(bytes[index + 2]) : static_cast<unsigned char>(0) };
+            unsigned char b641{ static_cast<unsigned char>((b1 & 0xfc) >> 2) };
+            unsigned char b642{ static_cast<unsigned char>(((b1 & 0x03) << 4) + ((b2 & 0xf0) >> 4)) };
+            unsigned char b643{ static_cast<unsigned char>(((b2 & 0x0f) << 2) + ((b3 & 0xc0) >> 6)) };
+            unsigned char b644{ static_cast<unsigned char>(b3 & 0x3f) };
             string.push_back(lookup[b641]);
             string.push_back(lookup[b642]);
             string.push_back(lookup[b643]);

@@ -16,22 +16,22 @@ namespace Nickvision::Filesystem
         LastAccess = 32
     };
 
-    inline WatcherFlags operator~(WatcherFlags a)
+    constexpr WatcherFlags operator~(WatcherFlags a)
     {
         return static_cast<WatcherFlags>(~static_cast<int>(a));
     }
 
-    inline WatcherFlags operator|(WatcherFlags a, WatcherFlags b)
+    constexpr WatcherFlags operator|(WatcherFlags a, WatcherFlags b)
     {
         return static_cast<WatcherFlags>(static_cast<int>(a) | static_cast<int>(b));
     }
 
-    inline WatcherFlags operator&(WatcherFlags a, WatcherFlags b)
+    constexpr WatcherFlags operator&(WatcherFlags a, WatcherFlags b)
     {
         return static_cast<WatcherFlags>(static_cast<int>(a) & static_cast<int>(b));
     }
 
-    inline WatcherFlags operator^(WatcherFlags a, WatcherFlags b)
+    constexpr WatcherFlags operator^(WatcherFlags a, WatcherFlags b)
     {
         return static_cast<WatcherFlags>(static_cast<int>(a) ^ static_cast<int>(b));
     }

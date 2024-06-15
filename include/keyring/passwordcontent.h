@@ -14,22 +14,22 @@ namespace Nickvision::Keyring
         Special = 8
     };
 
-    inline PasswordContent operator~(PasswordContent a)
+    constexpr PasswordContent operator~(PasswordContent a)
     {
         return static_cast<PasswordContent>(~static_cast<int>(a));
     }
 
-    inline PasswordContent operator|(PasswordContent a, PasswordContent b)
+    constexpr PasswordContent operator|(PasswordContent a, PasswordContent b)
     {
         return static_cast<PasswordContent>(static_cast<int>(a) | static_cast<int>(b));
     }
 
-    inline PasswordContent operator&(PasswordContent a, PasswordContent b)
+    constexpr PasswordContent operator&(PasswordContent a, PasswordContent b)
     {
         return static_cast<PasswordContent>(static_cast<int>(a) & static_cast<int>(b));
     }
 
-    inline PasswordContent operator^(PasswordContent a, PasswordContent b)
+    constexpr PasswordContent operator^(PasswordContent a, PasswordContent b)
     {
         return static_cast<PasswordContent>(static_cast<int>(a) ^ static_cast<int>(b));
     }

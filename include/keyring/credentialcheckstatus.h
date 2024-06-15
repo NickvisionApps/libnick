@@ -14,22 +14,22 @@ namespace Nickvision::Keyring
         InvalidUri = 8
     };
 
-    inline CredentialCheckStatus operator~(CredentialCheckStatus a)
+    constexpr CredentialCheckStatus operator~(CredentialCheckStatus a)
     {
         return static_cast<CredentialCheckStatus>(~static_cast<int>(a));
     }
 
-    inline CredentialCheckStatus operator|(CredentialCheckStatus a, CredentialCheckStatus b)
+    constexpr CredentialCheckStatus operator|(CredentialCheckStatus a, CredentialCheckStatus b)
     {
         return static_cast<CredentialCheckStatus>(static_cast<int>(a) | static_cast<int>(b));
     }
 
-    inline CredentialCheckStatus operator&(CredentialCheckStatus a, CredentialCheckStatus b)
+    constexpr CredentialCheckStatus operator&(CredentialCheckStatus a, CredentialCheckStatus b)
     {
         return static_cast<CredentialCheckStatus>(static_cast<int>(a) & static_cast<int>(b));
     }
 
-    inline CredentialCheckStatus operator^(CredentialCheckStatus a, CredentialCheckStatus b)
+    constexpr CredentialCheckStatus operator^(CredentialCheckStatus a, CredentialCheckStatus b)
     {
         return static_cast<CredentialCheckStatus>(static_cast<int>(a) ^ static_cast<int>(b));
     }

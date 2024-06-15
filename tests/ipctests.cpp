@@ -43,7 +43,7 @@ private:
 std::unique_ptr<InterProcessCommunicator> IPCTest::m_ipc = nullptr;
 std::mutex IPCTest::m_mutex = {};
 bool IPCTest::m_received = false;
-HandlerId IPCTest::m_handlerId = 0;
+HandlerId IPCTest::m_handlerId = {};
 
 TEST_F(IPCTest, EnsureServerStart)
 {

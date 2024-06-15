@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include <fstream>
-#include <iterator>
+#include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
 #include "network/webclient.h"
 
@@ -107,11 +106,11 @@ TEST(StringTests, Replace2)
 
 TEST(StringTests, Base641)
 {
-    std::vector<unsigned char> s{ 'A', 'B', 'X', 'J', 'K' };
+    std::vector<std::byte> s{ std::byte{'A'}, std::byte{'B'}, std::byte{'X'}, std::byte{'J'}, std::byte{'K'} };
     std::string base64;
     ASSERT_NO_THROW(base64 = StringHelpers::encode(s));
     ASSERT_FALSE(base64.empty());
-    std::vector<unsigned char> bytes;
+    std::vector<std::byte> bytes;
     ASSERT_NO_THROW(bytes = StringHelpers::decode(base64));
     ASSERT_EQ(bytes.size(), s.size());
     for(size_t i = 0; i < bytes.size(); i++)
@@ -122,11 +121,11 @@ TEST(StringTests, Base641)
 
 TEST(StringTests, Base642)
 {
-    std::vector<unsigned char> s{ 5, 89, 34, 112, 9, 34, 12, 7, 32, 67, 98, 45, 67, 234 };
+    std::vector<std::byte> s{ std::byte{5}, std::byte{89}, std::byte{34}, std::byte{112}, std::byte{9}, std::byte{34}, std::byte{12}, std::byte{7}, std::byte{32}, std::byte{67}, std::byte{98}, std::byte{45}, std::byte{67}, std::byte{234} };
     std::string base64;
     ASSERT_NO_THROW(base64 = StringHelpers::encode(s));
     ASSERT_FALSE(base64.empty());
-    std::vector<unsigned char> bytes;
+    std::vector<std::byte> bytes;
     ASSERT_NO_THROW(bytes = StringHelpers::decode(base64));
     ASSERT_EQ(bytes.size(), s.size());
     for(size_t i = 0; i < bytes.size(); i++)
@@ -139,19 +138,17 @@ TEST(StringTests, Base643)
 {
     WebClient client;
     client.downloadFile("https://www.freeiconspng.com/thumbs/pin-png/pin-png-24.png", "img.png");
-    std::ifstream img{ "img.png", std::ios_base::binary };
-    std::vector<unsigned char> s{ std::istreambuf_iterator<char>(img), std::istreambuf_iterator<char>() };
+    std::vector<std::byte> s{ CodeHelpers::readFileBytes("img.png") };
     std::string base64;
     ASSERT_NO_THROW(base64 = StringHelpers::encode(s));
     ASSERT_FALSE(base64.empty());
-    std::vector<unsigned char> bytes;
+    std::vector<std::byte> bytes;
     ASSERT_NO_THROW(bytes = StringHelpers::decode(base64));
     ASSERT_EQ(bytes.size(), s.size());
     for(size_t i = 0; i < bytes.size(); i++)
     {
         ASSERT_EQ(bytes[i], s[i]);
     }
-    img.close();
     std::filesystem::remove("img.png");
 }
 

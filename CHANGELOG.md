@@ -1,5 +1,19 @@
 # Changelog
 
+## 2024.6.6
+### Breaking Changes
+#### Events
+- `Nickvision::Events::HandlerId` is now defined as `enum class HandlerId : size_t` instead of `using HandlerId = size_t`
+#### Helpers
+- `Nickvision::Helpers::StringHelpers::encode` now accepts `std::vector<std::byte>` instead of `std::vector<std::uint_8>`
+- `Nickvision::Helpers::StringHelpers::decode` now returns `std::vector<std::byte>` instead of `std::vector<std::uint_8>`
+### New APIs
+#### Helpers
+- `Nickvision::Helpers::CodeHelpers::readFileBytes()`
+- `Nickvision::Helpers::CodeHelpers::writeFileBytes()`
+### Fixes
+- Enum flag operators are now `constexpr` where applicable
+
 ## 2024.6.5
 ### Breaking Changes
 None

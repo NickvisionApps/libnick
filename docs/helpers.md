@@ -17,14 +17,25 @@ Path: `Nickvision::Helpers::CodeHelpers`
 
 ### Functions
 - ```cpp
-  std::string getLastSystemError();
+  std::string getLastSystemError()
   ```
     - Returns: The last system api call error message.
+- ```cpp
+  std::vector<std::byte> readFileBytes(const std::filesystem::path& path)
+  ```
+    - Accepts: The path of a file to read bytes from, path.
+    - Returns: The byte vector from the file.
 - ```cpp
   const T& unmove(T&& t)
   ```
     - Accepts: An rvalue, t
     - Returns: The lvalue of t.
+- ```cpp
+  bool writeFileBytes(const std::filesystem::path& path, const std::vector<std::byte>& bytes, bool overwrite)
+  ```
+    - Accepts: The path of a file to write bytes to, path, the bytes to write to the file, bytes, and whether or not to overwrite the file if it exists, overwrite.
+    - Returns: True if successful.
+    - Returns: False if not successful. False is returned if overwrite is false and the file exists.
 
 ## StringHelpers
 Description: Helper functions for working with std::string
@@ -37,13 +48,13 @@ Path: `Nickvision::Helpers::StringHelpers`
 
 ### Functions
 - ```cpp
-  std::vector<std::uint8_t> decode(const std::string& base64)
+  std::vector<std::byte> decode(const std::string& base64)
   ```
     - Accepts: A base64 encoded string
     - Returns: The list of bytes from the base64 encoded string.
     - Returns: An empty list on error.
 - ```cpp
-  std::string encode(const std::vector<std::uint8_t>& bytes)
+  std::string encode(const std::vector<std::byte>& bytes)
   ```
     - Accepts: A list of bytes (char)
     - Returns: The base64 encoded string of the bytes list.

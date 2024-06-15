@@ -131,6 +131,7 @@ export(EXPORT "${PROJECT_NAME}Targets" FILE "${CMAKE_BINARY_DIR}/cmake/${PROJECT
 if (BUILD_TESTING)
 	add_executable(${PROJECT_NAME}_test
         "tests/auratests.cpp"
+        "tests/codetests.cpp"
         "tests/databasetests.cpp"
         "tests/eventtests.cpp"
         "tests/filewatchertests.cpp"
