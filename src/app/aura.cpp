@@ -13,7 +13,6 @@ using namespace Nickvision::Filesystem;
 using namespace Nickvision::Helpers;
 using namespace Nickvision::Localization;
 using namespace Nickvision::Logging;
-using namespace Nickvision::Notifications;
 using namespace Nickvision::System;
 
 namespace Nickvision::App
@@ -217,11 +216,11 @@ namespace Nickvision::App
     }
 
 #ifdef _WIN32
-    NotifyIcon& Aura::getNotifyIcon(HWND hwnd)
+    Notifications::NotifyIcon& Aura::getNotifyIcon(HWND hwnd)
     {
         if (!m_notifyIcon)
         {
-            m_notifyIcon = std::make_unique<NotifyIcon>(hwnd, StringHelpers::wstr(m_appInfo.getName()), NotifyIconMenu(), true);
+            m_notifyIcon = std::make_unique<Notifications::NotifyIcon>(hwnd, StringHelpers::wstr(m_appInfo.getName()), Notifications::NotifyIconMenu{}, true);
         }
         return *m_notifyIcon;
     }

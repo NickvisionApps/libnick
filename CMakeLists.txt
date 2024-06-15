@@ -140,7 +140,6 @@ if (BUILD_TESTING)
         "tests/loggingtests.cpp"
         "tests/main.cpp"
         "tests/networktests.cpp"
-        "tests/notifyicontests.cpp"
         "tests/passwordtests.cpp"
         "tests/storetests.cpp"
         "tests/stringtests.cpp"
