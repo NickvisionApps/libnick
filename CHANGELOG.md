@@ -3,7 +3,7 @@
 ## 2024.6.6
 ### Breaking Changes
 #### App
-- `Nickvision::App::Aura` now disables move operations, as well as previous disabled copy operations
+- `Nickvision::App::Aura` now disables move operations, as well as previously disabled copy operations
 #### Events
 - `Nickvision::Events::HandlerId` is now defined as `enum class HandlerId : size_t` instead of `using HandlerId = size_t`
 #### Helpers
