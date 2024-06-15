@@ -24,12 +24,11 @@ namespace Nickvision::App
     class Aura
     {
     public:
+        // Delete copy and move constructors and assignment operators
         Aura(const Aura&) = delete;
+        Aura(Aura&&) = delete;
         void operator=(const Aura&) = delete;
-        /**
-         * @brief Destructs an Aura.
-         */
-        ~Aura();
+        void operator=(Aura&&) = delete;
         /**
          * @brief Initializes Aura.
          * @brief This also calls curl_global_init().

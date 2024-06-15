@@ -174,18 +174,12 @@ Path: `Nickvision::App::Aura`
 
 ### Methods
 - ```cpp
-  ~Aura()
-  ```
-    - Destructs an Aura
-    - Note: This also called curl_global_clean().
-- ```cpp
   bool init(const std::string& id, const std::string& name, const std::string& englishShortName, Logging:LogLevel logLevel)
   ```
     - Accepts: An application id, id, an application name, name, an application english short name, englishShortName, and the application log level, logLevel.
-    - Returns: True if initialized, else false
-    - Throws: `std::runtime_error` if the gettext system fails to initialize
-    - Throws: `std::runtime_error` if unable to get the executable directory path
-    - Note: This also calls curl_global_init().
+    - Returns: True if initialized, else false.
+    - Throws: `std::runtime_error` if the gettext system fails to initialize.
+    - Throws: `std::runtime_error` if unable to get the executable directory path.
     - Note: This also calls Localization::Gettext::init().
 - ```cpp
   const std::filesystem::path& findDependency(std::string dependency)

@@ -23,10 +23,6 @@ namespace Nickvision::App
 
     }
 
-    Aura::~Aura()
-    {
-    }
-
     bool Aura::init(const std::string& id, const std::string& name, const std::string& englishShortName, LogLevel logLevel)
     {
         if(!m_initialized)
