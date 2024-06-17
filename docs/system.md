@@ -6,6 +6,7 @@ This module contains various helper namespaces and objects for working with the 
 - [Environment](#environment)
 - [Process](#process)
 - [ProcessExitedEventArgs](#processexitedeventargs)
+- [SuspendInhibitor](#suspendinhibitor)
 
 ## Environment
 Description: Helper functions for working with the system shell environment.
@@ -134,3 +135,40 @@ Path: `Nickvision::System::ProcessExitedEventArgs`
   ``` 
     - Constructs a ProcessExitedEventArgs.
     - Accepts: The exit code of the process, exitCode, and the console output of the process, output.
+
+## SuspendInhibitor
+Description: An object to prevent the system from suspending.
+
+Interface: [suspendinhibitor.h](/include/system/suspendinhibitor.h)
+
+Type: `class`
+
+Path: `Nickvision::System::SuspendInhibitor`
+
+### Member Variables
+- ```cpp
+  bool IsInhibiting: get
+  ```
+    - Whether or not the system is being inhibited from suspending.
+
+### Methods
+- ```cpp
+  SuspendInhibitor()
+  ```
+    - Constructs a SuspendInhibitor.
+    - Note: This will not inhibit the system from suspending until the inhibit() function is called.
+- ```cpp
+  ~SuspendInhibitor()
+  ```
+    - Destructs a SuspendInhibitor.
+    - Note: If the system is being inhibited, it will uninhibit.
+- ```cpp
+  bool inhibit()
+  ```
+    - Returns: True if inhibiting system suspend.
+    - Returns: False if error.
+- ```cpp
+  bool uninhibit()
+  ```
+    - Returns: True if not inhibiting system suspend.
+    - Returns: False if error.
