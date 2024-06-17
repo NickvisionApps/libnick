@@ -1,5 +1,13 @@
 # Changelog
 
+## 2024.6.7 (next)
+### Breaking Changes
+None
+### New APIs
+- `Nickvision::Systems::SuspendInhibitor` class
+### Fixes
+None
+
 ## 2024.6.6
 ### Breaking Changes
 #### App

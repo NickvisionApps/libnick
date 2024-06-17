@@ -68,6 +68,7 @@ add_library (${PROJECT_NAME}
     "src/system/environment.cpp"
     "src/system/process.cpp"
     "src/system/processexitedeventargs.cpp"
+    "src/system/suspendinhibitor.cpp"
     "src/taskbar/taskbaritem.cpp"
     "src/update/updater.cpp"
     "src/update/version.cpp")
