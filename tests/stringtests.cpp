@@ -57,8 +57,8 @@ TEST(StringTests, Split2)
     ASSERT_EQ(cmd.size(), 4);
     ASSERT_EQ(cmd[0], "libnick");
     ASSERT_EQ(cmd[1], "-t");
-    ASSERT_EQ(cmd[2], "'fg sg'");
-    ASSERT_EQ(cmd[3], "\"Hello World\"");
+    ASSERT_EQ(cmd[2], "fg sg");
+    ASSERT_EQ(cmd[3], "Hello World");
 }
 
 TEST(StringTests, Split3)
@@ -67,7 +67,7 @@ TEST(StringTests, Split3)
     ASSERT_EQ(cmd.size(), 3);
     ASSERT_EQ(cmd[0], "osascript");
     ASSERT_EQ(cmd[1], "-e");
-    ASSERT_EQ(cmd[2], "'display notification \"Message\" with title \"Title\"'");
+    ASSERT_EQ(cmd[2], "display notification \"Message\" with title \"Title\"");
 }
 
 TEST(StringTests, Guid1)

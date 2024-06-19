@@ -219,7 +219,12 @@ namespace Nickvision::Helpers
         std::smatch match;
         while (std::regex_search(s, match, regex))
         {
-            args.push_back(match.str());
+            std::string arg{ match.str() };
+            if((arg[0] == '\'' && arg[arg.size() - 1] == '\'') || (arg[0] == '"' && arg[arg.size() - 1] == '"'))
+            {
+                arg = arg.substr(1, arg.size() - 2);
+            }
+            args.push_back(arg);
             s = match.suffix();
         }
         if(!s.empty())
