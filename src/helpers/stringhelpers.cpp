@@ -127,7 +127,9 @@ namespace Nickvision::Helpers
 
     std::string StringHelpers::newGuid()
     {
-#ifndef __APPLE__
+#ifdef __APPLE__
+        return System::Environment::exec("uuidgen");
+#else
         std::array<unsigned char, 16> guid;
 #ifdef _WIN32
         GUID win;
@@ -182,8 +184,6 @@ namespace Nickvision::Helpers
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[14]);
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[15]);
         return out.str();
-#else
-        return System::Environment::exec("uuidgen");
 #endif
     }
 
