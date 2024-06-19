@@ -85,12 +85,12 @@ namespace Nickvision::App
         if (m_serverSocket != -1)
         {
 #ifdef __linux__
-            int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+            int connectSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
 #else
-            int clientSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
+            int connectSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
 #endif
-            connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr));
-            close(clientSocket);
+            connect(connectSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr));
+            close(connectSocket);
             close(m_serverSocket);
             unlink(m_path.c_str());
         }
@@ -125,36 +125,37 @@ namespace Nickvision::App
         }
         if (!args.empty())
         {
-            std::string argc{ std::to_string(args.size()) };
 #ifdef _WIN32
             std::wstring wPath{ StringHelpers::wstr(m_path) };
-            HANDLE clientPipe{ CreateFileW(wPath.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
-            if (clientPipe == INVALID_HANDLE_VALUE)
+            HANDLE connectPipe{ CreateFileW(wPath.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
+            if (connectPipe == INVALID_HANDLE_VALUE)
             {
                 return false;
             }
-            WriteFile(clientPipe, argc.c_str(), DWORD(argc.size()), nullptr, nullptr);
             for (const std::string& arg : args)
             {
-                WriteFile(clientPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
+                WriteFile(connectPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
             }
-            CloseHandle(clientPipe);
+            CloseHandle(connectPipe);
 #else
 #ifdef __linux__
-            int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+            int connectSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
 #else
-            int clientSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
+            int connectSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
 #endif
-            if (connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == -1)
+            if (connect(connectSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == -1)
             {
                 return false;
             }
-            send(clientSocket, argc.c_str(), argc.size(), 0);
             for (const std::string& arg : args)
             {
-                send(clientSocket, arg.c_str(), arg.size(), 0);
+                if(write(connectSocket, arg.c_str(), arg.size()) == -1)
+                {
+                    close(connectSocket);
+                    return false;
+                }
             }
-            close(clientSocket);
+            close(connectSocket);
 #endif
         }
         if (exitIfClient)
@@ -172,34 +173,42 @@ namespace Nickvision::App
 #ifdef _WIN32
             if (ConnectNamedPipe(m_serverPipe, nullptr))
             {
+                std::vector<std::string> args;
                 DWORD read;
-                ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
-                std::vector<std::string> args(std::stoull({ &buffer[0], read }));
-                for (size_t i = 0; i < args.size(); i++)
+                do
                 {
-                    ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
-                    args[i] = { &buffer[0], read };
-                }
-                m_commandReceived({ args });
+                    if(!ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr))
+                    {
+                        break;
+                    }
+                    args.push_back({ &buffer[0], read });
+                } while (read > 0);
                 DisconnectNamedPipe(m_serverPipe);
+                m_commandReceived({ args });
             }
 #else
-            int clientSocket{ accept(m_serverSocket, nullptr, nullptr) };
+            struct sockaddr_un clientAddr;
+            memset(&clientAddr, 0, sizeof(clientAddr));
+            socklen_t clientAddrLen{ sizeof(clientAddr) };
+            int clientSocket{ accept(m_serverSocket, reinterpret_cast<struct sockaddr*>(&clientAddr), &clientAddrLen) };
             if (!m_serverRunning)
             {
                 break;
             }
             if (clientSocket != -1)
             {
-                ssize_t bytes{ recv(clientSocket, &buffer[0], buffer.size(), 0) };
-                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(bytes < 0 ? 0 : bytes) }));
-                for (size_t i = 0; i < args.size(); i++)
+                std::vector<std::string> args;
+                ssize_t bytes{ 0 };
+                do
                 {
-                    bytes = recv(clientSocket, &buffer[0], buffer.size(), 0);
-                    args[i] = { &buffer[0], static_cast<size_t>(bytes < 0 ? 0 : bytes) };
-                }
-                m_commandReceived({ args });
+                    bytes = read(clientSocket, &buffer[0], buffer.size());
+                    if (bytes > 0)
+                    {
+                        args.push_back({ &buffer[0], static_cast<size_t>(bytes) });
+                    }
+                } while (bytes > 0);
                 close(clientSocket);
+                m_commandReceived({ args });
             }
 #endif
         }
