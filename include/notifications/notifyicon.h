@@ -111,7 +111,7 @@ namespace Nickvision::Notifications
          * @param wParam WPARAM
          * @param lParam LPARAM
          */
-        static LRESULT notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+        static LRESULT CALLBACK notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     };
 }
 

@@ -130,17 +130,17 @@ namespace Nickvision::Network
     }
 
 #ifdef _WIN32
-    ULONG NetworkMonitor::AddRef()
+    ULONG STDMETHODCALLTYPE NetworkMonitor::AddRef()
     {
         return 1;
     }
 
-    ULONG NetworkMonitor::Release()
+    ULONG STDMETHODCALLTYPE NetworkMonitor::Release()
     {
         return 1;
     }
 
-    HRESULT NetworkMonitor::QueryInterface(REFIID riid, LPVOID* ppvObj)
+    HRESULT STDMETHODCALLTYPE NetworkMonitor::QueryInterface(REFIID riid, LPVOID* ppvObj)
     {
         if (!ppvObj)
         {
@@ -156,13 +156,13 @@ namespace Nickvision::Network
         return E_NOINTERFACE;
     }
 
-    HRESULT NetworkMonitor::ConnectivityChanged(NLM_CONNECTIVITY)
+    HRESULT STDMETHODCALLTYPE NetworkMonitor::ConnectivityChanged(NLM_CONNECTIVITY)
     {
         checkConnectionState();
         return S_OK;
     }
 
-    HRESULT NetworkMonitor::NetworkConnectionPropertyChanged(GUID, NLM_CONNECTION_PROPERTY_CHANGE)
+    HRESULT STDMETHODCALLTYPE NetworkMonitor::NetworkConnectionPropertyChanged(GUID, NLM_CONNECTION_PROPERTY_CHANGE)
     {
         return S_OK;
     }
