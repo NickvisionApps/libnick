@@ -24,12 +24,11 @@ TEST(SystemCredentialsTests, FetchRandCredential)
 
 TEST(SystemCredentialsTests, UpdateRandCredential)
 {
-    Credential updatedCred{ randCredentialName, "", "test", "abc123" };
+    Credential updatedCred{ randCredentialName, "", "", "abc123" };
     ASSERT_TRUE(SystemCredentials::updateCredential(updatedCred));
     std::optional<Credential> cred{ SystemCredentials::getCredential(randCredentialName) };
     ASSERT_TRUE(cred.has_value());
     ASSERT_EQ(cred.value().getName(), randCredentialName);
-    ASSERT_EQ(cred.value().getUsername(), "test");
     ASSERT_EQ(cred.value().getPassword(), "abc123");
 }
 

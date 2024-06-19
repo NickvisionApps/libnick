@@ -457,6 +457,7 @@ Path: `Nickvision::Keyring::SystemCredentials`
     - Returns: `false` if the credential was not added to the store.
     - Note: On Linux, only the Name and Password fields of the credential will be stored. Uri and Username will be ignored.
     - Note: On Windows, all fields of the credential will be stored.
+    - Note: On macOS, all fields of the credential will be stored.
 - ```cpp
   bool updateCredential(const Credential& credential)
   ``` 
@@ -465,6 +466,7 @@ Path: `Nickvision::Keyring::SystemCredentials`
     - Returns: `false` if the credential was not updated in the store.
     - Note: On Linux, only the Name and Password fields of the credential will be stored. Uri and Username will be ignored.
     - Note: On Windows, all fields of the credential will be stored.
+    - Note: On macOS, all fields of the credential will be stored.
 - ```cpp
   bool deleteCredential(const std::string& name)
   ``` 
