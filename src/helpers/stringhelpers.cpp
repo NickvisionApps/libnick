@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <array>
 #include <codecvt>
+#include <cstdlib>
 #include <iomanip>
 #include <limits>
 #include <regex>
@@ -11,8 +12,6 @@
 #include <windows.h>
 #elif defined(__linux__)
 #include <uuid/uuid.h>
-#elif defined(__APPLE__)
-#include "system/environment.h"
 #endif
 
 namespace Nickvision::Helpers
@@ -128,7 +127,18 @@ namespace Nickvision::Helpers
     std::string StringHelpers::newGuid()
     {
 #ifdef __APPLE__
-        return System::Environment::exec("uuidgen");
+        std::string uuid;
+        FILE* pipe{ popen("uuidgen", "r") };
+        if (pipe) 
+        {
+            char buffer[37];
+            if (fgets(buffer, sizeof(buffer), pipe))
+            {
+                uuid = { buffer, ;
+            }
+            pclose(pipe);
+        }
+        return uuid;
 #else
         std::array<unsigned char, 16> guid;
 #ifdef _WIN32
