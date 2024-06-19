@@ -147,8 +147,15 @@ namespace Nickvision::App
             {
                 return false;
             }
+#ifdef __linux__
             for (const std::string& arg : args)
+#else
+            for (std::string arg : args)
+#endif
             {
+#ifndef __linux__
+                arg += "\n";
+#endif
                 if(write(connectSocket, arg.c_str(), arg.size()) == -1)
                 {
                     close(connectSocket);
@@ -197,18 +204,30 @@ namespace Nickvision::App
             }
             if (clientSocket != -1)
             {
-                std::vector<std::string> args;
                 ssize_t bytes{ 0 };
+#ifdef __linux__
+                std::vector<std::string> args;
+#else
+                std::string info;
+#endif
                 do
                 {
                     bytes = read(clientSocket, &buffer[0], buffer.size());
                     if (bytes > 0)
                     {
+#ifdef __linux__
                         args.push_back({ &buffer[0], static_cast<size_t>(bytes) });
+#else
+                        info += { &buffer[0], static_cast<size_t>(bytes) };
+#endif
                     }
                 } while (bytes > 0);
                 close(clientSocket);
+#ifdef __linux__
                 m_commandReceived({ args });
+#else
+                m_commandReceived({ StringHelpers::split(info, "\n") });
+#endif
             }
 #endif
         }
