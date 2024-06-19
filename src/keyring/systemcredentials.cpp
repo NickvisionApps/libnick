@@ -75,9 +75,9 @@ namespace Nickvision::Keyring
             std::vector<char> uriBuffer(uri ? static_cast<size_t>(CFStringGetLength(uri) + 1) : static_cast<size_t>(0));
             if(uri)
             {
-                FStringGetCString(uri, uriBuffer.data(), uriBuffer.size(), kCFStringEncodingUTF8);
+                CFStringGetCString(uri, uriBuffer.data(), uriBuffer.size(), kCFStringEncodingUTF8);
             }
-            Credential cred{ name, { uriBuffer.data(), uriBuffer.size() }, { usernameBuffer.data(), usernameBuffer.size() }, { passwordBuffer.data(), passwordBuffer.size() } };
+            Credential cred{ name, uriBuffer.size() == 0 ? "" : uriBuffer.data(), usernameBuffer.size() == 0 ? "" : usernameBuffer.data(), passwordBuffer.size() == 0 ? "" : passwordBuffer.data() };
             CFRelease(password);
             CFRelease(result);
             CFRelease(query);
@@ -216,12 +216,11 @@ namespace Nickvision::Keyring
             CFStringRef newPassword{ CFStringCreateWithCString(nullptr, credential.getPassword().c_str(), kCFStringEncodingUTF8) };
             CFDataRef newPasswordData{ CFStringCreateExternalRepresentation(nullptr, newPassword, kCFStringEncodingUTF8, 0) };
             CFStringRef newUri{ CFStringCreateWithCString(nullptr, credential.getUri().c_str(), kCFStringEncodingUTF8) };
-            CFDictionaryRef attributes{ reinterpret_cast<CFDictionaryRef>(result) };
-            CFMutableDictionaryRef updatedAttributes{ CFDictionaryCreateMutableCopy(nullptr, 0, attributes) };
+            CFMutableDictionaryRef updatedAttributes{ CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
             CFDictionaryAddValue(updatedAttributes, kSecAttrAccount, newUsername);
             CFDictionaryAddValue(updatedAttributes, kSecValueData, newPasswordData);
             CFDictionaryAddValue(updatedAttributes, kSecAttrComment, newUri);
-            OSStatus status{ SecItemUpdate(attributes, updatedAttributes) };
+            OSStatus status{ SecItemUpdate(query, updatedAttributes) };
             CFRelease(updatedAttributes);
             CFRelease(newUri);
             CFRelease(newPasswordData);
