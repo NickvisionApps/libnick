@@ -12,7 +12,6 @@ None
 ### Fixes
 #### System
 - `Nickvision::System::Environment::exec()` now correctly handles quotes args
-- `Nickvision::System::Process` now correctly handles quotes args
 
 ## 2024.6.6
 ### Breaking Changes
