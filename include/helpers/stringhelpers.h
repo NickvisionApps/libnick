@@ -93,6 +93,12 @@ namespace Nickvision::Helpers::StringHelpers
         return splits;
     }
     /**
+     * @brief Splits a string based on argument delimiters.
+     * @param s The string to split
+     * @return The splits of the argument string
+     */
+    std::vector<std::string> splitArgs(std::string s);
+    /**
      * @brief Converts the wstring to a string.
      * @param s The wstring to convert
      * @return The string version of the wstring

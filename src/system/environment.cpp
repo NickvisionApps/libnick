@@ -40,10 +40,10 @@ namespace Nickvision::System
         {
             return "";
         }
+        std::vector<std::string> args{ StringHelpers::splitArgs(command) };
 #ifdef _WIN32
-        Process process{ "cmd.exe", { "/C", "\"" + command + "\"" } };
+        Process process{ "cmd.exe", { "/C", StringHelpers::join(args, " ", false) } };
 #else
-        std::vector<std::string> args{ StringHelpers::split(command, " ") };
         std::string cmd{ args[0] };
         args.erase(args.begin());
         Process process{ cmd, args };
@@ -52,7 +52,7 @@ namespace Nickvision::System
         {
             process.waitForExit();
             return process.getOutput();
-        }        
+        }
         return "";
     }
 }
