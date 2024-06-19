@@ -36,14 +36,7 @@ namespace Nickvision::Keyring
         std::string next(size_t length = 16);
 
     private:
-        std::vector<char> m_chars;
         PasswordContent m_contentFlags;
-
-    private:
-        static std::vector<char> m_numericChars;
-        static std::vector<char> m_upperChars;
-        static std::vector<char> m_lowerChars;
-        static std::vector<char> m_specialChars;
     };
 }
 

@@ -20,7 +20,7 @@ namespace Nickvision::System
     {
         std::lock_guard<std::mutex> lock{ inhibitor.m_mutex };
         m_inhibiting = inhibitor.m_inhibiting;
-#ifdef __linux__
+#ifndef _WIN32
         m_cookie = inhibitor.m_cookie;
 #endif
     }
@@ -29,7 +29,7 @@ namespace Nickvision::System
     {
         std::lock_guard<std::mutex> lock{ inhibitor.m_mutex };
         m_inhibiting = std::move(inhibitor.m_inhibiting);
-#ifdef __linux__
+#ifndef _WIN32
         m_cookie = std::move(inhibitor.m_cookie);
 #endif
     }
@@ -76,6 +76,12 @@ namespace Nickvision::System
         m_cookie = g_variant_get_uint32(result);
         g_variant_unref(result);
         g_object_unref(proxy);
+#elif defined(__APPLE__)
+        IOReturn result{ IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleSystemSleep, kIOPMAssertionLevelOn, CFSTR("Nickvision preventing suspend"), &m_cookie) };
+        if(result != kIOReturnSuccess)
+        {
+            return false;
+        }
 #endif
         m_inhibiting = true;
         return true;
@@ -109,6 +115,12 @@ namespace Nickvision::System
         }
         g_variant_unref(result);
         g_object_unref(proxy);
+#elif defined(__APPLE__)
+        IOReturn result{ IOPMAssertionRelease(m_cookie) };
+        if(result != kIOReturnSuccess)
+        {
+            return false;
+        }
 #endif
         m_inhibiting = false;
         return true;
@@ -121,7 +133,7 @@ namespace Nickvision::System
             std::lock_guard<std::mutex> lock{ m_mutex };
             std::lock_guard<std::mutex> lock2{ inhibitor.m_mutex };
             m_inhibiting = inhibitor.m_inhibiting;
-#ifdef __linux__
+#ifndef _WIN32
             m_cookie = inhibitor.m_cookie;
 #endif
         }
@@ -135,7 +147,7 @@ namespace Nickvision::System
             std::lock_guard<std::mutex> lock{ m_mutex };
             std::lock_guard<std::mutex> lock2{ inhibitor.m_mutex };
             m_inhibiting = std::move(inhibitor.m_inhibiting);
-#ifdef __linux__
+#ifndef _WIN32
             m_cookie = std::move(inhibitor.m_cookie);
 #endif
         }

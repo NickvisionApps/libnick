@@ -24,7 +24,7 @@ namespace Nickvision::System
     {
 #ifdef _WIN32
         return _putenv_s(key.c_str(), value.c_str()) == 0;
-#elif defined(__linux__)
+#else
         return setenv(key.c_str(), value.c_str(), true) == 0;
 #endif
     }
@@ -42,7 +42,7 @@ namespace Nickvision::System
         }
 #ifdef _WIN32
         Process process{ "cmd.exe", { "/C", "\"" + command + "\"" } };
-#elif defined(__linux__)
+#else
         std::vector<std::string> args{ StringHelpers::split(command, " ") };
         std::string cmd{ args[0] };
         args.erase(args.begin());

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <array>
 #include <codecvt>
+#include <cstdlib>
 #include <iomanip>
 #include <limits>
 #include <regex>
@@ -125,8 +126,22 @@ namespace Nickvision::Helpers
 
     std::string StringHelpers::newGuid()
     {
+#ifdef __APPLE__
+        std::string uuid;
+        FILE* pipe{ popen("uuidgen", "r") };
+        if (pipe) 
+        {
+            char buffer[37];
+            if (fgets(buffer, sizeof(buffer), pipe))
+            {
+                uuid = { buffer, 36 };
+            }
+            pclose(pipe);
+        }
+        return uuid;
+#else
         std::array<unsigned char, 16> guid;
-    #ifdef _WIN32
+#ifdef _WIN32
         GUID win;
         CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         if (CoCreateGuid(&win) != S_OK)
@@ -154,9 +169,9 @@ namespace Nickvision::Helpers
             (unsigned char)win.Data4[6],
             (unsigned char)win.Data4[7]
         };
-    #elif defined(__linux__)
+#elif defined(__linux__)
         uuid_generate(guid.data());
-    #endif
+#endif
         std::ostringstream out;
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[0]);
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[1]);
@@ -179,6 +194,7 @@ namespace Nickvision::Helpers
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[14]);
         out << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(guid[15]);
         return out.str();
+#endif
     }
 
     std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace)

@@ -2,6 +2,9 @@
 #define SUSPENDINHIBITOR_H
 
 #include <mutex>
+#ifdef __APPLE__
+#include <IOKit/pwr_mgt/IOPMLib.h>
+#endif
 
 namespace Nickvision::System
 {
@@ -64,6 +67,8 @@ namespace Nickvision::System
         bool m_inhibiting;
 #ifdef __linux__
         unsigned int m_cookie;
+#elif defined(__APPLE__)
+        IOPMAssertionID m_cookie;
 #endif
     };
 }

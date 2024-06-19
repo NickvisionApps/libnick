@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <mutex>
 #include "app/aura.h"
 #include "app/interprocesscommunicator.h"
 #include "system/environment.h"
@@ -12,13 +11,13 @@ class IPCTest : public testing::Test
 {
 public:
     static std::unique_ptr<InterProcessCommunicator> m_ipc;
+    static bool m_received;
 
     static void SetUpTestSuite()
     {
         m_ipc = std::make_unique<InterProcessCommunicator>("org.nickvision.aura.test");
         m_handlerId = m_ipc->commandReceived() += [](const ParamEventArgs<std::vector<std::string>>& e) 
         { 
-            std::lock_guard<std::mutex> lock{ m_mutex };
             m_received = (e.getParam()[0] == "test1" && e.getParam()[1] == "test2" ? true : false);
         };
     }
@@ -28,20 +27,11 @@ public:
         m_ipc->commandReceived() -= m_handlerId;
     }
 
-    static bool getReceived()
-    {
-        std::lock_guard<std::mutex> lock{ m_mutex };
-        return m_received;
-    }
-
 private:
-    static std::mutex m_mutex;
-    static bool m_received;
     static HandlerId m_handlerId;
 };
 
 std::unique_ptr<InterProcessCommunicator> IPCTest::m_ipc = nullptr;
-std::mutex IPCTest::m_mutex = {};
 bool IPCTest::m_received = false;
 HandlerId IPCTest::m_handlerId = {};
 
@@ -59,6 +49,8 @@ TEST_F(IPCTest, ClientSend)
 
 TEST_F(IPCTest, EnsureServerReceived)
 {
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    ASSERT_TRUE(getReceived());
+    while(!m_received)
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
 }

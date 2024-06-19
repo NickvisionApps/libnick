@@ -1,0 +1,51 @@
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    types: [ "review_requested", "ready_for_review" ]
+  workflow_dispatch:
+name: macOS
+permissions:
+  id-token: write
+  contents: read
+env:
+  GITHUB_ACTIONS: true
+  VCPKG_ROOT: ${{github.workspace}}/vcpkg
+jobs:
+  build:
+    name: "Build on arm64"
+    runs-on: macos-latest
+    steps:
+      - name: "Checkout"  
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: "Setup Environment"
+        run: |
+          mkdir build
+          brew install python-setuptools
+      - name: "Vcpkg"
+        uses: johnwason/vcpkg-action@v6
+        id: vcpkg
+        with:
+          pkgs: curl gettext-libintl glib gtest jsoncpp maddy openssl
+          triplet: arm64-osx
+          revision: f7423ee180c4b7f40d43402c2feb3859161ef625
+          token: ${{ secrets.GITHUB_TOKEN }}
+          github-binarycache: true
+      - name: "Build"
+        working-directory: ${{github.workspace}}/build
+        run: |
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
+          cmake --build .
+      - name: "Install"
+        working-directory: ${{github.workspace}}/build
+        run: cmake --install .
+      - name: "Test"
+        run: ${{github.workspace}}/build/libnick_test
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{github.workspace}}/install
+          name: macOS-arm64-Release

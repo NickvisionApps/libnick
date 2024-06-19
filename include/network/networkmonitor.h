@@ -61,7 +61,7 @@ namespace Nickvision::Network
         CComPtr<INetworkListManager> m_netListManager;
         CComPtr<IConnectionPoint> m_connectionPoint;
         DWORD m_cookie;
-#elif defined(__linux__)
+#else
         unsigned long m_networkChangedHandlerId;
 #endif
     };

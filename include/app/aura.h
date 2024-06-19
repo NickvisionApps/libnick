@@ -63,6 +63,11 @@ namespace Nickvision::App
          */
         bool isRunningOnLinux() const;
         /**
+         * @brief Gets whether or not the app is running on macOS.
+         * @return True if running on macOS, else false 
+         */
+        bool isRunningOnMac() const;
+        /**
          * @brief Gets whether or not the app is running via Flatpak.
          * @return True if running via Flatpak, else false 
          */

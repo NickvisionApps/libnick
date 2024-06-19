@@ -27,6 +27,13 @@ namespace Nickvision::Notifications::ShellNotification
      * @param openText Localized text of "Open"
      */
     void send(const ShellNotificationSentEventArgs& e, const std::string& openText);
+#elif defined(__APPLE__)
+    /**
+     * @brief Sends a notification to the shell.
+     * @brief Uses NSUserNotification on macOS.
+     * @param e ShellNotificationSentEventArgs
+     */
+    void send(const ShellNotificationSentEventArgs& e);
 #endif
 }
 

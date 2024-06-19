@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include "helpers/stringhelpers.h"
-#ifdef __linux__
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/socket.h>
 #endif
@@ -30,16 +30,24 @@ namespace Nickvision::App
             m_serverRunning = true;
             FindClose(find);
         }
-#elif defined(__linux__)
+#else
         m_path = "/tmp/" + id;
+#ifdef __linux__
         if (m_path.size() >= 108)
+#else
+        if (m_path.size() >= 104)
+#endif
         {
-            throw std::runtime_error("Unable to create IPC server. Application ID is too long. Must be < 103 characters.");
+            throw std::runtime_error("Unable to create IPC server. Application ID is too long.");
         }
         memset(&m_sockaddr, 0, sizeof(m_sockaddr));
         m_sockaddr.sun_family = AF_UNIX;
         strcpy(m_sockaddr.sun_path, m_path.c_str());
+#ifdef __linux__
         m_serverSocket = socket(AF_UNIX, SOCK_SEQPACKET, 0);
+#else
+        m_serverSocket = socket(AF_UNIX, SOCK_STREAM, 0);
+#endif
         if (m_serverSocket == -1)
         {
             throw std::runtime_error("Unable to check IPC server.");
@@ -60,7 +68,7 @@ namespace Nickvision::App
 #endif
         if (m_serverRunning)
         {
-            m_server = std::jthread(&InterProcessCommunicator::runServer, this);
+            m_server = std::thread(&InterProcessCommunicator::runServer, this);
         }
     }
 
@@ -73,16 +81,24 @@ namespace Nickvision::App
             CancelSynchronousIo(m_serverPipe);
             CloseHandle(m_serverPipe);
         }
-#elif defined(__linux__)
+#else
         if (m_serverSocket != -1)
         {
-            int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
-            connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr));
-            close(clientSocket);
+#ifdef __linux__
+            int connectSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+#else
+            int connectSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
+#endif
+            connect(connectSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr));
+            close(connectSocket);
             close(m_serverSocket);
             unlink(m_path.c_str());
         }
 #endif
+        if(m_server.joinable())
+        {
+            m_server.join();
+        }
     }
 
     Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& InterProcessCommunicator::commandReceived()
@@ -109,32 +125,44 @@ namespace Nickvision::App
         }
         if (!args.empty())
         {
-            std::string argc{ std::to_string(args.size()) };
 #ifdef _WIN32
             std::wstring wPath{ StringHelpers::wstr(m_path) };
-            HANDLE clientPipe{ CreateFileW(wPath.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
-            if (clientPipe == INVALID_HANDLE_VALUE)
+            HANDLE connectPipe{ CreateFileW(wPath.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
+            if (connectPipe == INVALID_HANDLE_VALUE)
             {
                 return false;
             }
-            WriteFile(clientPipe, argc.c_str(), DWORD(argc.size()), nullptr, nullptr);
             for (const std::string& arg : args)
             {
-                WriteFile(clientPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
+                WriteFile(connectPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
             }
-            CloseHandle(clientPipe);
-#elif defined(__linux__)
-            int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
-            if (connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == -1)
+            CloseHandle(connectPipe);
+#else
+#ifdef __linux__
+            int connectSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+#else
+            int connectSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
+#endif
+            if (connect(connectSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == -1)
             {
                 return false;
             }
-            send(clientSocket, argc.c_str(), argc.size(), 0);
+#ifdef __linux__
             for (const std::string& arg : args)
+#else
+            for (std::string arg : args)
+#endif
             {
-                send(clientSocket, arg.c_str(), arg.size(), 0);
+#ifndef __linux__
+                arg += "\n";
+#endif
+                if(write(connectSocket, arg.c_str(), arg.size()) == -1)
+                {
+                    close(connectSocket);
+                    return false;
+                }
             }
-            close(clientSocket);
+            close(connectSocket);
 #endif
         }
         if (exitIfClient)
@@ -152,34 +180,54 @@ namespace Nickvision::App
 #ifdef _WIN32
             if (ConnectNamedPipe(m_serverPipe, nullptr))
             {
+                std::vector<std::string> args;
                 DWORD read;
-                ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
-                std::vector<std::string> args(std::stoull({ &buffer[0], read }));
-                for (size_t i = 0; i < args.size(); i++)
+                do
                 {
-                    ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr);
-                    args[i] = { &buffer[0], read };
-                }
-                m_commandReceived({ args });
+                    if(!ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr))
+                    {
+                        break;
+                    }
+                    args.push_back({ &buffer[0], read });
+                } while (read > 0);
                 DisconnectNamedPipe(m_serverPipe);
+                m_commandReceived({ args });
             }
-#elif defined(__linux__)
-            int clientSocket{ accept(m_serverSocket, nullptr, nullptr) };
+#else
+            struct sockaddr_un clientAddr;
+            memset(&clientAddr, 0, sizeof(clientAddr));
+            socklen_t clientAddrLen{ sizeof(clientAddr) };
+            int clientSocket{ accept(m_serverSocket, reinterpret_cast<struct sockaddr*>(&clientAddr), &clientAddrLen) };
             if (!m_serverRunning)
             {
                 break;
             }
             if (clientSocket != -1)
             {
-                ssize_t bytes{ recv(clientSocket, &buffer[0], buffer.size(), 0) };
-                std::vector<std::string> args(std::stoull({ &buffer[0], static_cast<size_t>(bytes < 0 ? 0 : bytes) }));
-                for (size_t i = 0; i < args.size(); i++)
+                ssize_t bytes{ 0 };
+#ifdef __linux__
+                std::vector<std::string> args;
+#else
+                std::string info;
+#endif
+                do
                 {
-                    bytes = recv(clientSocket, &buffer[0], buffer.size(), 0);
-                    args[i] = { &buffer[0], static_cast<size_t>(bytes < 0 ? 0 : bytes) };
-                }
-                m_commandReceived({ args });
+                    bytes = read(clientSocket, &buffer[0], buffer.size());
+                    if (bytes > 0)
+                    {
+#ifdef __linux__
+                        args.push_back({ &buffer[0], static_cast<size_t>(bytes) });
+#else
+                        info += { &buffer[0], static_cast<size_t>(bytes) };
+#endif
+                    }
+                } while (bytes > 0);
                 close(clientSocket);
+#ifdef __linux__
+                m_commandReceived({ args });
+#else
+                m_commandReceived({ StringHelpers::split(info, "\n") });
+#endif
             }
 #endif
         }

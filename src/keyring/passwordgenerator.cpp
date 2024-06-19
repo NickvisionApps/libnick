@@ -1,18 +1,14 @@
 #include "keyring/passwordgenerator.h"
+#include <cmath>
 #include <ctime>
 #include <random>
 
 namespace Nickvision::Keyring
 {
-    std::vector<char> PasswordGenerator::m_numericChars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-    std::vector<char> PasswordGenerator::m_upperChars = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-    std::vector<char> PasswordGenerator::m_lowerChars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
-    std::vector<char> PasswordGenerator::m_specialChars = { '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~' };
-
     PasswordGenerator::PasswordGenerator(PasswordContent contentFlags)
+        : m_contentFlags{ contentFlags }
     {
-        srand((unsigned)time(0));
-        setContentFlags(contentFlags);
+        srand(time(nullptr));
     }
 
     PasswordContent PasswordGenerator::getContentFlags() const
@@ -23,31 +19,42 @@ namespace Nickvision::Keyring
     void PasswordGenerator::setContentFlags(PasswordContent contentFlags)
     {
         m_contentFlags = contentFlags;
-        m_chars.clear();
-        if ((m_contentFlags & PasswordContent::Numeric) == PasswordContent::Numeric)
-        {
-            m_chars.insert(m_chars.end(), m_numericChars.begin(), m_numericChars.end());
-        }
-        if ((m_contentFlags & PasswordContent::Uppercase) == PasswordContent::Uppercase)
-        {
-            m_chars.insert(m_chars.end(), m_upperChars.begin(), m_upperChars.end());
-        }
-        if ((m_contentFlags & PasswordContent::Lowercase) == PasswordContent::Lowercase)
-        {
-            m_chars.insert(m_chars.end(), m_lowerChars.begin(), m_lowerChars.end());
-        }
-        if ((m_contentFlags & PasswordContent::Special) == PasswordContent::Special)
-        {
-            m_chars.insert(m_chars.end(), m_specialChars.begin(), m_specialChars.end());
-        }
     }
 
     std::string PasswordGenerator::next(size_t length)
     {
+        static std::vector<char> numericChars{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };
+        static std::vector<char> upperChars{ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+        static std::vector<char> lowerChars{ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+        static std::vector<char> specialChars{ '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~' };
         std::string pass;
         for(size_t i = 0; i < length; i++)
         {
-            pass += m_chars[rand() % m_chars.size()];
+            while(true)
+            {
+                PasswordContent randomType{ static_cast<int>(std::pow(2, rand() % 4)) };
+                if((m_contentFlags & randomType) == PasswordContent::Numeric)
+                {
+                    pass += numericChars[rand() % numericChars.size()];
+                } 
+                else if((m_contentFlags & randomType) == PasswordContent::Uppercase)
+                {
+                    pass += upperChars[rand() % upperChars.size()];
+                }  
+                else if((m_contentFlags & randomType) == PasswordContent::Lowercase)
+                {
+                    pass += lowerChars[rand() % lowerChars.size()];
+                }
+                else if((m_contentFlags & randomType) == PasswordContent::Special)
+                {
+                    pass += specialChars[rand() % specialChars.size()];
+                }
+                else
+                {
+                    continue;
+                }
+                break;
+            }
         }
         return pass;
     }

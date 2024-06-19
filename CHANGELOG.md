@@ -4,6 +4,7 @@
 ### Breaking Changes
 None
 ### New APIs
+- Added support for `macOS` across the library
 - `Nickvision::Systems::SuspendInhibitor` class
 ### Fixes
 None

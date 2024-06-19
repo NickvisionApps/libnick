@@ -7,7 +7,7 @@
 #include "system/environment.h"
 #ifdef _WIN32
 #include <shlobj_core.h>
-#elif defined(__linux__)
+#else
 #include <pwd.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -19,9 +19,12 @@ using namespace Nickvision::System;
 
 namespace Nickvision::Filesystem
 {
-#ifdef __linux__
+#ifndef _WIN32
     static std::filesystem::path getXDGDir(const std::string& key)
     {
+#ifdef __APPLE__
+        return {};
+#else
         std::string var{ Environment::getVariable(key) };
         if (!var.empty())
         {
@@ -51,6 +54,7 @@ namespace Nickvision::Filesystem
             }
         }
         return { };
+#endif
     }
 #endif
 
@@ -64,7 +68,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         std::filesystem::path var{ Environment::getVariable("HOME") };
         result = !var.empty() ? var : getpwuid(getuid())->pw_dir;
 #endif
@@ -81,7 +85,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         std::filesystem::path var{ Environment::getVariable("XDG_CONFIG_HOME") };
         result = !var.empty() ? var : (getHome() / ".config");
 #endif
@@ -106,7 +110,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         std::filesystem::path var{ Environment::getVariable("XDG_CACHE_HOME") };
         result = !var.empty() ? var : (getHome() / ".cache");
 #endif
@@ -126,7 +130,7 @@ namespace Nickvision::Filesystem
         std::filesystem::path result;
 #ifdef _WIN32
         result = getConfig();
-#elif defined(__linux__)
+#else
         std::filesystem::path var{ Environment::getVariable("XDG_DATA_HOME") };
         result = !var.empty() ? var : (getHome() / ".local/share");
 #endif
@@ -161,7 +165,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         result = getXDGDir("XDG_DESKTOP_DIR");
         result = result.empty() ? (getHome() / "Desktop") : result;
 #endif
@@ -179,7 +183,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         result = getXDGDir("XDG_DOCUMENTS_DIR");
         result = result.empty() ? (getHome() / "Documents") : result;
 #endif
@@ -197,7 +201,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         result = getXDGDir("XDG_DOWNLOAD_DIR");
         result = result.empty() ? (getHome() / "Downloads") : result;
 #endif
@@ -215,7 +219,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         result = getXDGDir("XDG_MUSIC_DIR");
         result = result.empty() ? (getHome() / "Music") : result;
 #endif
@@ -233,7 +237,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         result = getXDGDir("XDG_PICTURES_DIR");
         result = result.empty() ? (getHome() / "Pictures") : result;
 #endif
@@ -260,7 +264,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         result = getXDGDir("XDG_TEMPLATES_DIR");
         result = result.empty() ? (getHome() / "Templates") : result;
 #endif
@@ -278,7 +282,7 @@ namespace Nickvision::Filesystem
             result = p;
         }
         CoTaskMemFree(static_cast<void*>(p));
-#elif defined(__linux__)
+#else
         result = getXDGDir("XDG_VIDEOS_DIR");
         result = result.empty() ? (getHome() / "Videos") : result;
 #endif
