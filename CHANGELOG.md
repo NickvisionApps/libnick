@@ -5,9 +5,14 @@
 None
 ### New APIs
 - Added support for `macOS` across the library
-- `Nickvision::Systems::SuspendInhibitor` class
+#### Helpers
+- `Nickvision::Helpers::StringHelpers::splitArgs()`
+#### System
+- `Nickvision::System::SuspendInhibitor` class
 ### Fixes
-None
+#### System
+- `Nickvision::System::Environment::exec()` now correctly handles quotes args
+- `Nickvision::System::Process` now correctly handles quotes args
 
 ## 2024.6.6
 ### Breaking Changes
