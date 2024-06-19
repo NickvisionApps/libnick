@@ -252,6 +252,11 @@ Path: `Nickvision::Notifications::ShellNotification`
     - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the localized text of "Open", openText.
     - Note: This function is only available on the Linux platform.
     - Note: This function supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event.
+- ```cpp
+  void send(const ShellNotificationSentEventArgs& e)
+  ``` 
+    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e.
+    - Note: This function is only available on the macOS platform.
     
 ## ShellNotificationSentEventArgs
 Description: Event args for when a shell notification is sent.

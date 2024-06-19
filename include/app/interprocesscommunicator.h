@@ -8,7 +8,7 @@
 #include "events/parameventargs.h"
 #ifdef _WIN32
 #include <windows.h>
-#elif defined(__linux__)
+#else
 #include <sys/un.h>
 #endif
 
@@ -63,11 +63,11 @@ namespace Nickvision::App
         void runServer();
         bool m_serverRunning;
         Events::Event<Events::ParamEventArgs<std::vector<std::string>>> m_commandReceived;
-        std::jthread m_server;
+        std::thread m_server;
         std::string m_path;
 #ifdef _WIN32
         HANDLE m_serverPipe;
-#elif defined(__linux__)
+#else
         struct sockaddr_un m_sockaddr;
         int m_serverSocket;
 #endif

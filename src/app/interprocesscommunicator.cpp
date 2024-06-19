@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include "helpers/stringhelpers.h"
-#ifdef __linux__
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/socket.h>
 #endif
@@ -30,16 +30,24 @@ namespace Nickvision::App
             m_serverRunning = true;
             FindClose(find);
         }
-#elif defined(__linux__)
+#else
         m_path = "/tmp/" + id;
+#ifdef __linux__
         if (m_path.size() >= 108)
+#else
+        if (m_path.size() >= 104)
+#endif
         {
-            throw std::runtime_error("Unable to create IPC server. Application ID is too long. Must be < 103 characters.");
+            throw std::runtime_error("Unable to create IPC server. Application ID is too long.");
         }
         memset(&m_sockaddr, 0, sizeof(m_sockaddr));
         m_sockaddr.sun_family = AF_UNIX;
         strcpy(m_sockaddr.sun_path, m_path.c_str());
+#ifdef __linux__
         m_serverSocket = socket(AF_UNIX, SOCK_SEQPACKET, 0);
+#else
+        m_serverSocket = socket(AF_UNIX, SOCK_STREAM, 0);
+#endif
         if (m_serverSocket == -1)
         {
             throw std::runtime_error("Unable to check IPC server.");
@@ -60,7 +68,7 @@ namespace Nickvision::App
 #endif
         if (m_serverRunning)
         {
-            m_server = std::jthread(&InterProcessCommunicator::runServer, this);
+            m_server = std::thread(&InterProcessCommunicator::runServer, this);
         }
     }
 
@@ -73,16 +81,24 @@ namespace Nickvision::App
             CancelSynchronousIo(m_serverPipe);
             CloseHandle(m_serverPipe);
         }
-#elif defined(__linux__)
+#else
         if (m_serverSocket != -1)
         {
+#ifdef __linux__
             int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+#else
+            int clientSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
+#endif
             connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr));
             close(clientSocket);
             close(m_serverSocket);
             unlink(m_path.c_str());
         }
 #endif
+        if(m_server.joinable())
+        {
+            m_server.join();
+        }
     }
 
     Events::Event<Events::ParamEventArgs<std::vector<std::string>>>& InterProcessCommunicator::commandReceived()
@@ -123,8 +139,12 @@ namespace Nickvision::App
                 WriteFile(clientPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
             }
             CloseHandle(clientPipe);
-#elif defined(__linux__)
+#else
+#ifdef __linux__
             int clientSocket{ socket(AF_UNIX, SOCK_SEQPACKET, 0) };
+#else
+            int clientSocket{ socket(AF_UNIX, SOCK_STREAM, 0) };
+#endif
             if (connect(clientSocket, reinterpret_cast<const struct sockaddr*>(&m_sockaddr), sizeof(m_sockaddr)) == -1)
             {
                 return false;
@@ -163,7 +183,7 @@ namespace Nickvision::App
                 m_commandReceived({ args });
                 DisconnectNamedPipe(m_serverPipe);
             }
-#elif defined(__linux__)
+#else
             int clientSocket{ accept(m_serverSocket, nullptr, nullptr) };
             if (!m_serverRunning)
             {

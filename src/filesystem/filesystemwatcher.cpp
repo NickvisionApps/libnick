@@ -27,8 +27,18 @@ namespace Nickvision::Filesystem
         {
             throw std::runtime_error("Unable to init inotify.");
         }
+#elif defined(__APPLE__)
+        std::string pathString{ path.string() };
+        FSEventStreamContext context{ 0, this, nullptr, nullptr, nullptr };
+        CFStringRef paths[1];
+        paths[0] = CFStringCreateWithCString(NULL, pathString.c_str(), kCFStringEncodingUTF8);
+        m_stream = FSEventStreamCreate(nullptr, &callback, &context, CFArrayCreate(nullptr, reinterpret_cast<const void**>(paths), 1, nullptr), kFSEventStreamEventIdSinceNow, 1.0, kFSEventStreamCreateFlagFileEvents);
+        if (!m_stream)
+        {
+            throw std::runtime_error("Unable to create event stream.");
+        }
 #endif
-        m_watchThread = std::jthread(&FileSystemWatcher::watch, this);
+        m_watchThread = std::thread(&FileSystemWatcher::watch, this);
     }
 
     FileSystemWatcher::~FileSystemWatcher()
@@ -39,7 +49,16 @@ namespace Nickvision::Filesystem
         CloseHandle(m_terminateEvent);
 #elif defined(__linux__)
         close(m_notify);
+#elif defined(__APPLE__)
+        FSEventStreamStop(m_stream);
+        CFRunLoopStop(m_runLoop);
+        FSEventStreamInvalidate(m_stream);
+        FSEventStreamRelease(m_stream);
 #endif
+        if(m_watchThread.joinable())
+        {
+            m_watchThread.join();
+        }
     }
 
     const std::filesystem::path& FileSystemWatcher::getPath() const
@@ -244,6 +263,42 @@ namespace Nickvision::Filesystem
         {
             inotify_rm_watch(m_notify, watch);
         }
+#elif defined(__APPLE__)
+        m_runLoop = CFRunLoopGetCurrent();
+        FSEventStreamScheduleWithRunLoop(m_stream, m_runLoop, kCFRunLoopDefaultMode);
+        FSEventStreamStart(m_stream);
+        CFRunLoopRun();
 #endif
     }
+
+#ifdef __APPLE__
+    void FileSystemWatcher::callback(ConstFSEventStreamRef stream, void* clientCallBackInfo, size_t numEvents, void* eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[])
+    {
+        FileSystemWatcher* watcher{ static_cast<FileSystemWatcher*>(clientCallBackInfo) };
+        char** paths{ static_cast<char**>(eventPaths) };
+        for (size_t i = 0; i < numEvents; i++)
+        {
+            std::filesystem::path changed{ paths[i] };
+            if (watcher->isExtensionWatched(changed.extension()))
+            {
+                if (eventFlags[i] & kFSEventStreamEventFlagItemCreated)
+                {
+                    watcher->m_changed({ changed , FileAction::Added });
+                }
+                else if (eventFlags[i] & kFSEventStreamEventFlagItemRemoved)
+                {
+                    watcher->m_changed({ changed , FileAction::Removed });
+                }
+                else if (eventFlags[i] & kFSEventStreamEventFlagItemRenamed)
+                {
+                    watcher->m_changed({ changed , FileAction::Renamed });
+                }
+                else
+                {
+                    watcher->m_changed({ changed , FileAction::Modified });
+                }
+            }
+        }
+    }
+#endif
 }

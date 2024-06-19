@@ -2,8 +2,10 @@
 #include <filesystem>
 #include <memory>
 #include <string>
+#include <vector>
 #include "app/aura.h"
 #include "system/environment.h"
+#include "system/process.h"
 #ifdef _WIN32
 #include "notifications/notifyicon.h"
 #include "notifications/notifyiconmenu.h"
@@ -68,6 +70,14 @@ namespace Nickvision::Notifications
             g_object_unref(G_OBJECT(icon));
             g_object_unref(G_OBJECT(notification));
         }
+    }
+#elif defined(__APPLE__)
+    void ShellNotification::send(const ShellNotificationSentEventArgs& e)
+    {
+        std::vector<std::string> args{ "-e", "'display notification \"" + e.getMessage() + "\" with title \"" + e.getTitle() + "\"'" };
+        Process process{ "osascript", args };
+        process.start();
+        process.waitForExit();
     }
 #endif
 }
