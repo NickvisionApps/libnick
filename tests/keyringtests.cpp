@@ -14,7 +14,7 @@ public:
     static void SetUpTestSuite()
     {
 #ifdef __APPLE__
-        if(!Environment::getEnvVar("GITHUB_ACTIONS").empty())
+        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
         {
             return;
         }
@@ -29,7 +29,7 @@ std::unique_ptr<KeyringDialogController> KeyringTest::m_controller = nullptr;
 TEST_F(KeyringTest, CheckValidKeyring)
 {
 #ifdef __APPLE__
-        if(!Environment::getEnvVar("GITHUB_ACTIONS").empty())
+        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
         {
             GTEST_SKIP();
         }
@@ -41,7 +41,7 @@ TEST_F(KeyringTest, CheckValidKeyring)
 TEST_F(KeyringTest, ManageCredentials)
 {
 #ifdef __APPLE__
-        if(!Environment::getEnvVar("GITHUB_ACTIONS").empty())
+        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
         {
             GTEST_SKIP();
         }
@@ -61,7 +61,7 @@ TEST_F(KeyringTest, ManageCredentials)
 TEST_F(KeyringTest, ValidateCredential1)
 {
 #ifdef __APPLE__
-        if(!Environment::getEnvVar("GITHUB_ACTIONS").empty())
+        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
         {
             GTEST_SKIP();
         }
@@ -72,7 +72,7 @@ TEST_F(KeyringTest, ValidateCredential1)
 TEST_F(KeyringTest, ValidateCredential2)
 {
 #ifdef __APPLE__
-        if(!Environment::getEnvVar("GITHUB_ACTIONS").empty())
+        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
         {
             GTEST_SKIP();
         }
@@ -83,7 +83,7 @@ TEST_F(KeyringTest, ValidateCredential2)
 TEST_F(KeyringTest, ValidateCredential3)
 {
 #ifdef __APPLE__
-        if(!Environment::getEnvVar("GITHUB_ACTIONS").empty())
+        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
         {
             GTEST_SKIP();
         }
@@ -94,7 +94,7 @@ TEST_F(KeyringTest, ValidateCredential3)
 TEST_F(KeyringTest, ValidateCredential4)
 {
 #ifdef __APPLE__
-        if(!Environment::getEnvVar("GITHUB_ACTIONS").empty())
+        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
         {
             GTEST_SKIP();
         }
@@ -105,7 +105,7 @@ TEST_F(KeyringTest, ValidateCredential4)
 TEST_F(KeyringTest, DisableKeyring)
 {
 #ifdef __APPLE__
-        if(!Environment::getEnvVar("GITHUB_ACTIONS").empty())
+        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
         {
             GTEST_SKIP();
         }
