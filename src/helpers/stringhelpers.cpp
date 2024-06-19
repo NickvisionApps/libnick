@@ -212,6 +212,23 @@ namespace Nickvision::Helpers
         return s;
     }
 
+    std::vector<std::string> StringHelpers::splitArgs(std::string s)
+    {
+        std::vector<std::string> args;
+        std::regex regex{ "((?:[^\\s'\"]+|\"[^\"]*\"|'[^']*')+)" };
+        std::smatch match;
+        while (std::regex_search(s, match, regex))
+        {
+            args.push_back(match.str());
+            s = match.suffix();
+        }
+        if(!s.empty())
+        {
+            args.push_back(s);
+        }
+        return args;
+    }
+
     std::string StringHelpers::str(const std::wstring& s)
     {
         std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
@@ -273,13 +290,13 @@ namespace Nickvision::Helpers
         }
         std::string result{ s };
         result.erase(std::find_if(result.rbegin(), result.rend(), [delimiter](char ch)
-            {
-                return ch != delimiter;
-            }).base(), result.end());
+        {
+            return ch != delimiter;
+        }).base(), result.end());
         result.erase(result.begin(), std::find_if(result.begin(), result.end(), [delimiter](char ch)
-            {
+        {
                 return ch != delimiter;
-            }));
+        }));
         return result;
     }
 

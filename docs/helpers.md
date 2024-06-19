@@ -97,6 +97,12 @@ Path: `Nickvision::Helpers::StringHelpers`
     - Note: T requires the `StringImplicitlyConstructible` concept defined as: `std::is_constructible_v<T, std::string> && std::is_convertible_v<std::string, T>`.
     - Ex: `StringHelpers::split<std::string>("1,2,3,4", ",")` will return `std::vector<std::string>{ "1", "2", "3", "4" }`.
 - ```cpp
+  std::vector<std::string> splitArgs(std::string s)
+  ```
+    - Accepts: A string parameter, s.
+    - Returns: A list of the splits of s on argument delimiters.
+    - Ex: `StringHelpers::splitArgs("echo \"Hello World\"")` will return `std::vector<std::string>{ "echo", "Hello World" }`.
+- ```cpp
   std::string str(const std::wstring& s)
   ```
     - Accepts: A wide string parameter, s.
