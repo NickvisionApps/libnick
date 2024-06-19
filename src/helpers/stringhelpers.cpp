@@ -134,7 +134,7 @@ namespace Nickvision::Helpers
             char buffer[37];
             if (fgets(buffer, sizeof(buffer), pipe))
             {
-                uuid = { buffer, ;
+                uuid = { buffer, 36 };
             }
             pclose(pipe);
         }
