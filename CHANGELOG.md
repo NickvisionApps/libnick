@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.6.7 (next)
+## 2024.6.7
 ### Breaking Changes
 None
 ### New APIs
