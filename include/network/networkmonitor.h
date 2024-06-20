@@ -42,11 +42,11 @@ namespace Nickvision::Network
          */
         NetworkState getConnectionState() const;
 #ifdef _WIN32
-        ULONG AddRef() override;
-        ULONG Release() override;
-        HRESULT QueryInterface(REFIID riid, void** ppvObject) override;
-        HRESULT ConnectivityChanged(NLM_CONNECTIVITY newConnectivity) override;
-        HRESULT NetworkConnectionPropertyChanged(GUID connectionId, NLM_CONNECTION_PROPERTY_CHANGE newProperty);
+        ULONG STDMETHODCALLTYPE AddRef() override;
+        ULONG STDMETHODCALLTYPE Release() override;
+        HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppvObject) override;
+        HRESULT STDMETHODCALLTYPE ConnectivityChanged(NLM_CONNECTIVITY newConnectivity) override;
+        HRESULT STDMETHODCALLTYPE NetworkConnectionPropertyChanged(GUID connectionId, NLM_CONNECTION_PROPERTY_CHANGE newProperty);
 #endif
 
     private:

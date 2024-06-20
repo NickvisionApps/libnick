@@ -302,7 +302,7 @@ namespace Nickvision::Notifications
         return DefWindowProcW(m_hwnd, uMsg, wParam, lParam);
     }
 
-    LRESULT NotifyIcon::notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+    LRESULT CALLBACK NotifyIcon::notifyIconWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         if (m_icons.contains(hwnd))
         {
