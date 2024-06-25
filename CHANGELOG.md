@@ -1,5 +1,13 @@
 # Changelog
 
+## 2024.6.9 (next)
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+- Fixed an issue where Updater would crash if failed to fetch json
+
 ## 2024.6.8
 ### Breaking Changes
 None

@@ -65,10 +65,14 @@ namespace Nickvision::Update
             Json::Reader reader;
             if (reader.parse(releases, root, false))
             {
+                if(!root)
+                {
+                    return {};
+                }
                 for (const Json::Value& release : root)
                 {
                     std::string version{ release.get("tag_name", "NULL").asString() };
-                    if (version == "NULL")
+                    if (version.empty() || version == "NULL")
                     {
                         return {};
                     }
