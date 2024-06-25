@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <thread>
 #include "app/aura.h"
-#include "app/configurationbase.h"
+#include "app/datafilebase.h"
 #include "app/windowgeometry.h"
 #include "filesystem/userdirectories.h"
 #include "notifications/notifyicon.h"
@@ -19,11 +19,11 @@ enum class Theme
     System
 };
 
-class AppConfig : public ConfigurationBase
+class AppConfig : public DataFileBase
 {
 public:
-    AppConfig(const std::string& key)
-        : ConfigurationBase{ key } 
+    AppConfig(const std::string& key, const std::string& appName)
+        : DataFileBase{ key, appName } 
     { 
 
     }
@@ -61,7 +61,7 @@ class AuraTest : public testing::Test
 public:
     static void SetUpTestSuite()
     {
-        std::filesystem::remove(UserDirectories::get(UserDirectory::ApplicationCache, Aura::getActive().getAppInfo().getName()) / ("config.json"));
+        std::filesystem::remove(UserDirectories::get(UserDirectory::ApplicationConfig, Aura::getActive().getAppInfo().getName()) / ("config.json"));
     }
 };
 

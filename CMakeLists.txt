@@ -33,7 +33,7 @@ endif()
 add_library (${PROJECT_NAME}
     "src/app/appinfo.cpp"
     "src/app/aura.cpp"
-    "src/app/configurationbase.cpp"
+    "src/app/datafilebase.cpp"
     "src/app/interprocesscommunicator.cpp"
     "src/app/windowgeometry.cpp"
     "src/database/sqlcontext.cpp"

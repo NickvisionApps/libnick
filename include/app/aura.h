@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include "appinfo.h"
-#include "configurationbase.h"
+#include "datafilebase.h"
 #include "interprocesscommunicator.h"
 #include "logging/logger.h"
 #include "notifications/notifyicon.h"
@@ -15,7 +15,7 @@
 namespace Nickvision::App
 {
     template<typename T>
-    concept DerivedConfigurationBase = std::is_base_of_v<ConfigurationBase, T>;
+    concept DerivedDataFileBase = std::is_base_of_v<DataFileBase, T>;
 
     /**
      * @brief An application base.
@@ -74,24 +74,24 @@ namespace Nickvision::App
          */
         operator bool() const;
         /**
-         * @brief Gets a config object.
-         * @tparam T Derived type of ConfigurationBase
-         * @param key The key of the config file
+         * @brief Gets a data object.
+         * @tparam T Derived type of DataFileBase
+         * @param key The key of the data file
          * @throw std::invalid_argument Thrown if key is empty
-         * @return The config object
+         * @return The data object
          */
-        template<DerivedConfigurationBase T>
+        template<DerivedDataFileBase T>
         T& getConfig(const std::string& key)
         {
             if (key.empty())
             {
                 throw std::invalid_argument("Key must not be empty.");
             }
-            if (!m_configFiles.contains(key))
+            if (!m_dataFiles.contains(key))
             {
-                m_configFiles[key] = std::make_unique<T>(key);
+                m_dataFiles[key] = std::make_unique<T>(key, m_appInfo.getName());
             }
-            return *static_cast<T*>(m_configFiles[key].get());
+            return *static_cast<T*>(m_dataFiles[key].get());
         }
 #ifdef _WIN32
         /**
@@ -111,7 +111,7 @@ namespace Nickvision::App
         bool m_initialized;;
         AppInfo m_appInfo;
         std::unique_ptr<InterProcessCommunicator> m_ipc;
-        std::unordered_map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
+        std::unordered_map<std::string, std::unique_ptr<DataFileBase>> m_dataFiles;
         std::unique_ptr<Logging::Logger> m_logger;
 #ifdef _WIN32
         std::unique_ptr<Notifications::NotifyIcon> m_notifyIcon;

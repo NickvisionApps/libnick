@@ -1,8 +1,10 @@
 #include "localization/gettext.h"
 #include <filesystem>
 #include <cstdlib>
+#include "helpers/stringhelpers.h"
 #include "system/environment.h"
 
+using namespace Nickvision::Helpers;
 using namespace Nickvision::System;
 
 namespace Nickvision::Localization
@@ -16,7 +18,7 @@ namespace Nickvision::Localization
         {
             bool res{ true };
             setlocale(LC_ALL, "");
-            m_domainName = domainName;
+            m_domainName = StringHelpers::lower(StringHelpers::replace(domainName, " ", ""));
 #ifdef _WIN32
             res = res && (wbindtextdomain(m_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
 #else

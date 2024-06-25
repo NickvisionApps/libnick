@@ -1,21 +1,20 @@
-#include "app/configurationbase.h"
+#include "app/datafilebase.h"
 #include <fstream>
 #include <stdexcept>
-#include "app/aura.h"
 #include "filesystem/userdirectories.h"
 
 using namespace Nickvision::Filesystem;
 
 namespace Nickvision::App
 {
-    ConfigurationBase::ConfigurationBase(const std::string& key)
+    DataFileBase::DataFileBase(const std::string& key, const std::string& appName)
         : m_key{ key }
     {
         if (m_key.empty())
         {
             throw std::invalid_argument("Key must not be empty.");
         }
-        m_path = UserDirectories::get(UserDirectory::ApplicationCache, Aura::getActive().getAppInfo().getName()) / (key + ".json");
+        m_path = UserDirectories::get(UserDirectory::ApplicationConfig, appName) / (key + ".json");
         if (std::filesystem::exists(m_path))
         {
             std::ifstream in{ m_path };
@@ -23,17 +22,17 @@ namespace Nickvision::App
         }
     }
 
-    const std::string& ConfigurationBase::getKey() const
+    const std::string& DataFileBase::getKey() const
     {
         return m_key;
     }
 
-    Events::Event<Events::EventArgs>& ConfigurationBase::saved()
+    Events::Event<Events::EventArgs>& DataFileBase::saved()
     {
         return m_saved;
     }
 
-    bool ConfigurationBase::save()
+    bool DataFileBase::save()
     {
         std::ofstream out{ m_path };
         out << m_json;

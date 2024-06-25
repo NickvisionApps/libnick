@@ -6,6 +6,8 @@
 - Removed `Nickvision::App::Aura::getExecutableDirectory()`
 - Removed `Nickvision::App::Aura::isRunning*` methods
 - Removed `Nickvision::App::Aura::findDependency()`
+- Renamed `Nickvision::App::Aura::getConfig()` to `Nickvision::App::Aura::getDataFile()`
+- Renamed `Nickvision::App::ConfigurationBase` to` Nickvision::App::DataFileBase`
 #### Filesystem
 - Removed `Nickvision::Filesystem::SystemDirectories` namespace
 - Removed `Nickvision::Filesystem::UserDirectories::get*` methods
@@ -23,6 +25,8 @@
 - Added `Nickvision::System::Environment::getPath()`
 - Added `Nickvision::System::Environment::findDependency()`
 ### Fixes
+#### Localization
+- `Nickvision::Localization::Gettext::init()` will ensure the domainName is lowercase and contains no spaces
 #### Update
 - Fixed an issue where Updater would crash if failed to fetch json
 

@@ -28,13 +28,12 @@ namespace Nickvision::App
             m_appInfo.setName(name);
             m_appInfo.setEnglishShortName(englishShortName);
             //Setup gettext
-            std::string domainName{ StringHelpers::lower(StringHelpers::replace(m_appInfo.getEnglishShortName(), " ", "")) };
-            if (!Localization::Gettext::init(domainName))
+            if (!Localization::Gettext::init(m_appInfo.getEnglishShortName()))
             {
                 throw std::runtime_error("Unable to initialize gettext.");
             }
             //Setup logger
-            std::filesystem::path logPath{ UserDirectories::get(UserDirectory::ApplicationCache, m_appInfo.getName()) / "log.txt" };
+            std::filesystem::path logPath{ UserDirectories::get(UserDirectory::ApplicationLocalData, m_appInfo.getName()) / "log.txt" };
             if(std::filesystem::exists(logPath))
             {
                 std::filesystem::remove(logPath);

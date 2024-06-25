@@ -44,7 +44,8 @@ Path: `Nickvision::Localization::Gettext`
     - Accepts: The domain name for the gettext system, domainName.
     - Returns: `true` if the gettext system was initialized successfully.
     - Returns: `false` if there was an error initializing the gettext system.
-    - Note: This function should only be called once, regradless of with different domain names.
+    - Note: This function should only be called once, regardless of with different domain names.
+    - Note: domainName will be modified to ensure it is lowercase and contains no spaces.
 - ```cpp
   const std::string& getDomainName();
   ```
