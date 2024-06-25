@@ -1,6 +1,7 @@
 #include "app/configurationbase.h"
 #include <fstream>
 #include <stdexcept>
+#include "app/aura.h"
 #include "filesystem/userdirectories.h"
 
 using namespace Nickvision::Filesystem;
@@ -14,7 +15,7 @@ namespace Nickvision::App
         {
             throw std::invalid_argument("Key must not be empty.");
         }
-        m_path = UserDirectories::getApplicationConfig() / (key + ".json");
+        m_path = UserDirectories::get(UserDirectory::ApplicationCache, Aura::getActive().getAppInfo().getName()) / (key + ".json");
         if (std::filesystem::exists(m_path))
         {
             std::ifstream in{ m_path };

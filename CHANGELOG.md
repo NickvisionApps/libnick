@@ -8,7 +8,11 @@
 - Removed `Nickvision::App::Aura::findDependency()`
 #### Filesystem
 - Removed `Nickvision::Filesystem::SystemDirectories` namespace
+- Removed `Nickvision::Filesystem::UserDirectories::get*` methods
 ### New APIs
+#### Filesystem
+- Added `Nickvision::Filesystem::UserDirectory` enum
+- Added `Nickvision::Filesystem::UserDirectories::get()`
 #### System
 - Added `Nickvision::System::DeploymentMode` enum
 - Added `Nickvision::System::OperatingSystem` enum

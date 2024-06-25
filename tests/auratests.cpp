@@ -61,7 +61,7 @@ class AuraTest : public testing::Test
 public:
     static void SetUpTestSuite()
     {
-        std::filesystem::remove(UserDirectories::getApplicationConfig() / ("config.json"));
+        std::filesystem::remove(UserDirectories::get(UserDirectory::ApplicationCache, Aura::getActive().getAppInfo().getName()) / ("config.json"));
     }
 };
 

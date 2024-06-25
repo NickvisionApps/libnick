@@ -112,7 +112,7 @@ namespace Nickvision::Update
                     std::string name{ asset.get("name", "").asString() };
                     if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
                     {
-                        std::filesystem::path setupPath{ UserDirectories::getCache() / name };
+                        std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
                         std::wstring quotedSetupPath{ L"\"" + setupPath.wstring() + L"\""};
                         if (m_webClient.downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
                         {

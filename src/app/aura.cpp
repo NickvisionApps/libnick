@@ -34,7 +34,7 @@ namespace Nickvision::App
                 throw std::runtime_error("Unable to initialize gettext.");
             }
             //Setup logger
-            std::filesystem::path logPath{ UserDirectories::getApplicationCache() / "log.txt" };
+            std::filesystem::path logPath{ UserDirectories::get(UserDirectory::ApplicationCache, m_appInfo.getName()) / "log.txt" };
             if(std::filesystem::exists(logPath))
             {
                 std::filesystem::remove(logPath);
