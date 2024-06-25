@@ -7,12 +7,10 @@
 #include "notifications/notifyicon.h"
 #include "notifications/notifyiconmenu.h"
 #include "notifications/shellnotification.h"
-#include "system/environment.h"
 
 using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
 using namespace Nickvision::Notifications;
-using namespace Nickvision::System;
 
 enum class Theme
 {
@@ -104,41 +102,6 @@ TEST_F(AuraTest, EnsureChangeInAppConfig)
     ASSERT_EQ(geometry.getWidth(), 1920);
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
-}
-
-TEST_F(AuraTest, DependencyCheck)
-{
-#ifdef _WIN32
-    std::filesystem::path dependency{ Aura::getActive().findDependency("cmd") };
-#else
-    std::filesystem::path dependency{ Aura::getActive().findDependency("ls") };
-#endif
-    ASSERT_TRUE(!dependency.empty());
-    ASSERT_TRUE(std::filesystem::exists(dependency));
-    ShellNotificationSentEventArgs args{ "Dependency Found!", dependency.string(), NotificationSeverity::Success, "open", dependency.string() };
-#ifdef _WIN32
-    if (GetConsoleWindow())
-    {
-        ASSERT_NO_THROW(ShellNotification::send(args, GetConsoleWindow()));
-    }
-#elif defined(__linux__)
-    ASSERT_NO_THROW(ShellNotification::send(args, "Open"));
-#elif defined(__APPLE__)
-    ASSERT_NO_THROW(ShellNotification::send(args));
-#endif
-}
-
-TEST_F(AuraTest, RunningInformationChecks)
-{
-    ASSERT_TRUE(!Aura::getActive().getExecutableDirectory().empty());
-#ifdef _WIN32
-    ASSERT_TRUE(Aura::getActive().isRunningOnWindows());
-#elif defined(__linux__)
-    ASSERT_TRUE(Aura::getActive().isRunningOnLinux());
-#elif defined(__APPLE__)
-    ASSERT_TRUE(Aura::getActive().isRunningOnMac());
-#endif
-    ASSERT_TRUE(Aura::getActive().isRunningViaLocal());
 }
 
 TEST_F(AuraTest, HelpUrlChecks)

@@ -43,7 +43,6 @@ add_library (${PROJECT_NAME}
     "src/database/sqlvalue.cpp"
     "src/filesystem/filesystemchangedeventargs.cpp"
     "src/filesystem/filesystemwatcher.cpp"
-    "src/filesystem/systemdirectories.cpp"
     "src/filesystem/userdirectories.cpp"
     "src/helpers/codehelpers.cpp"
     "src/helpers/stringhelpers.cpp"

@@ -6,7 +6,6 @@ This module contains objects for working with the filesystem, such as a file sys
 - [FileAction](#fileaction)
 - [FileSystemChangedEventArgs](#filesystemchangedeventargs)
 - [FileSystemWatcher](#filesystemwatcher)
-- [SystemDirectories](#systemdirectories)
 - [UserDirectories](#userdirectories)
 - [WatcherFlags](#watcherflags)
 
@@ -126,29 +125,6 @@ The `FileSystemWatcher` object allows the consumer to specify specific extension
 By default (and when the extension filters list is empty), all files, regardless of extension, are watched for changes. 
 
 Otherwise, only the extensions contained in the extension filters list will be watched for changes.
-
-## SystemDirectories
-Description: Functions for working with system directories.
-
-Interface: [systemdirectories.h](/include/filesystem/systemdirectories.h)
-
-Type: `namespace`
-
-Path: `Nickvision::Filesystem::SystemDirectories`
-
-### Functions
-- ```cpp
-  std::vector<std::filesystem::path> getPath()
-  ```
-    - Returns: The list of directory paths found in the system's PATH variable.
-- ```cpp
-  std::vector<std::filesystem::path> getConfig()
-  ```
-    - Returns: The list of directory paths found in the system's XDG_CONFIG_DIRS variable.
-- ```cpp
-  std::vector<std::filesystem::path> getData()
-  ```
-    - Returns: The list of directory paths found in the system's XDG_DATA_DIRS variable.
 
 ## UserDirectories
 Description: Functions for working with user directories.

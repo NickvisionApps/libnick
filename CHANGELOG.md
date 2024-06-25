@@ -2,10 +2,24 @@
 
 ## 2024.6.9 (next)
 ### Breaking Changes
-None
+#### App
+- Removed `Nickvision::App::Aura::getExecutableDirectory()`
+- Removed `Nickvision::App::Aura::isRunning*` methods
+- Removed `Nickvision::App::Aura::findDependency()`
+#### Filesystem
+- Removed `Nickvision::Filesystem::SystemDirectories` namespace
 ### New APIs
-None
+#### System
+- Added `Nickvision::System::DeploymentMode` enum
+- Added `Nickvision::System::OperatingSystem` enum
+- Added `Nickvision::System::Environment::getOperatingSystem()`
+- Added `Nickvision::System::Environment::getDeploymentMode()`
+- Added `Nickvision::System::Environment::getExecutableDirectory()`
+- Added `Nickvision::System::Environment::getLocaleName()`
+- Added `Nickvision::System::Environment::getPath()`
+- Added `Nickvision::System::Environment::findDependency()`
 ### Fixes
+#### Update
 - Fixed an issue where Updater would crash if failed to fetch json
 
 ## 2024.6.8

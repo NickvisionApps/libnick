@@ -147,34 +147,6 @@ Path: `Nickvision::App::Aura`
   const Logger& Logger: get
   ```
     - The application's logger
-- ```
-  std::filesystem::path& ExecutableDirectory: get
-  ```
-    - The path of the executable's directory.
-- ```
-  bool IsRunningOnWindows: get
-  ```
-    - Whether or not the app is running on Windows
-- ```
-  bool IsRunningOnLinux: get
-  ```
-    - Whether or not the app is running on Linux
-- ```
-  bool IsRunningOnMac: get
-  ```
-    - Whether or not the app is running on macOS
-- ```
-  bool IsRunningViaFlatpak: get
-  ```
-    - Whether or not the app is running via Flatpak
-- ```
-  bool IsRunningViaSnap: get
-  ```
-    - Whether or not the app is running via Snap
-- ```
-  bool IsRunningViaLocal: get
-  ```
-    - Whether or not the app is running locally
 
 ### Methods
 - ```cpp
@@ -185,14 +157,6 @@ Path: `Nickvision::App::Aura`
     - Throws: `std::runtime_error` if the gettext system fails to initialize.
     - Throws: `std::runtime_error` if unable to get the executable directory path.
     - Note: This also calls Localization::Gettext::init().
-- ```cpp
-  const std::filesystem::path& findDependency(std::string dependency)
-  ```
-    - Accepts: The name of a dependency to find, dependency.
-    - Returns: The path of the dependency on disk if found.
-    - Returns: An empty path if the dependency was not found on disk.
-    - Ex: `Aura::findDependency("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
-    - Ex: `Aura::findDependency("bash")` on Linux will return `/usr/bin/bash`.
 - ```cpp
   std::string getHelpUrl(const std::string& pageName)
   ``` 

@@ -1,15 +1,75 @@
 #include "system/environment.h"
 #include <cstdlib>
+#include <locale>
+#include <unordered_map>
 #include "helpers/stringhelpers.h"
 #include "system/process.h"
 #ifdef _WIN32
 #include <windows.h>
+#elif defined(__APPLE__)
+#include <libproc.h>
+#include <unistd.h>
 #endif
 
 using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
 {
+    DeploymentMode Environment::getDeploymentMode()
+    {
+        if(std::filesystem::exists("./flatpak-info"))
+        {
+            return DeploymentMode::Flatpak;
+        }
+        else if(!getVariable("SNAP").empty())
+        {
+            return DeploymentMode::Snap;
+        }
+        return DeploymentMode::Local;
+    }
+
+    const std::filesystem::path& Environment::getExecutableDirectory()
+    {
+        static std::filesystem::path executableDirectory;
+        if (!executableDirectory.empty())
+        {
+            return executableDirectory;
+        }
+#ifdef _WIN32
+        wchar_t pth[MAX_PATH];
+        DWORD len{ GetModuleFileNameW(nullptr, pth, sizeof(pth)) };
+        if(len > 0)
+        {
+            executableDirectory = std::filesystem::path(std::wstring(pth, len)).parent_path();
+        }
+#elif defined(__linux__)
+        executableDirectory = std::filesystem::canonical("/proc/self/exe").parent_path();
+#elif defined(__APPLE__)
+        char pth[PROC_PIDPATHINFO_MAXSIZE];
+        int len{ proc_pidpath(getpid(), pth, sizeof(pth)) };
+        if(len > 0)
+        {
+            executableDirectory = std::filesystem::path(std::string(pth, len)).parent_path();
+        }
+#endif
+        return executableDirectory;
+    }
+
+    std::string Environment::getLocaleName()
+    {
+#ifdef _WIN32
+        LCID lcid{ GetThreadLocale() };
+        wchar_t name[LOCALE_NAME_MAX_LENGTH];
+        if(LCIDToLocaleName(lcid, name, LOCALE_NAME_MAX_LENGTH, 0) > 0)
+        {
+            return StringHelpers::str(name);
+        }
+        return "";
+#else
+        return std::locale("").name();
+#endif
+    }
+
     std::string Environment::getVariable(const std::string& key)
     {
         char* var{ std::getenv(key.c_str()) };
@@ -34,6 +94,20 @@ namespace Nickvision::System
         return setVariable(key, "");
     }
 
+    std::vector<std::filesystem::path> Environment::getPath()
+    {
+        std::string env{ getVariable("PATH") };
+        if (!env.empty())
+        {
+#ifdef _WIN32
+            return StringHelpers::split<std::filesystem::path>(env, ";");
+#else
+            return StringHelpers::split<std::filesystem::path>(env, ":");
+#endif
+        }
+        return {};
+    }
+
     std::string Environment::exec(const std::string& command)
     {
         if(command.empty())
@@ -54,5 +128,49 @@ namespace Nickvision::System
             return process.getOutput();
         }
         return "";
+    }
+
+    const std::filesystem::path& Environment::findDependency(std::string dependency)
+    {
+        static std::unordered_map<std::string, std::filesystem::path> dependencies;
+#ifdef _WIN32
+        if(!std::filesystem::path(dependency).has_extension())
+        {
+            dependency += ".exe";
+        }
+#endif
+        //Dependency already found once before
+        if(dependencies.contains(dependency))
+        {
+            const std::filesystem::path& location{ dependencies[dependency] };
+            //Return if path is still valid
+            if(std::filesystem::exists(location))
+            {
+                return location;
+            }
+        }
+        //Search for dependency
+        dependencies[dependency] = std::filesystem::path();
+        //Search in current executable's directory
+        std::filesystem::path path{ getExecutableDirectory() / dependency };
+        if(std::filesystem::exists(path))
+        {
+            dependencies[dependency] = path;
+        }
+        //Search in system PATH
+        else
+        {
+            for(const std::filesystem::path& dir : getPath())
+            {
+                path = { dir / dependency };
+                if(std::filesystem::exists(path) && dir.string().find("AppData\\Local\\Microsoft\\WindowsApps") == std::string::npos)
+                {
+                    dependencies[dependency] = path;
+                    break;
+                }
+            }
+        }
+        //Return newly cached dependency path
+        return dependencies[dependency];
     }
 }

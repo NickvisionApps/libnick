@@ -1,7 +1,6 @@
 #ifndef AURA_H
 #define AURA_H
 
-#include <filesystem>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -48,41 +47,6 @@ namespace Nickvision::App
          */
         bool isValid() const;
         /**
-         * @brief Gets the path of the executable's directory.
-         * @return The executable's directory path
-         */
-        const std::filesystem::path& getExecutableDirectory() const;
-        /**
-         * @brief Gets whether or not the app is running on Windows.
-         * @return True if running on Windows, else false 
-         */
-        bool isRunningOnWindows() const;
-        /**
-         * @brief Gets whether or not the app is running on Linux.
-         * @return True if running on Linux, else false 
-         */
-        bool isRunningOnLinux() const;
-        /**
-         * @brief Gets whether or not the app is running on macOS.
-         * @return True if running on macOS, else false 
-         */
-        bool isRunningOnMac() const;
-        /**
-         * @brief Gets whether or not the app is running via Flatpak.
-         * @return True if running via Flatpak, else false 
-         */
-        bool isRunningViaFlatpak() const;
-        /**
-         * @brief Gets whether or not the app is running via Snap.
-         * @return True if running via Snap, else false 
-         */
-        bool isRunningViaSnap() const;
-        /**
-         * @brief Gets whether or not the app is running locally.
-         * @return True if running locally, else false 
-         */
-        bool isRunningViaLocal() const;
-        /**
          * @brief Gets the AppInfo object for the application.
          */
         AppInfo& getAppInfo();
@@ -96,12 +60,6 @@ namespace Nickvision::App
          * @return The Logger
          */
         const Logging::Logger& getLogger() const;
-        /**
-         * @brief Finds the path of a given dependency.
-         * @param dependency The name of the dependency to find
-         * @return The path of the dependency if found, else empty path
-         */
-        const std::filesystem::path& findDependency(std::string dependency);
         /**
          * @brief Gets the url for a documentation page.
          * @brief This will be a yelp url for Linux and a website url for Windows and Linux snaps.
@@ -150,11 +108,9 @@ namespace Nickvision::App
          * @brief Constructs an Aura.
          */
         Aura();
-        bool m_initialized;
-        std::filesystem::path m_executableDirectory;
+        bool m_initialized;;
         AppInfo m_appInfo;
         std::unique_ptr<InterProcessCommunicator> m_ipc;
-        std::unordered_map<std::string, std::filesystem::path> m_dependencies;
         std::unordered_map<std::string, std::unique_ptr<ConfigurationBase>> m_configFiles;
         std::unique_ptr<Logging::Logger> m_logger;
 #ifdef _WIN32

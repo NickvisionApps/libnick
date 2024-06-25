@@ -1,9 +1,9 @@
 #include "localization/gettext.h"
 #include <filesystem>
 #include <cstdlib>
-#include "app/aura.h"
+#include "system/environment.h"
 
-using namespace Nickvision::App;
+using namespace Nickvision::System;
 
 namespace Nickvision::Localization
 {
@@ -18,9 +18,9 @@ namespace Nickvision::Localization
             setlocale(LC_ALL, "");
             m_domainName = domainName;
 #ifdef _WIN32
-            res = res && (wbindtextdomain(m_domainName.c_str(), Aura::getActive().getExecutableDirectory().c_str()) != nullptr);
+            res = res && (wbindtextdomain(m_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
 #else
-            res = res && (bindtextdomain(m_domainName.c_str(), Aura::getActive().getExecutableDirectory().c_str()) != nullptr);
+            res = res && (bindtextdomain(m_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
             res = res && (bind_textdomain_codeset(m_domainName.c_str(), "UTF-8") != nullptr);
 #endif
             res = res && (textdomain(m_domainName.c_str()) != nullptr);
