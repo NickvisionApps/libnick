@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <memory>
 #include <string>
-#include "app/aura.h"
+#include <thread>
 #include "system/environment.h"
 #ifdef _WIN32
 #include "notifications/notifyicon.h"
@@ -11,7 +11,6 @@
 #include <gio/gio.h>
 #endif
 
-using namespace Nickvision::App;
 using namespace Nickvision::System;
 
 namespace Nickvision::Notifications
@@ -19,18 +18,33 @@ namespace Nickvision::Notifications
 #ifdef _WIN32
     void ShellNotification::send(const ShellNotificationSentEventArgs& e, HWND hwnd)
     {
-        NotifyIcon& notifyIcon{ Aura::getActive().getNotifyIcon(hwnd) };
-        notifyIcon.notify(e);
+        NotifyIcon* icon{ NotifyIcon::getFromHWND(hwnd) };
+        if(icon)
+        {
+            icon->notify(e);
+        }
+        else
+        {
+            std::vector<wchar_t> title(static_cast<size_t>(GetWindowTextLengthW(hwnd)));
+            GetWindowTextW(hwnd, title.data(), static_cast<int>(title.size()));
+            icon = new NotifyIcon(hwnd, std::wstring(title.data(), title.size()), { }, false);
+            icon->notify(e);
+            std::thread t{ [icon]()
+            { 
+                std::this_thread::sleep_for(std::chrono::seconds(5));
+                delete icon;
+            } };
+            t.detach();
+        }
     }
 #elif defined(__linux__)
-    void ShellNotification::send(const ShellNotificationSentEventArgs& e, const std::string& openText)
+    void ShellNotification::send(const ShellNotificationSentEventArgs& e, const std::string& appId, const std::string& openText)
     {
         if (g_application_get_default())
         {
             GNotification* notification{ g_notification_new(e.getTitle().c_str()) };
             GIcon* icon{ nullptr };
             GFile* fileIcon{ nullptr };
-            std::string appId{ Aura::getActive().getAppInfo().getId() };
             if (Environment::getVariable("SNAP").empty())
             {
                 std::string name{ appId + "-symbolic" };

@@ -3,10 +3,35 @@
 This module contains various helper namespaces and objects for working with the system shell.
 
 ## Table of Contents
+- [DeploymentMode](#deploymentmode)
 - [Environment](#environment)
+- [OperatingSystem](#operatingsystem)
 - [Process](#process)
 - [ProcessExitedEventArgs](#processexitedeventargs)
 - [SuspendInhibitor](#suspendinhibitor)
+
+## DeploymentMode
+Description: Supported deployment mode values.
+
+Interface: [deploymentmode.h](/include/system/deploymentmode.h)
+
+Type: `enum class`
+
+Path: `Nickvision::System::DeploymentMode`
+
+### Values
+- ```cpp
+  Local = 0
+  ```
+    - Represents an application running locally (not sandboxed).
+- ```cpp
+  Flatpak = 1
+  ```
+    - Represents an application running via Flatpak.
+- ```cpp
+  Snap = 2
+  ```
+    - Represents an application running via Snap.
 
 ## Environment
 Description: Helper functions for working with the system shell environment.
@@ -18,6 +43,22 @@ Type: `namespace`
 Path: `Nickvision::System::Environment`
 
 ### Methods
+- ```cpp
+  constexpr OperatingSystem getOperatingSystem()
+  ```
+    - Returns: The current operating system.
+- ```cpp
+  DeploymentMode getDeploymentMode()
+  ```
+    - Returns: The current deployment mode.
+- ```cpp
+  const std::filesystem::path& getExecutableDirectory()
+  ```
+    - Returns: The path of the executable's directory.
+- ```cpp
+  std::string getLocaleName()
+  ```
+    - Returns: The name of the current locale.
 - ```cpp
   std::string getVariable(const std::string& key)
   ```
@@ -39,11 +80,53 @@ Path: `Nickvision::System::Environment`
     - Returns: `true` if the environment variable of name key was cleared.
     - Returns: `false` if clearing the environment variable failed.
 - ```cpp
+  std::vector<std::filesystem::path> getPath()
+  ```
+    - Returns: A list of directories from the system PATH variable.
+- ```cpp
   std::string exec(const std::string& command)
   ```
     - Accepts: The command to executed, command.
     - Returns: The output of the executed command.
     - Ex: `Environment::exec("echo Hello World")` will return `"Hello World"`.
+- ```cpp
+  const std::filesystem::path& findDependency(std::string dependency)
+  ```
+    - Accepts: The name of an executable dependency to find.
+    - Returns: The path of the executable dependency, if found.
+    - Returns: An empty path if no dependency found.
+    - Note: The current executable's directory is searched first, then the system's PATH.
+    - Note: Windows UWP (Store) apps are not supported.
+    - Ex: `System::findDependency("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
+    - Ex: `System::findDependency("bash")` on Linux will return `/usr/bin/bash`.
+- ```cpp
+  std::string getDebugInformation(const App::AppInfo& appInfo, const std::string& extraInformation = "")
+  ```
+    - Accepts: The application's AppInfo, appInfo, and optional additional information to append to the end of the string, extraInformation.
+    - Returns: The debug information string about the user's environment.
+
+## OperatingSystem
+Description: Supported operating system values.
+
+Interface: [operatingsystem.h](/include/system/operatingsystem.h)
+
+Type: `enum class`
+
+Path: `Nickvision::System::OperatingSystem`
+
+### Values
+- ```cpp
+  Windows = 0
+  ```
+    - Represents MS Windows.
+- ```cpp
+  Linux = 1
+  ```
+    - Represents a Linux distro.
+- ```cpp
+  MacOS = 2
+  ```
+    - Represents an Apple operating system.
 
 ## Process
 Description: A managed process.

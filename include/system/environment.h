@@ -5,10 +5,46 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
 
+#include <filesystem>
 #include <string>
+#include <vector>
+#include "app/appinfo.h"
+#include "deploymentmode.h"
+#include "operatingsystem.h"
 
 namespace Nickvision::System::Environment
 {
+    /**
+     * @brief Gets the current operating system.
+     * @return The current operating system
+     */
+    constexpr OperatingSystem getOperatingSystem()
+    {
+#ifdef _WIN32
+        return OperatingSystem::Windows;
+#elif defined(__linux__)
+        return OperatingSystem::Linux;
+#elif defined(__APPLE__)
+        return OperatingSystem::MacOS;
+#else
+        return OperatingSystem::Other;
+#endif
+    }
+    /**
+     * @brief Gets the current deployment mode.
+     * @return The current deployment mode
+     */
+    DeploymentMode getDeploymentMode();
+    /**
+     * @brief Gets the path of the executable's directory.
+     * @return The executable's directory path
+     */
+    const std::filesystem::path& getExecutableDirectory();
+    /**
+     * @brief Gets the name of the current locale.
+     * @return The locale name
+     */
+    std::string getLocaleName();
     /**
      * @brief Gets the value of an environment variable.
      * @param key The environment variable to get
@@ -29,11 +65,31 @@ namespace Nickvision::System::Environment
      */
     bool clearVariable(const std::string& key);
     /**
+     * @brief Gets a list of directories from the system PATH variable.
+     * @return The list of directories from PATH
+     */
+    std::vector<std::filesystem::path> getPath();
+    /**
      * @brief Executes a command in the system shell.
      * @param cmd The command to execute
      * @return The output of the command
      */
     std::string exec(const std::string& cmd);
+    /**
+     * @brief Finds the path of a given executable dependency in the system.
+     * @brief The current executable's directory is searched first, then the system's PATH.
+     * @brief Windows UWP (Store) apps are not supported.
+     * @param dependency The name of the executable dependency to find
+     * @return The path to the executable dependency if found, else empty path
+     */
+    const std::filesystem::path& findDependency(std::string dependency);
+    /**
+     * @brief Gets a debug information string about the user's environment.
+     * @brief appInfo The application's AppInfo
+     * @brief extraInformation Extra information to append to the end of the debug information string
+     * @return The debug information string
+     */
+    std::string getDebugInformation(const App::AppInfo& appInfo, const std::string& extraInformation = "");
 }
 
 #endif //ENVIRONMENT_H

@@ -6,8 +6,8 @@ This module contains objects for working with the filesystem, such as a file sys
 - [FileAction](#fileaction)
 - [FileSystemChangedEventArgs](#filesystemchangedeventargs)
 - [FileSystemWatcher](#filesystemwatcher)
-- [SystemDirectories](#systemdirectories)
 - [UserDirectories](#userdirectories)
+- [UserDirectory](#userdirectory)
 - [WatcherFlags](#watcherflags)
 
 ## FileAction
@@ -71,7 +71,7 @@ Path: `Nickvision::Filesystem::FileSystemWatcher`
   ``` 
     - The path of the folder being watched.
 - ```
-  Nickvision:Aura::Filesystem::WatcherFlags WatcherFlags: get
+  Nickvision::Filesystem::WatcherFlags WatcherFlags: get
   ``` 
     - The flags of what to watch changes for.
 - ```
@@ -127,29 +127,6 @@ By default (and when the extension filters list is empty), all files, regardless
 
 Otherwise, only the extensions contained in the extension filters list will be watched for changes.
 
-## SystemDirectories
-Description: Functions for working with system directories.
-
-Interface: [systemdirectories.h](/include/filesystem/systemdirectories.h)
-
-Type: `namespace`
-
-Path: `Nickvision::Filesystem::SystemDirectories`
-
-### Functions
-- ```cpp
-  std::vector<std::filesystem::path> getPath()
-  ```
-    - Returns: The list of directory paths found in the system's PATH variable.
-- ```cpp
-  std::vector<std::filesystem::path> getConfig()
-  ```
-    - Returns: The list of directory paths found in the system's XDG_CONFIG_DIRS variable.
-- ```cpp
-  std::vector<std::filesystem::path> getData()
-  ```
-    - Returns: The list of directory paths found in the system's XDG_DATA_DIRS variable.
-
 ## UserDirectories
 Description: Functions for working with user directories.
 
@@ -161,85 +138,10 @@ Path: `Nickvision::Filesystem::UserDirectories`
 
 ### Functions
 - ```cpp
-  std::filesystem::path getHome()
+  std::filesystem::path get(UserDirectory directory, const std::string& appName)
   ```
-    - Returns: The path to the user's home directory.
-    - Returns: `FOLDERID_Profile` on Windows, `$HOME` on Linux.
-- ```cpp
-  std::filesystem::path getConfig()
-  ```
-    - Returns: The path to the user's config directory.
-    - Returns: `FOLDERID_RoamingAppData` on Windows, `XDG_CONFIG_HOME` on Linux.
-- ```cpp
-  std::filesystem::path getApplicationConfig()
-  ```
-    - Returns: The path to the application's config directory.
-    - Returns: `getConfig() + Aura::getActive().getAppInfo().getName()`
-- ```cpp
-  std::filesystem::path getCache()
-  ```
-    - Returns: The path to the user's cache directory.
-    - Returns: `FOLDERID_LocalAppData` on Windows, `XDG_CACHE_HOME` on Linux.
-- ```cpp
-  std::filesystem::path getApplicationCache()
-  ```
-    - Returns: The path to the application's cache directory.
-    - Returns: `getCache() + Aura::getActive().getAppInfo().getName()`
-- ```cpp
-  std::filesystem::path getLocalData()
-  ```
-    - Returns: The path to the user's local data directory.
-    - Returns: `FOLDERID_RoamingAppData` on Windows, `XDG_DATA_HOME` on Linux.
-- ```cpp
-  std::filesystem::path getApplicationLocalData()
-  ```
-    - Returns: The path to the application's local data directory.
-    - Returns: `getLocalData() + Aura::getActive().getAppInfo().getName()`
-- ```cpp
-  std::filesystem::path getRuntime()
-  ```
-    - Returns: The path to the user's runtime directory.
-    - Returns: Empty path on Windows, `XDG_RUNTIME_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getDesktop()
-  ```
-    - Returns: The path to the user's desktop directory.
-    - Returns: `FOLDERID_Desktop` on Windows, `XDG_DESKTOP_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getDocuments()
-  ```
-    - Returns: The path to the user's documents directory.
-    - Returns: `FOLDERID_Documents` on Windows, `XDG_DOCUMENTS_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getDownloads()
-  ```
-    - Returns: The path to the user's downloads directory.
-    - Returns: `FOLDERID_Downloads` on Windows, `XDG_DOWNLOAD_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getMusic()
-  ```
-    - Returns: The path to the user's music directory.
-    - Returns: `FOLDERID_Music` on Windows, `XDG_MUSIC_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getPictures()
-  ```
-    - Returns: The path to the user's pictures directory.
-    - Returns: `FOLDERID_Pictures` on Windows, `XDG_PICTURES_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getPublicShare()
-  ```
-    - Returns: The path to the user's pictures directory.
-    - Returns: Empty path on Windows, `XDG_PUBLICSHARE_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getTemplates()
-  ```
-    - Returns: The path to the user's pictures directory.
-    - Returns: `FOLDERID_Templates` on Windows, `XDG_TEMPLATES_DIR` on Linux.
-- ```cpp
-  std::filesystem::path getVideos()
-  ```
-    - Returns: The path to the user's pictures directory.
-    - Returns: `FOLDERID_Videos` on Windows, `XDG_VIDEOS_DIR` on Linux.
+    - Accepts: A supported user directory to get, directory, and an application name for application specific directories, appName.
+    - Returns: The path to the user directory.
 
 ## WatcherFlags
 Description: Flags to describe properties of a file system object that can change.  
@@ -275,3 +177,56 @@ Path: `Nickvision::Filesystem::WatcherFlags`
   LastAccess = 32
   ``` 
     - Signifies to watch for last file access time changes.
+
+## UserDirectory
+Description: Supported user directories.
+
+Interface: [userdirectory.h](/include/filesystem/userdirectory.h)
+
+Type: `enum class`
+
+Path: `Nickvision::Filesystem::UserDirectory`
+
+### Values
+- ```cpp
+  Home = 0
+  ```
+- ```cpp
+  Config = 1
+  ```
+- ```cpp
+  ApplicationConfig = 2
+  ```
+- ```cpp
+  Cache = 3
+  ```
+- ```cpp
+  ApplicationCache = 4
+  ```
+- ```cpp
+  LocalData = 5
+  ```
+- ```cpp
+  ApplicationLocalData = 6
+  ```
+- ```cpp
+  Desktop = 7
+  ```
+- ```cpp
+  Documents = 8
+  ```
+- ```cpp
+  Downloads = 9
+  ```
+- ```cpp
+  Music = 10
+  ```
+- ```cpp
+  Pictures = 11
+  ```
+- ```cpp
+  Templates = 12
+  ```
+- ```cpp
+  Videos = 13
+  ```

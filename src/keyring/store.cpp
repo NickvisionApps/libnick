@@ -10,7 +10,7 @@ namespace Nickvision::Keyring
 {
     static std::filesystem::path getPathFromName(const std::string& name)
     {
-        std::filesystem::path dir{ UserDirectories::getConfig() / "Nickvision" / "Keyring" };
+        std::filesystem::path dir{ UserDirectories::get(UserDirectory::Config) / "Nickvision" / "Keyring" };
         std::filesystem::create_directories(dir);
         return dir / (name + ".ring");
     }

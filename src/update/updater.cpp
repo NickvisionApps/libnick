@@ -4,14 +4,12 @@
 #include <stdexcept>
 #include <vector>
 #include <json/json.h>
-#include "app/aura.h"
 #include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
-using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
 using namespace Nickvision::Helpers;
 
@@ -65,10 +63,14 @@ namespace Nickvision::Update
             Json::Reader reader;
             if (reader.parse(releases, root, false))
             {
+                if(!root)
+                {
+                    return {};
+                }
                 for (const Json::Value& release : root)
                 {
                     std::string version{ release.get("tag_name", "NULL").asString() };
-                    if (version == "NULL")
+                    if (version.empty() || version == "NULL")
                     {
                         return {};
                     }
@@ -108,7 +110,7 @@ namespace Nickvision::Update
                     std::string name{ asset.get("name", "").asString() };
                     if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
                     {
-                        std::filesystem::path setupPath{ UserDirectories::getCache() / name };
+                        std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
                         std::wstring quotedSetupPath{ L"\"" + setupPath.wstring() + L"\""};
                         if (m_webClient.downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
                         {

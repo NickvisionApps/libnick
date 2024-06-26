@@ -1,5 +1,5 @@
-#ifndef CONFIGURATIONBASE_H
-#define CONFIGURATIONBASE_H
+#ifndef DATAFILEBASE_H
+#define DATAFILEBASE_H
 
 #include <filesystem>
 #include <string>
@@ -9,21 +9,22 @@
 namespace Nickvision::App
 {
     /**
-     * A base class for configuration files.
+     * A base class for json data files.
      */
-    class ConfigurationBase
+    class DataFileBase
     {
     public:
         /**
-         * @brief Constructs a ConfigurationBase, loading the file from disk.
+         * @brief Constructs a DataFileBase, loading the file from disk.
          * @param key The key of the config file
+         * @param appName The name of the application the data file belongs to
          * @throw std::invalid_argument Thrown if key is empty
          */
-        ConfigurationBase(const std::string& key);
+        DataFileBase(const std::string& key, const std::string& appName);
         /**
-         * @brief Destructs a ConfigurationBase. 
+         * @brief Destructs a DataFileBase. 
          */
-        virtual ~ConfigurationBase() = default;
+        virtual ~DataFileBase() = default;
         /**
          * Gets the key of the config file.
          * @return The key of the config file
@@ -50,4 +51,4 @@ namespace Nickvision::App
     };
 }
 
-#endif //CONFIGURATIONBASE_H
+#endif //DATAFILEBASE_H

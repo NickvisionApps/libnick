@@ -31,10 +31,10 @@ namespace Nickvision::Logging
 
     }
 
-    Logger::Logger(const std::filesystem::path& path, LogLevel minimum)
+    Logger::Logger(const std::filesystem::path& path, LogLevel minimum, bool append)
         : m_minimum{ minimum },
         m_path{ path },
-        m_stream{ std::make_shared<std::ofstream>(m_path, std::ios::out | std::ios::app) }
+        m_stream{ std::make_shared<std::ofstream>(m_path, append ? std::ios::out | std::ios::app : std::ios::out | std::ios::trunc) }
     {
 
     }

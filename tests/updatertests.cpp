@@ -8,6 +8,10 @@ using namespace Nickvision::Update;
 
 TEST(UpdaterTests, ParabolicStableUpdate)
 {
+    if(!Environment::getVariable("GITHUB_ACTIONS").empty())
+    {
+        GTEST_SKIP();
+    }
     Updater updater{ "https://github.com/NickvisionApps/Parabolic" };
     Version stable{ updater.fetchCurrentVersion(VersionType::Stable) };
     ASSERT_TRUE(!stable.empty());
@@ -20,7 +24,7 @@ TEST(UpdaterTests, SpotlightWindowsUpdate)
 {
     if(!Environment::getVariable("GITHUB_ACTIONS").empty())
     {
-        GTEST_SKIP() << "Skipping Windows update test on GitHub Actions";
+        GTEST_SKIP();
     }
     Updater updater{ "https://github.com/NickvisionApps/Spotlight" };
     Version stable{ updater.fetchCurrentVersion(VersionType::Stable) };

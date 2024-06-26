@@ -13,8 +13,8 @@
 namespace Nickvision::Localization::Gettext
 {
     /**
-     * @brief Initializes the gettext system. This function should only be called once, regradless of with different domain names.
-     * @param domainName The domain name to use for gettext translations
+     * @brief Initializes the gettext system. This function should only be called once, regardless of with different domain names.
+     * @param domainName The domain name to use for gettext translations. Must be lowercase and contain no spaces.
      * @return True if initialized, else false
      */
     bool init(const std::string& domainName);

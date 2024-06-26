@@ -4,8 +4,8 @@ This module contains types and functions for creating Nickvision applications.
 
 ## Table of Contents
 - [AppInfo](#appinfo)
-- [Aura](#aura)
-- [ConfigurationBase](#configurationbase)
+- [DataFileBase](#datafilebase)
+- [DataFileManager](#datafilemanager)
 - [InterProcessCommunicator](#interprocesscommunicator)
 - [WindowGeometry](#windowgeometry)
 
@@ -45,7 +45,7 @@ Path: `Nickvision::App::AppInfo`
     - The application description.
     - Ex: `"A template for Nickvision applications."`
 - ```
-  Nickvision::Version Version: get, set
+  Nickvision::Update::Version Version: get, set
   ```
     - The application version.
     - Ex: `2023.12.0`
@@ -125,111 +125,14 @@ Path: `Nickvision::App::AppInfo`
     - Returns: A list of entries in the following format: `"{key} {value}"`.
     - Ex: `AppInfo::convertUrlMapToVector({ { "a", "a2" }, { "b", "b2" } })` will return `std::vector<std::string>{ "a a2", "b b2" }`.
 
-## Aura
-Description: An application base.
+## DataFileBase
+Description: A base class for json data files.
 
-Interface: [aura.h](/include/app/aura.h)
-
-Type: `class`
-
-Path: `Nickvision::App::Aura`
-
-### Member Variables
-- ```
-  Nickvision::App::AppInfo& AppInfo: get
-  ```
-    - The AppInfo object for the application
-- ```
-  InterProcessCommunicator& IPC: get
-  ```
-    - The application's inter process communicator
-- ```
-  const Logger& Logger: get
-  ```
-    - The application's logger
-- ```
-  std::filesystem::path& ExecutableDirectory: get
-  ```
-    - The path of the executable's directory.
-- ```
-  bool IsRunningOnWindows: get
-  ```
-    - Whether or not the app is running on Windows
-- ```
-  bool IsRunningOnLinux: get
-  ```
-    - Whether or not the app is running on Linux
-- ```
-  bool IsRunningOnMac: get
-  ```
-    - Whether or not the app is running on macOS
-- ```
-  bool IsRunningViaFlatpak: get
-  ```
-    - Whether or not the app is running via Flatpak
-- ```
-  bool IsRunningViaSnap: get
-  ```
-    - Whether or not the app is running via Snap
-- ```
-  bool IsRunningViaLocal: get
-  ```
-    - Whether or not the app is running locally
-
-### Methods
-- ```cpp
-  bool init(const std::string& id, const std::string& name, const std::string& englishShortName, Logging:LogLevel logLevel)
-  ```
-    - Accepts: An application id, id, an application name, name, an application english short name, englishShortName, and the application log level, logLevel.
-    - Returns: True if initialized, else false.
-    - Throws: `std::runtime_error` if the gettext system fails to initialize.
-    - Throws: `std::runtime_error` if unable to get the executable directory path.
-    - Note: This also calls Localization::Gettext::init().
-- ```cpp
-  const std::filesystem::path& findDependency(std::string dependency)
-  ```
-    - Accepts: The name of a dependency to find, dependency.
-    - Returns: The path of the dependency on disk if found.
-    - Returns: An empty path if the dependency was not found on disk.
-    - Ex: `Aura::findDependency("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
-    - Ex: `Aura::findDependency("bash")` on Linux will return `/usr/bin/bash`.
-- ```cpp
-  std::string getHelpUrl(const std::string& pageName)
-  ``` 
-    - Accepts: The name of the documentation page to get the help url for, pageName.
-    - Returns: The url for the documentation page. This will be a yelp url for Linux and a website url for Windows and Linux snaps.
-    - Note: HtmlDocsStore should be set for Aura::getActive()::getAppInfo(). For Nickvision apps, this will be: `https://raw.githubusercontent.com/NickvisionApps/SHORT_APP_NAME/main/APP_NAME.Shared/Docs/html`, but can be customized for any app.
-- ```cpp
-  T& getConfig<T>(const std::string& key)
-  ```
-    - Accepts: The string key of the config file, key.
-    - Returns: A reference to the configuration object of type T with key key.
-    - Throws: `std::invalid_argument` if key is empty
-    - Note: T must be a type that derives from `Nickvision::ConfigurationBase`
-    - Ex: `getConfig<Configuration>("config")` will return the `Configuration` object parsed from a `config.json` file on disk.
-- ```cpp
-  Notifications::NotifyIcon& getNotifyIcon(HWND hwnd)
-  ```
-    - Accepts: The window handle for the notify icon, hwnd.
-    - Returns: The application's NotifyIcon.
-    - Note: The hwnd only needs to be valid on the first call to establish the new NotifyIcon.
-    - Note: The new NotifyIcon will be hidden by default.
-    - Note: This function is only available on Windows.
-
-### Static Functions
-- ```cpp
-  Nickvision::Aura& getActive()
-  ```
-    - Returns: The reference to the singleton `Aura` object.
-
-## ConfigurationBase
-Description: A base class for configuration files.
-
-Interface: [configurationbase.h](/include/app/configurationbase.h)
+Interface: [datafilebase.h](/include/app/datafilebase.h)
 
 Type: `class`
 
-Path: `Nickvision::App::ConfigurationBase`
+Path: `Nickvision::App::DataFileBase`
 
 ### Member Variables
 - ```
@@ -241,48 +144,48 @@ Path: `Nickvision::App::ConfigurationBase`
 - ```cpp
   Event<Nickvision::Events::EventArgs> Saved
   ```
-    - Invoked when the configuration file is saved to disk
+    - Invoked when the configuration file is saved to disk.
 
 ### Methods
 - ```cpp
-  ConfigurationBase(const std::string& key)
+  DataFileBase(const std::string& key, const std::string& appName)
   ```
-    - Constructs the ConfigurationBase, loading the file from disk
-    - Accepts: The key of the configuration file, key
-    - Throws: `std::invalid_argument` if key is empty
+    - Constructs the DataFileBase, loading the file from disk.
+    - Accepts: The key of the configuration file, key, and the name of the app the file belongs to.
+    - Throws: `std::invalid_argument` if key is empty.
 - ```cpp
   bool save()
   ```
-    - Returns: `true` if the configuration file was saved to disk
-    - Returns: `false` if saving to disk failed
+    - Returns: `true` if the configuration file was saved to disk.
+    - Returns: `false` if saving to disk failed.
 
-### Creating Your Own Configuration Files
-The purpose of `ConfigurationBase` is to act as a base when defining your own configuration objects that you would like to be saved and retrieved from disk.
+### Creating Your Own Data Files
+The purpose of `DataFileBase` is to act as a base when defining your own data objects that you would like to be saved and retrieved from disk.
 
 Here are some key points when defining your own configuration objects:
-- Your configuration object's constructor must take a `const std::string& key` parameter and pass it to `ConfigurationBase`'s constructor. 
-    - Although you will not use key in your own implementation, it is required for `ConfigurationBase`'s functionality and will be filled-in by the `Aura::getConfig()` method.
-- `ConfigurationBase` exposes a protected `m_json` object which you must use in your implementation of getting and storing variables of your configuration object. 
-    - If this `m_json` object is not used, your configuration object will not be stored to disk correctly.
-- You must explicitly call the `save` method on your configuration object when you want to save the configuration to disk. Writing to the `m_json` object is not enough to trigger saving the file on disk
+- Your data object's constructor must take `const std::string& key` and `const std::string& appName` parameters and pass it to `DataFileBase`'s constructor. 
+    - Although you will not use `key` and `appName` in your own implementation, it is required for `DataFileBase`'s functionality and will be filled-in by the `DataFileManager`.
+- `DataFileBase` exposes a protected `m_json` object which you must use in your implementation of getting and storing variables of your data object. 
+    - If this `m_json` object is not used, your data object will not be stored to disk correctly.
+- You must explicitly call the `save` method on your configuration object when you want to save the configuration to disk. Writing to the `m_json` object is not enough to trigger saving the file on disk.
 
-Here is an example of a custom configuration object using `ConfigurationBase`:
+Here is an example of a custom configuration object using `DataFileBase`:
 ```cpp
 using namespace Nickvision::App;
 
-class AppConfig : public ConfigurationBase
+class AppConfig : public DataFileBase
 {
 public:
-	AppConfig(const std::string& key) 
-    : ConfigurationBase{ key } 
+	AppConfig(const std::string& key, const std::string& appName) 
+    : DataFileBase{ key, appName } 
 	{ 
 
 	}
 
 	int getPreviousCount() const
 	{
-        //0 is the default value of PreviousCount (i.e. if it does not exist in the file)
-		return m_json.get("PreviousCount", 0).asInt();
+    //0 is the default value of PreviousCount (i.e. if it does not exist in the file)
+	  return m_json.get("PreviousCount", 0).asInt();
 	}
 
 	void setPreviousCount(int count)
@@ -291,15 +194,15 @@ public:
 	}
 };
 ```
-This object can now be used by an Aura-based application:
+This object can now be used with the `DataFileManager`:
 ```cpp
 using namespace Nickvision::App;
 using namespace Nickvision::Events;
 
 int main()
 {
-    Aura::getActive().init(...);
-    AppConfig& config{ Aura::getActive().getConfig<AppConfig>("config") };
+    DataFileManager dfm{ "AppName" };
+    AppConfig& config{ dfm.get<AppConfig>("config") };
     config.saved() += [](const EventArgs& e) { std::cout << "Config saved to disk." << std::endl; };
     if(config.getPreviousCount() > 0)
     {
@@ -309,6 +212,30 @@ int main()
     config.save(); //lambda will be invoked on success
 }
 ```
+
+## DataFileManager
+Description: A manager of data files for an application.
+
+Interface: [datafilemanager.h](/include/app/datafilemanager.h)
+
+Type: `class`
+
+Path: `Nickvision::App::DataFileManager`
+
+### Methods
+- ```cpp
+  DataFileManager(const std::string& appName)
+  ```
+    - Constructs a DataFileManager.
+    - Accepts: The name of the application, appName (used in determining the path to store data files on disk).
+- ```cpp
+  T& get<T>(const std::string& key)
+  ```
+    - Accepts: The string key of the data file, key.
+    - Returns: A reference to the data object of type T with key key.
+    - Throws: `std::invalid_argument` if key is empty
+    - Note: T must be a type that derives from `Nickvision::App::DataFileBase`
+    - Ex: `get<Configuration>("abc")` will return the `Configuration` object parsed from a `abc.json` file on disk.
  
 ## InterProcessCommunicator
 Description: An inter process communicator (server/client).
@@ -372,7 +299,6 @@ using namespace Nickvision::App;
 
 int main(int argc, char*[] argv)
 {
-    Aura::getActive().init(...);
     std::vector<std::string> modernArgs;
     for(int i = 0; i < argc; i++)
     {
@@ -381,7 +307,7 @@ int main(int argc, char*[] argv)
             modernArgs.push_back({ argv[i] });
         }
     }
-    InterProcessCommunicator& ipc{ Aura::getActuve().getIPC() };
+    InterProcessCommunicator& ipc{ "appid" };
     ipc.commandReceived() += [](const Events::ParamEventArgs<std::vector<std::string>>& args) { ... };
     ipc.communicate(modernArgs, true);
 }

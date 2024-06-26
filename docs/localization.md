@@ -3,7 +3,24 @@
 This module contains functions for working with translations and other localization aspects of Nickvision applications.
 
 ## Table of Contents
+- [Documentation](#documentation)
 - [Gettext](#gettext)
+
+## Documentation
+Description: Functions for working with an application's documentation.
+
+Interface: [documentation.h](/include/localization/documentation.h)
+
+Type: `namespace`
+
+Path: `Nickvision::Localization::Documentation`
+
+### Methods
+- ```cpp
+  std::string getHelpUrl(const std::string& englishShortName, const std::string& htmlDocStore, const std::string& pageName)
+  ```
+    - Accepts: The english short name of the application, englishShortName, the html docs store url, htmlDocStore, and the name of the documentation page to get, pageName.
+    - Returns: The url for pageName.
 
 ## Gettext
 Description: Functions for managing credentials in the system's credential (secret) store.
@@ -44,7 +61,8 @@ Path: `Nickvision::Localization::Gettext`
     - Accepts: The domain name for the gettext system, domainName.
     - Returns: `true` if the gettext system was initialized successfully.
     - Returns: `false` if there was an error initializing the gettext system.
-    - Note: This function should only be called once, regradless of with different domain names.
+    - Note: This function should only be called once, regardless of with different domain names.
+    - Note: domainName will be modified to ensure it is lowercase and contains no spaces.
 - ```cpp
   const std::string& getDomainName();
   ```

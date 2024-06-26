@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2024.6.8 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2024.6.9 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -32,8 +32,8 @@ if(NOT WIN32)
 endif()
 add_library (${PROJECT_NAME}
     "src/app/appinfo.cpp"
-    "src/app/aura.cpp"
-    "src/app/configurationbase.cpp"
+    "src/app/datafilebase.cpp"
+    "src/app/datafilemanager.cpp"
     "src/app/interprocesscommunicator.cpp"
     "src/app/windowgeometry.cpp"
     "src/database/sqlcontext.cpp"
@@ -43,7 +43,6 @@ add_library (${PROJECT_NAME}
     "src/database/sqlvalue.cpp"
     "src/filesystem/filesystemchangedeventargs.cpp"
     "src/filesystem/filesystemwatcher.cpp"
-    "src/filesystem/systemdirectories.cpp"
     "src/filesystem/userdirectories.cpp"
     "src/helpers/codehelpers.cpp"
     "src/helpers/stringhelpers.cpp"
@@ -54,6 +53,7 @@ add_library (${PROJECT_NAME}
     "src/keyring/passwordstrength.cpp"
     "src/keyring/store.cpp"
     "src/keyring/systemcredentials.cpp"
+    "src/localization/documentation.cpp"
     "src/localization/gettext.cpp"
     "src/logging/logger.cpp"
     "src/network/curleasy.cpp"
@@ -146,9 +146,9 @@ export(EXPORT "${PROJECT_NAME}Targets" FILE "${CMAKE_BINARY_DIR}/cmake/${PROJECT
 #libnick Test
 if (BUILD_TESTING)
 	add_executable(${PROJECT_NAME}_test
-        "tests/auratests.cpp"
         "tests/codetests.cpp"
         "tests/databasetests.cpp"
+        "tests/datafiletests.cpp"
         "tests/eventtests.cpp"
         "tests/filewatchertests.cpp"
         "tests/ipctests.cpp"
@@ -156,6 +156,7 @@ if (BUILD_TESTING)
         "tests/loggingtests.cpp"
         "tests/main.cpp"
         "tests/networktests.cpp"
+        "tests/notificationtests.cpp"
         "tests/passwordtests.cpp"
         "tests/storetests.cpp"
         "tests/stringtests.cpp"

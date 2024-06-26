@@ -70,3 +70,29 @@ TEST_F(SystemTest, UninhibitSuspend)
     ASSERT_TRUE(SystemTest::m_inhibitor->uninhibit());
     ASSERT_FALSE(SystemTest::m_inhibitor->isInhibiting());
 }
+
+TEST_F(SystemTest, RunningInformationChecks)
+{
+    ASSERT_TRUE(!Environment::getExecutableDirectory().empty());
+    OperatingSystem os{ Environment::getOperatingSystem() };
+    DeploymentMode mode{ Environment::getDeploymentMode() };
+#ifdef _WIN32
+    ASSERT_EQ(os, OperatingSystem::Windows);
+#elif defined(__linux__)
+    ASSERT_EQ(os, OperatingSystem::Linux);
+#elif defined(__APPLE__)
+    ASSERT_EQ(os, OperatingSystem::MacOS);
+#endif
+    ASSERT_EQ(mode, DeploymentMode::Local);
+}
+
+TEST_F(SystemTest, DependencyCheck)
+{
+#ifdef _WIN32
+    std::filesystem::path dependency{ Environment::findDependency("cmd") };
+#else
+    std::filesystem::path dependency{ Environment::findDependency("ls") };
+#endif
+    ASSERT_TRUE(!dependency.empty());
+    ASSERT_TRUE(std::filesystem::exists(dependency));
+}

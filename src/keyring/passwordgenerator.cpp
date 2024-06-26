@@ -8,7 +8,7 @@ namespace Nickvision::Keyring
     PasswordGenerator::PasswordGenerator(PasswordContent contentFlags)
         : m_contentFlags{ contentFlags }
     {
-        srand(time(nullptr));
+        srand(static_cast<unsigned int>(time(nullptr)));
     }
 
     PasswordContent PasswordGenerator::getContentFlags() const

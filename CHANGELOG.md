@@ -1,5 +1,40 @@
 # Changelog
 
+## 2024.6.9
+### Breaking Changes
+#### App
+- Removed `Nickvision::App::Aura`
+- Renamed `Nickvision::App::ConfigurationBase` to `Nickvision::App::DataFileBase`
+#### Filesystem
+- Removed `Nickvision::Filesystem::SystemDirectories` namespace
+- Removed `Nickvision::Filesystem::UserDirectories::get*` methods
+### New APIs
+#### App
+- Added `Nickvision::App::DataFileManager` class
+#### Filesystem
+- Added `Nickvision::Filesystem::UserDirectory` enum
+- Added `Nickvision::Filesystem::UserDirectories::get()`
+#### Notifications
+- Added `Nickvision::Notifications::NotifyIcon::getForHWND()`
+#### Localization
+- Added `Nickvision::Localization::Documentation::getHelpUrl()`
+#### System
+- Added `Nickvision::System::DeploymentMode` enum
+- Added `Nickvision::System::OperatingSystem` enum
+- Added `Nickvision::System::Environment::getOperatingSystem()`
+- Added `Nickvision::System::Environment::getDeploymentMode()`
+- Added `Nickvision::System::Environment::getExecutableDirectory()`
+- Added `Nickvision::System::Environment::getLocaleName()`
+- Added `Nickvision::System::Environment::getPath()`
+- Added `Nickvision::System::Environment::findDependency()`
+### Fixes
+#### Filesystem
+- `Nickvision::Filesystem::UserDirectories` will now fetch proper `macOS` directories
+#### Localization
+- `Nickvision::Localization::Gettext::init()` will ensure the domainName is lowercase and contains no spaces
+#### Update
+- Fixed an issue where Updater would crash if failed to fetch json
+
 ## 2024.6.8
 ### Breaking Changes
 None

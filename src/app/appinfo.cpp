@@ -8,6 +8,14 @@ using namespace Nickvision::Update;
 
 namespace Nickvision::App
 {
+    AppInfo::AppInfo(const std::string& id, const std::string& name, const std::string& englishShortName)
+        : m_id{ id },
+        m_name{ name },
+        m_englishShortName{ englishShortName }
+    {
+        
+    }
+
     const std::string& AppInfo::getId() const
     {
         return m_id;
