@@ -4,7 +4,7 @@
 ### Breaking Changes
 #### App
 - Removed `Nickvision::App::Aura`
-- Renamed `Nickvision::App::ConfigurationBase` to` Nickvision::App::DataFileBase`
+- Renamed `Nickvision::App::ConfigurationBase` to `Nickvision::App::DataFileBase`
 #### Filesystem
 - Removed `Nickvision::Filesystem::SystemDirectories` namespace
 - Removed `Nickvision::Filesystem::UserDirectories::get*` methods
