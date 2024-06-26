@@ -156,7 +156,7 @@ TEST(StringTests, Base642)
 TEST(StringTests, Base643)
 {
     WebClient client;
-    client.downloadFile("https://www.freeiconspng.com/thumbs/pin-png/pin-png-24.png", "img.png");
+    client.downloadFile("https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/640px-PNG_transparency_demonstration_1.png", "img.png");
     std::vector<std::byte> s{ CodeHelpers::readFileBytes("img.png") };
     std::string base64;
     ASSERT_NO_THROW(base64 = StringHelpers::encode(s));

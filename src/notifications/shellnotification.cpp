@@ -25,12 +25,14 @@ namespace Nickvision::Notifications
         }
         else
         {
-            icon = new NotifyIcon(hwnd, L"", { }, false);
+            std::vector<wchar_t> title(static_cast<size_t>(GetWindowTextLengthW(hwnd)));
+            GetWindowTextW(hwnd, title.data(), static_cast<int>(title.size()));
+            icon = new NotifyIcon(hwnd, std::wstring(title.data(), title.size()), { }, false);
             icon->notify(e);
             std::thread t{ [icon]()
             { 
                 std::this_thread::sleep_for(std::chrono::seconds(5));
-                delete icon; 
+                delete icon;
             } };
             t.detach();
         }
