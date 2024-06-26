@@ -27,8 +27,9 @@ namespace Nickvision::Logging
          * @brief All messages are saved to the provided file and printed to standard outputs.
          * @param path The path to the log file
          * @param minimum The minimum supported LogLevel
+         * @param append Whether or not to append to the file if it already exists
          */
-        Logger(const std::filesystem::path& path, LogLevel minimum = LogLevel::Debug);
+        Logger(const std::filesystem::path& path, LogLevel minimum = LogLevel::Debug, bool append = true);
         /**
          * @brief Gets the path for the logs file.
          * @brief If the logger has no file attached, an empty path will be returned.

@@ -12,10 +12,9 @@ namespace Nickvision::Notifications::ShellNotification
 #ifdef _WIN32
     /**
      * @brief Sends a notification to the desktop.
-     * @brief Uses Nickvision::Notifications::NotifyIcon.
      * @brief Supports the action "open" with action param being a path of a file or folder to open.
      * @param e ShellNotificationSentEventArgs
-     * @param hwnd The HWND handle of the main application window. This parameter is only used once on the initial creation of the static NotifyIcon and then is ignored on future calls
+     * @param hwnd The handle to the main application window
      */
     void send(const ShellNotificationSentEventArgs& e, HWND hwnd);
 #elif defined(__linux__)
@@ -24,9 +23,10 @@ namespace Nickvision::Notifications::ShellNotification
      * @brief Uses Gio.Notification on Linux.
      * @brief Supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event.
      * @param e ShellNotificationSentEventArgs
+     * @param appId The application's id
      * @param openText Localized text of "Open"
      */
-    void send(const ShellNotificationSentEventArgs& e, const std::string& openText);
+    void send(const ShellNotificationSentEventArgs& e, const std::string& appId, const std::string& openText);
 #elif defined(__APPLE__)
     /**
      * @brief Sends a notification to the shell.

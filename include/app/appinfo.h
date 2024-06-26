@@ -19,6 +19,13 @@ namespace Nickvision::App
          */
         AppInfo() = default;
         /**
+         * @brief Constructs an AppInfo.
+         * @param id The application id
+         * @param name The application name
+         * @param englishShortName The application short name in English
+         */
+        AppInfo(const std::string& id, const std::string& name, const std::string& englishShortName);
+        /**
          * @brief Gets the application id.
          * @return The application id
          */

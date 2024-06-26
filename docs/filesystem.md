@@ -71,7 +71,7 @@ Path: `Nickvision::Filesystem::FileSystemWatcher`
   ``` 
     - The path of the folder being watched.
 - ```
-  Nickvision:Aura::Filesystem::WatcherFlags WatcherFlags: get
+  Nickvision::Filesystem::WatcherFlags WatcherFlags: get
   ``` 
     - The flags of what to watch changes for.
 - ```

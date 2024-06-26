@@ -2,11 +2,9 @@
 #include "notifications/notifyicon.h"
 #include <stdexcept>
 #include <strsafe.h>
-#include "app/aura.h"
 #include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
 
-using namespace Nickvision::App;
 using namespace Nickvision::Helpers;
 
 namespace Nickvision::Notifications
@@ -22,6 +20,10 @@ namespace Nickvision::Notifications
         m_guid{ 0 },
         m_hmenu{ nullptr }
     {
+        if(m_icons.contains(hwnd))
+        {
+            throw std::runtime_error("NotifyIcon already exists for this window. Use NotifyIcon::getFromHWND()");
+        }
         CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         //Get app icons
         HICON icon{ (HICON)GetClassLongPtrW(hwnd, GCLP_HICON) };
@@ -187,6 +189,15 @@ namespace Nickvision::Notifications
         return Shell_NotifyIconW(NIM_MODIFY, &notify) == TRUE;
     }
 
+    NotifyIcon* NotifyIcon::getFromHWND(HWND hwnd)
+    {
+        if (m_icons.contains(hwnd))
+        {
+            return m_icons[hwnd];
+        }
+        return nullptr;
+    }
+
     NOTIFYICONDATAW NotifyIcon::getBaseNotifyIconData()
     {
         NOTIFYICONDATAW notify{ 0 };
@@ -220,7 +231,6 @@ namespace Nickvision::Notifications
             m_hmenu = CreatePopupMenu();
             if (!m_hmenu)
             {
-                std::cout << "here1" << std::endl;
                 return false;
             }
             for (size_t i = 0; i < m_contextMenu.size(); i++)

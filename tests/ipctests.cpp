@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include "app/aura.h"
 #include "app/interprocesscommunicator.h"
 #include "system/environment.h"
 

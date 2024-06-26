@@ -32,8 +32,8 @@ if(NOT WIN32)
 endif()
 add_library (${PROJECT_NAME}
     "src/app/appinfo.cpp"
-    "src/app/aura.cpp"
     "src/app/datafilebase.cpp"
+    "src/app/datafilemanager.cpp"
     "src/app/interprocesscommunicator.cpp"
     "src/app/windowgeometry.cpp"
     "src/database/sqlcontext.cpp"
@@ -145,9 +145,9 @@ export(EXPORT "${PROJECT_NAME}Targets" FILE "${CMAKE_BINARY_DIR}/cmake/${PROJECT
 #libnick Test
 if (BUILD_TESTING)
 	add_executable(${PROJECT_NAME}_test
-        "tests/auratests.cpp"
         "tests/codetests.cpp"
         "tests/databasetests.cpp"
+        "tests/datafiletests.cpp"
         "tests/eventtests.cpp"
         "tests/filewatchertests.cpp"
         "tests/ipctests.cpp"
@@ -155,6 +155,7 @@ if (BUILD_TESTING)
         "tests/loggingtests.cpp"
         "tests/main.cpp"
         "tests/networktests.cpp"
+        "tests/notificationtests.cpp"
         "tests/passwordtests.cpp"
         "tests/storetests.cpp"
         "tests/stringtests.cpp"

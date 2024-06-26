@@ -75,6 +75,14 @@ namespace Nickvision::Notifications
          */
         bool notify(const ShellNotificationSentEventArgs& e);
 
+    public:
+        /**
+         * @brief Gets a NotifyIcon from an HWND.
+         * @param hwnd HWND
+         * @return The NotifyIcon associated with the HWND if found, else nullptr
+         */
+        static NotifyIcon* getFromHWND(HWND hwnd);
+
     private:
         /**
          * @brief Gets a basic NOTIFYICONDATAW struct for this NotifyIcon.

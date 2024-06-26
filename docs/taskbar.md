@@ -82,13 +82,13 @@ Path: `Nickvision::Taskbar::TaskbarItem`
   bool connect(HWND hwnd)
   ``` 
     - Accepts: The HWND handle of the main application window, hwnd.
-    - Returns: `true` if Aura connected to the taskbar item.
-    - Returns: `false` if Aura is unable to connect to the taskbar item.
+    - Returns: `true` if connected to the taskbar item.
+    - Returns: `false` if unable to connect to the taskbar item.
     - Note: This method is only available on Windows.
 - ```cpp
   bool connect(const std::string& desktopFile)
   ``` 
     - Accepts: The desktop file name with the file extension of the running application, desktopFile.
-    - Returns: `true` if Aura connected to the taskbar item.
-    - Returns: `false` if Aura is unable to connect to the taskbar item.
+    - Returns: `true` if connected to the taskbar item.
+    - Returns: `false` if unable to connect to the taskbar item.
     - Note: This method is only available on Linux.

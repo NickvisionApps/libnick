@@ -130,6 +130,13 @@ Path: `Nickvision::Notifications::NotifyIcon`
     - Returns: `true` if the notification was shown from the NotifyIcon.
     - Returns: `false` if the notification was not shown from the NotifyIcon.
     - Note: Supports the action "open" with action param being a path of a file or folder to open.
+- ```cpp
+  static NotifyIcon* getFromHWND(HWND hwnd)
+  ```
+    - Accepts: The window handle of a window to get the NotifyIcon for, hwnd.
+    - Returns: The pointer to the NotifyIcon for hwnd, if found.
+    - Returns: std::nullopt if no NotifyIcon fro hwnd was found.
+    - Note: This method is not recommended to be used.
 
 ## NotifyIconMenu
 Description: A menu for a NotifyIcon.
@@ -243,13 +250,13 @@ Path: `Nickvision::Notifications::ShellNotification`
 - ```cpp
   void send(const ShellNotificationSentEventArgs& e, HWND hwnd)
   ``` 
-    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the `HWND` handle for the main application window, hwnd. The hwnd parameter is only used once on the initial creation of the static `NotifyIcon` and then is ignored on future calls.
+    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the `HWND` handle for the main application window, hwnd.
     - Note: This function is only available on the Windows platform. It uses `Nickvision::Notifications::NotifyIcon`.
     - Note: This function supports the action "open" with action param being a path of a file or folder to open.
 - ```cpp
-  void send(const ShellNotificationSentEventArgs& e, const std::string& openText)
+  void send(const ShellNotificationSentEventArgs& e, const std::string& appId, const std::string& openText)
   ``` 
-    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, and the localized text of "Open", openText.
+    - Accepts: The `ShellNotificationSentEventArgs` containing the information to show, e, the application's id, appId, and the localized text of "Open", openText.
     - Note: This function is only available on the Linux platform.
     - Note: This function supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event.
 - ```cpp

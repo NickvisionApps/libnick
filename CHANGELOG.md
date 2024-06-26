@@ -3,18 +3,19 @@
 ## 2024.6.9 (next)
 ### Breaking Changes
 #### App
-- Removed `Nickvision::App::Aura::getExecutableDirectory()`
-- Removed `Nickvision::App::Aura::isRunning*` methods
-- Removed `Nickvision::App::Aura::findDependency()`
-- Renamed `Nickvision::App::Aura::getConfig()` to `Nickvision::App::Aura::getDataFile()`
+- Removed `Nickvision::App::Aura`
 - Renamed `Nickvision::App::ConfigurationBase` to` Nickvision::App::DataFileBase`
 #### Filesystem
 - Removed `Nickvision::Filesystem::SystemDirectories` namespace
 - Removed `Nickvision::Filesystem::UserDirectories::get*` methods
 ### New APIs
+#### App
+- Added `Nickvision::App::DataFileManager` class
 #### Filesystem
 - Added `Nickvision::Filesystem::UserDirectory` enum
 - Added `Nickvision::Filesystem::UserDirectories::get()`
+#### Notifications
+- Added `Nickvision::Notifications::NotifyIcon::getForHWND()`
 #### System
 - Added `Nickvision::System::DeploymentMode` enum
 - Added `Nickvision::System::OperatingSystem` enum
@@ -25,6 +26,8 @@
 - Added `Nickvision::System::Environment::getPath()`
 - Added `Nickvision::System::Environment::findDependency()`
 ### Fixes
+#### Filesystem
+- `Nickvision::Filesystem::UserDirectories` will now fetch proper `macOS` directories
 #### Localization
 - `Nickvision::Localization::Gettext::init()` will ensure the domainName is lowercase and contains no spaces
 #### Update

@@ -74,6 +74,9 @@ Type: `class`
 
 Path: `Nickvision::Network::NetworkMonitor`
 
+### Environment
+If the `AURA_DISABLE_NETCHECK` environment variable is set to `true`, `NetworkMonitor` will also return `ConnectedGlobal` for `ConnectionState`.
+
 ### Member Variables
 - ```
   Nickvision::Network::NetworkState ConnectionState: get
@@ -110,6 +113,7 @@ int main()
 {
     NetworkMonitor netmon;
     netmon.stateChanged() += onNetChanged;
+    //Have to check initial state
     if(netmon.getConnectedState() == NetworkState::ConnectedGlobal)
     {
         std::cout << "Connected to internet on startup." << std::endl;

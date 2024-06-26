@@ -4,8 +4,8 @@ This module contains types and functions for creating Nickvision applications.
 
 ## Table of Contents
 - [AppInfo](#appinfo)
-- [Aura](#aura)
 - [DataFileBase](#datafilebase)
+- [DataFileManager](#datafilemanager)
 - [InterProcessCommunicator](#interprocesscommunicator)
 - [WindowGeometry](#windowgeometry)
 
@@ -45,7 +45,7 @@ Path: `Nickvision::App::AppInfo`
     - The application description.
     - Ex: `"A template for Nickvision applications."`
 - ```
-  Nickvision::Version Version: get, set
+  Nickvision::Update::Version Version: get, set
   ```
     - The application version.
     - Ex: `2023.12.0`
@@ -125,67 +125,6 @@ Path: `Nickvision::App::AppInfo`
     - Returns: A list of entries in the following format: `"{key} {value}"`.
     - Ex: `AppInfo::convertUrlMapToVector({ { "a", "a2" }, { "b", "b2" } })` will return `std::vector<std::string>{ "a a2", "b b2" }`.
 
-## Aura
-Description: An application base.
-
-Interface: [aura.h](/include/app/aura.h)
-
-Type: `class`
-
-Path: `Nickvision::App::Aura`
-
-### Member Variables
-- ```
-  Nickvision::App::AppInfo& AppInfo: get
-  ```
-    - The AppInfo object for the application
-- ```
-  InterProcessCommunicator& IPC: get
-  ```
-    - The application's inter process communicator
-- ```
-  const Logger& Logger: get
-  ```
-    - The application's logger
-
-### Methods
-- ```cpp
-  bool init(const std::string& id, const std::string& name, const std::string& englishShortName, Logging:LogLevel logLevel)
-  ```
-    - Accepts: An application id, id, an application name, name, an application english short name, englishShortName, and the application log level, logLevel.
-    - Returns: True if initialized, else false.
-    - Throws: `std::runtime_error` if the gettext system fails to initialize.
-    - Throws: `std::runtime_error` if unable to get the executable directory path.
-    - Note: This also calls Localization::Gettext::init().
-- ```cpp
-  std::string getHelpUrl(const std::string& pageName)
-  ``` 
-    - Accepts: The name of the documentation page to get the help url for, pageName.
-    - Returns: The url for the documentation page. This will be a yelp url for Linux and a website url for Windows and Linux snaps.
-    - Note: HtmlDocsStore should be set for Aura::getActive()::getAppInfo(). For Nickvision apps, this will be: `https://raw.githubusercontent.com/NickvisionApps/SHORT_APP_NAME/main/APP_NAME.Shared/Docs/html`, but can be customized for any app.
-- ```cpp
-  T& getDataFile<T>(const std::string& key)
-  ```
-    - Accepts: The string key of the data file, key.
-    - Returns: A reference to the data object of type T with key key.
-    - Throws: `std::invalid_argument` if key is empty
-    - Note: T must be a type that derives from `Nickvision::DataFileBase`
-    - Ex: `getDataFile<Configuration>("abc")` will return the `Configuration` object parsed from a `abc.json` file on disk.
-- ```cpp
-  Notifications::NotifyIcon& getNotifyIcon(HWND hwnd)
-  ```
-    - Accepts: The window handle for the notify icon, hwnd.
-    - Returns: The application's NotifyIcon.
-    - Note: The hwnd only needs to be valid on the first call to establish the new NotifyIcon.
-    - Note: The new NotifyIcon will be hidden by default.
-    - Note: This function is only available on Windows.
-
-### Static Functions
-- ```cpp
-  Nickvision::Aura& getActive()
-  ```
-    - Returns: The reference to the singleton `Aura` object.
-
 ## DataFileBase
 Description: A base class for json data files.
 
@@ -225,7 +164,7 @@ The purpose of `DataFileBase` is to act as a base when defining your own data ob
 
 Here are some key points when defining your own configuration objects:
 - Your data object's constructor must take `const std::string& key` and `const std::string& appName` parameters and pass it to `DataFileBase`'s constructor. 
-    - Although you will not use `key` and `appName` in your own implementation, it is required for `DataFileBase`'s functionality and will be filled-in by the `Aura::getDataFile()` method.
+    - Although you will not use `key` and `appName` in your own implementation, it is required for `DataFileBase`'s functionality and will be filled-in by the `DataFileManager`.
 - `DataFileBase` exposes a protected `m_json` object which you must use in your implementation of getting and storing variables of your data object. 
     - If this `m_json` object is not used, your data object will not be stored to disk correctly.
 - You must explicitly call the `save` method on your configuration object when you want to save the configuration to disk. Writing to the `m_json` object is not enough to trigger saving the file on disk.
@@ -255,15 +194,15 @@ public:
 	}
 };
 ```
-This object can now be used by an Aura-based application:
+This object can now be used with the `DataFileManager`:
 ```cpp
 using namespace Nickvision::App;
 using namespace Nickvision::Events;
 
 int main()
 {
-    Aura::getActive().init(...);
-    AppConfig& config{ Aura::getActive().getDataFile<AppConfig>("config") };
+    DataFileManager dfm{ "AppName" };
+    AppConfig& config{ dfm.get<AppConfig>("config") };
     config.saved() += [](const EventArgs& e) { std::cout << "Config saved to disk." << std::endl; };
     if(config.getPreviousCount() > 0)
     {
@@ -273,6 +212,30 @@ int main()
     config.save(); //lambda will be invoked on success
 }
 ```
+
+## DataFileManager
+Description: A manager of data files for an application.
+
+Interface: [datafilemanager.h](/include/app/datafilemanager.h)
+
+Type: `class`
+
+Path: `Nickvision::App::DataFileManager`
+
+### Methods
+- ```cpp
+  DataFileManager(const std::string& appName)
+  ```
+    - Constructs a DataFileManager.
+    - Accepts: The name of the application, appName (used in determining the path to store data files on disk).
+- ```cpp
+  T& get<T>(const std::string& key)
+  ```
+    - Accepts: The string key of the data file, key.
+    - Returns: A reference to the data object of type T with key key.
+    - Throws: `std::invalid_argument` if key is empty
+    - Note: T must be a type that derives from `Nickvision::App::DataFileBase`
+    - Ex: `get<Configuration>("abc")` will return the `Configuration` object parsed from a `abc.json` file on disk.
  
 ## InterProcessCommunicator
 Description: An inter process communicator (server/client).
@@ -336,7 +299,6 @@ using namespace Nickvision::App;
 
 int main(int argc, char*[] argv)
 {
-    Aura::getActive().init(...);
     std::vector<std::string> modernArgs;
     for(int i = 0; i < argc; i++)
     {
@@ -345,7 +307,7 @@ int main(int argc, char*[] argv)
             modernArgs.push_back({ argv[i] });
         }
     }
-    InterProcessCommunicator& ipc{ Aura::getActuve().getIPC() };
+    InterProcessCommunicator& ipc{ "appid" };
     ipc.commandReceived() += [](const Events::ParamEventArgs<std::vector<std::string>>& args) { ... };
     ipc.communicate(modernArgs, true);
 }

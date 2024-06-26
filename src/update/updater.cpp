@@ -4,14 +4,12 @@
 #include <stdexcept>
 #include <vector>
 #include <json/json.h>
-#include "app/aura.h"
 #include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
-using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
 using namespace Nickvision::Helpers;
 
