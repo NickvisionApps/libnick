@@ -37,7 +37,7 @@ namespace Nickvision::Filesystem
         {
             return var;
         }
-        std::filesystem::path dirsPath{ UserDirectories::getConfig() / "user-dirs.dirs" };
+        std::filesystem::path dirsPath{ UserDirectories::get(UserDirectory::Config) / "user-dirs.dirs" };
         if (!std::filesystem::exists(dirsPath))
         {
             return {};
@@ -70,6 +70,7 @@ namespace Nickvision::Filesystem
         switch(directory)
         {
         case UserDirectory::Home:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_Profile);
 #else
@@ -77,7 +78,9 @@ namespace Nickvision::Filesystem
             result = !var.empty() ? var : getpwuid(getuid())->pw_dir;
 #endif
             break;
+        }
         case UserDirectory::Config:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_RoamingAppData);
 #elif defined(__APPLE__)
@@ -87,14 +90,18 @@ namespace Nickvision::Filesystem
             result = !var.empty() ? var : (get(UserDirectory::Home) / ".config");
 #endif
             break;
+        }
         case UserDirectory::ApplicationConfig:
+        {
             if(appName.empty())
             {
                 return result;
             }
             result = get(UserDirectory::Config) / appName;
             break;
+        }
         case UserDirectory::Cache:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_LocalAppData) / "Temp";
 #elif defined(__APPLE__)
@@ -104,14 +111,18 @@ namespace Nickvision::Filesystem
             result = !var.empty() ? var : (get(UserDirectory::Home) / ".cache");
 #endif
             break;
+        }
         case UserDirectory::ApplicationCache:
+        {
             if(appName.empty())
             {
                 return result;
             }
             result = get(UserDirectory::Cache) / appName;
             break;
+        }
         case UserDirectory::LocalData:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_LocalAppData);
 #elif defined(__APPLE__)
@@ -121,14 +132,18 @@ namespace Nickvision::Filesystem
             result = !var.empty() ? var : (get(UserDirectory::Home) / ".local/share");
 #endif
             break;
+        }
         case UserDirectory::ApplicationLocalData:
+        {
             if(appName.empty())
             {
                 return result;
             }
             result = get(UserDirectory::LocalData) / appName;
             break;
+        }
         case UserDirectory::Desktop:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_Desktop);
 #elif defined(__APPLE__)
@@ -138,7 +153,9 @@ namespace Nickvision::Filesystem
             result = result.empty() ? (get(UserDirectory::Home) / "Desktop") : result;
 #endif
             break;
+        }
         case UserDirectory::Documents:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_Documents);
 #elif defined(__APPLE__)
@@ -148,7 +165,9 @@ namespace Nickvision::Filesystem
             result = result.empty() ? (get(UserDirectory::Home) / "Documents") : result;
 #endif
             break;
+        }
         case UserDirectory::Downloads:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_Downloads);
 #elif defined(__APPLE__)
@@ -158,7 +177,9 @@ namespace Nickvision::Filesystem
             result = result.empty() ? (get(UserDirectory::Home) / "Downloads") : result;
 #endif
             break;
+        }
         case UserDirectory::Music:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_Music);
 #elif defined(__APPLE__)
@@ -168,7 +189,9 @@ namespace Nickvision::Filesystem
             result = result.empty() ? (get(UserDirectory::Home) / "Music") : result;
 #endif
             break;
+        }
         case UserDirectory::Pictures:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_Pictures);
 #elif defined(__APPLE__)
@@ -178,7 +201,9 @@ namespace Nickvision::Filesystem
             result = result.empty() ? (get(UserDirectory::Home) / "Pictures") : result;
 #endif
             break;
+        }
         case UserDirectory::Templates:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_Templates);
 #elif defined(__APPLE__)
@@ -188,7 +213,9 @@ namespace Nickvision::Filesystem
             result = result.empty() ? (get(UserDirectory::Home) / "Templates") : result;
 #endif
             break;
+        }
         case UserDirectory::Videos:
+        {
 #ifdef _WIN32
             result = getKnownDir(FOLDERID_Videos);
 #elif defined(__APPLE__)
@@ -198,6 +225,7 @@ namespace Nickvision::Filesystem
             result = result.empty() ? (get(UserDirectory::Home) / "Videos") : result;
 #endif
             break;
+        }
         default:
             return result;
         }

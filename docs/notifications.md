@@ -135,7 +135,7 @@ Path: `Nickvision::Notifications::NotifyIcon`
   ```
     - Accepts: The window handle of a window to get the NotifyIcon for, hwnd.
     - Returns: The pointer to the NotifyIcon for hwnd, if found.
-    - Returns: std::nullopt if no NotifyIcon fro hwnd was found.
+    - Returns: std::nullopt if no NotifyIcon for hwnd was found.
     - Note: This method is not recommended to be used.
 
 ## NotifyIconMenu
