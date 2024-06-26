@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.6.9 (next)
+## 2024.6.9
 ### Breaking Changes
 #### App
 - Removed `Nickvision::App::Aura`
