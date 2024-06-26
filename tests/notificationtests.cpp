@@ -15,7 +15,7 @@ TEST(NotificationTests, SendShellNotification)
         ASSERT_NO_THROW(ShellNotification::send(e, GetConsoleWindow()));
     }
 #elif defined(__linux__)
-    ASSERT_NO_THROW(ShellNotification::send(e, "Open"));
+    ASSERT_NO_THROW(ShellNotification::send(e, "org.nickvision.aura.test", "Open"));
 #elif defined(__APPLE__)
     ASSERT_NO_THROW(ShellNotification::send(e));
 #endif

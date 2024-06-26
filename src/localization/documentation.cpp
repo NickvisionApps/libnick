@@ -11,7 +11,7 @@ namespace Nickvision::Localization
     std::string Documentation::getHelpUrl(const std::string& englishShortName, const std::string& htmlDocStore, const std::string& pageName)
     {
 #ifdef __linux__
-        if (Environment::getDeploymentMode() != DeploymentMode::Snap))
+        if (Environment::getDeploymentMode() != DeploymentMode::Snap)
         {
             return "help:" + StringHelpers::lower(englishShortName) + "/" + pageName;
         }

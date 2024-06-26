@@ -55,7 +55,7 @@ namespace Nickvision::Filesystem
             {
                 if (pair[1].find("$HOME") != std::string::npos)
                 {
-                    pair[1].replace(pair[1].find("$HOME"), 5, UserDirectories::getHome().string());
+                    pair[1].replace(pair[1].find("$HOME"), 5, UserDirectories::get(UserDirectory::Home).string());
                 }
                 return StringHelpers::trim(pair[1], '"');
             }
