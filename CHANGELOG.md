@@ -16,6 +16,8 @@
 - Added `Nickvision::Filesystem::UserDirectories::get()`
 #### Notifications
 - Added `Nickvision::Notifications::NotifyIcon::getForHWND()`
+#### Localization
+- Added `Nickvision::Localization::Documentation::getHelpUrl()`
 #### System
 - Added `Nickvision::System::DeploymentMode` enum
 - Added `Nickvision::System::OperatingSystem` enum

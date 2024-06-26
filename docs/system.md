@@ -99,6 +99,11 @@ Path: `Nickvision::System::Environment`
     - Note: Windows UWP (Store) apps are not supported.
     - Ex: `System::findDependency("cmd")` on Windows will return `C:\Windows\System32\cmd.exe`.
     - Ex: `System::findDependency("bash")` on Linux will return `/usr/bin/bash`.
+- ```cpp
+  std::string getDebugInformation(const App::AppInfo& appInfo, const std::string& extraInformation = "")
+  ```
+    - Accepts: The application's AppInfo, appInfo, and optional additional information to append to the end of the string, extraInformation.
+    - Returns: The debug information string about the user's environment.
 
 ## OperatingSystem
 Description: Supported operating system values.

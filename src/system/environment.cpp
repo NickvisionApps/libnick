@@ -1,6 +1,7 @@
 #include "system/environment.h"
 #include <cstdlib>
 #include <locale>
+#include <sstream>
 #include <unordered_map>
 #include "helpers/stringhelpers.h"
 #include "system/process.h"
@@ -11,6 +12,7 @@
 #include <unistd.h>
 #endif
 
+using namespace Nickvision::App;
 using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
@@ -64,10 +66,14 @@ namespace Nickvision::System
         {
             return StringHelpers::str(name);
         }
-        return "";
 #else
-        return std::locale("").name();
+        try
+        {
+            return std::locale("").name();
+        }
+        catch(...) { }
 #endif
+        return "";
     }
 
     std::string Environment::getVariable(const std::string& key)
@@ -172,5 +178,47 @@ namespace Nickvision::System
         }
         //Return newly cached dependency path
         return dependencies[dependency];
+    }
+
+    std::string Environment::getDebugInformation(const AppInfo& appInfo, const std::string& extraInformation)
+    {
+        std::stringstream builder;
+        builder << appInfo.getId() << std::endl;
+        switch(getOperatingSystem())
+        {
+        case OperatingSystem::Windows:
+            builder << "Windows" << std::endl;
+            break;
+        case OperatingSystem::MacOS:
+            builder << "macOS" << std::endl;
+            break;
+        case OperatingSystem::Linux:
+            builder << "Linux" << std::endl;
+            break;
+        default:
+            builder << "Unknown OS" << std::endl;
+            break;
+        }
+        builder << appInfo.getVersion() << std::endl << std::endl;
+        builder << "Deployment Mode: ";
+        switch(getDeploymentMode())
+        {
+        case DeploymentMode::Local:
+            builder << "Local" << std::endl;
+            break;
+        case DeploymentMode::Flatpak:
+            builder << "Flatpak" << std::endl;
+            break;
+        case DeploymentMode::Snap:
+            builder << "Snap" << std::endl;
+            break;
+        }
+        builder << "Locale: " << getLocaleName() << std::endl;
+        builder << "Running From: " << getExecutableDirectory() << std::endl;
+        if(!extraInformation.empty())
+        {
+            builder << std::endl << extraInformation;
+        }
+        return builder.str();
     }
 }

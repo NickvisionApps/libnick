@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <string>
 #include <vector>
+#include "app/appinfo.h"
 #include "deploymentmode.h"
 #include "operatingsystem.h"
 
@@ -82,6 +83,13 @@ namespace Nickvision::System::Environment
      * @return The path to the executable dependency if found, else empty path
      */
     const std::filesystem::path& findDependency(std::string dependency);
+    /**
+     * @brief Gets a debug information string about the user's environment.
+     * @brief appInfo The application's AppInfo
+     * @brief extraInformation Extra information to append to the end of the debug information string
+     * @return The debug information string
+     */
+    std::string getDebugInformation(const App::AppInfo& appInfo, const std::string& extraInformation = "");
 }
 
 #endif //ENVIRONMENT_H

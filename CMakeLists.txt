@@ -53,6 +53,7 @@ add_library (${PROJECT_NAME}
     "src/keyring/passwordstrength.cpp"
     "src/keyring/store.cpp"
     "src/keyring/systemcredentials.cpp"
+    "src/localization/documentation.cpp"
     "src/localization/gettext.cpp"
     "src/logging/logger.cpp"
     "src/network/curleasy.cpp"
