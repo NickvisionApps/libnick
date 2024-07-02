@@ -1,0 +1,43 @@
+\doxysection{include/localization/documentation.h File Reference}
+\hypertarget{documentation_8h}{}\label{documentation_8h}\index{include/localization/documentation.h@{include/localization/documentation.h}}
+{\ttfamily \#include $<$string$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{documentation_8h_acb1ae996c11dca1249b6c8ba09387bb3}{Nickvision\+::\+Localization\+::\+Documentation\+::get\+Help\+Url}} (const std\+::string \&english\+Short\+Name, const std\+::string \&html\+Doc\+Store, const std\+::string \&page\+Name)
+\begin{DoxyCompactList}\small\item\em Gets the url for a documentation page. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Nicholas Logozzo \href{mailto:nlogozzo225@gmail.com}{\texttt{ nlogozzo225@gmail.\+com}}
+\end{DoxyAuthor}
+\hypertarget{versiontype_8h_LICENSE}{}\doxysubsection{\texorpdfstring{LICENSE}{LICENSE}}\label{versiontype_8h_LICENSE}
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details at \href{https://www.gnu.org/copyleft/gpl.html}{\texttt{ https\+://www.\+gnu.\+org/copyleft/gpl.\+html}}\hypertarget{versiontype_8h_DESCRIPTION}{}\doxysubsection{\texorpdfstring{DESCRIPTION}{DESCRIPTION}}\label{versiontype_8h_DESCRIPTION}
+Functions for working with an application\textquotesingle{}s documentation. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{documentation_8h_acb1ae996c11dca1249b6c8ba09387bb3}\index{documentation.h@{documentation.h}!getHelpUrl@{getHelpUrl}}
+\index{getHelpUrl@{getHelpUrl}!documentation.h@{documentation.h}}
+\doxysubsubsection{\texorpdfstring{getHelpUrl()}{getHelpUrl()}}
+{\footnotesize\ttfamily \label{documentation_8h_acb1ae996c11dca1249b6c8ba09387bb3} 
+std\+::string Nickvision\+::\+Localization\+::\+Documentation\+::get\+Help\+Url (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{english\+Short\+Name}{, }\item[{const std\+::string \&}]{html\+Doc\+Store}{, }\item[{const std\+::string \&}]{page\+Name}{}\end{DoxyParamCaption})}
+
+
+
+Gets the url for a documentation page. 
+
+This will be a yelp url for Linux and a website url for Windows and Linux snaps. 
+\begin{DoxyParams}{Parameters}
+{\em english\+Short\+Name} & The english short name of the application \\
+\hline
+{\em html\+Doc\+Store} & The html docs store url \\
+\hline
+{\em page\+Name} & The name of the documentation page to get \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The url for the documentation page 
+\end{DoxyReturn}

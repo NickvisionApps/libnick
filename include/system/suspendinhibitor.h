@@ -1,3 +1,25 @@
+/**
+ * @file
+ * @author Nicholas Logozzo <nlogozzo225@gmail.com>
+ *
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details at
+ * https://www.gnu.org/copyleft/gpl.html
+ *
+ * @section DESCRIPTION
+ *
+ * An object to prevent the system from suspending.
+ */
+
 #ifndef SUSPENDINHIBITOR_H
 #define SUSPENDINHIBITOR_H
 
@@ -21,12 +43,12 @@ namespace Nickvision::System
         SuspendInhibitor();
         /**
          * @brief Copies a SuspendInhibitor object.
-         * @param database The object to move
+         * @param inhibitor The object to move
          */
         SuspendInhibitor(const SuspendInhibitor& inhibitor);
         /**
          * @brief Moves a SuspendInhibitor object.
-         * @param database The object to move
+         * @param inhibitor The object to move
          */
         SuspendInhibitor(SuspendInhibitor&& inhibitor) noexcept;
         /**
@@ -51,13 +73,13 @@ namespace Nickvision::System
         bool uninhibit();
         /**
          * @brief Copies a SuspendInhibitor object.
-         * @param database The SuspendInhibitor to copy
+         * @param inhibitor The SuspendInhibitor to copy
          * @return this
          */
         SuspendInhibitor& operator=(const SuspendInhibitor& inhibitor);
         /**
          * @brief Moves a SuspendInhibitor object.
-         * @param database The SuspendInhibitor to move
+         * @param inhibitor The SuspendInhibitor to move
          * @return this
          */
         SuspendInhibitor& operator=(SuspendInhibitor&& inhibitor) noexcept;

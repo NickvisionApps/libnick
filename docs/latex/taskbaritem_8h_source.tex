@@ -1,0 +1,68 @@
+\doxysection{taskbaritem.\+h}
+\hypertarget{taskbaritem_8h_source}{}\label{taskbaritem_8h_source}\index{include/taskbar/taskbaritem.h@{include/taskbar/taskbaritem.h}}
+\mbox{\hyperlink{taskbaritem_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ TASKBARITEM\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ TASKBARITEM\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{progressstate_8h}{progressstate.h}}"{}}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ <windows.h>}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ <atlbase.h>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ <gdiplus.h>}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <shlobj\_core.h>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#elif\ defined(\_\_linux\_\_)}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <gio/gio.h>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{namespace\ }Nickvision::Taskbar}
+\DoxyCodeLine{00040\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item}{TaskbarItem}}}
+\DoxyCodeLine{00045\ \ \ \ \ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_a1779a4810c8772dc14c9b278297c0395}{TaskbarItem}}();}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_a617906079dfb1876eecbda928e8d803c}{\string~TaskbarItem}}();}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{progressstate_8h_a93de85f76e52f245dcbd9e6f374b10ef}{ProgressState}}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_a91ce47ef86b7211cfd5045252b432277}{getProgressState}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_aebb59965cd76bcf83b87b1cb80bc9122}{setProgressState}}(\mbox{\hyperlink{progressstate_8h_a93de85f76e52f245dcbd9e6f374b10ef}{ProgressState}}\ state);}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_aa92fde4c9d5d8039f2bfd56b7f9e586e}{getProgress}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_ad1166f019302e32912886df910cae3ad}{setProgress}}(\textcolor{keywordtype}{double}\ progress);}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_a77759399e8bb7afa8c9793c480f5de5c}{getUrgent}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_ad11028f2c367618a9f0ec3b14bcbb9ce}{setUrgent}}(\textcolor{keywordtype}{bool}\ urgent);}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_a88bf3912381ae8f6f313c860d3263b96}{getCountVisible}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_acb4af229f74a9c108da71a41ab468914}{setCountVisible}}(\textcolor{keywordtype}{bool}\ countVisible);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_a374c087d79fecf70a667e85ede8618d6}{getCount}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_nickvision_1_1_taskbar_1_1_taskbar_item_a410bded1f3d174b095f22925b0fccf35}{setCount}}(\textcolor{keywordtype}{long}\ count);}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ connect(HWND\ hwnd);}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#elif\ defined(\_\_linux\_\_)}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ connect(\textcolor{keyword}{const}\ std::string\&\ desktopFile);}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keyword}{mutable}\ std::mutex\ m\_mutex;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{progressstate_8h_a93de85f76e52f245dcbd9e6f374b10ef}{ProgressState}}\ m\_progressState;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ m\_progress;}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_urgent;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_countVisible;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ m\_count;}
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ drawCountIcon();}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ HWND\ m\_hwnd;}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ CComPtr<ITaskbarList3>\ m\_taskbar;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ ULONG\_PTR\ m\_gdi;}
+\DoxyCodeLine{00137\ \textcolor{preprocessor}{\#elif\ defined(\_\_linux\_\_)}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ sendDBusUpdate();}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ GDBusConnection*\ m\_connection;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ std::string\ m\_objectPath;}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ std::string\ m\_appUri;}
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00146\ \ \ \ \ \};}
+\DoxyCodeLine{00147\ \}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//TASKBARITEM\_H}}
+
+\end{DoxyCode}

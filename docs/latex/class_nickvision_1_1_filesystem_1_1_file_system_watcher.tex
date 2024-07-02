@@ -1,0 +1,194 @@
+\doxysection{Nickvision\+::Filesystem\+::File\+System\+Watcher Class Reference}
+\hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher}{}\label{class_nickvision_1_1_filesystem_1_1_file_system_watcher}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+
+
+A watcher of a file system folder.  
+
+
+
+
+{\ttfamily \#include $<$filesystemwatcher.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_ade02d21a7e8bffb375fcf0dfef46c999}{File\+System\+Watcher}} (const std\+::filesystem\+::path \&path, bool include\+Subdirectories, \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} watcher\+Flags=Watcher\+Flags\+::\+File\+Name\texorpdfstring{$\vert$}{|}Watcher\+Flags\+::\+Directory\+Name\texorpdfstring{$\vert$}{|}Watcher\+Flags\+::\+Attributes\texorpdfstring{$\vert$}{|}Watcher\+Flags\+::\+Size\texorpdfstring{$\vert$}{|}Watcher\+Flags\+::\+Last\+Write\texorpdfstring{$\vert$}{|}Watcher\+Flags\+::\+Last\+Access)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_filesystem_1_1_file_system_watcher}{File\+System\+Watcher}. \end{DoxyCompactList}\item 
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a9fae14fdc5ba6aa344624a710f582150}\label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a9fae14fdc5ba6aa344624a710f582150} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+File\+System\+Watcher} ()
+\begin{DoxyCompactList}\small\item\em Destructs a \doxylink{class_nickvision_1_1_filesystem_1_1_file_system_watcher}{File\+System\+Watcher}. \end{DoxyCompactList}\item 
+const std\+::filesystem\+::path \& \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a52e705f6e8c688e98162a2b320058dac}{get\+Path}} () const
+\begin{DoxyCompactList}\small\item\em Gets the path of the folder being watched. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a037468f5b7bedf6f0b80e8db089be019}{get\+Watcher\+Flags}} () const
+\begin{DoxyCompactList}\small\item\em Gets the flags of what to watch changes for. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a523efaff917d11a260f1c20f23d569dc}{get\+Include\+Subdirectories}} () const
+\begin{DoxyCompactList}\small\item\em Gets whether or not subdirectories of the folder are watched. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events\+::\+Event}}$<$ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args}{File\+System\+Changed\+Event\+Args}} $>$ \& \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a629bdd9d9658f07bac913bd51565a436}{changed}} ()
+\begin{DoxyCompactList}\small\item\em Gets the event for when a watched flag of the folder is changed. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_afb69e43029a4b149a2863bcce0409259}{is\+Extension\+Watched}} (const std\+::filesystem\+::path \&extension)
+\begin{DoxyCompactList}\small\item\em Gets whether or not a file extension is being watched. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a195e39b870aaccedc301d7ed6c3a621e}{add\+Extension\+Filter}} (const std\+::filesystem\+::path \&extension)
+\begin{DoxyCompactList}\small\item\em Adds an extension of a file to watch for changes in the folder. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_aaf524f11f1b3a68d81f81e9aa8e4a615}{remove\+Extension\+Filter}} (const std\+::filesystem\+::path \&extension)
+\begin{DoxyCompactList}\small\item\em Removes an extension of a file to watch for changes in the folder. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a64525d379136fbd985ef59e3c6348ca0}{clear\+Extension\+Filters}} ()
+\begin{DoxyCompactList}\small\item\em Clears all watched extension filters. This will cause all extensions to be implicitly watched. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A watcher of a file system folder. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_ade02d21a7e8bffb375fcf0dfef46c999}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!FileSystemWatcher@{FileSystemWatcher}}
+\index{FileSystemWatcher@{FileSystemWatcher}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{FileSystemWatcher()}{FileSystemWatcher()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_ade02d21a7e8bffb375fcf0dfef46c999} 
+Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::\+File\+System\+Watcher (\begin{DoxyParamCaption}\item[{const std\+::filesystem\+::path \&}]{path}{, }\item[{bool}]{include\+Subdirectories}{, }\item[{\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}}}]{watcher\+Flags}{ = {\ttfamily WatcherFlags\+:\+:FileName\texorpdfstring{$\vert$}{|}WatcherFlags\+:\+:DirectoryName\texorpdfstring{$\vert$}{|}WatcherFlags\+:\+:Attributes\texorpdfstring{$\vert$}{|}WatcherFlags\+:\+:Size\texorpdfstring{$\vert$}{|}WatcherFlags\+:\+:LastWrite\texorpdfstring{$\vert$}{|}WatcherFlags\+:\+:LastAccess}}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_filesystem_1_1_file_system_watcher}{File\+System\+Watcher}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & The path of the folder to watch \\
+\hline
+{\em include\+Subdirectories} & Whether or not to include subdirectories for the folder \\
+\hline
+{\em watcher\+Flags} & The flags of what to watch changes for \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & Thrown if unable to initialize watcher \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a195e39b870aaccedc301d7ed6c3a621e}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!addExtensionFilter@{addExtensionFilter}}
+\index{addExtensionFilter@{addExtensionFilter}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{addExtensionFilter()}{addExtensionFilter()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a195e39b870aaccedc301d7ed6c3a621e} 
+bool Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::add\+Extension\+Filter (\begin{DoxyParamCaption}\item[{const std\+::filesystem\+::path \&}]{extension}{}\end{DoxyParamCaption})}
+
+
+
+Adds an extension of a file to watch for changes in the folder. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em extension} & The file extension to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a629bdd9d9658f07bac913bd51565a436}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!changed@{changed}}
+\index{changed@{changed}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{changed()}{changed()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a629bdd9d9658f07bac913bd51565a436} 
+\mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events\+::\+Event}}$<$ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args}{File\+System\+Changed\+Event\+Args}} $>$ \& Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::changed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the event for when a watched flag of the folder is changed. 
+
+\begin{DoxyReturn}{Returns}
+The changed event 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a64525d379136fbd985ef59e3c6348ca0}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!clearExtensionFilters@{clearExtensionFilters}}
+\index{clearExtensionFilters@{clearExtensionFilters}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{clearExtensionFilters()}{clearExtensionFilters()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a64525d379136fbd985ef59e3c6348ca0} 
+bool Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::clear\+Extension\+Filters (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Clears all watched extension filters. This will cause all extensions to be implicitly watched. 
+
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a523efaff917d11a260f1c20f23d569dc}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!getIncludeSubdirectories@{getIncludeSubdirectories}}
+\index{getIncludeSubdirectories@{getIncludeSubdirectories}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{getIncludeSubdirectories()}{getIncludeSubdirectories()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a523efaff917d11a260f1c20f23d569dc} 
+bool Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::get\+Include\+Subdirectories (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets whether or not subdirectories of the folder are watched. 
+
+\begin{DoxyReturn}{Returns}
+True if subdirectories watched, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a52e705f6e8c688e98162a2b320058dac}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!getPath@{getPath}}
+\index{getPath@{getPath}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{getPath()}{getPath()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a52e705f6e8c688e98162a2b320058dac} 
+const std\+::filesystem\+::path \& Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::get\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the path of the folder being watched. 
+
+\begin{DoxyReturn}{Returns}
+The path of the folder being watched 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a037468f5b7bedf6f0b80e8db089be019}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!getWatcherFlags@{getWatcherFlags}}
+\index{getWatcherFlags@{getWatcherFlags}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{getWatcherFlags()}{getWatcherFlags()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a037468f5b7bedf6f0b80e8db089be019} 
+\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::get\+Watcher\+Flags (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the flags of what to watch changes for. 
+
+\begin{DoxyReturn}{Returns}
+The flags of watched properties 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_afb69e43029a4b149a2863bcce0409259}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!isExtensionWatched@{isExtensionWatched}}
+\index{isExtensionWatched@{isExtensionWatched}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{isExtensionWatched()}{isExtensionWatched()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_afb69e43029a4b149a2863bcce0409259} 
+bool Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::is\+Extension\+Watched (\begin{DoxyParamCaption}\item[{const std\+::filesystem\+::path \&}]{extension}{}\end{DoxyParamCaption})}
+
+
+
+Gets whether or not a file extension is being watched. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em extension} & The file extension to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if extension is being watched, else false 
+
+True if list of extension filters is empty 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_watcher_aaf524f11f1b3a68d81f81e9aa8e4a615}\index{Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}!removeExtensionFilter@{removeExtensionFilter}}
+\index{removeExtensionFilter@{removeExtensionFilter}!Nickvision::Filesystem::FileSystemWatcher@{Nickvision::Filesystem::FileSystemWatcher}}
+\doxysubsubsection{\texorpdfstring{removeExtensionFilter()}{removeExtensionFilter()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_watcher_aaf524f11f1b3a68d81f81e9aa8e4a615} 
+bool Nickvision\+::\+Filesystem\+::\+File\+System\+Watcher\+::remove\+Extension\+Filter (\begin{DoxyParamCaption}\item[{const std\+::filesystem\+::path \&}]{extension}{}\end{DoxyParamCaption})}
+
+
+
+Removes an extension of a file to watch for changes in the folder. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em extension} & The file extension to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/filesystem/\mbox{\hyperlink{filesystemwatcher_8h}{filesystemwatcher.\+h}}\end{DoxyCompactItemize}

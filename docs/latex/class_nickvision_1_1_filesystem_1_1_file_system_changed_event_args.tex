@@ -1,0 +1,88 @@
+\doxysection{Nickvision\+::Filesystem\+::File\+System\+Changed\+Event\+Args Class Reference}
+\hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args}{}\label{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args}\index{Nickvision::Filesystem::FileSystemChangedEventArgs@{Nickvision::Filesystem::FileSystemChangedEventArgs}}
+
+
+An event argument for when a file system object is changed.  
+
+
+
+
+{\ttfamily \#include $<$filesystemchangedeventargs.\+h$>$}
+
+Inheritance diagram for Nickvision\+::Filesystem\+::File\+System\+Changed\+Event\+Args\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_a2cc2a641e853f52e14099de71f0b5159}{File\+System\+Changed\+Event\+Args}} (const std\+::filesystem\+::path \&path, \mbox{\hyperlink{fileaction_8h_a2ab0a9147887a01966de0ea9ec663178}{File\+Action}} why)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args}{File\+System\+Changed\+Event\+Args}. \end{DoxyCompactList}\item 
+const std\+::filesystem\+::path \& \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_acf82b92640f9bc9d0ca8840afcc7a86d}{get\+Path}} () const
+\begin{DoxyCompactList}\small\item\em Gets the path of the changed file system object system object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{fileaction_8h_a2ab0a9147887a01966de0ea9ec663178}{File\+Action}} \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_a1e01b9ec9c055a60b04ad51d517e164b}{get\+Why}} () const
+\begin{DoxyCompactList}\small\item\em Gets the action that caused the file system object to change. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event_args}{Nickvision\+::\+Events\+::\+Event\+Args}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Event\+Args} ()=default
+\begin{DoxyCompactList}\small\item\em Constructs an \doxylink{class_nickvision_1_1_events_1_1_event_args}{Event\+Args}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An event argument for when a file system object is changed. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_a2cc2a641e853f52e14099de71f0b5159}\index{Nickvision::Filesystem::FileSystemChangedEventArgs@{Nickvision::Filesystem::FileSystemChangedEventArgs}!FileSystemChangedEventArgs@{FileSystemChangedEventArgs}}
+\index{FileSystemChangedEventArgs@{FileSystemChangedEventArgs}!Nickvision::Filesystem::FileSystemChangedEventArgs@{Nickvision::Filesystem::FileSystemChangedEventArgs}}
+\doxysubsubsection{\texorpdfstring{FileSystemChangedEventArgs()}{FileSystemChangedEventArgs()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_a2cc2a641e853f52e14099de71f0b5159} 
+Nickvision\+::\+Filesystem\+::\+File\+System\+Changed\+Event\+Args\+::\+File\+System\+Changed\+Event\+Args (\begin{DoxyParamCaption}\item[{const std\+::filesystem\+::path \&}]{path}{, }\item[{\mbox{\hyperlink{fileaction_8h_a2ab0a9147887a01966de0ea9ec663178}{File\+Action}}}]{why}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args}{File\+System\+Changed\+Event\+Args}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & The path of the file/folder that changed \\
+\hline
+{\em why} & The action that caused the file system object to change \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_acf82b92640f9bc9d0ca8840afcc7a86d}\index{Nickvision::Filesystem::FileSystemChangedEventArgs@{Nickvision::Filesystem::FileSystemChangedEventArgs}!getPath@{getPath}}
+\index{getPath@{getPath}!Nickvision::Filesystem::FileSystemChangedEventArgs@{Nickvision::Filesystem::FileSystemChangedEventArgs}}
+\doxysubsubsection{\texorpdfstring{getPath()}{getPath()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_acf82b92640f9bc9d0ca8840afcc7a86d} 
+const std\+::filesystem\+::path \& Nickvision\+::\+Filesystem\+::\+File\+System\+Changed\+Event\+Args\+::get\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the path of the changed file system object system object. 
+
+\begin{DoxyReturn}{Returns}
+The path of the changed file/folder 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_a1e01b9ec9c055a60b04ad51d517e164b}\index{Nickvision::Filesystem::FileSystemChangedEventArgs@{Nickvision::Filesystem::FileSystemChangedEventArgs}!getWhy@{getWhy}}
+\index{getWhy@{getWhy}!Nickvision::Filesystem::FileSystemChangedEventArgs@{Nickvision::Filesystem::FileSystemChangedEventArgs}}
+\doxysubsubsection{\texorpdfstring{getWhy()}{getWhy()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_a1e01b9ec9c055a60b04ad51d517e164b} 
+\mbox{\hyperlink{fileaction_8h_a2ab0a9147887a01966de0ea9ec663178}{File\+Action}} Nickvision\+::\+Filesystem\+::\+File\+System\+Changed\+Event\+Args\+::get\+Why (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the action that caused the file system object to change. 
+
+\begin{DoxyReturn}{Returns}
+The action that caused the file system object to change 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/filesystem/\mbox{\hyperlink{filesystemchangedeventargs_8h}{filesystemchangedeventargs.\+h}}\end{DoxyCompactItemize}

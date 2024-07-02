@@ -1,0 +1,41 @@
+\doxysection{updater.\+h}
+\hypertarget{updater_8h_source}{}\label{updater_8h_source}\index{include/update/updater.h@{include/update/updater.h}}
+\mbox{\hyperlink{updater_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ UPDATER\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ UPDATER\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{webclient_8h}{network/webclient.h}}"{}}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{version_8h}{version.h}}"{}}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{namespace\ }Nickvision::Update}
+\DoxyCodeLine{00032\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater}{Updater}}}
+\DoxyCodeLine{00037\ \ \ \ \ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater_a009c2750078bffea24694fb500fd8b7b}{Updater}}(std::string\ githubRepoUrl);}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater_a6355912ef3438cd185932ead1821926c}{Updater}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater}{Updater}}\&\ u);}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater_a89514febd7ee0e5d10a284abe9e5353e}{Updater}}(\mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater}{Updater}}\&\&\ u)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}}\ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater_ae38dbd1456ce594fba7ddd277610fb5d}{fetchCurrentVersion}}(\mbox{\hyperlink{versiontype_8h_a69dce6cf29b036c94933303281e37a5e}{VersionType}}\ versionType);}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ windowsUpdate(\mbox{\hyperlink{versiontype_8h_a69dce6cf29b036c94933303281e37a5e}{VersionType}}\ versionType);}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater}{Updater}}\&\ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater_a8c596526c6b8d627a31264e9107134e3}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater}{Updater}}\&\ u);}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater}{Updater}}\&\ \mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater_a988357c558238cd565e4a8dcb89a0972}{operator=}}(\mbox{\hyperlink{class_nickvision_1_1_update_1_1_updater}{Updater}}\&\&\ u)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{mutable}\ std::mutex\ m\_mutex;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_network_1_1_web_client}{Network::WebClient}}\ m\_webClient;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ std::string\ m\_repoOwner;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ std::string\ m\_repoName;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m\_latestStableReleaseId;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m\_latestPreviewReleaseId;}
+\DoxyCodeLine{00091\ \ \ \ \ \};}
+\DoxyCodeLine{00092\ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//UPDATER\_H}}
+
+\end{DoxyCode}

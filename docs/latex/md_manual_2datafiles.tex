@@ -1,0 +1,65 @@
+\chapter{Creating Your Own Data Files}
+\hypertarget{md_manual_2datafiles}{}\label{md_manual_2datafiles}\index{Creating Your Own Data Files@{Creating Your Own Data Files}}
+\label{md_manual_2datafiles_autotoc_md0}%
+\Hypertarget{md_manual_2datafiles_autotoc_md0}%
+The purpose of {\ttfamily Data\+File\+Base} is to act as a base when defining your own data objects that you would like to be saved and retrieved from disk.
+
+Here are some key points when defining your own configuration objects\+:
+\begin{DoxyItemize}
+\item Your data object\textquotesingle{}s constructor must take {\ttfamily const std\+::string\& key} and {\ttfamily const std\+::string\& app\+Name} parameters and pass it to {\ttfamily Data\+File\+Base}\textquotesingle{}s constructor.
+\begin{DoxyItemize}
+\item Although you will not use {\ttfamily key} and {\ttfamily app\+Name} in your own implementation, it is required for {\ttfamily Data\+File\+Base}\textquotesingle{}s functionality and will be filled-\/in by the {\ttfamily Data\+File\+Manager}.
+\end{DoxyItemize}
+\item {\ttfamily Data\+File\+Base} exposes a protected {\ttfamily m\+\_\+json} object which you must use in your implementation of getting and storing variables of your data object.
+\begin{DoxyItemize}
+\item If this {\ttfamily m\+\_\+json} object is not used, your data object will not be stored to disk correctly.
+\end{DoxyItemize}
+\item You must explicitly call the {\ttfamily save} method on your configuration object when you want to save the configuration to disk. Writing to the {\ttfamily m\+\_\+json} object is not enough to trigger saving the file on disk.
+\end{DoxyItemize}
+
+Here is an example of a custom configuration object using {\ttfamily Data\+File\+Base}\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{using\ namespace\ }Nickvision::App;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{class\ }AppConfig\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_base}{DataFileBase}}}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\textcolor{keyword}{public}:}
+\DoxyCodeLine{\ \ \ \ AppConfig(\textcolor{keyword}{const}\ std::string\&\ key,\ \textcolor{keyword}{const}\ std::string\&\ appName)\ }
+\DoxyCodeLine{\ \ \ \ :\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_base}{DataFileBase}}\{\ key,\ appName\ \}\ }
+\DoxyCodeLine{\ \ \ \ \{\ }
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ getPreviousCount()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//0\ is\ the\ default\ value\ of\ PreviousCount\ (i.e.\ if\ it\ does\ not\ exist\ in\ the\ file)}}
+\DoxyCodeLine{\ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_json.get(\textcolor{stringliteral}{"{}PreviousCount"{}},\ 0).asInt();}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{void}\ setPreviousCount(\textcolor{keywordtype}{int}\ count)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ m\_json[\textcolor{stringliteral}{"{}PreviousCount"{}}]\ =\ count;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\};}
+
+\end{DoxyCode}
+ This object can now be used with the {\ttfamily Data\+File\+Manager}\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{using\ namespace\ }Nickvision::App;}
+\DoxyCodeLine{\textcolor{keyword}{using\ namespace\ }Nickvision::Events;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ main()}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_manager}{DataFileManager}}\ dfm\{\ \textcolor{stringliteral}{"{}AppName"{}}\ \};}
+\DoxyCodeLine{\ \ \ \ AppConfig\&\ config\{\ dfm.\mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_manager_aa43d0d8d18c87a1e69176633840f8977}{get}}<AppConfig>(\textcolor{stringliteral}{"{}config"{}})\ \};}
+\DoxyCodeLine{\ \ \ \ config.saved()\ +=\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event_args}{EventArgs}}\&\ e)\ \{\ std::cout\ <<\ \textcolor{stringliteral}{"{}Config\ saved\ to\ disk."{}}\ <<\ std::endl;\ \};}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}(config.getPreviousCount()\ >\ 0)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::cout\ <<\ config.getPreviousCount()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ config.setPreviousCount(6);}
+\DoxyCodeLine{\ \ \ \ config.save();\ \textcolor{comment}{//lambda\ will\ be\ invoked\ on\ success}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ 

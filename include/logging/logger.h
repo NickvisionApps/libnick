@@ -1,3 +1,25 @@
+/**
+ * @file
+ * @author Nicholas Logozzo <nlogozzo225@gmail.com>
+ *
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details at
+ * https://www.gnu.org/copyleft/gpl.html
+ *
+ * @section DESCRIPTION
+ *
+ * A logger of application messages.
+ */
+
 #ifndef LOGGER_H
 #define LOGGER_H
 
@@ -11,7 +33,7 @@
 namespace Nickvision::Logging
 {
     /**
-     * @brief A model of an object that logs application messages.
+     * @brief A logger of application messages.
      */
     class Logger
     {
@@ -28,6 +50,7 @@ namespace Nickvision::Logging
          * @param path The path to the log file
          * @param minimum The minimum supported LogLevel
          * @param append Whether or not to append to the file if it already exists
+         * @throw std::runtime_error Thrown if the unable to open the file
          */
         Logger(const std::filesystem::path& path, LogLevel minimum = LogLevel::Debug, bool append = true);
         /**

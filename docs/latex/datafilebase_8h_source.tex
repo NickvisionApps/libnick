@@ -1,0 +1,37 @@
+\doxysection{datafilebase.\+h}
+\hypertarget{datafilebase_8h_source}{}\label{datafilebase_8h_source}\index{include/app/datafilebase.h@{include/app/datafilebase.h}}
+\mbox{\hyperlink{datafilebase_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ DATAFILEBASE\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ DATAFILEBASE\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <json/json.h>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{event_8h}{events/event.h}}"{}}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{namespace\ }Nickvision::App}
+\DoxyCodeLine{00032\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_base}{DataFileBase}}}
+\DoxyCodeLine{00037\ \ \ \ \ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_base_a212c327905599a0fe3b592838fcdd633}{DataFileBase}}(\textcolor{keyword}{const}\ std::string\&\ key,\ \textcolor{keyword}{const}\ std::string\&\ appName);}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_base_ae0dc0c55d30a2c04ae9df2498a5c8642}{\string~DataFileBase}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_base_a367af548ab75c485e074e8e15bb9c2b1}{getKey}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events::Event<Events::EventArgs>}}\&\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_base_a6ba1cbf9592182e06eccbbc89881e0cc}{saved}}();}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_base_af8d085274d69fa4763157bfdd297800c}{save}}();}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ Json::Value\ m\_json;}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ std::string\ m\_key;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ std::filesystem::path\ m\_path;}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events::Event<Events::EventArgs>}}\ m\_saved;}
+\DoxyCodeLine{00073\ \ \ \ \ \};}
+\DoxyCodeLine{00074\ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//DATAFILEBASE\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,59 @@
+\doxysection{watcherflags.\+h}
+\hypertarget{watcherflags_8h_source}{}\label{watcherflags_8h_source}\index{include/filesystem/watcherflags.h@{include/filesystem/watcherflags.h}}
+\mbox{\hyperlink{watcherflags_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ WATCHERFLAGS\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ WATCHERFLAGS\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{namespace\ }Nickvision::Filesystem}
+\DoxyCodeLine{00027\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}}
+\DoxyCodeLine{00032\ \ \ \ \ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ FileName\ =\ 1,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ DirectoryName\ =\ 2,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ Attributes\ =\ 4,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ Size\ =\ 8,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ LastWrite\ =\ 16,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ LastAccess\ =\ 32}
+\DoxyCodeLine{00039\ \ \ \ \ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{constexpr}\ WatcherFlags\ operator\string~(WatcherFlags\ a)}
+\DoxyCodeLine{00042\ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}WatcherFlags\textcolor{keyword}{>}(\string~static\_cast<int>(a));}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{constexpr}\ WatcherFlags\ operator|(WatcherFlags\ a,\ WatcherFlags\ b)}
+\DoxyCodeLine{00047\ \ \ \ \ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}WatcherFlags\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(a)\ |\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(b));}
+\DoxyCodeLine{00049\ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\ operator\&(WatcherFlags\ a,\ WatcherFlags\ b)}
+\DoxyCodeLine{00052\ \ \ \ \ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(a)\ \&\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(b));}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\ operator\string^(WatcherFlags\ a,\ WatcherFlags\ b)}
+\DoxyCodeLine{00057\ \ \ \ \ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(a)\ \string^\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(b));}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\&\ operator|=(WatcherFlags\&\ a,\ WatcherFlags\ b)}
+\DoxyCodeLine{00062\ \ \ \ \ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\&\textcolor{keyword}{>}(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{int}\&\textcolor{keyword}{>}(a)\ |=\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(b));}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\&\ operator\&=(WatcherFlags\&\ a,\ WatcherFlags\ b)}
+\DoxyCodeLine{00067\ \ \ \ \ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\&\textcolor{keyword}{>}(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{int}\&\textcolor{keyword}{>}(a)\ \&=\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(b));}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\&\ operator\string^=(WatcherFlags\&\ a,\ WatcherFlags\ b)}
+\DoxyCodeLine{00072\ \ \ \ \ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\&\textcolor{keyword}{>}(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{int}\&\textcolor{keyword}{>}(a)\ \string^=\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(b));}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

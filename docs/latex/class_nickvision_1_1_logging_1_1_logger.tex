@@ -1,0 +1,107 @@
+\doxysection{Nickvision\+::Logging\+::Logger Class Reference}
+\hypertarget{class_nickvision_1_1_logging_1_1_logger}{}\label{class_nickvision_1_1_logging_1_1_logger}\index{Nickvision::Logging::Logger@{Nickvision::Logging::Logger}}
+
+
+A logger of application messages.  
+
+
+
+
+{\ttfamily \#include $<$logger.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_logging_1_1_logger_a32895f024c0367beec6c3f90843a0161}{Logger}} (\mbox{\hyperlink{loglevel_8h_a5a9cd2a8425c99f0331b60e0600036d5}{Log\+Level}} minimum=Log\+Level\+::\+Debug)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_logging_1_1_logger}{Logger}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_nickvision_1_1_logging_1_1_logger_a0dcca45f5148b786eeb7c5171d56bf82}{Logger}} (const std\+::filesystem\+::path \&path, \mbox{\hyperlink{loglevel_8h_a5a9cd2a8425c99f0331b60e0600036d5}{Log\+Level}} minimum=Log\+Level\+::\+Debug, bool append=true)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_logging_1_1_logger}{Logger}. \end{DoxyCompactList}\item 
+const std\+::filesystem\+::path \& \mbox{\hyperlink{class_nickvision_1_1_logging_1_1_logger_a2d0f603e7fad0d0f2a1b9d12231f7fb7}{get\+Path}} () const
+\begin{DoxyCompactList}\small\item\em Gets the path for the logs file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_nickvision_1_1_logging_1_1_logger_a52f085d22348dcf7a828289265ef095f}{log}} (\mbox{\hyperlink{loglevel_8h_a5a9cd2a8425c99f0331b60e0600036d5}{Log\+Level}} level, const std\+::string \&message, const std\+::source\+\_\+location \&source=std\+::source\+\_\+location\+::current()) const
+\begin{DoxyCompactList}\small\item\em Logs a message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A logger of application messages. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_logging_1_1_logger_a32895f024c0367beec6c3f90843a0161}\index{Nickvision::Logging::Logger@{Nickvision::Logging::Logger}!Logger@{Logger}}
+\index{Logger@{Logger}!Nickvision::Logging::Logger@{Nickvision::Logging::Logger}}
+\doxysubsubsection{\texorpdfstring{Logger()}{Logger()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_logging_1_1_logger_a32895f024c0367beec6c3f90843a0161} 
+Nickvision\+::\+Logging\+::\+Logger\+::\+Logger (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{loglevel_8h_a5a9cd2a8425c99f0331b60e0600036d5}{Log\+Level}}}]{minimum}{ = {\ttfamily LogLevel\+:\+:Debug}}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_logging_1_1_logger}{Logger}. 
+
+All messages are printed to standard outputs. 
+\begin{DoxyParams}{Parameters}
+{\em minimum} & The minimum supported Log\+Level \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_nickvision_1_1_logging_1_1_logger_a0dcca45f5148b786eeb7c5171d56bf82}\index{Nickvision::Logging::Logger@{Nickvision::Logging::Logger}!Logger@{Logger}}
+\index{Logger@{Logger}!Nickvision::Logging::Logger@{Nickvision::Logging::Logger}}
+\doxysubsubsection{\texorpdfstring{Logger()}{Logger()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_logging_1_1_logger_a0dcca45f5148b786eeb7c5171d56bf82} 
+Nickvision\+::\+Logging\+::\+Logger\+::\+Logger (\begin{DoxyParamCaption}\item[{const std\+::filesystem\+::path \&}]{path}{, }\item[{\mbox{\hyperlink{loglevel_8h_a5a9cd2a8425c99f0331b60e0600036d5}{Log\+Level}}}]{minimum}{ = {\ttfamily LogLevel\+:\+:Debug}, }\item[{bool}]{append}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_logging_1_1_logger}{Logger}. 
+
+All messages are saved to the provided file and printed to standard outputs. 
+\begin{DoxyParams}{Parameters}
+{\em path} & The path to the log file \\
+\hline
+{\em minimum} & The minimum supported Log\+Level \\
+\hline
+{\em append} & Whether or not to append to the file if it already exists \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & Thrown if the unable to open the file \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_logging_1_1_logger_a2d0f603e7fad0d0f2a1b9d12231f7fb7}\index{Nickvision::Logging::Logger@{Nickvision::Logging::Logger}!getPath@{getPath}}
+\index{getPath@{getPath}!Nickvision::Logging::Logger@{Nickvision::Logging::Logger}}
+\doxysubsubsection{\texorpdfstring{getPath()}{getPath()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_logging_1_1_logger_a2d0f603e7fad0d0f2a1b9d12231f7fb7} 
+const std\+::filesystem\+::path \& Nickvision\+::\+Logging\+::\+Logger\+::get\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the path for the logs file. 
+
+If the logger has no file attached, an empty path will be returned. \begin{DoxyReturn}{Returns}
+The path to the logs file 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_logging_1_1_logger_a52f085d22348dcf7a828289265ef095f}\index{Nickvision::Logging::Logger@{Nickvision::Logging::Logger}!log@{log}}
+\index{log@{log}!Nickvision::Logging::Logger@{Nickvision::Logging::Logger}}
+\doxysubsubsection{\texorpdfstring{log()}{log()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_logging_1_1_logger_a52f085d22348dcf7a828289265ef095f} 
+void Nickvision\+::\+Logging\+::\+Logger\+::log (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{loglevel_8h_a5a9cd2a8425c99f0331b60e0600036d5}{Log\+Level}}}]{level}{, }\item[{const std\+::string \&}]{message}{, }\item[{const std\+::source\+\_\+location \&}]{source}{ = {\ttfamily std\+:\+:source\+\_\+location\+:\+:current()}}\end{DoxyParamCaption}) const}
+
+
+
+Logs a message. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em level} & Log\+Level \\
+\hline
+{\em message} & The message to log \\
+\hline
+{\em source} & The code location of the log message \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/logging/\mbox{\hyperlink{logger_8h}{logger.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,237 @@
+\doxysection{Nickvision\+::Keyring\+::Keyring\+Dialog\+Controller Class Reference}
+\hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller}{}\label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+
+
+A controller for a Keyring\+Dialog.  
+
+
+
+
+{\ttfamily \#include $<$keyringdialogcontroller.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a87c1781cbfd088ac27226d1e7af5092b}{Keyring\+Dialog\+Controller}} (const std\+::string \&name, const std\+::optional$<$ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring}{Keyring}} $>$ \&keyring)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller}{Keyring\+Dialog\+Controller}. \end{DoxyCompactList}\item 
+const std\+::optional$<$ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring}{Keyring}} $>$ \& \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a334c0b72718a5be6aad440db292a338f}{get\+Keyring}} ()
+\begin{DoxyCompactList}\small\item\em Gets the keyring managed by the controller, if available. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_ae475d01fd8b622cdd8da2df36979d399}{is\+Enabled}} () const
+\begin{DoxyCompactList}\small\item\em Gets whether or not the keyring is enabled (unlocked). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a80e3890de1c88f0050062381acecb4b6}{is\+Valid}} () const
+\begin{DoxyCompactList}\small\item\em Gets whether or not the keyring state is valid. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_aaab77cb808253b4bccb862f3ddbaa895}{enable\+Keyring}} (const std\+::string \&password="{}"{})
+\begin{DoxyCompactList}\small\item\em Enables the keyring. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a191ee4a29e0917d2213b061d54dce4df}{disable\+Keyring}} ()
+\begin{DoxyCompactList}\small\item\em Disables the keyring and destroys its data. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a25fec91e65aab0aced284915bb953947}{reset\+Keyring}} ()
+\begin{DoxyCompactList}\small\item\em Resets the keyring and destroys its data. To be used only if the keyring is locked. If unlocked, use \doxylink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a191ee4a29e0917d2213b061d54dce4df}{disable\+Keyring()} . \end{DoxyCompactList}\item 
+\mbox{\hyperlink{credentialcheckstatus_8h_ae5598b61227dc7f68423e9095206f31d}{Credential\+Check\+Status}} \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_ae7b2c5a8d423e42c8820769e141c9dfd}{validate\+Credential}} (const \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}} \&credential) const
+\begin{DoxyCompactList}\small\item\em Validates a \doxylink{class_nickvision_1_1_keyring_1_1_credential}{Credential} object. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}} $>$ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a25801e101860c739d099608ab41d0df7}{get\+All\+Credentials}} () const
+\begin{DoxyCompactList}\small\item\em Gets all credentials in the keyring. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a6e0c70d5d02952284f62d35c43cdd69d}{add\+Credential}} (const \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}} \&credential)
+\begin{DoxyCompactList}\small\item\em Adds a credential to the keyring. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a0125455048803243ff3fab773d2b77f1}{update\+Credential}} (const \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}} \&credential)
+\begin{DoxyCompactList}\small\item\em Updates a credential in the keyring. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_aa595c8d4c286c0cd91f707e58ae40b2e}{delete\+Credential}} (int id)
+\begin{DoxyCompactList}\small\item\em Deletes a credential from the keyring. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A controller for a Keyring\+Dialog. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a87c1781cbfd088ac27226d1e7af5092b}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!KeyringDialogController@{KeyringDialogController}}
+\index{KeyringDialogController@{KeyringDialogController}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{KeyringDialogController()}{KeyringDialogController()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a87c1781cbfd088ac27226d1e7af5092b} 
+Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::\+Keyring\+Dialog\+Controller (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{const std\+::optional$<$ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring}{Keyring}} $>$ \&}]{keyring}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller}{Keyring\+Dialog\+Controller}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the controller \\
+\hline
+{\em keyring} & The keyring managed by the controller, if available \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a6e0c70d5d02952284f62d35c43cdd69d}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!addCredential@{addCredential}}
+\index{addCredential@{addCredential}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{addCredential()}{addCredential()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a6e0c70d5d02952284f62d35c43cdd69d} 
+bool Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::add\+Credential (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}} \&}]{credential}{}\end{DoxyParamCaption})}
+
+
+
+Adds a credential to the keyring. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em credential} & The \doxylink{class_nickvision_1_1_keyring_1_1_credential}{Credential} to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_aa595c8d4c286c0cd91f707e58ae40b2e}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!deleteCredential@{deleteCredential}}
+\index{deleteCredential@{deleteCredential}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{deleteCredential()}{deleteCredential()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_aa595c8d4c286c0cd91f707e58ae40b2e} 
+bool Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::delete\+Credential (\begin{DoxyParamCaption}\item[{int}]{id}{}\end{DoxyParamCaption})}
+
+
+
+Deletes a credential from the keyring. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The id of the credential to delete \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a191ee4a29e0917d2213b061d54dce4df}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!disableKeyring@{disableKeyring}}
+\index{disableKeyring@{disableKeyring}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{disableKeyring()}{disableKeyring()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a191ee4a29e0917d2213b061d54dce4df} 
+bool Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::disable\+Keyring (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Disables the keyring and destroys its data. 
+
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_aaab77cb808253b4bccb862f3ddbaa895}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!enableKeyring@{enableKeyring}}
+\index{enableKeyring@{enableKeyring}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{enableKeyring()}{enableKeyring()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_aaab77cb808253b4bccb862f3ddbaa895} 
+bool Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::enable\+Keyring (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{password}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})}
+
+
+
+Enables the keyring. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em password} & The password of the keyring \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a25801e101860c739d099608ab41d0df7}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!getAllCredentials@{getAllCredentials}}
+\index{getAllCredentials@{getAllCredentials}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{getAllCredentials()}{getAllCredentials()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a25801e101860c739d099608ab41d0df7} 
+std\+::vector$<$ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}} $>$ Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::get\+All\+Credentials (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets all credentials in the keyring. 
+
+\begin{DoxyReturn}{Returns}
+The list of all credentials 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a334c0b72718a5be6aad440db292a338f}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!getKeyring@{getKeyring}}
+\index{getKeyring@{getKeyring}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{getKeyring()}{getKeyring()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a334c0b72718a5be6aad440db292a338f} 
+const std\+::optional$<$ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring}{Keyring}} $>$ \& Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::get\+Keyring (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the keyring managed by the controller, if available. 
+
+\begin{DoxyReturn}{Returns}
+The keyring if available, else std\+::nullopt 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_ae475d01fd8b622cdd8da2df36979d399}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!isEnabled@{isEnabled}}
+\index{isEnabled@{isEnabled}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{isEnabled()}{isEnabled()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_ae475d01fd8b622cdd8da2df36979d399} 
+bool Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::is\+Enabled (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets whether or not the keyring is enabled (unlocked). 
+
+\begin{DoxyReturn}{Returns}
+True if enabled, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a80e3890de1c88f0050062381acecb4b6}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!isValid@{isValid}}
+\index{isValid@{isValid}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{isValid()}{isValid()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a80e3890de1c88f0050062381acecb4b6} 
+bool Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::is\+Valid (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets whether or not the keyring state is valid. 
+
+\begin{DoxyReturn}{Returns}
+True if valid, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a25fec91e65aab0aced284915bb953947}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!resetKeyring@{resetKeyring}}
+\index{resetKeyring@{resetKeyring}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{resetKeyring()}{resetKeyring()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a25fec91e65aab0aced284915bb953947} 
+bool Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::reset\+Keyring (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Resets the keyring and destroys its data. To be used only if the keyring is locked. If unlocked, use \doxylink{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a191ee4a29e0917d2213b061d54dce4df}{disable\+Keyring()} . 
+
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a0125455048803243ff3fab773d2b77f1}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!updateCredential@{updateCredential}}
+\index{updateCredential@{updateCredential}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{updateCredential()}{updateCredential()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_a0125455048803243ff3fab773d2b77f1} 
+bool Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::update\+Credential (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}} \&}]{credential}{}\end{DoxyParamCaption})}
+
+
+
+Updates a credential in the keyring. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em credential} & The \doxylink{class_nickvision_1_1_keyring_1_1_credential}{Credential} to update \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_ae7b2c5a8d423e42c8820769e141c9dfd}\index{Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}!validateCredential@{validateCredential}}
+\index{validateCredential@{validateCredential}!Nickvision::Keyring::KeyringDialogController@{Nickvision::Keyring::KeyringDialogController}}
+\doxysubsubsection{\texorpdfstring{validateCredential()}{validateCredential()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_keyring_1_1_keyring_dialog_controller_ae7b2c5a8d423e42c8820769e141c9dfd} 
+\mbox{\hyperlink{credentialcheckstatus_8h_ae5598b61227dc7f68423e9095206f31d}{Credential\+Check\+Status}} Nickvision\+::\+Keyring\+::\+Keyring\+Dialog\+Controller\+::validate\+Credential (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}} \&}]{credential}{}\end{DoxyParamCaption}) const}
+
+
+
+Validates a \doxylink{class_nickvision_1_1_keyring_1_1_credential}{Credential} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em credential} & The credential to validate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Credential\+Check\+Status 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/keyring/\mbox{\hyperlink{keyringdialogcontroller_8h}{keyringdialogcontroller.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,109 @@
+\doxysection{Nickvision\+::Notifications\+::Shell\+Notification\+Sent\+Event\+Args Class Reference}
+\hypertarget{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args}{}\label{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args}\index{Nickvision::Notifications::ShellNotificationSentEventArgs@{Nickvision::Notifications::ShellNotificationSentEventArgs}}
+
+
+An event argument for when a shell notification is sent.  
+
+
+
+
+{\ttfamily \#include $<$shellnotificationsenteventargs.\+h$>$}
+
+Inheritance diagram for Nickvision\+::Notifications\+::Shell\+Notification\+Sent\+Event\+Args\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args_a435a56c3e48f4326a6de41bcf552bc40}{Shell\+Notification\+Sent\+Event\+Args}} (const std\+::string \&title, const std\+::string \&message, \mbox{\hyperlink{notificationseverity_8h_aa17627dd724dc0f4b1c9453dea238026}{Notification\+Severity}} severity, const std\+::string \&action="{}"{}, const std\+::string \&action\+Param="{}"{})
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args}{Shell\+Notification\+Sent\+Event\+Args}. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args_a026234a001e2f730b6586cd12251f5ca}{get\+Title}} () const
+\begin{DoxyCompactList}\small\item\em Gets the title of the notification. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_notification_sent_event_args}{Nickvision\+::\+Notifications\+::\+Notification\+Sent\+Event\+Args}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_notification_sent_event_args_a80cd09dacb7c9d965bbf3d638612596d}{Notification\+Sent\+Event\+Args}} (const std\+::string \&message, \mbox{\hyperlink{notificationseverity_8h_aa17627dd724dc0f4b1c9453dea238026}{Notification\+Severity}} severity, const std\+::string \&action="{}"{}, const std\+::string \&action\+Param="{}"{})
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_notifications_1_1_notification_sent_event_args}{Notification\+Sent\+Event\+Args}. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_notification_sent_event_args_a264b09cc848d462260eee345ff1bb153}{get\+Message}} () const
+\begin{DoxyCompactList}\small\item\em Gets the message of the notification. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{notificationseverity_8h_aa17627dd724dc0f4b1c9453dea238026}{Notification\+Severity}} \mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_notification_sent_event_args_a5cc50c79481f6da7c70193dc1c700a2c}{get\+Severity}} () const
+\begin{DoxyCompactList}\small\item\em Gets the severity of the notification. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_notification_sent_event_args_a9913d995b548dfd7849f96bcc39b80a8}{get\+Action}} () const
+\begin{DoxyCompactList}\small\item\em Gets the optional action of the notification. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_notification_sent_event_args_a6c06d54e02ac69ddd18bf103290c3a29}{get\+Action\+Param}} () const
+\begin{DoxyCompactList}\small\item\em Gets the parameter of the optional action. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event_args}{Nickvision\+::\+Events\+::\+Event\+Args}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Event\+Args} ()=default
+\begin{DoxyCompactList}\small\item\em Constructs an \doxylink{class_nickvision_1_1_events_1_1_event_args}{Event\+Args}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args_a1c590ef4f3dc055985444b83378c3e63}\label{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args_a1c590ef4f3dc055985444b83378c3e63} 
+std\+::string {\bfseries m\+\_\+title}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_nickvision_1_1_notifications_1_1_notification_sent_event_args}{Nickvision\+::\+Notifications\+::\+Notification\+Sent\+Event\+Args}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries m\+\_\+message}
+\item 
+\mbox{\hyperlink{notificationseverity_8h_aa17627dd724dc0f4b1c9453dea238026}{Notification\+Severity}} {\bfseries m\+\_\+severity}
+\item 
+std\+::string {\bfseries m\+\_\+action}
+\item 
+std\+::string {\bfseries m\+\_\+action\+Param}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An event argument for when a shell notification is sent. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args_a435a56c3e48f4326a6de41bcf552bc40}\index{Nickvision::Notifications::ShellNotificationSentEventArgs@{Nickvision::Notifications::ShellNotificationSentEventArgs}!ShellNotificationSentEventArgs@{ShellNotificationSentEventArgs}}
+\index{ShellNotificationSentEventArgs@{ShellNotificationSentEventArgs}!Nickvision::Notifications::ShellNotificationSentEventArgs@{Nickvision::Notifications::ShellNotificationSentEventArgs}}
+\doxysubsubsection{\texorpdfstring{ShellNotificationSentEventArgs()}{ShellNotificationSentEventArgs()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args_a435a56c3e48f4326a6de41bcf552bc40} 
+Nickvision\+::\+Notifications\+::\+Shell\+Notification\+Sent\+Event\+Args\+::\+Shell\+Notification\+Sent\+Event\+Args (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{title}{, }\item[{const std\+::string \&}]{message}{, }\item[{\mbox{\hyperlink{notificationseverity_8h_aa17627dd724dc0f4b1c9453dea238026}{Notification\+Severity}}}]{severity}{, }\item[{const std\+::string \&}]{action}{ = {\ttfamily "{}"{}}, }\item[{const std\+::string \&}]{action\+Param}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args}{Shell\+Notification\+Sent\+Event\+Args}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em title} & The title of the notification \\
+\hline
+{\em message} & The message of the notification \\
+\hline
+{\em severity} & The severity of the notification \\
+\hline
+{\em action} & An additional action for the notification \\
+\hline
+{\em action\+Param} & The parameter of the additional action \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args_a026234a001e2f730b6586cd12251f5ca}\index{Nickvision::Notifications::ShellNotificationSentEventArgs@{Nickvision::Notifications::ShellNotificationSentEventArgs}!getTitle@{getTitle}}
+\index{getTitle@{getTitle}!Nickvision::Notifications::ShellNotificationSentEventArgs@{Nickvision::Notifications::ShellNotificationSentEventArgs}}
+\doxysubsubsection{\texorpdfstring{getTitle()}{getTitle()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_notifications_1_1_shell_notification_sent_event_args_a026234a001e2f730b6586cd12251f5ca} 
+const std\+::string \& Nickvision\+::\+Notifications\+::\+Shell\+Notification\+Sent\+Event\+Args\+::get\+Title (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the title of the notification. 
+
+\begin{DoxyReturn}{Returns}
+The title of the notification 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/notifications/\mbox{\hyperlink{shellnotificationsenteventargs_8h}{shellnotificationsenteventargs.\+h}}\end{DoxyCompactItemize}

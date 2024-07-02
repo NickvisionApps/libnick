@@ -1,0 +1,28 @@
+\doxysection{shellnotification.\+h}
+\hypertarget{shellnotification_8h_source}{}\label{shellnotification_8h_source}\index{include/notifications/shellnotification.h@{include/notifications/shellnotification.h}}
+\mbox{\hyperlink{shellnotification_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ SHELLNOTIFICATION\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ SHELLNOTIFICATION\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{shellnotificationsenteventargs_8h}{shellnotificationsenteventargs.h}}"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <windows.h>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{namespace\ }Nickvision::Notifications::ShellNotification}
+\DoxyCodeLine{00033\ \{}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ send(\textcolor{keyword}{const}\ ShellNotificationSentEventArgs\&\ e,\ HWND\ hwnd);}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#elif\ defined(\_\_linux\_\_)}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ send(\textcolor{keyword}{const}\ ShellNotificationSentEventArgs\&\ e,\ \textcolor{keyword}{const}\ std::string\&\ appId,\ \textcolor{keyword}{const}\ std::string\&\ openText);}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#elif\ defined(\_\_APPLE\_\_)}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ send(\textcolor{keyword}{const}\ ShellNotificationSentEventArgs\&\ e);}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00060\ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SHELLNOTIFICATION\_H}}
+
+\end{DoxyCode}

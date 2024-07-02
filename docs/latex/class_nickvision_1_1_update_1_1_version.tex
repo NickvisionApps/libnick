@@ -1,0 +1,335 @@
+\doxysection{Nickvision\+::Update\+::Version Class Reference}
+\hypertarget{class_nickvision_1_1_update_1_1_version}{}\label{class_nickvision_1_1_update_1_1_version}\index{Nickvision::Update::Version@{Nickvision::Update::Version}}
+
+
+A model for a version number.  
+
+
+
+
+{\ttfamily \#include $<$version.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a33eb04bbda56b77c2f79bbef93df80a5}\label{class_nickvision_1_1_update_1_1_version_a33eb04bbda56b77c2f79bbef93df80a5} 
+{\bfseries Version} ()
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a6df3f0bb28937118e129acc6c0f56b9d}{Version}} (int major, int minor, int build)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a7dce1d83b70690e5b79d8982a25a072f}{Version}} (int major, int minor, int build, const std\+::string \&dev)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a1314923eb2b6d7f68af9a904c8118c49}{Version}} (const std\+::string \&version)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a808ef87adb49de3bfd583af877c235c4}{get\+Major}} () const
+\begin{DoxyCompactList}\small\item\em Gets the major number of the version. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a88795d80b3874beec3ef902b287a3923}{get\+Minor}} () const
+\begin{DoxyCompactList}\small\item\em Gets the minor number of the version. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a4a3eabbd3d3e1d137bfc2687c512e9a1}{get\+Build}} () const
+\begin{DoxyCompactList}\small\item\em Gets the build number of the version. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_aab174c27ee9ac945b1f70430358b473f}{get\+Dev}} () const
+\begin{DoxyCompactList}\small\item\em Gets the dev string of the version. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{versiontype_8h_a69dce6cf29b036c94933303281e37a5e}{Version\+Type}} \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a4b9019d1febc4705f84255cdadae585c}{get\+Version\+Type}} () const
+\begin{DoxyCompactList}\small\item\em Gets the type of the version. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a36912bce7b5b0da9601350003c3c1392}{str}} () const
+\begin{DoxyCompactList}\small\item\em Gets a string representation of the \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a49a4ca926e3465242f0b048dfa666beb}{empty}} () const
+\begin{DoxyCompactList}\small\item\em Gets whether or not the \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object is empty. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_af848c7dd1f920d1f580691ae6d83f83c}{operator$<$}} (const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&compare) const
+\begin{DoxyCompactList}\small\item\em Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via \texorpdfstring{$<$}{<} operator. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a19b12c7be34950ff6b58bef39e1dbfc6}{operator$<$=}} (const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&compare) const
+\begin{DoxyCompactList}\small\item\em Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via \texorpdfstring{$<$}{<}= operator. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_ab81c9df8e9fd946b6faf545795a00067}{operator$>$}} (const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&compare) const
+\begin{DoxyCompactList}\small\item\em Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via \texorpdfstring{$>$}{>} operator. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_aa54fd8318e4b408a3493814f9f4a3531}{operator$>$=}} (const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&compare) const
+\begin{DoxyCompactList}\small\item\em Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via \texorpdfstring{$>$}{>}= operator. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_a9863547e8d09236cd9163946a16ae061}{operator==}} (const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&compare) const
+\begin{DoxyCompactList}\small\item\em Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via == operator. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version_ae204f907965431704fc43ae64316c944}{operator!=}} (const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&compare) const
+\begin{DoxyCompactList}\small\item\em Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via != operator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_nickvision_1_1_update_1_1_version_ab3c68bc255ee8f2b6ea0bef0fa91d98e}\label{class_nickvision_1_1_update_1_1_version_ab3c68bc255ee8f2b6ea0bef0fa91d98e} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&version)
+\begin{DoxyCompactList}\small\item\em Outputs the \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A model for a version number. 
+
+Formatted in "{}major.\+minor.\+build-\/dev"{}. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a6df3f0bb28937118e129acc6c0f56b9d}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!Version@{Version}}
+\index{Version@{Version}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{Version()}{Version()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a6df3f0bb28937118e129acc6c0f56b9d} 
+Nickvision\+::\+Update\+::\+Version\+::\+Version (\begin{DoxyParamCaption}\item[{int}]{major}{, }\item[{int}]{minor}{, }\item[{int}]{build}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em major} & The major number \\
+\hline
+{\em minor} & The minor number \\
+\hline
+{\em build} & The build number \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a7dce1d83b70690e5b79d8982a25a072f}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!Version@{Version}}
+\index{Version@{Version}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{Version()}{Version()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a7dce1d83b70690e5b79d8982a25a072f} 
+Nickvision\+::\+Update\+::\+Version\+::\+Version (\begin{DoxyParamCaption}\item[{int}]{major}{, }\item[{int}]{minor}{, }\item[{int}]{build}{, }\item[{const std\+::string \&}]{dev}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em major} & The major number \\
+\hline
+{\em minor} & The minor number \\
+\hline
+{\em build} & The build number \\
+\hline
+{\em dev} & The dev string \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & Thrown when the dev version does not contain a "{}-\/"{} \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a1314923eb2b6d7f68af9a904c8118c49}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!Version@{Version}}
+\index{Version@{Version}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{Version()}{Version()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a1314923eb2b6d7f68af9a904c8118c49} 
+Nickvision\+::\+Update\+::\+Version\+::\+Version (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{version}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em version} & A version string to parse \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & Thrown when the version string is not formatted correctly \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a49a4ca926e3465242f0b048dfa666beb}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!empty@{empty}}
+\index{empty@{empty}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{empty()}{empty()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a49a4ca926e3465242f0b048dfa666beb} 
+bool Nickvision\+::\+Update\+::\+Version\+::empty (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets whether or not the \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object is empty. 
+
+\begin{DoxyReturn}{Returns}
+True if empty, else false 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a4a3eabbd3d3e1d137bfc2687c512e9a1}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!getBuild@{getBuild}}
+\index{getBuild@{getBuild}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{getBuild()}{getBuild()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a4a3eabbd3d3e1d137bfc2687c512e9a1} 
+int Nickvision\+::\+Update\+::\+Version\+::get\+Build (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the build number of the version. 
+
+\begin{DoxyReturn}{Returns}
+The build number 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_aab174c27ee9ac945b1f70430358b473f}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!getDev@{getDev}}
+\index{getDev@{getDev}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{getDev()}{getDev()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_aab174c27ee9ac945b1f70430358b473f} 
+const std\+::string \& Nickvision\+::\+Update\+::\+Version\+::get\+Dev (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the dev string of the version. 
+
+\begin{DoxyReturn}{Returns}
+The dev string 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a808ef87adb49de3bfd583af877c235c4}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!getMajor@{getMajor}}
+\index{getMajor@{getMajor}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{getMajor()}{getMajor()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a808ef87adb49de3bfd583af877c235c4} 
+int Nickvision\+::\+Update\+::\+Version\+::get\+Major (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the major number of the version. 
+
+\begin{DoxyReturn}{Returns}
+The major number 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a88795d80b3874beec3ef902b287a3923}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!getMinor@{getMinor}}
+\index{getMinor@{getMinor}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{getMinor()}{getMinor()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a88795d80b3874beec3ef902b287a3923} 
+int Nickvision\+::\+Update\+::\+Version\+::get\+Minor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the minor number of the version. 
+
+\begin{DoxyReturn}{Returns}
+The minor number 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a4b9019d1febc4705f84255cdadae585c}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!getVersionType@{getVersionType}}
+\index{getVersionType@{getVersionType}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{getVersionType()}{getVersionType()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a4b9019d1febc4705f84255cdadae585c} 
+\mbox{\hyperlink{versiontype_8h_a69dce6cf29b036c94933303281e37a5e}{Version\+Type}} Nickvision\+::\+Update\+::\+Version\+::get\+Version\+Type (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the type of the version. 
+
+\begin{DoxyReturn}{Returns}
+Version\+Type 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_ae204f907965431704fc43ae64316c944}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_ae204f907965431704fc43ae64316c944} 
+bool Nickvision\+::\+Update\+::\+Version\+::operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&}]{compare}{}\end{DoxyParamCaption}) const}
+
+
+
+Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via != operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em compare} & The \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object to compare too \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if this != compare 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_af848c7dd1f920d1f580691ae6d83f83c}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_af848c7dd1f920d1f580691ae6d83f83c} 
+bool Nickvision\+::\+Update\+::\+Version\+::operator$<$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&}]{compare}{}\end{DoxyParamCaption}) const}
+
+
+
+Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via \texorpdfstring{$<$}{<} operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em compare} & The \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object to compare too \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if this \texorpdfstring{$<$}{<} compare 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a19b12c7be34950ff6b58bef39e1dbfc6}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!operator$<$=@{operator$<$=}}
+\index{operator$<$=@{operator$<$=}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{operator$<$=()}{operator<=()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a19b12c7be34950ff6b58bef39e1dbfc6} 
+bool Nickvision\+::\+Update\+::\+Version\+::operator$<$= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&}]{compare}{}\end{DoxyParamCaption}) const}
+
+
+
+Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via \texorpdfstring{$<$}{<}= operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em compare} & The \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object to compare too \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if this \texorpdfstring{$<$}{<}= compare 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a9863547e8d09236cd9163946a16ae061}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!operator==@{operator==}}
+\index{operator==@{operator==}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a9863547e8d09236cd9163946a16ae061} 
+bool Nickvision\+::\+Update\+::\+Version\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&}]{compare}{}\end{DoxyParamCaption}) const}
+
+
+
+Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via == operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em compare} & The \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object to compare too \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if this == compare 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_ab81c9df8e9fd946b6faf545795a00067}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!operator$>$@{operator$>$}}
+\index{operator$>$@{operator$>$}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{operator$>$()}{operator>()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_ab81c9df8e9fd946b6faf545795a00067} 
+bool Nickvision\+::\+Update\+::\+Version\+::operator$>$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&}]{compare}{}\end{DoxyParamCaption}) const}
+
+
+
+Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via \texorpdfstring{$>$}{>} operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em compare} & The \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object to compare too \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if this \texorpdfstring{$>$}{>} compare 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_aa54fd8318e4b408a3493814f9f4a3531}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!operator$>$=@{operator$>$=}}
+\index{operator$>$=@{operator$>$=}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{operator$>$=()}{operator>=()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_aa54fd8318e4b408a3493814f9f4a3531} 
+bool Nickvision\+::\+Update\+::\+Version\+::operator$>$= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_nickvision_1_1_update_1_1_version}{Version}} \&}]{compare}{}\end{DoxyParamCaption}) const}
+
+
+
+Compares \doxylink{class_nickvision_1_1_update_1_1_version}{Version} objects via \texorpdfstring{$>$}{>}= operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em compare} & The \doxylink{class_nickvision_1_1_update_1_1_version}{Version} object to compare too \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if this \texorpdfstring{$>$}{>}= compare 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_update_1_1_version_a36912bce7b5b0da9601350003c3c1392}\index{Nickvision::Update::Version@{Nickvision::Update::Version}!str@{str}}
+\index{str@{str}!Nickvision::Update::Version@{Nickvision::Update::Version}}
+\doxysubsubsection{\texorpdfstring{str()}{str()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_update_1_1_version_a36912bce7b5b0da9601350003c3c1392} 
+const std\+::string \& Nickvision\+::\+Update\+::\+Version\+::str (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets a string representation of the \doxylink{class_nickvision_1_1_update_1_1_version}{Version}. 
+
+\begin{DoxyReturn}{Returns}
+The string representation of the \doxylink{class_nickvision_1_1_update_1_1_version}{Version} 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/update/\mbox{\hyperlink{version_8h}{version.\+h}}\end{DoxyCompactItemize}

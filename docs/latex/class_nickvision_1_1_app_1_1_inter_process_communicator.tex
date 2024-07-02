@@ -1,0 +1,120 @@
+\doxysection{Nickvision\+::App\+::Inter\+Process\+Communicator Class Reference}
+\hypertarget{class_nickvision_1_1_app_1_1_inter_process_communicator}{}\label{class_nickvision_1_1_app_1_1_inter_process_communicator}\index{Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}}
+
+
+An inter process communicator (server/client).  
+
+
+
+
+{\ttfamily \#include $<$interprocesscommunicator.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_a8f10fae5001f997d29ea6410588bf737}{Inter\+Process\+Communicator}} (const std\+::string \&id)
+\begin{DoxyCompactList}\small\item\em Constructs an \doxylink{class_nickvision_1_1_app_1_1_inter_process_communicator}{Inter\+Process\+Communicator}. \end{DoxyCompactList}\item 
+\Hypertarget{class_nickvision_1_1_app_1_1_inter_process_communicator_abbef836c35cbdb4f9f484e8278ff218c}\label{class_nickvision_1_1_app_1_1_inter_process_communicator_abbef836c35cbdb4f9f484e8278ff218c} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Inter\+Process\+Communicator} ()
+\begin{DoxyCompactList}\small\item\em Destructs an \doxylink{class_nickvision_1_1_app_1_1_inter_process_communicator}{Inter\+Process\+Communicator}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events\+::\+Event}}$<$ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_param_event_args}{Events\+::\+Param\+Event\+Args}}$<$ std\+::vector$<$ std\+::string $>$ $>$ $>$ \& \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_a8a46d1c5270ca1b22c5685a352d58469}{command\+Received}} ()
+\begin{DoxyCompactList}\small\item\em Gets the event for when a command is received. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_a9d2782014587dfd44505a3e0876cd820}{is\+Server}} () const
+\begin{DoxyCompactList}\small\item\em Gets whether or not this instance is an IPC server. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_acae4f1fb4c03c1daf728d778b4d473a9}{is\+Client}} () const
+\begin{DoxyCompactList}\small\item\em Gets whether or not this instance is an IPC client. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_a0587bd9ac274f481754d175c0cd63259}{communicate}} (const std\+::vector$<$ std\+::string $>$ \&args, bool exit\+If\+Client=false)
+\begin{DoxyCompactList}\small\item\em Communicates to the IPC server instance. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An inter process communicator (server/client). 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_app_1_1_inter_process_communicator_a8f10fae5001f997d29ea6410588bf737}\index{Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}!InterProcessCommunicator@{InterProcessCommunicator}}
+\index{InterProcessCommunicator@{InterProcessCommunicator}!Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}}
+\doxysubsubsection{\texorpdfstring{InterProcessCommunicator()}{InterProcessCommunicator()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_app_1_1_inter_process_communicator_a8f10fae5001f997d29ea6410588bf737} 
+Nickvision\+::\+App\+::\+Inter\+Process\+Communicator\+::\+Inter\+Process\+Communicator (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{id}{}\end{DoxyParamCaption})}
+
+
+
+Constructs an \doxylink{class_nickvision_1_1_app_1_1_inter_process_communicator}{Inter\+Process\+Communicator}. 
+
+If this is the first IPC instance for all processes, this instance will become an IPC server. Else, this instance will become an IPC client. 
+\begin{DoxyParams}{Parameters}
+{\em id} & The id of the process (Must be the same amongst all IPCs that must talk to each other) \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & Thrown if the client or server IPC cannot be created \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_app_1_1_inter_process_communicator_a8a46d1c5270ca1b22c5685a352d58469}\index{Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}!commandReceived@{commandReceived}}
+\index{commandReceived@{commandReceived}!Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}}
+\doxysubsubsection{\texorpdfstring{commandReceived()}{commandReceived()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_app_1_1_inter_process_communicator_a8a46d1c5270ca1b22c5685a352d58469} 
+\mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events\+::\+Event}}$<$ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_param_event_args}{Events\+::\+Param\+Event\+Args}}$<$ std\+::vector$<$ std\+::string $>$ $>$ $>$ \& Nickvision\+::\+App\+::\+Inter\+Process\+Communicator\+::command\+Received (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the event for when a command is received. 
+
+This event is only triggered on IPC server instances. \begin{DoxyReturn}{Returns}
+The command received event 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_app_1_1_inter_process_communicator_a0587bd9ac274f481754d175c0cd63259}\index{Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}!communicate@{communicate}}
+\index{communicate@{communicate}!Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}}
+\doxysubsubsection{\texorpdfstring{communicate()}{communicate()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_app_1_1_inter_process_communicator_a0587bd9ac274f481754d175c0cd63259} 
+bool Nickvision\+::\+App\+::\+Inter\+Process\+Communicator\+::communicate (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::string $>$ \&}]{args}{, }\item[{bool}]{exit\+If\+Client}{ = {\ttfamily false}}\end{DoxyParamCaption})}
+
+
+
+Communicates to the IPC server instance. 
+
+If this instance is the running server, command\+Received will be triggered with the passed arguments. 
+\begin{DoxyParams}{Parameters}
+{\em args} & The command-\/line arguments \\
+\hline
+{\em exit\+If\+Client} & Whether or not to exit this process if it is an IPC client \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if command-\/line arguments were sent to a server instance 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_app_1_1_inter_process_communicator_acae4f1fb4c03c1daf728d778b4d473a9}\index{Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}!isClient@{isClient}}
+\index{isClient@{isClient}!Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}}
+\doxysubsubsection{\texorpdfstring{isClient()}{isClient()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_app_1_1_inter_process_communicator_acae4f1fb4c03c1daf728d778b4d473a9} 
+bool Nickvision\+::\+App\+::\+Inter\+Process\+Communicator\+::is\+Client (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets whether or not this instance is an IPC client. 
+
+\begin{DoxyReturn}{Returns}
+True if this instance is an IPC client, else false. 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_app_1_1_inter_process_communicator_a9d2782014587dfd44505a3e0876cd820}\index{Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}!isServer@{isServer}}
+\index{isServer@{isServer}!Nickvision::App::InterProcessCommunicator@{Nickvision::App::InterProcessCommunicator}}
+\doxysubsubsection{\texorpdfstring{isServer()}{isServer()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_app_1_1_inter_process_communicator_a9d2782014587dfd44505a3e0876cd820} 
+bool Nickvision\+::\+App\+::\+Inter\+Process\+Communicator\+::is\+Server (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets whether or not this instance is an IPC server. 
+
+\begin{DoxyReturn}{Returns}
+True if this instance is an IPC server, else false. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/app/\mbox{\hyperlink{interprocesscommunicator_8h}{interprocesscommunicator.\+h}}\end{DoxyCompactItemize}

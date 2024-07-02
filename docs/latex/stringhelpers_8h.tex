@@ -1,0 +1,349 @@
+\doxysection{include/helpers/stringhelpers.h File Reference}
+\hypertarget{stringhelpers_8h}{}\label{stringhelpers_8h}\index{include/helpers/stringhelpers.h@{include/helpers/stringhelpers.h}}
+{\ttfamily \#include $<$cstddef$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$type\+\_\+traits$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\doxysubsubsection*{Concepts}
+\begin{DoxyCompactItemize}
+\item 
+concept \mbox{\hyperlink{concept_nickvision_1_1_helpers_1_1_string_helpers_1_1_string_implicitly_constructible}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::\+String\+Implicitly\+Constructible}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{stringhelpers_8h_a8b75147364e050fa9eb1809db9a47549}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::decode}} (const std\+::string \&base64)
+\begin{DoxyCompactList}\small\item\em Converts a base64 encoded string into a list of bytes. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_a1cb4a98b2018a2aa2570db6ccb4aa520}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::encode}} (const std\+::vector$<$ std\+::byte $>$ \&bytes)
+\begin{DoxyCompactList}\small\item\em Converts a list of bytes into a base64 encoded string. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{stringhelpers_8h_a4ec483a6f43eacbc1ba01c76ac778205}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::is\+Valid\+Url}} (const std\+::string \&s)
+\begin{DoxyCompactList}\small\item\em Gets whether or not the provided string is a valid url. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_aee4d1db22614b18367df4fef47f3bc00}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::join}} (const std\+::vector$<$ std\+::string $>$ \&values, const std\+::string \&separator, bool separate\+Last=true)
+\begin{DoxyCompactList}\small\item\em Concatenates the elements of a string list using the specified separator between each element. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_a7d435349b1fc5726a5bcc2a7c6b8fca4}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::lower}} (std\+::string s)
+\begin{DoxyCompactList}\small\item\em Gets a fully lowercase string from the provided string. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_ab4e773ed06578f94e8681d92ab391ab6}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::new\+Guid}} ()
+\begin{DoxyCompactList}\small\item\em Generates a new guid (uuid v4) value. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_af0f3a4f3297882aa3154d6515ec94ad4}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::replace}} (std\+::string s, const std\+::string \&to\+Replace, const std\+::string \&replace)
+\begin{DoxyCompactList}\small\item\em Replaces a substring within a string with a new string. \end{DoxyCompactList}\item 
+{\footnotesize template$<$String\+Implicitly\+Constructible T = std\+::string$>$ }\\std\+::vector$<$ T $>$ \mbox{\hyperlink{stringhelpers_8h_ac190bdeb28cfa3cc79e03e84f401263a}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::split}} (std\+::string s, const std\+::string \&delimiter)
+\begin{DoxyCompactList}\small\item\em Splits a string based on a delimiter. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{stringhelpers_8h_a59b3778ae4d3c9d4286c6f70ff79ece4}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::split\+Args}} (std\+::string s)
+\begin{DoxyCompactList}\small\item\em Splits a string based on argument delimiters. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_a13810f339c4954e5747ca2c00be654fd}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::str}} (const std\+::wstring \&s)
+\begin{DoxyCompactList}\small\item\em Converts the wstring to a string. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{stringhelpers_8h_afe6a384f9e68cbd2bee687bf435a2657}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::stoui}} (const std\+::string \&s, size\+\_\+t \texorpdfstring{$\ast$}{*}idx=nullptr, int base=10)
+\begin{DoxyCompactList}\small\item\em Converts a string to an unsigned int. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_aa8c01477f778b9ee01d6428f77f06894}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::trim}} (const std\+::string \&s)
+\begin{DoxyCompactList}\small\item\em Trims whitespace form the beginning and end of a string. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_aba6f15d091f02ecaa513e260bd0b603f}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::trim}} (const std\+::string \&s, char delimiter)
+\begin{DoxyCompactList}\small\item\em Trims the delimiter character form the beginning and end of a string. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{stringhelpers_8h_aab30b376853a003cd472c7c1237ff555}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::upper}} (std\+::string s)
+\begin{DoxyCompactList}\small\item\em Gets a fully uppercase string from the provided string. \end{DoxyCompactList}\item 
+std\+::wstring \mbox{\hyperlink{stringhelpers_8h_a69cca87ef7e3d47b452c0779d102869d}{Nickvision\+::\+Helpers\+::\+String\+Helpers\+::wstr}} (const std\+::string \&s)
+\begin{DoxyCompactList}\small\item\em Converts the string to a wstring. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Nicholas Logozzo \href{mailto:nlogozzo225@gmail.com}{\texttt{ nlogozzo225@gmail.\+com}}
+\end{DoxyAuthor}
+\hypertarget{versiontype_8h_LICENSE}{}\doxysubsection{\texorpdfstring{LICENSE}{LICENSE}}\label{versiontype_8h_LICENSE}
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details at \href{https://www.gnu.org/copyleft/gpl.html}{\texttt{ https\+://www.\+gnu.\+org/copyleft/gpl.\+html}}\hypertarget{versiontype_8h_DESCRIPTION}{}\doxysubsection{\texorpdfstring{DESCRIPTION}{DESCRIPTION}}\label{versiontype_8h_DESCRIPTION}
+Functions for working with strings. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{stringhelpers_8h_a8b75147364e050fa9eb1809db9a47549}\index{stringhelpers.h@{stringhelpers.h}!decode@{decode}}
+\index{decode@{decode}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{decode()}{decode()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_a8b75147364e050fa9eb1809db9a47549} 
+std\+::vector$<$ std\+::byte $>$ Nickvision\+::\+Helpers\+::\+String\+Helpers\+::decode (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{base64}{}\end{DoxyParamCaption})}
+
+
+
+Converts a base64 encoded string into a list of bytes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em base64} & The base64 encoded string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The bytes list from the base64 encoded string, empty list if error 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_a1cb4a98b2018a2aa2570db6ccb4aa520}\index{stringhelpers.h@{stringhelpers.h}!encode@{encode}}
+\index{encode@{encode}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{encode()}{encode()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_a1cb4a98b2018a2aa2570db6ccb4aa520} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::encode (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::byte $>$ \&}]{bytes}{}\end{DoxyParamCaption})}
+
+
+
+Converts a list of bytes into a base64 encoded string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & The list of bytes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The base64 encoded string of the bytes list 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_a4ec483a6f43eacbc1ba01c76ac778205}\index{stringhelpers.h@{stringhelpers.h}!isValidUrl@{isValidUrl}}
+\index{isValidUrl@{isValidUrl}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{isValidUrl()}{isValidUrl()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_a4ec483a6f43eacbc1ba01c76ac778205} 
+bool Nickvision\+::\+Helpers\+::\+String\+Helpers\+::is\+Valid\+Url (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Gets whether or not the provided string is a valid url. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the string is a valid url, else false 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_aee4d1db22614b18367df4fef47f3bc00}\index{stringhelpers.h@{stringhelpers.h}!join@{join}}
+\index{join@{join}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{join()}{join()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_aee4d1db22614b18367df4fef47f3bc00} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::join (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::string $>$ \&}]{values}{, }\item[{const std\+::string \&}]{separator}{, }\item[{bool}]{separate\+Last}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+
+
+Concatenates the elements of a string list using the specified separator between each element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em values} & The list of strings to join \\
+\hline
+{\em delimiter} & The string to use as a separator between each element \\
+\hline
+{\em delimit\+Last} & Whether or not to include the separator for the last joined element \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A single string that consists of all elements of the string list separated by the delimiter 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_a7d435349b1fc5726a5bcc2a7c6b8fca4}\index{stringhelpers.h@{stringhelpers.h}!lower@{lower}}
+\index{lower@{lower}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{lower()}{lower()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_a7d435349b1fc5726a5bcc2a7c6b8fca4} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::lower (\begin{DoxyParamCaption}\item[{std\+::string}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Gets a fully lowercase string from the provided string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to get lowercase \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new lowercase string 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_ab4e773ed06578f94e8681d92ab391ab6}\index{stringhelpers.h@{stringhelpers.h}!newGuid@{newGuid}}
+\index{newGuid@{newGuid}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{newGuid()}{newGuid()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_ab4e773ed06578f94e8681d92ab391ab6} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::new\+Guid (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Generates a new guid (uuid v4) value. 
+
+\begin{DoxyReturn}{Returns}
+The guid value 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_af0f3a4f3297882aa3154d6515ec94ad4}\index{stringhelpers.h@{stringhelpers.h}!replace@{replace}}
+\index{replace@{replace}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{replace()}{replace()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_af0f3a4f3297882aa3154d6515ec94ad4} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::replace (\begin{DoxyParamCaption}\item[{std\+::string}]{s}{, }\item[{const std\+::string \&}]{to\+Replace}{, }\item[{const std\+::string \&}]{replace}{}\end{DoxyParamCaption})}
+
+
+
+Replaces a substring within a string with a new string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to work on \\
+\hline
+{\em to\+Repalce} & The substring to be replaced \\
+\hline
+{\em replace} & The new string to replace with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new replaced string 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_ac190bdeb28cfa3cc79e03e84f401263a}\index{stringhelpers.h@{stringhelpers.h}!split@{split}}
+\index{split@{split}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{split()}{split()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_ac190bdeb28cfa3cc79e03e84f401263a} 
+template$<$String\+Implicitly\+Constructible T = std\+::string$>$ \\
+std\+::vector$<$ T $>$ Nickvision\+::\+Helpers\+::\+String\+Helpers\+::split (\begin{DoxyParamCaption}\item[{std\+::string}]{s}{, }\item[{const std\+::string \&}]{delimiter}{}\end{DoxyParamCaption})}
+
+
+
+Splits a string based on a delimiter. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type of the resulting splits (must be a type that can be implicitly converted to string) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to split \\
+\hline
+{\em delimiter} & The delimiter to split the string on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The splits of the string 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_a59b3778ae4d3c9d4286c6f70ff79ece4}\index{stringhelpers.h@{stringhelpers.h}!splitArgs@{splitArgs}}
+\index{splitArgs@{splitArgs}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{splitArgs()}{splitArgs()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_a59b3778ae4d3c9d4286c6f70ff79ece4} 
+std\+::vector$<$ std\+::string $>$ Nickvision\+::\+Helpers\+::\+String\+Helpers\+::split\+Args (\begin{DoxyParamCaption}\item[{std\+::string}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Splits a string based on argument delimiters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to split \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The splits of the argument string 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_afe6a384f9e68cbd2bee687bf435a2657}\index{stringhelpers.h@{stringhelpers.h}!stoui@{stoui}}
+\index{stoui@{stoui}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{stoui()}{stoui()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_afe6a384f9e68cbd2bee687bf435a2657} 
+unsigned int Nickvision\+::\+Helpers\+::\+String\+Helpers\+::stoui (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{idx}{ = {\ttfamily nullptr}, }\item[{int}]{base}{ = {\ttfamily 10}}\end{DoxyParamCaption})}
+
+
+
+Converts a string to an unsigned int. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to convert \\
+\hline
+{\em idx} & The address of a size\+\_\+t to store the number of characters processed \\
+\hline
+{\em base} & The number base \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The unsigned int version of the string 
+
+UINT\+\_\+\+MAX if the converted string is too long 
+
+0 if error 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_a13810f339c4954e5747ca2c00be654fd}\index{stringhelpers.h@{stringhelpers.h}!str@{str}}
+\index{str@{str}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{str()}{str()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_a13810f339c4954e5747ca2c00be654fd} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::str (\begin{DoxyParamCaption}\item[{const std\+::wstring \&}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Converts the wstring to a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The wstring to convert \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The string version of the wstring 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_aa8c01477f778b9ee01d6428f77f06894}\index{stringhelpers.h@{stringhelpers.h}!trim@{trim}}
+\index{trim@{trim}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{trim()}{trim()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_aa8c01477f778b9ee01d6428f77f06894} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::trim (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Trims whitespace form the beginning and end of a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to trim (unmodified) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new trimmed string 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_aba6f15d091f02ecaa513e260bd0b603f}\index{stringhelpers.h@{stringhelpers.h}!trim@{trim}}
+\index{trim@{trim}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{trim()}{trim()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_aba6f15d091f02ecaa513e260bd0b603f} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::trim (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s}{, }\item[{char}]{delimiter}{}\end{DoxyParamCaption})}
+
+
+
+Trims the delimiter character form the beginning and end of a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to trim (unmodified) \\
+\hline
+{\em delimiter} & The character to trim \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new trimmed string 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_aab30b376853a003cd472c7c1237ff555}\index{stringhelpers.h@{stringhelpers.h}!upper@{upper}}
+\index{upper@{upper}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{upper()}{upper()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_aab30b376853a003cd472c7c1237ff555} 
+std\+::string Nickvision\+::\+Helpers\+::\+String\+Helpers\+::upper (\begin{DoxyParamCaption}\item[{std\+::string}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Gets a fully uppercase string from the provided string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to get uppercase \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new uppercase string 
+\end{DoxyReturn}
+\Hypertarget{stringhelpers_8h_a69cca87ef7e3d47b452c0779d102869d}\index{stringhelpers.h@{stringhelpers.h}!wstr@{wstr}}
+\index{wstr@{wstr}!stringhelpers.h@{stringhelpers.h}}
+\doxysubsubsection{\texorpdfstring{wstr()}{wstr()}}
+{\footnotesize\ttfamily \label{stringhelpers_8h_a69cca87ef7e3d47b452c0779d102869d} 
+std\+::wstring Nickvision\+::\+Helpers\+::\+String\+Helpers\+::wstr (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Converts the string to a wstring. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to convert \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The wstring version of the string 
+\end{DoxyReturn}

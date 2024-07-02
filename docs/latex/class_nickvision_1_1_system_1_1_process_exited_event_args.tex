@@ -1,0 +1,88 @@
+\doxysection{Nickvision\+::System\+::Process\+Exited\+Event\+Args Class Reference}
+\hypertarget{class_nickvision_1_1_system_1_1_process_exited_event_args}{}\label{class_nickvision_1_1_system_1_1_process_exited_event_args}\index{Nickvision::System::ProcessExitedEventArgs@{Nickvision::System::ProcessExitedEventArgs}}
+
+
+An event argument for when a process has exited.  
+
+
+
+
+{\ttfamily \#include $<$processexitedeventargs.\+h$>$}
+
+Inheritance diagram for Nickvision\+::System\+::Process\+Exited\+Event\+Args\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_nickvision_1_1_system_1_1_process_exited_event_args}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_system_1_1_process_exited_event_args_ae7de153d4c993dc04b628fbae0bcefec}{Process\+Exited\+Event\+Args}} (int exit\+Code, const std\+::string \&output)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_system_1_1_process_exited_event_args}{Process\+Exited\+Event\+Args}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_nickvision_1_1_system_1_1_process_exited_event_args_a6c2b3f58204c369321b5853a3a4a9415}{get\+Exit\+Code}} () const
+\begin{DoxyCompactList}\small\item\em Gets the exit code of the process. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_nickvision_1_1_system_1_1_process_exited_event_args_a9409297b389a185a577167fa44db08a3}{get\+Output}} () const
+\begin{DoxyCompactList}\small\item\em Gets the console output of the process. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event_args}{Nickvision\+::\+Events\+::\+Event\+Args}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Event\+Args} ()=default
+\begin{DoxyCompactList}\small\item\em Constructs an \doxylink{class_nickvision_1_1_events_1_1_event_args}{Event\+Args}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An event argument for when a process has exited. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_system_1_1_process_exited_event_args_ae7de153d4c993dc04b628fbae0bcefec}\index{Nickvision::System::ProcessExitedEventArgs@{Nickvision::System::ProcessExitedEventArgs}!ProcessExitedEventArgs@{ProcessExitedEventArgs}}
+\index{ProcessExitedEventArgs@{ProcessExitedEventArgs}!Nickvision::System::ProcessExitedEventArgs@{Nickvision::System::ProcessExitedEventArgs}}
+\doxysubsubsection{\texorpdfstring{ProcessExitedEventArgs()}{ProcessExitedEventArgs()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_system_1_1_process_exited_event_args_ae7de153d4c993dc04b628fbae0bcefec} 
+Nickvision\+::\+System\+::\+Process\+Exited\+Event\+Args\+::\+Process\+Exited\+Event\+Args (\begin{DoxyParamCaption}\item[{int}]{exit\+Code}{, }\item[{const std\+::string \&}]{output}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_system_1_1_process_exited_event_args}{Process\+Exited\+Event\+Args}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exit\+Code} & The exit code of the process \\
+\hline
+{\em output} & The console output of the process \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_system_1_1_process_exited_event_args_a6c2b3f58204c369321b5853a3a4a9415}\index{Nickvision::System::ProcessExitedEventArgs@{Nickvision::System::ProcessExitedEventArgs}!getExitCode@{getExitCode}}
+\index{getExitCode@{getExitCode}!Nickvision::System::ProcessExitedEventArgs@{Nickvision::System::ProcessExitedEventArgs}}
+\doxysubsubsection{\texorpdfstring{getExitCode()}{getExitCode()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_system_1_1_process_exited_event_args_a6c2b3f58204c369321b5853a3a4a9415} 
+int Nickvision\+::\+System\+::\+Process\+Exited\+Event\+Args\+::get\+Exit\+Code (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the exit code of the process. 
+
+\begin{DoxyReturn}{Returns}
+The exit code of the process 
+\end{DoxyReturn}
+\Hypertarget{class_nickvision_1_1_system_1_1_process_exited_event_args_a9409297b389a185a577167fa44db08a3}\index{Nickvision::System::ProcessExitedEventArgs@{Nickvision::System::ProcessExitedEventArgs}!getOutput@{getOutput}}
+\index{getOutput@{getOutput}!Nickvision::System::ProcessExitedEventArgs@{Nickvision::System::ProcessExitedEventArgs}}
+\doxysubsubsection{\texorpdfstring{getOutput()}{getOutput()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_system_1_1_process_exited_event_args_a9409297b389a185a577167fa44db08a3} 
+const std\+::string \& Nickvision\+::\+System\+::\+Process\+Exited\+Event\+Args\+::get\+Output (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets the console output of the process. 
+
+\begin{DoxyReturn}{Returns}
+The console output of the process 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/system/\mbox{\hyperlink{processexitedeventargs_8h}{processexitedeventargs.\+h}}\end{DoxyCompactItemize}

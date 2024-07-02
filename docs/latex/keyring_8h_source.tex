@@ -1,0 +1,42 @@
+\doxysection{keyring.\+h}
+\hypertarget{keyring_8h_source}{}\label{keyring_8h_source}\index{include/keyring/keyring.h@{include/keyring/keyring.h}}
+\mbox{\hyperlink{keyring_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ KEYRING\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ KEYRING\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{credential_8h}{credential.h}}"{}}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{store_8h}{store.h}}"{}}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{namespace\ }Nickvision::Keyring}
+\DoxyCodeLine{00033\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring}{Keyring}}}
+\DoxyCodeLine{00038\ \ \ \ \ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_afb683c4f535c3081e392b8f9f1649677}{getName}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::vector<Credential>\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_a8c149da98605ccf6686d74e90f5f981d}{getAllCredentials}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ std::optional<Credential>\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_a2c920361946750677974ebdff6fb4bd6}{getCredential}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ std::vector<Credential>\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_a2b6fd1f34ad26d731cb9f72151c0a016}{getCredentials}}(\textcolor{keyword}{const}\ std::string\&\ name)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_af562a58f442ab29ff95238d5dd275cad}{addCredential}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}}\&\ credential);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_ac72b0fee9e7c9b7e6e8ec96acb065448}{updateCredential}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}}\&\ credential);}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_a7454e4f6843e522de0e22c2066e373c8}{deleteCredential}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_af9906a2833af35016d57e8af0c1b8887}{destroy}}();}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring}{Keyring}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store}{Store}}\&\ store);}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store}{Store}}\ m\_store;}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::optional<Keyring>\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_a349bc7d590cdfd8f2ce41f2d91f8ec43}{access}}(\textcolor{keyword}{const}\ std::string\&\ name,\ std::string\ password\ =\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_a20aee04c60790761eb73acd8c5080352}{exists}}(\textcolor{keyword}{const}\ std::string\&\ name);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_keyring_a7f2d3be5f6e2d85036068772b8710742}{destroy}}(\textcolor{keyword}{const}\ std::string\&\ name);}
+\DoxyCodeLine{00114\ \ \ \ \ \};}
+\DoxyCodeLine{00115\ \}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//KEYRING\_H}}
+
+\end{DoxyCode}

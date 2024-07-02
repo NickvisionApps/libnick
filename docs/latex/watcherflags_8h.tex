@@ -1,0 +1,52 @@
+\doxysection{include/filesystem/watcherflags.h File Reference}
+\hypertarget{watcherflags_8h}{}\label{watcherflags_8h}\index{include/filesystem/watcherflags.h@{include/filesystem/watcherflags.h}}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}\label{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4} 
+enum class \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Nickvision\+::\+Filesystem\+::\+Watcher\+Flags}} \{ \newline
+{\bfseries File\+Name} = 1
+, {\bfseries Directory\+Name} = 2
+, {\bfseries Attributes} = 4
+, {\bfseries Size} = 8
+, \newline
+{\bfseries Last\+Write} = 16
+, {\bfseries Last\+Access} = 32
+ \}
+\begin{DoxyCompactList}\small\item\em Flags to describe properties of a file system object that can change. ~\newline
+ \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{watcherflags_8h_ae5776d07c87afccc6c53996fdc9ac4f8}\label{watcherflags_8h_ae5776d07c87afccc6c53996fdc9ac4f8} 
+constexpr \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} {\bfseries Nickvision\+::\+Filesystem\+::operator\texorpdfstring{$\sim$}{\string~}} (\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} a)
+\item 
+\Hypertarget{watcherflags_8h_ad628013a0bdfa85b4940c081374436e0}\label{watcherflags_8h_ad628013a0bdfa85b4940c081374436e0} 
+constexpr \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} {\bfseries Nickvision\+::\+Filesystem\+::operator\texorpdfstring{$\vert$}{|}} (\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} a, \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} b)
+\item 
+\Hypertarget{watcherflags_8h_a482ed39ee12ef9730af1d3911b5acc36}\label{watcherflags_8h_a482ed39ee12ef9730af1d3911b5acc36} 
+constexpr \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} {\bfseries Nickvision\+::\+Filesystem\+::operator\&} (\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} a, \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} b)
+\item 
+\Hypertarget{watcherflags_8h_a3df4d9409dfec56bde4c9f4267836687}\label{watcherflags_8h_a3df4d9409dfec56bde4c9f4267836687} 
+constexpr \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} {\bfseries Nickvision\+::\+Filesystem\+::operator\texorpdfstring{$^\wedge$}{\string^}} (\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} a, \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} b)
+\item 
+\Hypertarget{watcherflags_8h_a7343b285da83996f70ed807633f8ad80}\label{watcherflags_8h_a7343b285da83996f70ed807633f8ad80} 
+\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} \& {\bfseries Nickvision\+::\+Filesystem\+::operator\texorpdfstring{$\vert$}{|}=} (\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} \&a, \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} b)
+\item 
+\Hypertarget{watcherflags_8h_ad209a23e8a6e75eb5e1dffb3bd9a57a6}\label{watcherflags_8h_ad209a23e8a6e75eb5e1dffb3bd9a57a6} 
+\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} \& {\bfseries Nickvision\+::\+Filesystem\+::operator\&=} (\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} \&a, \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} b)
+\item 
+\Hypertarget{watcherflags_8h_a2ad6af4b1e3508c2a6d3923eafcba331}\label{watcherflags_8h_a2ad6af4b1e3508c2a6d3923eafcba331} 
+\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} \& {\bfseries Nickvision\+::\+Filesystem\+::operator\texorpdfstring{$^\wedge$}{\string^}=} (\mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} \&a, \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{Watcher\+Flags}} b)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Nicholas Logozzo \href{mailto:nlogozzo225@gmail.com}{\texttt{ nlogozzo225@gmail.\+com}}
+\end{DoxyAuthor}
+\hypertarget{versiontype_8h_LICENSE}{}\doxysubsection{\texorpdfstring{LICENSE}{LICENSE}}\label{versiontype_8h_LICENSE}
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details at \href{https://www.gnu.org/copyleft/gpl.html}{\texttt{ https\+://www.\+gnu.\+org/copyleft/gpl.\+html}}\hypertarget{versiontype_8h_DESCRIPTION}{}\doxysubsection{\texorpdfstring{DESCRIPTION}{DESCRIPTION}}\label{versiontype_8h_DESCRIPTION}
+Flags to describe properties of a file system object that can change. 

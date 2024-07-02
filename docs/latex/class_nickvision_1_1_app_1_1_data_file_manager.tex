@@ -1,0 +1,88 @@
+\doxysection{Nickvision\+::App\+::Data\+File\+Manager Class Reference}
+\hypertarget{class_nickvision_1_1_app_1_1_data_file_manager}{}\label{class_nickvision_1_1_app_1_1_data_file_manager}\index{Nickvision::App::DataFileManager@{Nickvision::App::DataFileManager}}
+
+
+A manager of data files for an application.  
+
+
+
+
+{\ttfamily \#include $<$datafilemanager.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_manager_ab3d0a40aaa93bbbcc7c97812e48d63ac}{Data\+File\+Manager}} (const std\+::string \&app\+Name)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_nickvision_1_1_app_1_1_data_file_manager}{Data\+File\+Manager}. \end{DoxyCompactList}\item 
+\Hypertarget{class_nickvision_1_1_app_1_1_data_file_manager_a8c39b51bb830cb57254d78c63e5825a1}\label{class_nickvision_1_1_app_1_1_data_file_manager_a8c39b51bb830cb57254d78c63e5825a1} 
+{\bfseries Data\+File\+Manager} (const \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_manager}{Data\+File\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_nickvision_1_1_app_1_1_data_file_manager_a5efae6fb0261b0c4ec14770c878931f9}\label{class_nickvision_1_1_app_1_1_data_file_manager_a5efae6fb0261b0c4ec14770c878931f9} 
+{\bfseries Data\+File\+Manager} (\mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_manager}{Data\+File\+Manager}} \&\&)=delete
+\item 
+\Hypertarget{class_nickvision_1_1_app_1_1_data_file_manager_ac59da27bff6e6485000b295f30a377c9}\label{class_nickvision_1_1_app_1_1_data_file_manager_ac59da27bff6e6485000b295f30a377c9} 
+void {\bfseries operator=} (const \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_manager}{Data\+File\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_nickvision_1_1_app_1_1_data_file_manager_a1c3523a87ef7971cabd72a19048d714e}\label{class_nickvision_1_1_app_1_1_data_file_manager_a1c3523a87ef7971cabd72a19048d714e} 
+void {\bfseries operator=} (\mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_manager}{Data\+File\+Manager}} \&\&)=delete
+\item 
+{\footnotesize template$<$Derived\+Data\+File\+Base T$>$ }\\T \& \mbox{\hyperlink{class_nickvision_1_1_app_1_1_data_file_manager_aa43d0d8d18c87a1e69176633840f8977}{get}} (const std\+::string \&key)
+\begin{DoxyCompactList}\small\item\em Gets a data object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A manager of data files for an application. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_nickvision_1_1_app_1_1_data_file_manager_ab3d0a40aaa93bbbcc7c97812e48d63ac}\index{Nickvision::App::DataFileManager@{Nickvision::App::DataFileManager}!DataFileManager@{DataFileManager}}
+\index{DataFileManager@{DataFileManager}!Nickvision::App::DataFileManager@{Nickvision::App::DataFileManager}}
+\doxysubsubsection{\texorpdfstring{DataFileManager()}{DataFileManager()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_app_1_1_data_file_manager_ab3d0a40aaa93bbbcc7c97812e48d63ac} 
+Nickvision\+::\+App\+::\+Data\+File\+Manager\+::\+Data\+File\+Manager (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{app\+Name}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_nickvision_1_1_app_1_1_data_file_manager}{Data\+File\+Manager}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em app\+Name} & The name of the application (used in determining the path to store data files on disk) \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_nickvision_1_1_app_1_1_data_file_manager_aa43d0d8d18c87a1e69176633840f8977}\index{Nickvision::App::DataFileManager@{Nickvision::App::DataFileManager}!get@{get}}
+\index{get@{get}!Nickvision::App::DataFileManager@{Nickvision::App::DataFileManager}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily \label{class_nickvision_1_1_app_1_1_data_file_manager_aa43d0d8d18c87a1e69176633840f8977} 
+template$<$Derived\+Data\+File\+Base T$>$ \\
+T \& Nickvision\+::\+App\+::\+Data\+File\+Manager\+::get (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets a data object. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Derived type of \doxylink{class_nickvision_1_1_app_1_1_data_file_base}{Data\+File\+Base} \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key of the data file \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & Thrown if key is empty \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+The data object 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/app/\mbox{\hyperlink{datafilemanager_8h}{datafilemanager.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,30 @@
+\doxysection{filesystemchangedeventargs.\+h}
+\hypertarget{filesystemchangedeventargs_8h_source}{}\label{filesystemchangedeventargs_8h_source}\index{include/filesystem/filesystemchangedeventargs.h@{include/filesystem/filesystemchangedeventargs.h}}
+\mbox{\hyperlink{filesystemchangedeventargs_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ FILESYSTEMCHANGEDEVENTARGS\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ FILESYSTEMCHANGEDEVENTARGS\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{fileaction_8h}{fileaction.h}}"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{eventargs_8h}{events/eventargs.h}}"{}}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{namespace\ }Nickvision::Filesystem}
+\DoxyCodeLine{00031\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args}{FileSystemChangedEventArgs}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event_args}{Events::EventArgs}}}
+\DoxyCodeLine{00036\ \ \ \ \ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_a2cc2a641e853f52e14099de71f0b5159}{FileSystemChangedEventArgs}}(\textcolor{keyword}{const}\ std::filesystem::path\&\ path,\ \mbox{\hyperlink{fileaction_8h_a2ab0a9147887a01966de0ea9ec663178}{FileAction}}\ why);}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::filesystem::path\&\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_acf82b92640f9bc9d0ca8840afcc7a86d}{getPath}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fileaction_8h_a2ab0a9147887a01966de0ea9ec663178}{FileAction}}\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_changed_event_args_a1e01b9ec9c055a60b04ad51d517e164b}{getWhy}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ std::filesystem::path\ m\_path;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fileaction_8h_a2ab0a9147887a01966de0ea9ec663178}{FileAction}}\ m\_why;}
+\DoxyCodeLine{00058\ \ \ \ \ \};}
+\DoxyCodeLine{00059\ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//FILESYSTEMCHANGEDEVENTARGS\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['datafilebase_0',['DataFileBase',['../class_nickvision_1_1_app_1_1_data_file_base.html#a212c327905599a0fe3b592838fcdd633',1,'Nickvision::App::DataFileBase']]],
+  ['datafilemanager_1',['DataFileManager',['../class_nickvision_1_1_app_1_1_data_file_manager.html#ab3d0a40aaa93bbbcc7c97812e48d63ac',1,'Nickvision::App::DataFileManager']]],
+  ['decode_2',['decode',['../stringhelpers_8h.html#a8b75147364e050fa9eb1809db9a47549',1,'Nickvision::Helpers::StringHelpers']]],
+  ['deletecredential_3',['deleteCredential',['../class_nickvision_1_1_keyring_1_1_keyring.html#a7454e4f6843e522de0e22c2066e373c8',1,'Nickvision::Keyring::Keyring::deleteCredential()'],['../class_nickvision_1_1_keyring_1_1_keyring_dialog_controller.html#aa595c8d4c286c0cd91f707e58ae40b2e',1,'Nickvision::Keyring::KeyringDialogController::deleteCredential()'],['../class_nickvision_1_1_keyring_1_1_store.html#a84e8c753f846025f32d8529a2d7fc67a',1,'Nickvision::Keyring::Store::deleteCredential()'],['../systemcredentials_8h.html#a4b5737bb65328417e3b921283e80f639',1,'Nickvision::Keyring::SystemCredentials::deleteCredential()']]],
+  ['destroy_4',['destroy',['../class_nickvision_1_1_keyring_1_1_keyring.html#af9906a2833af35016d57e8af0c1b8887',1,'Nickvision::Keyring::Keyring::destroy()'],['../class_nickvision_1_1_keyring_1_1_keyring.html#a7f2d3be5f6e2d85036068772b8710742',1,'Nickvision::Keyring::Keyring::destroy(const std::string &amp;name)'],['../class_nickvision_1_1_keyring_1_1_store.html#a53de9343baccad7aeeed361757d127c2',1,'Nickvision::Keyring::Store::destroy()'],['../class_nickvision_1_1_keyring_1_1_store.html#a7c8dc10eb66c0b9cd4e88fc63ae7a61c',1,'Nickvision::Keyring::Store::destroy(const std::string &amp;name)']]],
+  ['disablekeyring_5',['disableKeyring',['../class_nickvision_1_1_keyring_1_1_keyring_dialog_controller.html#a191ee4a29e0917d2213b061d54dce4df',1,'Nickvision::Keyring::KeyringDialogController']]],
+  ['downloadfile_6',['downloadFile',['../class_nickvision_1_1_network_1_1_web_client.html#a71c3150bb7e4c1181c8aaf339b494c90',1,'Nickvision::Network::WebClient']]]
+];

@@ -10,3 +10,5 @@
 # Exclude sqlite From Stats
 include/database/sqlite3.h linguist-vendored
 src/database/sqlite3.c linguist-vendored
+# Exclude docs From Stats
+docs/** linguist-documentation

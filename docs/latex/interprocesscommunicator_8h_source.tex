@@ -1,0 +1,49 @@
+\doxysection{interprocesscommunicator.\+h}
+\hypertarget{interprocesscommunicator_8h_source}{}\label{interprocesscommunicator_8h_source}\index{include/app/interprocesscommunicator.h@{include/app/interprocesscommunicator.h}}
+\mbox{\hyperlink{interprocesscommunicator_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ INTERPROCESSCOMMUNICATOR\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ INTERPROCESSCOMMUNICATOR\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{event_8h}{events/event.h}}"{}}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{parameventargs_8h}{events/parameventargs.h}}"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ <windows.h>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <sys/un.h>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{namespace\ }Nickvision::App}
+\DoxyCodeLine{00038\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator}{InterProcessCommunicator}}}
+\DoxyCodeLine{00043\ \ \ \ \ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_a8f10fae5001f997d29ea6410588bf737}{InterProcessCommunicator}}(\textcolor{keyword}{const}\ std::string\&\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_abbef836c35cbdb4f9f484e8278ff218c}{\string~InterProcessCommunicator}}();}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events::Event<Events::ParamEventArgs<std::vector<std::string>}}>>\&\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_a8a46d1c5270ca1b22c5685a352d58469}{commandReceived}}();}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_a9d2782014587dfd44505a3e0876cd820}{isServer}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_acae4f1fb4c03c1daf728d778b4d473a9}{isClient}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_app_1_1_inter_process_communicator_a0587bd9ac274f481754d175c0cd63259}{communicate}}(\textcolor{keyword}{const}\ std::vector<std::string>\&\ args,\ \textcolor{keywordtype}{bool}\ exitIfClient\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ runServer();}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_serverRunning;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events::Event<Events::ParamEventArgs<std::vector<std::string>}}>>\ m\_commandReceived;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ std::thread\ m\_server;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ std::string\ m\_path;}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ HANDLE\ m\_serverPipe;}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }sockaddr\_un\ m\_sockaddr;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m\_serverSocket;}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00096\ \ \ \ \ \};}
+\DoxyCodeLine{00097\ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//INTERPROCESSCOMMUNICATOR\_H}}
+
+\end{DoxyCode}

@@ -36,7 +36,10 @@ namespace Nickvision::Logging
         m_path{ path },
         m_stream{ std::make_shared<std::ofstream>(m_path, append ? std::ios::out | std::ios::app : std::ios::out | std::ios::trunc) }
     {
-
+        if(!m_stream || !m_stream->good())
+        {
+            throw std::runtime_error("Unable to open log file.");
+        }
     }
 
     const std::filesystem::path& Logger::getPath() const

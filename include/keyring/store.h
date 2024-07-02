@@ -1,3 +1,25 @@
+/**
+ * @file
+ * @author Nicholas Logozzo <nlogozzo225@gmail.com>
+ *
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details at
+ * https://www.gnu.org/copyleft/gpl.html
+ *
+ * @section DESCRIPTION
+ *
+ * A store object for credentials. Backed by sqlcipher.
+ */
+
 #ifndef STORE_H
 #define STORE_H
 
@@ -90,7 +112,7 @@ namespace Nickvision::Keyring
         static bool exists(const std::string& name);
         /**
          * @brief Destroys a store and all of its data from disk.
-         * @param The name of the store to destroy
+         * @param name name of the store to destroy
          * @return True if successful, else false
          */
         static bool destroy(const std::string& name);

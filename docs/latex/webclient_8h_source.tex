@@ -1,0 +1,33 @@
+\doxysection{webclient.\+h}
+\hypertarget{webclient_8h_source}{}\label{webclient_8h_source}\index{include/network/webclient.h@{include/network/webclient.h}}
+\mbox{\hyperlink{webclient_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ WEBCLIENT\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ WEBCLIENT\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <curl/curl.h>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{curleasy_8h}{curleasy.h}}"{}}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{namespace\ }Nickvision::Network}
+\DoxyCodeLine{00032\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_network_1_1_web_client}{WebClient}}}
+\DoxyCodeLine{00037\ \ \ \ \ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_network_1_1_web_client_a470cf23524b6aeabbe1fdf3425aa012f}{WebClient}}();}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_network_1_1_web_client_ab066bea3326e97d5a2588bdcb017cb2e}{\string~WebClient}}();}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_network_1_1_web_client_a65f2dddf003457768f0a94c7dc10fead}{getWebsiteExists}}(\textcolor{keyword}{const}\ std::string\&\ url)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{class_nickvision_1_1_network_1_1_web_client_a45e1b8496d6508bc06f3986a4d223f48}{fetchJson}}(\textcolor{keyword}{const}\ std::string\&\ url)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_network_1_1_web_client_a71c3150bb7e4c1181c8aaf339b494c90}{downloadFile}}(\textcolor{keyword}{const}\ std::string\&\ url,\ \textcolor{keyword}{const}\ std::filesystem::path\&\ path,\ \textcolor{keyword}{const}\ CurlProgressFunction\&\ progress\ =\ \{\},\ \textcolor{keywordtype}{bool}\ overwrite\ =\ \textcolor{keyword}{true})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ m\_initialized;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ m\_instanceCount;}
+\DoxyCodeLine{00076\ \ \ \ \ \};}
+\DoxyCodeLine{00077\ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//WEBCLIENT\_H}}
+
+\end{DoxyCode}

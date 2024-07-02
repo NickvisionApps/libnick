@@ -1,0 +1,39 @@
+\chapter{Creating a Context Menu}
+\hypertarget{md_manual_2notifyicon}{}\label{md_manual_2notifyicon}\index{Creating a Context Menu@{Creating a Context Menu}}
+\label{md_manual_2notifyicon_autotoc_md4}%
+\Hypertarget{md_manual_2notifyicon_autotoc_md4}%
+The {\ttfamily Notify\+Menu\+Item} provides an easy API for creating context menus for a {\ttfamily Notify\+Icon} to use within your app.
+
+Assume we want to create the following context menu for a {\ttfamily Notify\+Icon}\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}
+\DoxyCodeLine{|\ Show\ Window\ |}
+\DoxyCodeLine{|\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ |}
+\DoxyCodeLine{|\ \ \ \ Exit\ \ \ \ \ |}
+\DoxyCodeLine{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ }
+
+\end{DoxyCode}
+
+
+Here is the code we could use to accomplish this\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{...}
+\DoxyCodeLine{bool\ m\_running\{\ \textcolor{keyword}{true}\ \};}
+\DoxyCodeLine{NotifyIconMenu\ contextMenu;}
+\DoxyCodeLine{contextMenu.addAction(\textcolor{stringliteral}{"{}Show\ Window"{}},\ [\&]()}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ showWindow();}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{contextMenu.addSeparator();}
+\DoxyCodeLine{contextMenu.addAction(\textcolor{stringliteral}{"{}Exit"{}},\ [\&m\_running]()}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ m\_running\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{NotifyIcon\ icon\{\ GetConsoleWindow(),\ \textcolor{stringliteral}{"{}"{}},\ contextMenu\ \};}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ following\ also\ works:}}
+\DoxyCodeLine{\textcolor{comment}{//\ NotifyIcon\ icon\{\ GetConsoleWindow(),\ "{}"{}\ \};}}
+\DoxyCodeLine{\textcolor{comment}{//\ icon.setContextMenu(contextMenu);}}
+\DoxyCodeLine{...}
+
+\end{DoxyCode}
+ 

@@ -1,0 +1,46 @@
+\doxysection{store.\+h}
+\hypertarget{store_8h_source}{}\label{store_8h_source}\index{include/keyring/store.h@{include/keyring/store.h}}
+\mbox{\hyperlink{store_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ STORE\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ STORE\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{credential_8h}{credential.h}}"{}}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{sqldatabase_8h}{../database/sqldatabase.h}}"{}}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{namespace\ }Nickvision::Keyring}
+\DoxyCodeLine{00035\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store}{Store}}}
+\DoxyCodeLine{00040\ \ \ \ \ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_a2ce9b191759f46b13246f69cdf4960af}{Store}}(\textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keyword}{const}\ std::string\&\ password);}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_a7c2c4d9b35cbe6694975d40c270f20c4}{getName}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::filesystem::path\&\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_aea626e2e976c5d291a5b4989c628ad8d}{getPath}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ std::vector<Credential>\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_a1acb9b81c85d211f6db9e8c5363900e9}{getAllCredentials}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ std::optional<Credential>\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_ad935f56eee8b581bbd1c5abebd0038b1}{getCredential}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ std::vector<Credential>\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_ac933311538ecd953cf30915cadc7aa01}{getCredentials}}(\textcolor{keyword}{const}\ std::string\&\ name)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_af209e5b40f18e956ae91b04aded4d8c4}{addCredential}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}}\&\ credential);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_adef02beb0e2475c4695a69704311709d}{updateCredential}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_credential}{Credential}}\&\ credential);}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_a84e8c753f846025f32d8529a2d7fc67a}{deleteCredential}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_a53de9343baccad7aeeed361757d127c2}{destroy}}();}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ std::string\ m\_name;}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ std::string\ m\_password;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ std::shared\_ptr<Database::SqlDatabase>\ m\_database;}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_a130eb4047631e39524ae317befe12cb7}{exists}}(\textcolor{keyword}{const}\ std::string\&\ name);}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_keyring_1_1_store_a7c8dc10eb66c0b9cd4e88fc63ae7a61c}{destroy}}(\textcolor{keyword}{const}\ std::string\&\ name);}
+\DoxyCodeLine{00119\ \ \ \ \ \};}
+\DoxyCodeLine{00120\ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//STORE\_H}}
+
+\end{DoxyCode}

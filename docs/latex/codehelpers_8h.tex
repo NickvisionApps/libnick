@@ -1,0 +1,102 @@
+\doxysection{include/helpers/codehelpers.h File Reference}
+\hypertarget{codehelpers_8h}{}\label{codehelpers_8h}\index{include/helpers/codehelpers.h@{include/helpers/codehelpers.h}}
+{\ttfamily \#include $<$cstddef$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{codehelpers_8h_a53f1d66052c68aff28bc8e52e29b61a1}{Nickvision\+::\+Helpers\+::\+Code\+Helpers\+::get\+Last\+System\+Error}} ()
+\begin{DoxyCompactList}\small\item\em Get the last system api call error message. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{codehelpers_8h_af42b499ff3b568b428f86301988c023a}{Nickvision\+::\+Helpers\+::\+Code\+Helpers\+::read\+File\+Bytes}} (const std\+::filesystem\+::path \&path)
+\begin{DoxyCompactList}\small\item\em Reads a file as a vector of bytes. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\const T \& \mbox{\hyperlink{codehelpers_8h_a39be48c6ae3d12226df51735cc18b75a}{Nickvision\+::\+Helpers\+::\+Code\+Helpers\+::unmove}} (T \&\&t)
+\begin{DoxyCompactList}\small\item\em Unmoves a value. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{codehelpers_8h_a611be9cb712ee17498b3655d2a6e90fa}{Nickvision\+::\+Helpers\+::\+Code\+Helpers\+::write\+File\+Bytes}} (const std\+::filesystem\+::path \&path, const std\+::vector$<$ std\+::byte $>$ \&bytes, bool overwrite=true)
+\begin{DoxyCompactList}\small\item\em Writes a vector of bytes to a file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Nicholas Logozzo \href{mailto:nlogozzo225@gmail.com}{\texttt{ nlogozzo225@gmail.\+com}}
+\end{DoxyAuthor}
+\hypertarget{versiontype_8h_LICENSE}{}\doxysubsection{\texorpdfstring{LICENSE}{LICENSE}}\label{versiontype_8h_LICENSE}
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details at \href{https://www.gnu.org/copyleft/gpl.html}{\texttt{ https\+://www.\+gnu.\+org/copyleft/gpl.\+html}}\hypertarget{versiontype_8h_DESCRIPTION}{}\doxysubsection{\texorpdfstring{DESCRIPTION}{DESCRIPTION}}\label{versiontype_8h_DESCRIPTION}
+Functions that make working with C++ easier. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{codehelpers_8h_a53f1d66052c68aff28bc8e52e29b61a1}\index{codehelpers.h@{codehelpers.h}!getLastSystemError@{getLastSystemError}}
+\index{getLastSystemError@{getLastSystemError}!codehelpers.h@{codehelpers.h}}
+\doxysubsubsection{\texorpdfstring{getLastSystemError()}{getLastSystemError()}}
+{\footnotesize\ttfamily \label{codehelpers_8h_a53f1d66052c68aff28bc8e52e29b61a1} 
+std\+::string Nickvision\+::\+Helpers\+::\+Code\+Helpers\+::get\+Last\+System\+Error (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Get the last system api call error message. 
+
+\begin{DoxyReturn}{Returns}
+The last system error message 
+\end{DoxyReturn}
+\Hypertarget{codehelpers_8h_af42b499ff3b568b428f86301988c023a}\index{codehelpers.h@{codehelpers.h}!readFileBytes@{readFileBytes}}
+\index{readFileBytes@{readFileBytes}!codehelpers.h@{codehelpers.h}}
+\doxysubsubsection{\texorpdfstring{readFileBytes()}{readFileBytes()}}
+{\footnotesize\ttfamily \label{codehelpers_8h_af42b499ff3b568b428f86301988c023a} 
+std\+::vector$<$ std\+::byte $>$ Nickvision\+::\+Helpers\+::\+Code\+Helpers\+::read\+File\+Bytes (\begin{DoxyParamCaption}\item[{const std\+::filesystem\+::path \&}]{path}{}\end{DoxyParamCaption})}
+
+
+
+Reads a file as a vector of bytes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & The path to the file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The bytes from the file 
+\end{DoxyReturn}
+\Hypertarget{codehelpers_8h_a39be48c6ae3d12226df51735cc18b75a}\index{codehelpers.h@{codehelpers.h}!unmove@{unmove}}
+\index{unmove@{unmove}!codehelpers.h@{codehelpers.h}}
+\doxysubsubsection{\texorpdfstring{unmove()}{unmove()}}
+{\footnotesize\ttfamily \label{codehelpers_8h_a39be48c6ae3d12226df51735cc18b75a} 
+template$<$typename T $>$ \\
+const T \& Nickvision\+::\+Helpers\+::\+Code\+Helpers\+::unmove (\begin{DoxyParamCaption}\item[{T \&\&}]{t}{}\end{DoxyParamCaption})}
+
+
+
+Unmoves a value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & An rvalue of T \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The lvalue of t 
+\end{DoxyReturn}
+\Hypertarget{codehelpers_8h_a611be9cb712ee17498b3655d2a6e90fa}\index{codehelpers.h@{codehelpers.h}!writeFileBytes@{writeFileBytes}}
+\index{writeFileBytes@{writeFileBytes}!codehelpers.h@{codehelpers.h}}
+\doxysubsubsection{\texorpdfstring{writeFileBytes()}{writeFileBytes()}}
+{\footnotesize\ttfamily \label{codehelpers_8h_a611be9cb712ee17498b3655d2a6e90fa} 
+bool Nickvision\+::\+Helpers\+::\+Code\+Helpers\+::write\+File\+Bytes (\begin{DoxyParamCaption}\item[{const std\+::filesystem\+::path \&}]{path}{, }\item[{const std\+::vector$<$ std\+::byte $>$ \&}]{bytes}{, }\item[{bool}]{overwrite}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+
+
+Writes a vector of bytes to a file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & The path to the file \\
+\hline
+{\em bytes} & The bytes to write \\
+\hline
+{\em overwrite} & Whether or not to overwrite the file if it already exists \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, false otherwise. False is returned if overwrite is false and the file exists. 
+\end{DoxyReturn}

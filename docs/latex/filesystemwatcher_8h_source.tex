@@ -1,0 +1,62 @@
+\doxysection{filesystemwatcher.\+h}
+\hypertarget{filesystemwatcher_8h_source}{}\label{filesystemwatcher_8h_source}\index{include/filesystem/filesystemwatcher.h@{include/filesystem/filesystemwatcher.h}}
+\mbox{\hyperlink{filesystemwatcher_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ FILESYSTEMWATCHER\_H}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ FILESYSTEMWATCHER\_H}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{filesystemchangedeventargs_8h}{filesystemchangedeventargs.h}}"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{watcherflags_8h}{watcherflags.h}}"{}}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{event_8h}{events/event.h}}"{}}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <windows.h>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#elif\ defined(\_\_APPLE\_\_)}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <CoreServices/CoreServices.h>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{namespace\ }Nickvision::Filesystem}
+\DoxyCodeLine{00040\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher}{FileSystemWatcher}}}
+\DoxyCodeLine{00045\ \ \ \ \ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_ade02d21a7e8bffb375fcf0dfef46c999}{FileSystemWatcher}}(\textcolor{keyword}{const}\ std::filesystem::path\&\ path,\ \textcolor{keywordtype}{bool}\ includeSubdirectories,\ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\ watcherFlags\ =\ WatcherFlags::FileName\ |\ WatcherFlags::DirectoryName\ |\ WatcherFlags::Attributes\ |\ WatcherFlags::Size\ |\ WatcherFlags::LastWrite\ |\ WatcherFlags::LastAccess);}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a9fae14fdc5ba6aa344624a710f582150}{\string~FileSystemWatcher}}();}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::filesystem::path\&\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a52e705f6e8c688e98162a2b320058dac}{getPath}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a037468f5b7bedf6f0b80e8db089be019}{getWatcherFlags}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a523efaff917d11a260f1c20f23d569dc}{getIncludeSubdirectories}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events::Event<FileSystemChangedEventArgs>}}\&\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a629bdd9d9658f07bac913bd51565a436}{changed}}();}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_afb69e43029a4b149a2863bcce0409259}{isExtensionWatched}}(\textcolor{keyword}{const}\ std::filesystem::path\&\ extension);}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a195e39b870aaccedc301d7ed6c3a621e}{addExtensionFilter}}(\textcolor{keyword}{const}\ std::filesystem::path\&\ extension);}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_aaf524f11f1b3a68d81f81e9aa8e4a615}{removeExtensionFilter}}(\textcolor{keyword}{const}\ std::filesystem::path\&\ extension);}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_nickvision_1_1_filesystem_1_1_file_system_watcher_a64525d379136fbd985ef59e3c6348ca0}{clearExtensionFilters}}();}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ watch();}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ std::thread\ m\_watchThread;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keyword}{mutable}\ std::mutex\ m\_mutex;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ std::filesystem::path\ m\_path;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_includeSubdirectories;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{watcherflags_8h_a860a02453443de2c3e705cbb7e9ec5b4}{WatcherFlags}}\ m\_watcherFlags;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_nickvision_1_1_events_1_1_event}{Events::Event<FileSystemChangedEventArgs>}}\ m\_changed;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_watching;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ std::vector<std::filesystem::path>\ m\_extensionFilters;}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#ifdef\ \_WIN32}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ HANDLE\ m\_terminateEvent;}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#elif\ defined(\_\_linux\_\_)}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m\_notify;}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#elif\ defined(\_\_APPLE\_\_)}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ callback(ConstFSEventStreamRef\ stream,\ \textcolor{keywordtype}{void}*\ clientCallBackInfo,\ \textcolor{keywordtype}{size\_t}\ numEvents,\ \textcolor{keywordtype}{void}*\ eventPaths,\ \textcolor{keyword}{const}\ FSEventStreamEventFlags\ eventFlags[],\ \textcolor{keyword}{const}\ FSEventStreamEventId\ eventIds[]);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ FSEventStreamRef\ m\_stream;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ CFRunLoopRef\ m\_runLoop;}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00126\ \ \ \ \ \};}
+\DoxyCodeLine{00127\ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//FILESYSTEMWATCHER\_H}}
+
+\end{DoxyCode}
