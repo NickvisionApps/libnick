@@ -8,7 +8,7 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 
 ## Documentation
 
-Documentation for this library and its modules can be found [here](https://htmlpreview.github.io/?https://github.com/NickvisionApps/libnick/blob/main/docs/html/index.html).
+Documentation for this library and its modules can be found [here](https://nickvision.org/docs/libnick/index.html).
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

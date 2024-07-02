@@ -67,3 +67,6 @@ compile_commands.json
 
 # Setup Files
 inno/*.exe
+
+# Docs
+docs/
