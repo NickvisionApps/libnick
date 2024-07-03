@@ -59,7 +59,7 @@ public:
 
     static void SetUpTestSuite()
     {
-        std::filesystem::remove(UserDirectories::get(UserDirectory::ApplicationConfig, "Nickvision Aura Tests") / ("config.json"));
+        std::filesystem::remove(UserDirectories::get(ApplicationUserDirectory::Config, "Nickvision Aura Tests") / ("config.json"));
         m_manager = std::make_shared<DataFileManager>("Nickvision Aura Tests");
     }
 };

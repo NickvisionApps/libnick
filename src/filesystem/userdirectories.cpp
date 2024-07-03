@@ -64,7 +64,7 @@ namespace Nickvision::Filesystem
     }
 #endif
 
-    std::filesystem::path UserDirectories::get(UserDirectory directory, const std::string& appName)
+    std::filesystem::path UserDirectories::get(UserDirectory directory)
     {
         std::filesystem::path result;
         switch(directory)
@@ -91,15 +91,6 @@ namespace Nickvision::Filesystem
 #endif
             break;
         }
-        case UserDirectory::ApplicationConfig:
-        {
-            if(appName.empty())
-            {
-                return result;
-            }
-            result = get(UserDirectory::Config) / appName;
-            break;
-        }
         case UserDirectory::Cache:
         {
 #ifdef _WIN32
@@ -112,15 +103,6 @@ namespace Nickvision::Filesystem
 #endif
             break;
         }
-        case UserDirectory::ApplicationCache:
-        {
-            if(appName.empty())
-            {
-                return result;
-            }
-            result = get(UserDirectory::Cache) / appName;
-            break;
-        }
         case UserDirectory::LocalData:
         {
 #ifdef _WIN32
@@ -131,15 +113,6 @@ namespace Nickvision::Filesystem
             std::filesystem::path var{ Environment::getVariable("XDG_DATA_HOME") };
             result = !var.empty() ? var : (get(UserDirectory::Home) / ".local/share");
 #endif
-            break;
-        }
-        case UserDirectory::ApplicationLocalData:
-        {
-            if(appName.empty())
-            {
-                return result;
-            }
-            result = get(UserDirectory::LocalData) / appName;
             break;
         }
         case UserDirectory::Desktop:
@@ -224,6 +197,37 @@ namespace Nickvision::Filesystem
             result = getXDGDir("XDG_VIDEOS_DIR");
             result = result.empty() ? (get(UserDirectory::Home) / "Videos") : result;
 #endif
+            break;
+        }
+        default:
+            return result;
+        }
+        std::filesystem::create_directories(result);
+        return result;
+    }
+
+    std::filesystem::path UserDirectories::get(ApplicationUserDirectory directory, const std::string& appName)
+    {
+        std::filesystem::path result;
+        if(appName.empty())
+        {
+            return result;
+        }
+        switch(directory)
+        {
+        case ApplicationUserDirectory::Config:
+        {
+            result = get(UserDirectory::Config) / appName;
+            break;
+        }
+        case ApplicationUserDirectory::Cache:
+        {
+            result = get(UserDirectory::Cache) / appName;
+            break;
+        }
+        case ApplicationUserDirectory::LocalData:
+        {
+            result = get(UserDirectory::LocalData) / appName;
             break;
         }
         default:

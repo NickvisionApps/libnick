@@ -6,6 +6,18 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
+## 2024.6.10 (next)
+### Breaking Changes
+#### Filesystem
+- Removed application directories from `Nickvision::Filesystem::UserDirectory` enum
+### New APIs
+#### Filesystem
+- Added `Nickvision::Filesystem::ApplicationUserDirectory` enum
+- Added `Nickvision::Filesystem::UserDirectories::get()` function overload for `Nickvision::Filesystem::ApplicationUserDirectory` support
+### Fixes
+#### Update
+- Fixed an issue where `Nickvision::Update::Updater::windowsUpdate()` did not work correctly
+
 ## Dependencies
 The following are a list of dependencies used by libnick. 
 

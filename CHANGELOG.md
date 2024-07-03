@@ -2,7 +2,12 @@
 
 ## 2024.6.10 (next)
 ### Breaking Changes
+#### Filesystem
+- Removed application directories from `Nickvision::Filesystem::UserDirectory` enum
 ### New APIs
+#### Filesystem
+- Added `Nickvision::Filesystem::ApplicationUserDirectory` enum
+- Added `Nickvision::Filesystem::UserDirectories::get()` function overload for `Nickvision::Filesystem::ApplicationUserDirectory` support
 ### Fixes
 #### Update
 - Fixed an issue where `Nickvision::Update::Updater::windowsUpdate()` did not work correctly
