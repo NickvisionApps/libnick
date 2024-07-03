@@ -1,5 +1,12 @@
 # Changelog
 
+## 2024.6.10 (next)
+### Breaking Changes
+### New APIs
+### Fixes
+#### Update
+- Fixed an issue where `Nickvision::Update::Updater::windowsUpdate()` did not work correctly
+
 ## 2024.6.9
 ### Breaking Changes
 #### App

@@ -111,10 +111,10 @@ namespace Nickvision::Update
                     if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
                     {
                         std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
-                        std::wstring quotedSetupPath{ L"\"" + setupPath.wstring() + L"\""};
                         if (m_webClient.downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
                         {
-                            if ((INT_PTR)ShellExecuteW(nullptr, L"open", quotedSetupPath.c_str(), nullptr, nullptr, SW_SHOWDEFAULT) > 32)
+                            CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+                            if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)
                             {
                                 return true;
                             }
