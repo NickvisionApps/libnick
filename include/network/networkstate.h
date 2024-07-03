@@ -30,9 +30,9 @@ namespace Nickvision::Network
      */
     enum class NetworkState
     {
-        Disconnected = 0,
-        ConnectedLocal,
-        ConnectedGlobal
+        Disconnected = 0, ///< The network is disconnected.
+        ConnectedLocal, ///< The network is connected locally.
+        ConnectedGlobal ///< The network is connected globally.
     };
 }
 

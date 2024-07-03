@@ -30,9 +30,9 @@ namespace Nickvision::System
      */
     enum class DeploymentMode
     {
-        Local,
-        Flatpak,
-        Snap
+        Local, ///< Local deployment.
+        Flatpak, ///< Flatpak deployment.
+        Snap ///< Snap deployment.
     };
 }
 

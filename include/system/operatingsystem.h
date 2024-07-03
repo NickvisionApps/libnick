@@ -30,10 +30,10 @@ namespace Nickvision::System
      */
     enum class OperatingSystem
     {
-        Windows,
-        Linux,
-        MacOS,
-        Other
+        Windows, ///< The Windows operating system.
+        Linux, ///< The Linux operating system.
+        MacOS, ///< The MacOS operating system.
+        Other ///< A unknown operating system.
     };
 }
 

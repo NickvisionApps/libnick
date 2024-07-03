@@ -30,10 +30,10 @@ namespace Nickvision::Keyring
      */
     enum class PasswordContent
     {
-        Numeric = 1,
-        Uppercase = 2,
-        Lowercase = 4,
-        Special = 8
+        Numeric = 1, ///< The password contains numeric characters.
+        Uppercase = 2, ///< The password contains uppercase characters.
+        Lowercase = 4, ///< The password contains lowercase characters.
+        Special = 8 ///< The password contains special characters.
     };
 
     constexpr PasswordContent operator~(PasswordContent a)

@@ -11,6 +11,7 @@ Here are some key points when defining your own configuration objects:
 Here is an example of a custom configuration object using `DataFileBase`:
 ```cpp
 using namespace Nickvision::App;
+using namespace Nickvision::Events;
 
 class AppConfig : public DataFileBase
 {
@@ -32,11 +33,8 @@ public:
 		m_json["PreviousCount"] = count;
 	}
 };
-```
-This object can now be used with the `DataFileManager`:
-```cpp
-using namespace Nickvision::App;
-using namespace Nickvision::Events;
+
+//This object can now be used with the DataFileManager:
 
 int main()
 {
@@ -48,6 +46,7 @@ int main()
         std::cout << config.getPreviousCount() << std::endl;
     }
     config.setPreviousCount(6);
-    config.save(); //lambda will be invoked on success
+    config.save(); //above lambda will be invoked on success
+    return 0;
 }
 ```

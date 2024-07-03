@@ -30,20 +30,20 @@ namespace Nickvision::Filesystem
      */
     enum class UserDirectory
     {
-        Home,
-        Config,
-        ApplicationConfig,
-        Cache,
-        ApplicationCache,
-        LocalData,
-        ApplicationLocalData,
-        Desktop,
-        Documents,
-        Downloads,
-        Music,
-        Pictures,
-        Templates,
-        Videos
+        Home, ///< The home directory.
+        Config, ///< The configuration directory.
+        ApplicationConfig, ///< The application configuration directory.
+        Cache, ///< The cache directory.
+        ApplicationCache, ///< The application cache directory.
+        LocalData, ///< The local data directory.
+        ApplicationLocalData, ///< The application local data directory.
+        Desktop, ///< The desktop directory.
+        Documents, ///< The documents directory.
+        Downloads, ///< The downloads directory.
+        Music, ///< The music directory.
+        Pictures, ///< The pictures directory.
+        Templates, ///< The templates directory.
+        Videos ///< The videos directory.
     };
 }
 

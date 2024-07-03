@@ -1,8 +1,10 @@
 # Monitoring Network Connectivity
-The `NetworkMonitor` provides an easy to use API to monitor for changes in the system's network connectivity.
+The `Nickvision::Network::NetworkMonitor` class provides an easy to use API to monitor for changes in the system's network connectivity.
 
 Take the following program that checks the network status on startup and watches for changes:
 ```cpp
+using namespace Nickvision::Network;
+
 void onNetChanged(const NetworkStateChangedEventArgs& e)
 {
     std::cout << "Network state changed: " << (int)e.getState() << std::endl;

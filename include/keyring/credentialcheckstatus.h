@@ -30,10 +30,10 @@ namespace Nickvision::Keyring
      */
     enum class CredentialCheckStatus
     {
-        Valid = 1,
-        EmptyName = 2,
-        EmptyUsernamePassword = 4,
-        InvalidUri = 8
+        Valid = 1, ///< The credential is valid.
+        EmptyName = 2, ///< The credential has an empty name.
+        EmptyUsernamePassword = 4, ///< The credential has an empty username or password.
+        InvalidUri = 8 ///< The credential has an invalid URI.
     };
 
     constexpr CredentialCheckStatus operator~(CredentialCheckStatus a)

@@ -30,10 +30,10 @@ namespace Nickvision::Notifications
      */
     enum class NotificationSeverity
     {
-        Informational = 0,
-        Success,
-        Warning,
-        Error
+        Informational = 0, ///< An informational notification.
+        Success, ///< A success notification.
+        Warning, ///< A warning notification.
+        Error ///< An error notification.
     };
 }
 

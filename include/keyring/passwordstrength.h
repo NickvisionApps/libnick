@@ -32,12 +32,12 @@ namespace Nickvision::Keyring
      */
     enum class PasswordStrength
     {
-        Blank = 0,
-        VeryWeak,
-        Weak,
-        Medium,
-        Strong,
-        VeryStrong
+        Blank = 0, ///< A blank password.
+        VeryWeak, ///< A very weak password.
+        Weak, ///< A weak password.
+        Medium, ///< A medium password.
+        Strong, ///< A strong password.
+        VeryStrong ///< A very strong password.
     };
 
     /**

@@ -30,11 +30,11 @@ namespace Nickvision::Logging
      */
     enum class LogLevel
     {
-        Debug,
-        Info,
-        Warning,
-        Error,
-        Critical
+        Debug, ///< A debug message.
+        Info, ///< An informational message.
+        Warning, ///< A warning message.
+        Error, ///< An error message.
+        Critical // /<A critical message.
     };
 }
 

@@ -36,8 +36,8 @@ namespace Nickvision::Notifications
      */
     enum class NotifyIconMenuItemType
     {
-        Action = 0,
-        Separator = 1
+        Action = 0, ///< A menu item that can be clicked.
+        Separator = 1 ///< A separator menu item.
     };
 
     /**

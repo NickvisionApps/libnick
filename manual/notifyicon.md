@@ -1,5 +1,5 @@
 # Creating a Context Menu
-The `NotifyMenuItem` provides an easy API for creating context menus for a `NotifyIcon` to use within your app.
+The `Nickvision::Notifications::NotifyMenuItem` class provides an easy API for creating context menus for a `Nickvision::Notifications::NotifyIcon` to use within your Windows app.
 
 Assume we want to create the following context menu for a `NotifyIcon`:
 ```
@@ -12,6 +12,8 @@ Assume we want to create the following context menu for a `NotifyIcon`:
 
 Here is the code we could use to accomplish this:
 ```cpp
+using namespace Nickvision::Notifications;
+
 ...
 bool m_running{ true };
 NotifyIconMenu contextMenu;

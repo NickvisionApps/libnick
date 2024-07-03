@@ -30,10 +30,10 @@ namespace Nickvision::Filesystem
      */
     enum class FileAction
     {
-        Added = 1,
-        Removed,
-        Modified,
-        Renamed
+        Added = 1, ///< A file was added to the file system object.
+        Removed, ///< A file was removed from the file system object.
+        Modified, ///< A file was modified in the file system object.
+        Renamed ///< A file was renamed in the file system object.
     };
 }
 

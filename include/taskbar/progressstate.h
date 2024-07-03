@@ -30,11 +30,11 @@ namespace Nickvision::Taskbar
      */
     enum class ProgressState
     {
-        NoProgress = 0,
-        Indeterminate = 1,
-        Normal = 2,
-        Error = 4,
-        Paused = 8
+        NoProgress = 0, ///< The taskbar item is in a no progress state.
+        Indeterminate = 1, ///< The taskbar item is in an indeterminate progress state.
+        Normal = 2, ///< The taskbar item is in a normal progress state.
+        Error = 4, ///< The taskbar item is in an error progress state.
+        Paused = 8 ///< The taskbar item is in a paused progress state.
     };
 }
 

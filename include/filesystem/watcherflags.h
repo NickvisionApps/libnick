@@ -30,12 +30,12 @@ namespace Nickvision::Filesystem
      */
     enum class WatcherFlags
     {
-        FileName = 1,
-        DirectoryName = 2,
-        Attributes = 4,
-        Size = 8,
-        LastWrite = 16,
-        LastAccess = 32
+        FileName = 1, ///< The name of a file in the file system object has changed.
+        DirectoryName = 2, ///< The name of a directory in the file system object has changed.
+        Attributes = 4,  ///< The attributes of an item in the file system object have changed.
+        Size = 8, ///< The size of an item in the file system object has changed.
+        LastWrite = 16, ///< The last write time of an item in the file system object has changed.
+        LastAccess = 32 ///< The last access time of an item in the file system object has changed.
     };
 
     constexpr WatcherFlags operator~(WatcherFlags a)

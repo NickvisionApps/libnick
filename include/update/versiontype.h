@@ -30,8 +30,8 @@ namespace Nickvision::Update
      */
     enum class VersionType
     {
-        Stable = 0,
-        Preview
+        Stable = 0, ///< A stable version.
+        Preview ///< preview version.
     };
 }
 
