@@ -57,8 +57,8 @@ namespace Nickvision::Helpers::StringHelpers
     /**
      * @brief Concatenates the elements of a string list using the specified separator between each element.
      * @param values The list of strings to join
-     * @param delimiter The string to use as a separator between each element
-     * @param delimitLast Whether or not to include the separator for the last joined element
+     * @param separator The string to use as a separator between each element
+     * @param separateLast Whether or not to include the separator for the last joined element
      * @return A single string that consists of all elements of the string list separated by the delimiter
      */
     std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true);
@@ -76,7 +76,7 @@ namespace Nickvision::Helpers::StringHelpers
     /**
      * @brief Replaces a substring within a string with a new string.
      * @param s The string to work on
-     * @param toRepalce The substring to be replaced
+     * @param toReplace The substring to be replaced
      * @param replace The new string to replace with
      * @return The new replaced string
      */

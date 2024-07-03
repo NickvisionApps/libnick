@@ -46,7 +46,7 @@ namespace Nickvision::Keyring::SystemCredentials
      * @brief On Linux, only the name and password of a credential will be stored. 
      * @brief On Windows, all fields of a credential will be stored.
      * @brief On macOS, all fields of a credential will be stored.
-     * @param name The new credential object
+     * @param credential The new credential object
      * @return True if successful, else false
      */
     bool addCredential(const Credential& credential);
@@ -55,7 +55,7 @@ namespace Nickvision::Keyring::SystemCredentials
      * @brief On Linux, only the name and password of a credential will be stored. 
      * @brief On Windows, all fields of a credential will be stored.
      * @brief On macOS, all fields of a credential will be stored.
-     * @param name The updated credential object
+     * @param credential The updated credential object
      * @return True if successful, else false
      */
     bool updateCredential(const Credential& credential);

@@ -20,12 +20,12 @@
  * Functions for working with the system's shell and environment.
  */
 
+#ifndef ENVIRONMENT_H
+#define ENVIRONMENT_H
+
 #if (defined(_WIN32) && !defined(_CRT_SECURE_NO_WARNINGS))
 #define _CRT_SECURE_NO_WARNINGS
 #endif
-
-#ifndef ENVIRONMENT_H
-#define ENVIRONMENT_H
 
 #include <filesystem>
 #include <string>
