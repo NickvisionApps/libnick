@@ -131,10 +131,10 @@ TEST(StringTests, Replace3)
 TEST(StringTests, Normalize1)
 {
 #ifdef _WIN32
-    ASSERT_EQ(StringHelpers::normalizeForFilename("Hel*lo*.txt"), "Hel_lo_.txt");
+    ASSERT_EQ(StringHelpers::normalizeForFilename("*Help*.txt"), "_Help_.txt");
 #else
-    ASSERT_EQ(StringHelpers::normalizeForFilename("Hel*lo*.txt"), "Hel*lo*.txt");
-    ASSERT_EQ(StringHelpers::normalizeForFilename("Hel*lo*.txt", true), "Hel_lo_.txt");
+    ASSERT_EQ(StringHelpers::normalizeForFilename("*Help*.txt"), "*Help*.txt");
+    ASSERT_EQ(StringHelpers::normalizeForFilename("*Help*.txt", true), "_Help_.txt");
 #endif
 }
 

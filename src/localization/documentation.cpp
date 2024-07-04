@@ -19,7 +19,7 @@ namespace Nickvision::Localization
         std::string lang{ "C" };
         std::string sysLocale{ Environment::getLocaleName() };
 #ifdef _WIN32
-        sysLocale = StringHelpers::replace(sysLocale, "-", "_");
+        sysLocale = StringHelpers::replace(sysLocale, '-', '_');
 #else
         sysLocale = StringHelpers::split(sysLocale, ".")[0]; //split to remove the .UTF-8
 #endif

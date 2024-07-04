@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.6.10 (next)
+## 2024.7.0
 ### Breaking Changes
 #### Filesystem
 - Removed application directories from `Nickvision::Filesystem::UserDirectory` enum
