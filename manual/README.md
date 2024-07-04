@@ -14,6 +14,9 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 #### Filesystem
 - Added `Nickvision::Filesystem::ApplicationUserDirectory` enum
 - Added `Nickvision::Filesystem::UserDirectories::get()` function overload for `Nickvision::Filesystem::ApplicationUserDirectory` support
+#### Helpers
+- Added `Nickvision::Helpers::StringHelpers::normalizeForFilename()`
+- Added `Nickvision::Helpers::StringHelpers::replace()` character overload
 ### Fixes
 #### Update
 - Fixed an issue where `Nickvision::Update::Updater::windowsUpdate()` did not work correctly

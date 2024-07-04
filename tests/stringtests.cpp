@@ -123,6 +123,26 @@ TEST(StringTests, Replace2)
     ASSERT_EQ(StringHelpers::replace("hello bye hi bye", "bye", "goodbye"), "hello goodbye hi goodbye");
 }
 
+TEST(StringTests, Replace3)
+{
+    ASSERT_EQ(StringHelpers::replace("hello bye hi bye", 'b', 'g'), "hello gye hi gye");
+}
+
+TEST(StringTests, Normalize1)
+{
+#ifdef _WIN32
+    ASSERT_EQ(StringHelpers::normalizeForFilename("Hel*lo*.txt"), "Hel_lo_.txt");
+#else
+    ASSERT_EQ(StringHelpers::normalizeForFilename("Hel*lo*.txt"), "Hel*lo*.txt");
+    ASSERT_EQ(StringHelpers::normalizeForFilename("Hel*lo*.txt", true), "Hel_lo_.txt");
+#endif
+}
+
+TEST(StringTests, Normalize2)
+{
+    ASSERT_EQ(StringHelpers::normalizeForFilename("Hello/my/friend.txt"), "Hello_my_friend.txt");
+}
+
 TEST(StringTests, Base641)
 {
     std::vector<std::byte> s{ std::byte{'A'}, std::byte{'B'}, std::byte{'X'}, std::byte{'J'}, std::byte{'K'} };

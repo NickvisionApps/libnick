@@ -74,6 +74,13 @@ namespace Nickvision::Helpers::StringHelpers
      */
     std::string newGuid();
     /**
+     * @brief Normalizes a string for use in a filename.
+     * @param s The string to normalize
+     * @param windowsOnly Whether or not to normalize strictly for Windows
+     * @return The new normalized string
+     */
+    std::string normalizeForFilename(const std::string& s, bool windowsOnly = false);
+    /**
      * @brief Replaces a substring within a string with a new string.
      * @param s The string to work on
      * @param toReplace The substring to be replaced
@@ -81,6 +88,14 @@ namespace Nickvision::Helpers::StringHelpers
      * @return The new replaced string
      */
     std::string replace(std::string s, const std::string& toReplace, const std::string& replace);
+    /**
+     * @brief Replaces a character within a string with a new character.
+     * @param s The string to work on
+     * @param toReplace The character to be replaced
+     * @param replace The new character to replace with
+     * @return The new replaced string
+     */
+    std::string replace(std::string s, char toReplace, char replace);
     /**
      * @brief Splits a string based on a delimiter.
      * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)

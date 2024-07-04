@@ -8,11 +8,14 @@
 #include <regex>
 #include <sstream>
 #include <curl/curl.h>
+#include "system/environment.h"
 #ifdef _WIN32
 #include <windows.h>
 #elif defined(__linux__)
 #include <uuid/uuid.h>
 #endif
+
+using namespace Nickvision::System;
 
 namespace Nickvision::Helpers
 {
@@ -197,6 +200,24 @@ namespace Nickvision::Helpers
 #endif
     }
 
+    std::string StringHelpers::normalizeForFilename(const std::string& s, bool windowsOnly)
+    {
+        std::string result{ s };
+        result = replace(result, '/', '_'); //invalid on all operating systems
+        if(windowsOnly || Environment::getOperatingSystem() == OperatingSystem::Windows)
+        {
+            result = replace(result, '<', '_');
+            result = replace(result, '>', '_');
+            result = replace(result, ':', '_');
+            result = replace(result, '"', '_');
+            result = replace(result, '\\', '_');
+            result = replace(result, '|', '_');
+            result = replace(result, '?', '_');
+            result = replace(result, '*', '_');
+        }
+        return result;
+    }
+
     std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace)
     {
         if (s.empty() || toReplace.empty())
@@ -209,6 +230,16 @@ namespace Nickvision::Helpers
             s.replace(pos, toReplace.size(), replace);
             pos += replace.size();
         }
+        return s;
+    }
+
+    std::string StringHelpers::replace(std::string s, char toReplace, char replace)
+    {
+        if (s.empty())
+        {
+            return s;
+        }
+        std::replace(s.begin(), s.end(), toReplace, replace);
         return s;
     }
 
