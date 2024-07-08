@@ -49,24 +49,12 @@ TEST_F(SystemTest, Exec)
 
 TEST_F(SystemTest, InhibitSuspend)
 {
-#ifdef __linux__
-    if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-    {
-        GTEST_SKIP();
-    }
-#endif
     ASSERT_TRUE(SystemTest::m_inhibitor->inhibit());
     ASSERT_TRUE(SystemTest::m_inhibitor->isInhibiting());
 }
 
 TEST_F(SystemTest, UninhibitSuspend)
 {
-#ifdef __linux__
-    if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-    {
-        GTEST_SKIP();
-    }
-#endif
     ASSERT_TRUE(SystemTest::m_inhibitor->uninhibit());
     ASSERT_FALSE(SystemTest::m_inhibitor->isInhibiting());
 }

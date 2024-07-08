@@ -1,5 +1,15 @@
 # Changelog
 
+## 2024.7.1 (next)
+### Breaking Changes
+#### Helpers
+- The default value of `StringHelpers::join`'s `separateLast` parameter is now `false`
+### New APIs
+None
+### Fixes
+#### System
+- Fixed an issue where `SuspendInhibitor` did not work correctly on Linux systems
+
 ## 2024.7.0
 ### Breaking Changes
 #### Filesystem

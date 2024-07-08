@@ -100,17 +100,17 @@ TEST(StringTests, UrlValidity4)
 
 TEST(StringTests, Join1)
 {
-    ASSERT_EQ(StringHelpers::join({ "hi", "bye" }, "|"), "hi|bye|");
+    ASSERT_EQ(StringHelpers::join({ "hi", "bye" }, "|"), "hi|bye");
 }
 
 TEST(StringTests, Join2)
 {
-    ASSERT_EQ(StringHelpers::join({ "hi", "bye" }, "|", false), "hi|bye");
+    ASSERT_EQ(StringHelpers::join({ "hi", "bye" }, "|", true), "hi|bye|");
 }
 
 TEST(StringTests, Join3)
 {
-    ASSERT_EQ(StringHelpers::join({ "hi" }, "\n"), "hi\n");
+    ASSERT_EQ(StringHelpers::join({ "hi" }, "\n"), "hi");
 }
 
 TEST(StringTests, Replace1)

@@ -60,20 +60,20 @@ namespace Nickvision::System
         }
 #elif defined(__linux__)
         GError* error{ nullptr };
-        GDBusProxy* proxy{ g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION, G_DBUS_PROXY_FLAGS_NONE, nullptr, "org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver", "org.freedesktop.ScreenSaver.Inhibit", nullptr, &error) };
+        GDBusProxy* proxy{ g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION, G_DBUS_PROXY_FLAGS_NONE, nullptr, "org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver", "org.freedesktop.ScreenSaver", nullptr, &error) };
         if(error)
         {
             g_error_free(error);
             return false;
         }
-        GVariant* result{ g_dbus_proxy_call_sync(proxy, "Inhibit", g_variant_new("(ss)", "Nickvision", "Preventing suspend"), G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error) };
+        GVariant* result{ g_dbus_proxy_call_sync(proxy, "Inhibit", g_variant_new("(ss)", "org.nickvision.libnick", "Preventing suspend"), G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error) };
         if(error)
         {
             g_error_free(error);
             g_object_unref(proxy);
             return false;
         }
-        m_cookie = g_variant_get_uint32(result);
+        g_variant_get(result, "(u)", &m_cookie);
         g_variant_unref(result);
         g_object_unref(proxy);
 #elif defined(__APPLE__)
@@ -100,7 +100,7 @@ namespace Nickvision::System
         }
 #elif defined(__linux__)
         GError* error{ nullptr };
-        GDBusProxy* proxy{ g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION, G_DBUS_PROXY_FLAGS_NONE, nullptr, "org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver", "org.freedesktop.ScreenSaver.UnInhibit", nullptr, &error) };
+        GDBusProxy* proxy{ g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION, G_DBUS_PROXY_FLAGS_NONE, nullptr, "org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver", "org.freedesktop.ScreenSaver", nullptr, &error) };
         if(error)
         {
             g_error_free(error);

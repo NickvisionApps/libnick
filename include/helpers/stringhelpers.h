@@ -61,7 +61,7 @@ namespace Nickvision::Helpers::StringHelpers
      * @param separateLast Whether or not to include the separator for the last joined element
      * @return A single string that consists of all elements of the string list separated by the delimiter
      */
-    std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = true);
+    std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = false);
     /**
      * @brief Gets a fully lowercase string from the provided string.
      * @param s The string to get lowercase
