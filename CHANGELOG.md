@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.7.1 (next)
+## 2024.7.1
 ### Breaking Changes
 #### Helpers
 - The default value of `StringHelpers::join`'s `separateLast` parameter is now `false`
