@@ -6,20 +6,15 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.7.0
+## 2024.7.1
 ### Breaking Changes
-#### Filesystem
-- Removed application directories from `Nickvision::Filesystem::UserDirectory` enum
-### New APIs
-#### Filesystem
-- Added `Nickvision::Filesystem::ApplicationUserDirectory` enum
-- Added `Nickvision::Filesystem::UserDirectories::get()` function overload for `Nickvision::Filesystem::ApplicationUserDirectory` support
 #### Helpers
-- Added `Nickvision::Helpers::StringHelpers::normalizeForFilename()`
-- Added `Nickvision::Helpers::StringHelpers::replace()` character overload
+- The default value of `StringHelpers::join`'s `separateLast` parameter is now `false`
+### New APIs
+None
 ### Fixes
-#### Update
-- Fixed an issue where `Nickvision::Update::Updater::windowsUpdate()` did not work correctly
+#### System
+- Fixed an issue where `SuspendInhibitor` did not work correctly on Linux systems
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
