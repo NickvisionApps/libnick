@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.7.2 (next)
+## 2024.7.2
 ### Breaking Changes
 None
 ### New APIs
@@ -13,12 +13,12 @@ None
 ## 2024.7.1
 ### Breaking Changes
 #### Helpers
-- The default value of `StringHelpers::join`'s `separateLast` parameter is now `false`
+- The default value of `Nickvision::Helpers::StringHelpers::join`'s `separateLast` parameter is now `false`
 ### New APIs
 None
 ### Fixes
 #### System
-- Fixed an issue where `SuspendInhibitor` did not work correctly on Linux systems
+- Fixed an issue where `Nickvision::System::SuspendInhibitor` did not work correctly on Linux systems
 
 ## 2024.7.0
 ### Breaking Changes
