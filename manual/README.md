@@ -6,15 +6,15 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.7.1
+## 2024.7.2 (next)
 ### Breaking Changes
-#### Helpers
-- The default value of `StringHelpers::join`'s `separateLast` parameter is now `false`
-### New APIs
 None
-### Fixes
+### New APIs
 #### System
-- Fixed an issue where `SuspendInhibitor` did not work correctly on Linux systems
+- Added `Nickvision::System::Environment::testVariable()`
+### Fixes
+#### Network
+- Fixed a deadlock that can occur when reading `Nickvision::Network::NetworkMonitor`'s connectionState
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

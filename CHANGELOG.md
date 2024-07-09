@@ -1,5 +1,15 @@
 # Changelog
 
+## 2024.7.2 (next)
+### Breaking Changes
+None
+### New APIs
+#### System
+- Added `Nickvision::System::Environment::testVariable()`
+### Fixes
+#### Network
+- Fixed a deadlock that can occur when reading `Nickvision::Network::NetworkMonitor`'s connectionState
+
 ## 2024.7.1
 ### Breaking Changes
 #### Helpers

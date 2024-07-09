@@ -1,12 +1,10 @@
 #include "network/networkmonitor.h"
 #include <stdexcept>
-#include "helpers/stringhelpers.h"
 #include "system/environment.h"
 #ifndef _WIN32
 #include <gio/gio.h>
 #endif
 
-using namespace Nickvision::Helpers;
 using namespace Nickvision::System;
 
 namespace Nickvision::Network
@@ -80,10 +78,8 @@ namespace Nickvision::Network
 
     void NetworkMonitor::checkConnectionState()
     {
-        std::lock_guard<std::mutex> lock{ m_mutex };
         NetworkState newState{ NetworkState::Disconnected };
-        std::string noNetCheck{ StringHelpers::lower(Environment::getVariable("AURA_DISABLE_NETCHECK")) };
-        if (!noNetCheck.empty() && (noNetCheck == "true" || noNetCheck == "t" || noNetCheck == "yes" || noNetCheck == "y" || noNetCheck == "1"))
+        if(Environment::testVariable("AURA_DISABLE_NETCHECK"))
         {
             newState = NetworkState::ConnectedGlobal;
         }
@@ -124,7 +120,9 @@ namespace Nickvision::Network
         }
         if (m_connectionState != newState)
         {
+            std::unique_lock<std::mutex> lock{ m_mutex };
             m_connectionState = newState;
+            lock.unlock();
             m_stateChanged({ m_connectionState });
         }
     }
