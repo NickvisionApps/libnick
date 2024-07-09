@@ -25,12 +25,17 @@ TEST_F(SystemTest, GetPath)
 
 TEST_F(SystemTest, SetTestVar)
 {
-    ASSERT_TRUE(Environment::setVariable("AURA_TEST_VAR", "test"));
+    ASSERT_TRUE(Environment::setVariable("AURA_TEST_VAR", "yes"));
 }
 
 TEST_F(SystemTest, EnsureTestVar)
 {
-    ASSERT_EQ(Environment::getVariable("AURA_TEST_VAR"), "test");
+    ASSERT_EQ(Environment::getVariable("AURA_TEST_VAR"), "yes");
+}
+
+TEST_F(SystemTest, TestTestVar)
+{
+    ASSERT_TRUE(Environment::testVariable("AURA_TEST_VAR"));
 }
 
 TEST_F(SystemTest, ClearTestVar)

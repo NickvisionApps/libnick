@@ -99,6 +99,17 @@ namespace Nickvision::System
     {
         return setVariable(key, "");
     }
+    
+    bool Environment::testVariable(const std::string& key)
+    {
+        std::string value{ getVariable(key) };
+        if(value.empty())
+        {
+            return false;
+        }
+        value = StringHelpers::lower(value);
+        return value == "true" || value == "t" || value == "yes" || value == "y" || value == "1";
+    }
 
     std::vector<std::filesystem::path> Environment::getPath()
     {

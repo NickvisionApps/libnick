@@ -87,6 +87,13 @@ namespace Nickvision::System::Environment
      */
     bool clearVariable(const std::string& key);
     /**
+     * @brief Tests an environment variable value to see if it is true.
+     * @brief A true value is one that is "true", "t", "yes", "y", or "1".
+     * @param key The environment variable to test
+     * @return True if the value is true, else false
+     */
+    bool testVariable(const std::string& key);
+    /**
      * @brief Gets a list of directories from the system PATH variable.
      * @return The list of directories from PATH
      */
