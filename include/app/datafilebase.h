@@ -41,6 +41,7 @@ namespace Nickvision::App
          * @param key The key of the config file
          * @param appName The name of the application the data file belongs to
          * @throw std::invalid_argument Thrown if key is empty
+         * @throw std::invalid_argument Thrown if appName is empty
          */
         DataFileBase(const std::string& key, const std::string& appName);
         /**

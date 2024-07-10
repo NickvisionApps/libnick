@@ -1,5 +1,16 @@
 # Changelog
 
+## 2024.7.3 (next)
+### Breaking Changes
+#### Database
+- Non-constructor methods will no longer throw exceptions but return true or false upon success.
+#### Network
+- Non-constructor methods will no longer throw exceptions but return true or false upon success.
+### New APIs
+None
+### Fixes
+None
+
 ## 2024.7.2
 ### Breaking Changes
 None

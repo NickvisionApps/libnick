@@ -16,52 +16,34 @@ namespace Nickvision::Database
         } };
     }
 
-    void SqlStatement::bind(int index, int value)
+    bool SqlStatement::bind(int index, int value)
     {
-        if(sqlite3_bind_int(m_statement.get(), index, value) != SQLITE_OK)
-        {
-            throw std::runtime_error("Unable to bind int in sql statement.");
-        }
+        return sqlite3_bind_int(m_statement.get(), index, value) == SQLITE_OK;
     }
 
-    void SqlStatement::bind(int index, sqlite3_int64 value)
+    bool SqlStatement::bind(int index, sqlite3_int64 value)
     {
-        if(sqlite3_bind_int64(m_statement.get(), index, value) != SQLITE_OK)
-        {
-            throw std::runtime_error("Unable to bind int64 in sql statement.");
-        }
+        return sqlite3_bind_int64(m_statement.get(), index, value) == SQLITE_OK;
     }
 
-    void SqlStatement::bind(int index, double value)
+    bool SqlStatement::bind(int index, double value)
     {
-        if(sqlite3_bind_double(m_statement.get(), index, value) != SQLITE_OK)
-        {
-            throw std::runtime_error("Unable to bind double in sql statement.");
-        }
+        return sqlite3_bind_double(m_statement.get(), index, value) == SQLITE_OK;
     }
 
-    void SqlStatement::bind(int index, bool value)
+    bool SqlStatement::bind(int index, bool value)
     {
-        if(sqlite3_bind_int(m_statement.get(), index, static_cast<int>(value)) != SQLITE_OK)
-        {
-            throw std::runtime_error("Unable to bind bool in sql statement.");
-        }
+        return sqlite3_bind_int(m_statement.get(), index, static_cast<int>(value)) == SQLITE_OK;
     }
 
-    void SqlStatement::bind(int index, const std::string& value)
+    bool SqlStatement::bind(int index, const std::string& value)
     {
-        if(sqlite3_bind_text(m_statement.get(), index, value.c_str(), static_cast<int>(value.size()), SQLITE_TRANSIENT) != SQLITE_OK)
-        {
-            throw std::runtime_error("Unable to bind string in sql statement.");
-        }
+        return sqlite3_bind_text(m_statement.get(), index, value.c_str(), static_cast<int>(value.size()), SQLITE_TRANSIENT) == SQLITE_OK;
     }
 
-    void SqlStatement::bind(int index, void* value, int n)
+    bool SqlStatement::bind(int index, void* value, int n)
     {
-        if(sqlite3_bind_blob(m_statement.get(), index, value, n, SQLITE_TRANSIENT) != SQLITE_OK)
-        {
-            throw std::runtime_error("Unable to bind blob in sql statement.");
-        }
+        return sqlite3_bind_blob(m_statement.get(), index, value, n, SQLITE_TRANSIENT) == SQLITE_OK;
     }
 
     bool SqlStatement::step()

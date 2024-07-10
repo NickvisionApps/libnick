@@ -89,7 +89,6 @@ namespace Nickvision::Database
          * @brief If the database is not encrypted and is newly created, this will encrypt and set its password.
          * @param password The password of the database
          * @return True if unlocked, else false
-         * @throw std::runtime_error Thrown if error in executing sql statement 
          */
         bool unlock(const std::string& password);
         /**
@@ -119,9 +118,9 @@ namespace Nickvision::Database
          * @param name The name of the sql function
          * @param expectedArgs The number of args the sql function expects to receive (specify -1 for unlimited number of args)
          * @param func The sql function
-         * @throw std::runtime_error Thrown if error in executing sql statement 
+         * @return True if function registered, else false
          */
-        void registerFunction(const std::string& name, const SqliteCustomFunction& func, int expectedArgs = -1);
+        bool registerFunction(const std::string& name, const SqliteCustomFunction& func, int expectedArgs = -1);
         /**
          * @brief Copies a SqlDatabase object.
          * @param database The SqlDatabase to copy

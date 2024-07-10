@@ -23,7 +23,10 @@ namespace Nickvision::Network
         m_noBody{ false },
         m_stream{ nullptr }
     {
-        init();
+        if(!init())
+        {
+            throw std::runtime_error("Failed to initialize curl.");
+        }
     }
     
     CurlEasy::~CurlEasy()
@@ -62,7 +65,7 @@ namespace Nickvision::Network
         return m_headers;
     }
 
-    void CurlEasy::setHeaders(const std::vector<std::string>& headers)
+    bool CurlEasy::setHeaders(const std::vector<std::string>& headers)
     {
         m_headers = headers;
         for(const std::string& header : m_headers)
@@ -70,11 +73,12 @@ namespace Nickvision::Network
             struct curl_slist* temp{ curl_slist_append(m_headersList, header.c_str()) };
             if(!temp)
             {
-                throw std::runtime_error("Failed to append header to list");
+                return false;
             }
             m_headersList = temp;
         }
         curl_easy_setopt(m_curl, CURLOPT_HTTPHEADER, m_headersList);
+        return true;
     }
 
     const std::string& CurlEasy::getUserAgent() const
@@ -130,7 +134,7 @@ namespace Nickvision::Network
         }
     }
 
-    void CurlEasy::reset(const std::string& url)
+    bool CurlEasy::reset(const std::string& url)
     {
         if(m_headersList)
         {
@@ -144,7 +148,7 @@ namespace Nickvision::Network
         m_stream = nullptr;
         m_progress = {};
         curl_easy_reset(m_curl);
-        init();
+        return init();
     }
 
     CURLcode CurlEasy::perform()
@@ -152,11 +156,11 @@ namespace Nickvision::Network
         return curl_easy_perform(m_curl);
     }
 
-    void CurlEasy::init()
+    bool CurlEasy::init()
     {
         if(!m_curl)
         {
-            throw std::runtime_error("Failed to initialize curl");
+            return false;
         }
         if(!m_url.empty())
         {
@@ -167,5 +171,6 @@ namespace Nickvision::Network
         curl_easy_setopt(m_curl, CURLOPT_SSL_VERIFYPEER, 0);
         curl_easy_setopt(m_curl, CURLOPT_SSL_VERIFYHOST, 0);
 #endif
+        return true;
     }
 }

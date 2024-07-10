@@ -14,6 +14,10 @@ namespace Nickvision::App
         {
             throw std::invalid_argument("Key must not be empty.");
         }
+        if(appName.empty())
+        {
+            throw std::invalid_argument("Application name must not be empty.");
+        }
         m_path = UserDirectories::get(ApplicationUserDirectory::Config, appName) / (m_key + ".json");
         if (std::filesystem::exists(m_path))
         {

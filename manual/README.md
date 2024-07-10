@@ -6,15 +6,16 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.7.2
+## 2024.7.3 (next)
 ### Breaking Changes
-None
-### New APIs
-#### System
-- Added `Nickvision::System::Environment::testVariable()`
-### Fixes
+#### Database
+- Non-constructor methods will no longer throw exceptions but return true or false upon success.
 #### Network
-- Fixed a deadlock that can occur when reading `Nickvision::Network::NetworkMonitor`'s connectionState
+- Non-constructor methods will no longer throw exceptions but return true or false upon success.
+### New APIs
+None
+### Fixes
+None
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

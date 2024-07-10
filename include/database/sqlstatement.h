@@ -55,45 +55,45 @@ namespace Nickvision::Database
          * @brief Binds an int to a parameter.
          * @param index The index of the parameter
          * @param value The int to bind
-         * @throw std::runtime_error Thrown if error in executing sql statement 
+         * @return True if bind was successful, else false
          */
-        void bind(int index, int value);
+        bool bind(int index, int value);
         /**
          * @brief Binds an int64 to a parameter.
          * @param index The index of the parameter
          * @param value The int64 to bind
-         * @throw std::runtime_error Thrown if error in executing sql statement 
+         * @return True if bind was successful, else false
          */
-        void bind(int index, sqlite3_int64 value);
+        bool bind(int index, sqlite3_int64 value);
         /**
          * @brief Binds a double to a parameter.
          * @param index The index of the parameter
          * @param value The double to bind
-         * @throw std::runtime_error Thrown if error in executing sql statement 
+         * @return True if bind was successful, else false
          */
-        void bind(int index, double value);
+        bool bind(int index, double value);
         /**
          * @brief Binds a bool to a parameter.
          * @param index The index of the parameter
          * @param value The bool to bind
-         * @throw std::runtime_error Thrown if error in executing sql statement 
+         * @return True if bind was successful, else false
          */
-        void bind(int index, bool value);
+        bool bind(int index, bool value);
         /**
          * @brief Binds a string to a parameter.
          * @param index The index of the parameter
          * @param value The string to bind
-         * @throw std::runtime_error Thrown if error in executing sql statement 
+         * @return True if bind was successful, else false 
          */
-        void bind(int index, const std::string& value);
+        bool bind(int index, const std::string& value);
         /**
          * @brief Binds a blob to a parameter.
          * @param index The index of the parameter
          * @param value The blob to bind
          * @param n The size of the blob
-         * @throw std::runtime_error Thrown if error in executing sql statement 
+         * @return True if bind was successful, else false
          */
-        void bind(int index, void* value, int n);
+        bool bind(int index, void* value, int n);
         /**
          * @brief Steps through the statement.
          * @returns True if SQLITE_ROW, else false

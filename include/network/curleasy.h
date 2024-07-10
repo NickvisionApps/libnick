@@ -77,9 +77,9 @@ namespace Nickvision::Network
         /**
          * @brief Sets the headers to include in the request.
          * @param headers The headers to include
-         * @throw std::runtime_error If curl fails to append headers to the list
+         * @return True if successful, else false
          */
-        void setHeaders(const std::vector<std::string>& headers);
+        bool setHeaders(const std::vector<std::string>& headers);
         /**
          * @brief Gets the user agent to use in the request.
          * @return The user agent to use
@@ -113,9 +113,9 @@ namespace Nickvision::Network
         /**
          * @brief Resets the curl request.
          * @param url The url to make requests to
-         * @throw std::runtime_error If curl fails to initialize
+         * @return True if successful, else false
          */
-        void reset(const std::string& url = "");
+        bool reset(const std::string& url = "");
         /**
          * @brief Performs the curl request.
          * @return The code returned by the curl request
@@ -125,9 +125,9 @@ namespace Nickvision::Network
     private:
         /**
          * @brief Initializes the curl request handle.
-         * @throw std::runtime_error If curl fails to initialize
+         * @return True if successful, else false
          */
-        void init();
+        bool init();
         CURL* m_curl;
         struct curl_slist* m_headersList;
         std::string m_url;
