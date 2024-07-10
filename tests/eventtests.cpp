@@ -42,5 +42,6 @@ TEST(EventTests, Event1)
     e(true);
     e(false);
     e.invoke(true);
+    ASSERT_EQ(e.count(), 2);
     ASSERT_EQ(count, 1);
 }

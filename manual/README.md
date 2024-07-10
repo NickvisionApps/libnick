@@ -13,7 +13,9 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 #### Network
 - Non-constructor methods will no longer throw exceptions but return true or false upon success.
 ### New APIs
-None
+#### Events
+- Added `Nickvision::Events::Event::count()` method
+- Added `Nickvision::Events::Event::operator bool()` method
 ### Fixes
 None
 

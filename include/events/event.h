@@ -71,6 +71,15 @@ namespace Nickvision::Events
             m_handlers = std::move(e.m_handlers);
         }
         /**
+         * @brief Gets the number of handlers subscribed to the event.
+         * @return The number of handlers
+         */
+        size_t count() const
+        {
+            std::lock_guard<std::mutex> lock{ m_mutex };
+            return m_handlers.size();
+        }
+        /**
          * @brief Subscribes a handler to the event.
          * @param handler The handler function
          * @return The handler id
@@ -160,6 +169,14 @@ namespace Nickvision::Events
                 m_handlers = std::move(e.m_handlers);
             }
             return *this;
+        }
+        /**
+         * @brief Gets whether or not the object is valid or not.
+         * @return True if valid (if count() > 0), else false 
+         */
+        operator bool() const
+        {
+            return count() > 0;
         }
 
     private:
