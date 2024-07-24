@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.7.3 (next)
+## 2024.7.3
 ### Breaking Changes
 - Removed the dependency on `libuuid`
 #### Database
