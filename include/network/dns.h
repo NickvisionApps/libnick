@@ -34,7 +34,13 @@ namespace Nickvision::Network::DNS
      * @param hostname The hostname to resolve
      * @return A list of IPv4 addresses that the hostname resolves to
      */
-    std::vector<IPv4Address> resolve(const std::string& hostname);
+    std::vector<IPv4Address> a(const std::string& hostname);
+    /**
+     * @brief Gets text records for a hostname.
+     * @param hostname The hostname to resolve
+     * @return A list of text records for the hostname
+     */
+    std::vector<std::string> txt(const std::string& hostname);
 }
 
 #endif //DNS_H

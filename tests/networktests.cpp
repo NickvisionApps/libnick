@@ -125,7 +125,12 @@ TEST_F(NetworkTest, MacAddress3)
     ASSERT_FALSE(mac.has_value());
 }
 
-TEST_F(NetworkTest, Dns1)
+TEST_F(NetworkTest, DnsA)
 {
-    ASSERT_FALSE(DNS::resolve("www.google.com").empty());
+    ASSERT_FALSE(DNS::a("www.google.com").empty());
+}
+
+TEST_F(NetworkTest, DnsTXT)
+{
+    ASSERT_FALSE(DNS::txt("www.example.com").empty());
 }
