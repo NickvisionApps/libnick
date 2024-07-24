@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
-#include "network/webclient.h"
+#include "network/web.h"
 
 using namespace Nickvision::Helpers;
 using namespace Nickvision::Network;
@@ -175,8 +175,7 @@ TEST(StringTests, Base642)
 
 TEST(StringTests, Base643)
 {
-    WebClient client;
-    client.downloadFile("https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/640px-PNG_transparency_demonstration_1.png", "img.png");
+    ASSERT_TRUE(Web::downloadFile("https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/640px-PNG_transparency_demonstration_1.png", "img.png"));
     std::vector<std::byte> s{ CodeHelpers::readFileBytes("img.png") };
     std::string base64;
     ASSERT_NO_THROW(base64 = StringHelpers::encode(s));

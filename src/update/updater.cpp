@@ -6,12 +6,14 @@
 #include <json/json.h>
 #include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
+#include "network/web.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
 using namespace Nickvision::Filesystem;
 using namespace Nickvision::Helpers;
+using namespace Nickvision::Network;
 
 namespace Nickvision::Update
 {
@@ -56,34 +58,25 @@ namespace Nickvision::Update
     Version Updater::fetchCurrentVersion(VersionType versionType)
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        std::string releases{ m_webClient.fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
-        if (!releases.empty())
+        Json::Value root{ Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
+        if (!root.empty())
         {
-            Json::Value root;
-            Json::Reader reader;
-            if (reader.parse(releases, root, false))
+            for (const Json::Value& release : root)
             {
-                if(!root)
+                std::string version{ release.get("tag_name", "NULL").asString() };
+                if (version.empty() || version == "NULL")
                 {
                     return {};
                 }
-                for (const Json::Value& release : root)
+                if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
                 {
-                    std::string version{ release.get("tag_name", "NULL").asString() };
-                    if (version.empty() || version == "NULL")
-                    {
-                        return {};
-                    }
-                    if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
-                    {
-                        m_latestStableReleaseId = release.get("id", -1).asInt();
-                        return version;
-                    }
-                    if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
-                    {
-                        m_latestPreviewReleaseId = release.get("id", -1).asInt();
-                        return version;
-                    }
+                    m_latestStableReleaseId = release.get("id", -1).asInt();
+                    return version;
+                }
+                if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
+                {
+                    m_latestPreviewReleaseId = release.get("id", -1).asInt();
+                    return version;
                 }
             }
         }
@@ -98,29 +91,24 @@ namespace Nickvision::Update
         {
             return false;
         }
-        std::string release{ m_webClient.fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId)) };
-        if (!release.empty())
+        Json::Value root{ Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId)) };
+        if (!root.empty())
         {
-            Json::Value root;
-            Json::Reader reader;
-            if (reader.parse(release, root, false))
+            for (const Json::Value& asset : root.get("assets", {}))
             {
-                for (const Json::Value& asset : root.get("assets", {}))
+                std::string name{ asset.get("name", "").asString() };
+                if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
                 {
-                    std::string name{ asset.get("name", "").asString() };
-                    if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
+                    std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
+                    if (Web::downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
                     {
-                        std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
-                        if (m_webClient.downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
+                        CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+                        if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)
                         {
-                            CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-                            if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)
-                            {
-                                return true;
-                            }
+                            return true;
                         }
-                        return false;
                     }
+                    return false;
                 }
             }
         }

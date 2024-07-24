@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iterator>
 #include "helpers/codehelpers.h"
-#include "network/webclient.h"
+#include "network/web.h"
 
 using namespace Nickvision::Helpers;
 using namespace Nickvision::Network;
@@ -15,8 +15,7 @@ public:
 
     static void SetUpTestSuite()
     {
-        WebClient client;
-        client.downloadFile("https://www.freeiconspng.com/thumbs/pin-png/pin-png-24.png", "a.png");
+        Web::downloadFile("https://www.freeiconspng.com/thumbs/pin-png/pin-png-24.png", "a.png");
     }
 
     static void TearDownTestSuite()

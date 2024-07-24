@@ -62,7 +62,7 @@ add_library (${PROJECT_NAME}
     "src/network/macaddress.cpp"
     "src/network/networkmonitor.cpp"
     "src/network/networkstatechangedeventargs.cpp"
-    "src/network/webclient.cpp"
+    "src/network/web.cpp"
     "src/notifications/notificationsenteventargs.cpp"
     "src/notifications/notifyicon.cpp"
     "src/notifications/notifyiconmenu.cpp"
@@ -152,6 +152,7 @@ if (BUILD_TESTING)
         "tests/codetests.cpp"
         "tests/databasetests.cpp"
         "tests/datafiletests.cpp"
+        "tests/dnstests.cpp"
         "tests/eventtests.cpp"
         "tests/filewatchertests.cpp"
         "tests/ipctests.cpp"
@@ -167,7 +168,8 @@ if (BUILD_TESTING)
         "tests/systemtests.cpp"
         "tests/taskbartests.cpp"
         "tests/updatertests.cpp"
-        "tests/versiontests.cpp")
+        "tests/versiontests.cpp"
+        "tests/webtests.cpp")
 	find_package(GTest CONFIG REQUIRED)
 	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main ${PROJECT_NAME})
 endif()

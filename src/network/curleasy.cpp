@@ -3,6 +3,9 @@
 
 namespace Nickvision::Network
 {
+    static bool m_curlInitialized{ false };
+    static unsigned int m_instanceCount{ 0 };
+
     static size_t writeDataCallback(char* ptr, size_t size, size_t nmemb, void* data)
     {
         std::basic_ostream<char>* stream{ static_cast<std::basic_ostream<char>*>(data) };
@@ -23,10 +26,16 @@ namespace Nickvision::Network
         m_noBody{ false },
         m_stream{ nullptr }
     {
+        if(!m_curlInitialized)
+        {
+            curl_global_init(CURL_GLOBAL_ALL);
+            m_curlInitialized = true;
+        }
         if(!init())
         {
             throw std::runtime_error("Failed to initialize curl.");
         }
+        m_instanceCount++;
     }
     
     CurlEasy::~CurlEasy()
@@ -35,6 +44,12 @@ namespace Nickvision::Network
         if(m_headersList)
         {
             curl_slist_free_all(m_headersList);
+        }
+        m_instanceCount--;
+        if(m_curlInitialized && m_instanceCount == 0)
+        {
+            curl_global_cleanup();
+            m_curlInitialized = false;
         }
     }
 
