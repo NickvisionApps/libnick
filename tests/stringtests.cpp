@@ -70,12 +70,12 @@ TEST(StringTests, Split3)
     ASSERT_EQ(cmd[2], "display notification \"Message\" with title \"Title\"");
 }
 
-TEST(StringTests, Guid1)
+TEST(StringTests, Uuid1)
 {
     std::string s;
-    ASSERT_NO_THROW(s = StringHelpers::newGuid());
+    ASSERT_NO_THROW(s = StringHelpers::newUuid());
     ASSERT_FALSE(s.empty());
-    ASSERT_TRUE(s.size() == 36);
+    ASSERT_EQ(s.size(), 36);
 }
 
 TEST(StringTests, UrlValidity1)

@@ -12,7 +12,7 @@ namespace Nickvision::Notifications
     std::unordered_map<HWND, NotifyIcon*> NotifyIcon::m_icons = {};
 
     NotifyIcon::NotifyIcon(HWND hwnd, const std::wstring& tooltip, const NotifyIconMenu& contextMenu, bool hidden)
-        : m_className{ StringHelpers::wstr(StringHelpers::newGuid()) },
+        : m_className{ StringHelpers::wstr(StringHelpers::newUuid()) },
         m_isHidden{ hidden },
         m_tooltip{ tooltip },
         m_contextMenu{ contextMenu },

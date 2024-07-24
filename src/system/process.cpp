@@ -33,7 +33,7 @@ namespace Nickvision::System
         m_pi{ 0 }
 #else
         m_pid{ -1 },
-        m_consoleFilePath{ UserDirectories::get(UserDirectory::Cache) / (StringHelpers::newGuid() + ".lnproc") }
+        m_consoleFilePath{ UserDirectories::get(UserDirectory::Cache) / (StringHelpers::newUuid() + ".lnproc") }
 #endif
     {
 #ifdef _WIN32

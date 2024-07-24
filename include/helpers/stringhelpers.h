@@ -69,7 +69,13 @@ namespace Nickvision::Helpers::StringHelpers
      */
     std::string lower(std::string s);
     /**
-     * @brief Generates a new guid (uuid v4) value.
+     * @brief Generates a new uuid value.
+     * @return The uuid value
+     */
+    std::string newUuid();
+    /**
+     * @brief Generates a new guid value.
+     * @brief This function simple calls newUuid() and returns the result.
      * @return The guid value
      */
     std::string newGuid();
