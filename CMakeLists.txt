@@ -57,6 +57,8 @@ add_library (${PROJECT_NAME}
     "src/localization/gettext.cpp"
     "src/logging/logger.cpp"
     "src/network/curleasy.cpp"
+    "src/network/ipv4address.cpp"
+    "src/network/macaddress.cpp"
     "src/network/networkmonitor.cpp"
     "src/network/networkstatechangedeventargs.cpp"
     "src/network/webclient.cpp"

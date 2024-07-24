@@ -40,7 +40,7 @@ jobs:
         with:
           pkgs: curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl
           triplet: x64-linux
-          revision: 5f502b165027bbede86ff2c5316334e3398bc519
+          revision: ee1093857f3d16b007065542bbb2229369c70c2e
           token: ${{ secrets.GITHUB_TOKEN }}
           github-binarycache: true
       - name: "Build"
