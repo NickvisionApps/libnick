@@ -57,6 +57,7 @@ add_library (${PROJECT_NAME}
     "src/localization/gettext.cpp"
     "src/logging/logger.cpp"
     "src/network/curleasy.cpp"
+    "src/network/dns.cpp"
     "src/network/ipv4address.cpp"
     "src/network/macaddress.cpp"
     "src/network/networkmonitor.cpp"
@@ -94,7 +95,7 @@ if(USING_VCPKG)
 endif()
 if(WIN32)
     find_package(sqlcipher CONFIG REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dwmapi Gdiplus Kernel32 Shell32 UxTheme)
+    target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dnsapi Dwmapi Gdiplus Kernel32 Shell32 UxTheme)
 elseif(LINUX)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)

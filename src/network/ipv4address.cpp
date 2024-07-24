@@ -16,6 +16,15 @@ namespace Nickvision::Network
 
     }
 
+    IPv4Address::IPv4Address(unsigned long address)
+        : m_first{ static_cast<unsigned char>((address >> 24) & 0xFF) },
+        m_second{ static_cast<unsigned char>((address >> 16) & 0xFF) },
+        m_third{ static_cast<unsigned char>((address >> 8) & 0xFF) },
+        m_fourth{ static_cast<unsigned char>(address & 0xFF) }
+    {
+        
+    }
+
     unsigned char IPv4Address::getFirst() const
     {
         return m_first;

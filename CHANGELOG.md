@@ -11,6 +11,7 @@
 - Added `Nickvision::Events::Event::count()` method
 - Added `Nickvision::Events::Event::operator bool()` method
 #### Network
+- Added `Nickvision::Network::DNS` namespace
 - Added `Nickvision::Network::IPv4Address` class
 - Added `Nickvision::Network::MacAddress` class
 ### Fixes

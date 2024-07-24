@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "network/dns.h"
 #include "network/ipv4address.h"
 #include "network/macaddress.h"
 #include "network/networkmonitor.h"
@@ -83,6 +84,16 @@ TEST_F(NetworkTest, IPv4Address3)
     ASSERT_FALSE(ip.has_value());
 }
 
+TEST_F(NetworkTest, IPv4Address4)
+{
+    IPv4Address ip{ 0x7F000001 };
+    ASSERT_EQ(ip.getFirst(), 127);
+    ASSERT_EQ(ip.getSecond(), 0);
+    ASSERT_EQ(ip.getThird(), 0);
+    ASSERT_EQ(ip.getFourth(), 1);
+    ASSERT_EQ(ip.str(), "127.0.0.1");
+}
+
 TEST_F(NetworkTest, MacAddress1)
 {
     MacAddress mac{ 0x00, 0x1A, 0x2B, 0x3C, 0x4D, 0x5E };
@@ -112,4 +123,9 @@ TEST_F(NetworkTest, MacAddress3)
 {
     std::optional<MacAddress> mac{ MacAddress::parse("00:1A:2B:3C:4D") };
     ASSERT_FALSE(mac.has_value());
+}
+
+TEST_F(NetworkTest, Dns1)
+{
+    ASSERT_FALSE(DNS::resolve("www.google.com").empty());
 }
