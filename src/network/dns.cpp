@@ -2,7 +2,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <windns.h>
-#elif defined(__linux__)
+#else
 #include <gio/gio.h>
 #endif
 
@@ -36,11 +36,10 @@ namespace Nickvision::Network
             while(next)
             {
                 GInetAddress* address{ G_INET_ADDRESS(next->data) };
-                if(g_inet_address_get_family(address) == G_SOCKET_FAMILY_IPV4)
+                if(g_inet_address_get_family(address) == G_SOCKET_FAMILY_IPV4 && g_inet_address_get_native_size(address) == 4)
                 {
-                    gchar* str{ g_inet_address_to_string(address) };
-                    addresses.push_back(*IPv4Address::parse(str));
-                    g_free(str);
+                    const unsigned char* bytes{ g_inet_address_to_bytes(address) };
+                    addresses.push_back({ bytes[0], bytes[1], bytes[2], bytes[3] });
                 }
                 next = next->next;
             }
