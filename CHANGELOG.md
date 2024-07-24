@@ -2,6 +2,7 @@
 
 ## 2024.7.3 (next)
 ### Breaking Changes
+- Removed the dependency on `libuuid`
 #### Database
 - Non-constructor methods will no longer throw exceptions but return true or false upon success.
 #### Network

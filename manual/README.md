@@ -8,20 +8,26 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 
 ## 2024.7.3 (next)
 ### Breaking Changes
+- Removed the dependency on `libuuid`
 #### Database
 - Non-constructor methods will no longer throw exceptions but return true or false upon success.
 #### Network
 - Non-constructor methods will no longer throw exceptions but return true or false upon success.
+- Removed `Nickvision::Network::WebClient` class
 ### New APIs
 #### Events
 - Added `Nickvision::Events::Event::count()` method
 - Added `Nickvision::Events::Event::operator bool()` method
+#### Helpers
+- Added `Nickvision::Helpers::StringHelpers::newUuid()` method
 #### Network
 - Added `Nickvision::Network::DNS` namespace
 - Added `Nickvision::Network::IPv4Address` class
 - Added `Nickvision::Network::MacAddress` class
+- Added `Nickvision::Network::Web` class
 ### Fixes
-None
+#### Helpers
+- Improved GUID/UUID generation in `Nickvision::Helpers::StringHelpers`
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

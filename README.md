@@ -28,7 +28,6 @@ The above dependencies must be installed, *plus* the following for Windows syste
 The above dependencies must be installed, *plus* the following for Linux systems:
 - glib
 - libsecret
-- libuuid
 - openssl
     - Used for sqlcipher, as libnick manually builds sqlcipher on Linux as the vcpkg port is broken.
 
@@ -66,7 +65,7 @@ A C++20 compiler is also required to build libnick.
 1. Run `vcpkg install curl gettext-libintl gtest jsoncpp maddy sqlcipher`
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
+1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl`
 #### macOS (Intel)
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-osx`
 1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl`
