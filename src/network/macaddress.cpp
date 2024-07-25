@@ -9,12 +9,12 @@ using namespace Nickvision::Helpers;
 namespace Nickvision::Network
 {
     MacAddress::MacAddress(unsigned char oui1, unsigned char oui2, unsigned char oui3, unsigned char nic1, unsigned char nic2, unsigned char nic3)
-        : m_oui1(oui1),
-        m_oui2(oui2),
-        m_oui3(oui3),
-        m_nic1(nic1),
-        m_nic2(nic2),
-        m_nic3(nic3)
+        : m_oui1{ oui1 },
+        m_oui2{ oui2 },
+        m_oui3{ oui3 },
+        m_nic1{ nic1 },
+        m_nic2{ nic2 },
+        m_nic3{ nic3 }
     {
 
     }

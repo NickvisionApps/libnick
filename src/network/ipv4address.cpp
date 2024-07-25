@@ -8,10 +8,10 @@ using namespace Nickvision::Helpers;
 namespace Nickvision::Network
 {
     IPv4Address::IPv4Address(unsigned char first, unsigned char second, unsigned char third, unsigned char fourth)
-        : m_first(first),
-        m_second(second),
-        m_third(third),
-        m_fourth(fourth)
+        : m_first{ first },
+        m_second{ second },
+        m_third{ third },
+        m_fourth{ fourth }
     {
 
     }
