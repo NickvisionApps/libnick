@@ -1,5 +1,15 @@
 # Changelog
 
+## 2024.8.0 (Next)
+### Breaking Changes
+#### System
+- `Nickvision::System::Process::kill()` will now kill child processes spawned by the respective process
+### New APIs
+None
+### Fixes
+#### System
+- Improved `Nickvision::System::Process`'s handling of arguments
+
 ## 2024.7.3
 ### Breaking Changes
 - Removed the dependency on `libuuid`

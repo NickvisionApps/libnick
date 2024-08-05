@@ -46,7 +46,7 @@ TEST_F(SystemTest, ClearTestVar)
 TEST_F(SystemTest, Exec)
 {
 #ifdef _WIN32
-    ASSERT_EQ(Environment::exec("echo \"Hello World\""), "Hello World\r\n");
+    ASSERT_EQ(Environment::exec("echo \"Hello World\""), "\"Hello World\"\r\n");
 #else
     ASSERT_EQ(Environment::exec("echo \"Hello World\""), "Hello World\n");
 #endif

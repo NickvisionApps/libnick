@@ -47,19 +47,31 @@ namespace Nickvision::System
             throw std::runtime_error("Failed to create pipe.");
         }
         //Create process arguments
-        std::wstring appArgs{ L"\"" + m_path.wstring() + L"\"" };
-        for(const std::string& arg : m_args)
+        std::string appArgs{ "" };
+        for(size_t i = 0; i < m_args.size(); i++)
         {
-            appArgs += L" " + StringHelpers::wstr(arg);
+            const std::string arg{ m_args[i] };
+            if(arg.find(' ') != std::string::npos && arg[0] != '\"')
+            {
+                appArgs += "\"" + arg + "\"";
+            }
+            else
+            {
+                appArgs += arg;
+            }
+            if(i != m_args.size() - 1)
+            {
+                appArgs += " ";
+            }
         }
-        STARTUPINFOW si{ 0 };
-        si.cb = sizeof(STARTUPINFOW);
+        STARTUPINFOA si{ 0 };
+        si.cb = sizeof(STARTUPINFOA);
         si.hStdError = m_write;
         si.hStdOutput = m_write;
         si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
         si.wShowWindow = SW_HIDE;
         //Create process
-        if(!CreateProcessW(nullptr, LPWSTR(appArgs.c_str()), nullptr, nullptr, TRUE, CREATE_SUSPENDED | CREATE_NEW_CONSOLE, nullptr, nullptr, &si, &m_pi))
+        if(!CreateProcessA(m_path.string().c_str(), LPSTR(appArgs.c_str()), nullptr, nullptr, TRUE, CREATE_SUSPENDED | CREATE_NEW_CONSOLE | CREATE_NEW_PROCESS_GROUP, nullptr, nullptr, &si, &m_pi))
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             CloseHandle(m_read);
@@ -108,6 +120,10 @@ namespace Nickvision::System
 
     Process::~Process()
     {
+        if(m_watchThread.joinable())
+        {
+            m_watchThread.join();
+        }
 #ifdef _WIN32
         CloseHandle(m_read);
         CloseHandle(m_write);
@@ -116,10 +132,6 @@ namespace Nickvision::System
 #else
         std::filesystem::remove(m_consoleFilePath);
 #endif
-        if(m_watchThread.joinable())
-        {
-            m_watchThread.join();
-        }
     }
 
     const std::filesystem::path& Process::getPath() const
@@ -191,6 +203,17 @@ namespace Nickvision::System
         {
             return false;
         }
+        //Kill child processes spawned by the process
+#ifdef _WIN32
+        if(!GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, m_pi.dwProcessId))
+#else
+        if(::kill(-m_pid, SIGTERM) < 0)
+#endif
+        {
+            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
+            return false;
+        }
+        //Kill process
 #ifdef _WIN32
         if(!TerminateProcess(m_pi.hProcess, 0))
 #else
@@ -265,12 +288,12 @@ namespace Nickvision::System
                     ended = true;
                 }
             }
+            //Read console output
+            std::ifstream file{ m_consoleFilePath };
+            m_output = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
             std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
         int exitCode{ WIFEXITED(status) ? WEXITSTATUS(status) : -1 };
-        //Read console output
-        std::ifstream file{ m_consoleFilePath };
-        m_output = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 #endif
         std::unique_lock<std::mutex> lock{ m_mutex };
         m_exitCode = static_cast<int>(exitCode);

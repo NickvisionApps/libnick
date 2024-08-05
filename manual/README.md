@@ -6,28 +6,15 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.7.3
+## 2024.8.0 (Next)
 ### Breaking Changes
-- Removed the dependency on `libuuid`
-#### Database
-- Non-constructor methods will no longer throw exceptions but return true or false upon success.
-#### Network
-- Non-constructor methods will no longer throw exceptions but return true or false upon success.
-- Removed `Nickvision::Network::WebClient` class
+#### System
+- `Nickvision::System::Process::kill()` will now kill child processes spawned by the respective process
 ### New APIs
-#### Events
-- Added `Nickvision::Events::Event::count()` method
-- Added `Nickvision::Events::Event::operator bool()` method
-#### Helpers
-- Added `Nickvision::Helpers::StringHelpers::newUuid()` method
-#### Network
-- Added `Nickvision::Network::DNS` namespace
-- Added `Nickvision::Network::IPv4Address` class
-- Added `Nickvision::Network::MacAddress` class
-- Added `Nickvision::Network::Web` class
+None
 ### Fixes
-#### Helpers
-- Improved GUID/UUID generation in `Nickvision::Helpers::StringHelpers`
+#### System
+- Improved `Nickvision::System::Process`'s handling of arguments
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
