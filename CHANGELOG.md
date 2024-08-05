@@ -1,5 +1,14 @@
 # Changelog
 
+## 2024.8.1
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### System
+- Improved `Nickvision::System::Process`'s handling of arguments
+
 ## 2024.8.0
 ### Breaking Changes
 #### System

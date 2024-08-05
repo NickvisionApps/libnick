@@ -47,31 +47,27 @@ namespace Nickvision::System
             throw std::runtime_error("Failed to create pipe.");
         }
         //Create process arguments
-        std::string appArgs{ "" };
-        for(size_t i = 0; i < m_args.size(); i++)
+        std::wstring appArgs{ L"\"" + m_path.wstring() + L"\"" };
+        for(const std::string& arg : m_args)
         {
-            const std::string arg{ m_args[i] };
             if(arg.find(' ') != std::string::npos && arg[0] != '\"')
             {
-                appArgs += "\"" + arg + "\"";
+                appArgs += L" \"" + StringHelpers::wstr(arg) + L"\"";
             }
             else
             {
-                appArgs += arg;
-            }
-            if(i != m_args.size() - 1)
-            {
-                appArgs += " ";
+                appArgs += L" " + StringHelpers::wstr(arg);
             }
         }
-        STARTUPINFOA si{ 0 };
-        si.cb = sizeof(STARTUPINFOA);
+        std::wcout << appArgs << std::endl;
+        STARTUPINFOW si{ 0 };
+        si.cb = sizeof(STARTUPINFOW);
         si.hStdError = m_write;
         si.hStdOutput = m_write;
         si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
         si.wShowWindow = SW_HIDE;
         //Create process
-        if(!CreateProcessA(m_path.string().c_str(), LPSTR(appArgs.c_str()), nullptr, nullptr, TRUE, CREATE_SUSPENDED | CREATE_NEW_CONSOLE | CREATE_NEW_PROCESS_GROUP, nullptr, nullptr, &si, &m_pi))
+        if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED | CREATE_NEW_PROCESS_GROUP, nullptr, nullptr, &si, &m_pi))
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             CloseHandle(m_read);

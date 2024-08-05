@@ -6,15 +6,12 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.8.0
+## 2024.8.1
 ### Breaking Changes
-#### System
-- `Nickvision::System::Process::kill()` will now kill child processes spawned by the respective process
+None
 ### New APIs
 None
 ### Fixes
-#### Logging
-- Cleaned up the message logged by `Nickvision::Logging::Logger:log()`
 #### System
 - Improved `Nickvision::System::Process`'s handling of arguments
 

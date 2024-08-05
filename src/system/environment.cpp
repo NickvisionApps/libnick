@@ -131,10 +131,11 @@ namespace Nickvision::System
         {
             return "";
         }
-#ifdef _WIN32
-        Process process{ findDependency("cmd.exe"), { "/C", command } };
-#else
         std::vector<std::string> args{ StringHelpers::splitArgs(command) };
+#ifdef _WIN32
+        args.insert(args.begin(), "/c");
+        Process process{ findDependency("cmd.exe"), args };
+#else
         std::string cmd{ args[0] };
         args.erase(args.begin());
         Process process{ cmd, args };
