@@ -56,9 +56,8 @@ namespace Nickvision::Logging
         }
         //Make log
         std::stringstream builder;
-        builder << "[" << logLevelToString(level) << "] ";
-        builder << "file: " << source.file_name() << "(" << source.line() << ":" << source.column() << ") `" << source.function_name() << "`: ";
-        builder << message << std::endl;
+        builder << "[" << logLevelToString(level) << "] " << message;
+        builder << "\nfile: " << source.file_name() << "(" << source.line() << ":" << source.column() << ") `" << source.function_name() << "`" << std::endl;
         std::string log{ builder.str() };
         //Save log to file
         if(m_stream)

@@ -1,12 +1,14 @@
 # Changelog
 
-## 2024.8.0 (Next)
+## 2024.8.0
 ### Breaking Changes
 #### System
 - `Nickvision::System::Process::kill()` will now kill child processes spawned by the respective process
 ### New APIs
 None
 ### Fixes
+#### Logging
+- Cleaned up the message logged by `Nickvision::Logging::Logger:log()`
 #### System
 - Improved `Nickvision::System::Process`'s handling of arguments
 
