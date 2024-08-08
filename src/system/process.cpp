@@ -59,7 +59,6 @@ namespace Nickvision::System
                 appArgs += L" " + StringHelpers::wstr(arg);
             }
         }
-        std::wcout << appArgs << std::endl;
         STARTUPINFOW si{ 0 };
         si.cb = sizeof(STARTUPINFOW);
         si.hStdError = m_write;
