@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include "filesystem/userdirectories.h"
 #include "helpers/codehelpers.h"
@@ -75,6 +76,12 @@ namespace Nickvision::System
         }
 #else
         //Fork
+        int fd{ open(m_consoleFilePath.string().c_str(), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) };
+        if(fd < 0)
+        {
+            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
+            throw std::runtime_error("Failed to create file.");
+        }
         if((m_pid = fork()) < 0)
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
@@ -92,12 +99,6 @@ namespace Nickvision::System
             }
             appArgs.push_back(nullptr);
             //Redirect console output
-            int fd{ open(m_consoleFilePath.string().c_str(), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) };
-            if(fd < 0)
-            {
-                std::cerr << CodeHelpers::getLastSystemError() << std::endl;
-                throw std::runtime_error("Failed to create file.");
-            }
             dup2(fd, STDERR_FILENO);
             dup2(fd, STDOUT_FILENO);
             //Create process
@@ -110,6 +111,7 @@ namespace Nickvision::System
                 exit(1);
             }
         }
+        close(fd);
 #endif
     }
 
@@ -239,10 +241,10 @@ namespace Nickvision::System
 
     void Process::watch()
     {
-#ifdef _WIN32
         bool ended{ false };
         while(!ended)
         {
+#ifdef _WIN32
             //Determine if ended
             ended = WaitForSingleObject(m_pi.hProcess, 50) == WAIT_OBJECT_0;
             //Read console output
@@ -267,15 +269,9 @@ namespace Nickvision::System
                 std::lock_guard<std::mutex> lock{ m_mutex };
                 m_output += buffer.data();
             }
-        }
-        DWORD exitCode{ 0 };
-        GetExitCodeProcess(m_pi.hProcess, &exitCode);
 #else
-        int status{ 0 };
-        bool ended{ false };
-        while(!ended)
-        {
             //Determine if ended
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
             while(waitpid(m_pid, &status, WNOHANG | WUNTRACED | WCONTINUED) > 0)
             {
                 if(WIFEXITED(status) || WIFSIGNALED(status))
@@ -284,10 +280,17 @@ namespace Nickvision::System
                 }
             }
             //Read console output
+            std::lock_guard<std::mutex> lock{ m_mutex };
             std::ifstream file{ m_consoleFilePath };
-            m_output = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            std::stringstream buffer;
+            buffer << file.rdbuf();
+            m_output = buffer.str();
+#endif
         }
+#ifdef _WIN32
+        DWORD exitCode{ 0 };
+        GetExitCodeProcess(m_pi.hProcess, &exitCode);
+#else
         int exitCode{ WIFEXITED(status) ? WEXITSTATUS(status) : -1 };
 #endif
         std::unique_lock<std::mutex> lock{ m_mutex };
