@@ -31,7 +31,7 @@ jobs:
         with:
           pkgs: curl gettext-libintl glib gtest jsoncpp maddy openssl
           triplet: arm64-osx
-          revision: fe1cde61e971d53c9687cf9a46308f8f55da19fa
+          revision: a4cfba036f013aea0347c3efc335186754b696b3
           token: ${{ secrets.GITHUB_TOKEN }}
           github-binarycache: true
       - name: "Build"

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2024.8.2 (next)
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### System
+- Fixed reading console output from `Nickvision::System::Process` on linux
+
 ## 2024.8.1
 ### Breaking Changes
 None

@@ -241,6 +241,9 @@ namespace Nickvision::System
 
     void Process::watch()
     {
+#ifdef __linux__
+        int status{ 0 };
+#endif
         bool ended{ false };
         while(!ended)
         {
