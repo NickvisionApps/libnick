@@ -9,6 +9,7 @@
 #include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
 #ifndef _WIN32
+#include <signal.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #endif
