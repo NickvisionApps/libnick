@@ -13,7 +13,7 @@ None
 None
 ### Fixes
 #### System
-- Fixed reading console output from `Nickvision::System::Process` on linux
+- Improved `Nickvision::System::Process` implementation on UNIX systems
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

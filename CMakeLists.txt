@@ -152,6 +152,7 @@ if (BUILD_TESTING)
         "tests/networktests.cpp"
         "tests/notificationtests.cpp"
         "tests/passwordtests.cpp"
+        "tests/processtests.cpp"
         "tests/storetests.cpp"
         "tests/stringtests.cpp"
         "tests/systemcredentialstests.cpp"

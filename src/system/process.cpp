@@ -6,17 +6,15 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
-#include "filesystem/userdirectories.h"
 #include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
 #ifndef _WIN32
-#include <fcntl.h>
 #include <unistd.h>
-#include <signal.h>
 #include <sys/wait.h>
 #endif
 
-using namespace Nickvision::Filesystem;
+#define PROCESS_WAIT_TIMEOUT 50
+
 using namespace Nickvision::Events;
 using namespace Nickvision::Helpers;
 
@@ -33,8 +31,7 @@ namespace Nickvision::System
         m_write{ nullptr },
         m_pi{ 0 }
 #else
-        m_pid{ -1 },
-        m_consoleFilePath{ UserDirectories::get(UserDirectory::Cache) / (StringHelpers::newUuid() + ".lnproc") }
+        m_pid{ -1 }
 #endif
     {
 #ifdef _WIN32
@@ -75,43 +72,11 @@ namespace Nickvision::System
             throw std::runtime_error("Failed to create process.");
         }
 #else
-        //Fork
-        int fd{ open(m_consoleFilePath.string().c_str(), O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) };
-        if(fd < 0)
+        if(pipe(m_pipe) < 0)
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
-            throw std::runtime_error("Failed to create file.");
+            throw std::runtime_error("Failed to create pipe.");
         }
-        if((m_pid = fork()) < 0)
-        {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
-            throw std::runtime_error("Failed to create fork.");
-        }
-        else if(m_pid == 0) //child
-        {
-            //Create process arguments
-            std::string filename{ m_path.filename().string() };
-            std::vector<char*> appArgs;
-            appArgs.push_back(filename.data());
-            for(std::string& arg : m_args)
-            {
-                appArgs.push_back(arg.data());
-            }
-            appArgs.push_back(nullptr);
-            //Redirect console output
-            dup2(fd, STDERR_FILENO);
-            dup2(fd, STDOUT_FILENO);
-            //Create process
-            raise(SIGSTOP);
-            if(execvp(m_path.string().c_str(), appArgs.data()) < 0)
-            {
-                std::cerr << CodeHelpers::getLastSystemError() << std::endl;
-                m_completed = true;
-                m_exitCode = 1;
-                exit(1);
-            }
-        }
-        close(fd);
 #endif
     }
 
@@ -125,9 +90,10 @@ namespace Nickvision::System
         CloseHandle(m_read);
         CloseHandle(m_write);
         CloseHandle(m_pi.hProcess);
-        CloseHandle(m_pi.hThread);
+        CloseHandle(m_pi.hThread); 
 #else
-        std::filesystem::remove(m_consoleFilePath);
+        close(m_pipe[0]);
+        close(m_pipe[1]);
 #endif
     }
 
@@ -180,14 +146,45 @@ namespace Nickvision::System
         }
 #ifdef _WIN32
         if(!ResumeThread(m_pi.hThread))
-#else
-        waitpid(m_pid, nullptr, WUNTRACED);
-        if(::kill(m_pid, SIGCONT) < 0)
-#endif
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
+#else
+        if((m_pid = fork()) < 0)
+        {
+            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
+            return false;
+        }
+        //child
+        else if(m_pid == 0)
+        {
+            //Create process arguments
+            std::string filename{ m_path.filename().string() };
+            std::vector<char*> appArgs;
+            appArgs.push_back(filename.data());
+            for(std::string& arg : m_args)
+            {
+                appArgs.push_back(arg.data());
+            }
+            appArgs.push_back(nullptr);
+            //Redirect console output
+            close(m_pipe[0]);
+            dup2(m_pipe[1], STDERR_FILENO);
+            dup2(m_pipe[1], STDOUT_FILENO);
+            close(m_pipe[1]);
+            //Create process
+            if(execvp(m_path.string().c_str(), appArgs.data()) < 0)
+            {
+                std::cerr << CodeHelpers::getLastSystemError() << std::endl;
+                m_completed = true;
+                m_exitCode = 1;
+                exit(1);
+            }
+        }
+        //parent
+        close(m_pipe[1]);
+#endif
         m_watchThread = std::thread(&Process::watch, this);
         m_running = true;
         return true;
@@ -203,13 +200,13 @@ namespace Nickvision::System
         //Kill child processes spawned by the process
 #ifdef _WIN32
         if(!GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, m_pi.dwProcessId))
-#else
-        if(::kill(-m_pid, SIGTERM) < 0)
-#endif
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
+#else
+        ::kill(-m_pid, SIGTERM);
+#endif
         //Kill process
 #ifdef _WIN32
         if(!TerminateProcess(m_pi.hProcess, 0))
@@ -234,7 +231,7 @@ namespace Nickvision::System
         }
         while(!hasCompleted())
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
         }
         return getExitCode();
     }
@@ -249,7 +246,7 @@ namespace Nickvision::System
         {
 #ifdef _WIN32
             //Determine if ended
-            ended = WaitForSingleObject(m_pi.hProcess, 50) == WAIT_OBJECT_0;
+            ended = WaitForSingleObject(m_pi.hProcess, PROCESS_WAIT_TIMEOUT) == WAIT_OBJECT_0;
             //Read console output
             while(true)
             {
@@ -274,31 +271,34 @@ namespace Nickvision::System
             }
 #else
             //Determine if ended
-            while(waitpid(m_pid, &status, WNOHANG | WUNTRACED | WCONTINUED) > 0)
+            while(waitpid(m_pid, &status, WNOHANG | WUNTRACED) > 0)
             {
                 if(WIFEXITED(status) || WIFSIGNALED(status))
                 {
                     ended = true;
+                    close(m_pipe[0]);
                 }
             }
             //Read console output
-            std::unique_lock<std::mutex> lock{ m_mutex };
-            std::ifstream file{ m_consoleFilePath };
-            std::stringstream buffer;
-            buffer << file.rdbuf();
-            m_output = buffer.str();
-            lock.unlock();
-            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+            char buffer[1024];
+            ssize_t bytes{ 0 };
+            while((bytes = read(m_pipe[0], buffer, sizeof(buffer) - 1)) > 0)
+            {
+                buffer[bytes] = '\0';
+                std::lock_guard<std::mutex> lock{ m_mutex };
+                m_output += buffer;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
 #endif
         }
+        std::unique_lock<std::mutex> lock{ m_mutex };
 #ifdef _WIN32
         DWORD exitCode{ 0 };
         GetExitCodeProcess(m_pi.hProcess, &exitCode);
-#else
-        int exitCode{ WIFEXITED(status) ? WEXITSTATUS(status) : -1 };
-#endif
-        std::unique_lock<std::mutex> lock{ m_mutex };
         m_exitCode = static_cast<int>(exitCode);
+#else
+        m_exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
+#endif
         m_running = false;
         m_completed = true;
         lock.unlock();

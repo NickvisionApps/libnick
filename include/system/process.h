@@ -125,8 +125,8 @@ namespace Nickvision::System
         HANDLE m_write;
         PROCESS_INFORMATION m_pi;
 #else
+        int m_pipe[2];
         pid_t m_pid;
-        std::filesystem::path m_consoleFilePath;
 #endif
     };
 }
