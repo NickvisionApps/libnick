@@ -241,7 +241,7 @@ namespace Nickvision::System
 
     void Process::watch()
     {
-#ifdef __linux__
+#ifndef _WIN32
         int status{ 0 };
 #endif
         bool ended{ false };
@@ -274,7 +274,6 @@ namespace Nickvision::System
             }
 #else
             //Determine if ended
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
             while(waitpid(m_pid, &status, WNOHANG | WUNTRACED | WCONTINUED) > 0)
             {
                 if(WIFEXITED(status) || WIFSIGNALED(status))
@@ -283,11 +282,13 @@ namespace Nickvision::System
                 }
             }
             //Read console output
-            std::lock_guard<std::mutex> lock{ m_mutex };
+            std::unique_lock<std::mutex> lock{ m_mutex };
             std::ifstream file{ m_consoleFilePath };
             std::stringstream buffer;
             buffer << file.rdbuf();
             m_output = buffer.str();
+            lock.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
 #endif
         }
 #ifdef _WIN32
