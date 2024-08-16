@@ -6,14 +6,16 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.8.2
+## 2024.8.3 (next)
 ### Breaking Changes
-None
+#### Keyring
+- The entire keyring module has been rewritten for better performance and a cleaner API. Keyrings created with previous versions of libnick are no longer compatible.
+- Removed `Nickvision::Keyring::KeyringDialogController`
+- Removed `Nickvision::Keyring::Store`
 ### New APIs
 None
 ### Fixes
-#### System
-- Improved `Nickvision::System::Process` implementation on UNIX systems
+None
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
