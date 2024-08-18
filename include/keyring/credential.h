@@ -36,26 +36,12 @@ namespace Nickvision::Keyring
     public:
         /**
          * @brief Constructs a credential.
-         * @param id The id of the credential
-         * @param name The name of the credential
-         * @param uri The uri of the credential (can also be used as a comment for the Credential)
-         * @param username The username of the credential
-         * @param password The password of the credential
-         */
-        Credential(int id, const std::string& name, const std::string& uri, const std::string& username, const std::string& password);
-        /**
-         * @brief Constructs a credential.
          * @param name The name of the credential
          * @param uri The uri of the credential
          * @param username The username of the credential
          * @param password The password of the credential
          */
         Credential(const std::string& name, const std::string& uri, const std::string& username, const std::string& password);
-        /**
-         * @brief Gets the id of the credential
-         * @return The id of the credential
-         */
-        int getId() const;
         /**
          * @brief Gets the name of the credential
          * @return The name of the credential
@@ -126,7 +112,6 @@ namespace Nickvision::Keyring
         friend std::ostream& operator<<(std::ostream& os, const Credential& credential);
 
     private:
-        int m_id;
         std::string m_name;
         std::string m_uri;
         std::string m_username;

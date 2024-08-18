@@ -6,29 +6,13 @@ using namespace Nickvision::Helpers;
 
 namespace Nickvision::Keyring
 {
-    Credential::Credential(int id, const std::string& name, const std::string& uri, const std::string& username, const std::string& password)
-        : m_id{ id },
-        m_name{ name },
-        m_uri{ uri },
-        m_username{ username },
-        m_password{ password }
-    {
-
-    }
-
     Credential::Credential(const std::string& name, const std::string& uri, const std::string& username, const std::string& password)
-        : m_id{ static_cast<int>(std::hash<std::string>{}(StringHelpers::newUuid())) },
-        m_name{ name },
+        : m_name{ name },
         m_uri{ uri },
         m_username{ username },
         m_password{ password }
     {
 
-    }
-
-    int Credential::getId() const
-    {
-        return m_id;
     }
 
     const std::string& Credential::getName() const
@@ -73,22 +57,22 @@ namespace Nickvision::Keyring
 
     bool Credential::operator<(const Credential& compare) const
     {
-        return m_id < compare.m_id;
+        return m_name < compare.m_name;
     }
 
     bool Credential::operator>(const Credential& compare) const
     {
-        return m_id > compare.m_id;
+        return m_name > compare.m_name;
     }
 
     bool Credential::operator==(const Credential& compare) const
     {
-        return m_id == compare.m_id;
+        return m_name == compare.m_name;
     }
 
     bool Credential::operator!=(const Credential& compare) const
     {
-        return m_id != compare.m_id;
+        return m_name != compare.m_name;
     }
 
     std::ostream& operator<<(std::ostream& os, const Credential& credential)

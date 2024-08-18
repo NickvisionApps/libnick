@@ -17,7 +17,7 @@ using namespace Nickvision::Helpers;
 namespace Nickvision::Keyring
 {
 #ifdef __linux__
-    static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.aura.keyring", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
+    static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.libnick", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
 #endif
 
     std::optional<Credential> SystemCredentials::getCredential(const std::string& name)
