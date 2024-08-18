@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.8.3 (next)
+## 2024.8.3
 ### Breaking Changes
 #### Keyring
 - The `Nickvision::Keyring::Keyring` class has been rewritten for better performance and a cleaner API. Keyrings created with previous versions of libnick are no longer compatible.
