@@ -28,6 +28,14 @@ namespace Nickvision::Keyring
                 {
                     m_database.reset();
                 }
+                else
+                {
+                    SqlStatement statement{ m_database->createStatement("SELECT * FROM credentials") };
+                    while(statement.step())
+                    {
+                        m_credentials.push_back({ statement.getColumnString(0), statement.getColumnString(1), statement.getColumnString(2), statement.getColumnString(3) });
+                    }
+                }
             }
         }
     }
@@ -130,6 +138,7 @@ namespace Nickvision::Keyring
             m_database.reset();
             m_database = nullptr;
             std::filesystem::remove(path);
+            m_credentials.clear();
         }
         return true;
     }

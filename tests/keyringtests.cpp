@@ -1,114 +1,106 @@
 #include <gtest/gtest.h>
+#include <filesystem>
+#include "filesystem/userdirectories.h"
 #include "keyring/keyring.h"
-#include "keyring/keyringdialogcontroller.h"
 #include "system/environment.h"
 
+#define KEYRING_NAME std::string("org.nickvision.libnick.test")
+
+using namespace Nickvision::Filesystem;
 using namespace Nickvision::Keyring;
 using namespace Nickvision::System;
 
 class KeyringTest : public testing::Test
 {
 public:
-    static std::unique_ptr<KeyringDialogController> m_controller;
+    static std::unique_ptr<Keyring> m_keyring;
+    static std::filesystem::path m_keyringPath;
 
     static void SetUpTestSuite()
     {
-#ifdef __APPLE__
-        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-        {
-            return;
-        }
-#endif
-        Keyring::destroy("org.nickvision.aura.test.keyring");
-        m_controller = std::make_unique<KeyringDialogController>("org.nickvision.aura.test.keyring", Keyring::access("org.nickvision.aura.test.keyring"));
+        std::filesystem::remove(m_keyringPath);
+    }
+
+    static void TearDownTestSuite()
+    {
+        m_keyring.reset();
+        std::filesystem::remove(m_keyringPath);
     }
 };
 
-std::unique_ptr<KeyringDialogController> KeyringTest::m_controller = nullptr;
+std::unique_ptr<Keyring> KeyringTest::m_keyring{ nullptr };
+std::filesystem::path KeyringTest::m_keyringPath{ UserDirectories::get(UserDirectory::Config) / "Nickvision" / "Keyring" / (KEYRING_NAME + ".ring2") };
 
-TEST_F(KeyringTest, CheckValidKeyring)
+TEST_F(KeyringTest, Create)
 {
+    ASSERT_NO_THROW(m_keyring = std::make_unique<Keyring>(KEYRING_NAME));
 #ifdef __APPLE__
-        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-        {
-            GTEST_SKIP();
-        }
+    if(Environment::getVariable("GITHUB_ACTIONS").empty())
+    {
+        ASSERT_TRUE(m_keyring->isSavingToDisk());
+    }
+#else
+    ASSERT_TRUE(m_keyring->isSavingToDisk());
 #endif
-    ASSERT_TRUE(m_controller->isEnabled());
-    ASSERT_TRUE(m_controller->isValid());
 }
 
-TEST_F(KeyringTest, ManageCredentials)
+TEST_F(KeyringTest, AddCredential1)
 {
-#ifdef __APPLE__
-        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-        {
-            GTEST_SKIP();
-        }
-#endif
-    ASSERT_TRUE(m_controller->addCredential({ "YT", "https://youtube.com", "theawesomeguy", "abc123!" }));
-    ASSERT_TRUE(m_controller->addCredential({ "Google", "https://google.com", "me@gmail.com", "abc12345!" }));
-    ASSERT_TRUE(m_controller->getAllCredentials().size() == 2);
-    Credential cred{ m_controller->getAllCredentials()[0] };
-    ASSERT_EQ(cred.getName(), "YT");
-    ASSERT_EQ(cred.getUri(), "https://youtube.com");
-    ASSERT_EQ(cred.getUsername(), "theawesomeguy");
-    ASSERT_EQ(cred.getPassword(), "abc123!");
-    ASSERT_TRUE(m_controller->deleteCredential(cred.getId()));
-    ASSERT_TRUE(m_controller->getAllCredentials().size() == 1);
+    Credential credential{ "YouTube", "https://youtube.com", "theawesomeguy", "abc123!" };
+    ASSERT_TRUE(m_keyring->addCredential(credential));
+    ASSERT_EQ(m_keyring->getCredentials().size(), 1);
+    ASSERT_EQ(m_keyring->getCredential("YouTube"), credential);
 }
 
-TEST_F(KeyringTest, ValidateCredential1)
+TEST_F(KeyringTest, AddCredential2)
 {
-#ifdef __APPLE__
-        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-        {
-            GTEST_SKIP();
-        }
-#endif
-    ASSERT_TRUE(m_controller->validateCredential({ "YT", "https://youtube.com", "theawesomeguy", "abc123!" }) == CredentialCheckStatus::Valid);
+    Credential credential{ "GitHub", "https://github.com", "theawesomeguy", "abc123!" };
+    ASSERT_TRUE(m_keyring->addCredential(credential));
+    ASSERT_EQ(m_keyring->getCredentials().size(), 2);
+    ASSERT_EQ(m_keyring->getCredential("GitHub"), credential);
 }
 
-TEST_F(KeyringTest, ValidateCredential2)
+TEST_F(KeyringTest, AddCredential3)
 {
-#ifdef __APPLE__
-        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-        {
-            GTEST_SKIP();
-        }
-#endif
-    ASSERT_TRUE(m_controller->validateCredential({ "", "https://youtube.com", "theawesomeguy", "abc123!" }) == CredentialCheckStatus::EmptyName);
+    Credential credential{ "YouTube", "https://youtube.com", "me@gmail.com", "abc123!" };
+    ASSERT_FALSE(m_keyring->addCredential(credential));
 }
 
-TEST_F(KeyringTest, ValidateCredential3)
+TEST_F(KeyringTest, ReloadAndValidate)
 {
-#ifdef __APPLE__
-        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-        {
-            GTEST_SKIP();
-        }
-#endif
-    ASSERT_TRUE(m_controller->validateCredential({ "YT", "https://youtube.com", "theawesomeguy", "" }) == CredentialCheckStatus::Valid);
+    ASSERT_NO_THROW(m_keyring.reset());
+    ASSERT_NO_THROW(m_keyring = std::make_unique<Keyring>(KEYRING_NAME));
+    ASSERT_EQ(m_keyring->getCredentials().size(), 2);
 }
 
-TEST_F(KeyringTest, ValidateCredential4)
+TEST_F(KeyringTest, GetCredential1)
 {
-#ifdef __APPLE__
-        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-        {
-            GTEST_SKIP();
-        }
-#endif
-    ASSERT_TRUE(m_controller->validateCredential({ "YT", "https://youtube.com", "", "" }) == CredentialCheckStatus::EmptyUsernamePassword);
+    ASSERT_EQ(m_keyring->getCredential("Microsoft"), std::nullopt);
 }
 
-TEST_F(KeyringTest, DisableKeyring)
+TEST_F(KeyringTest, DeleteCredential1)
 {
-#ifdef __APPLE__
-        if(!Environment::getVariable("GITHUB_ACTIONS").empty())
-        {
-            GTEST_SKIP();
-        }
-#endif
-    ASSERT_TRUE(m_controller->disableKeyring());
+    ASSERT_TRUE(m_keyring->deleteCredential("YouTube"));
+    ASSERT_EQ(m_keyring->getCredentials().size(), 1);
+    ASSERT_EQ(m_keyring->getCredential("YouTube"), std::nullopt);
+}
+
+TEST_F(KeyringTest, DeleteCredential2)
+{
+    ASSERT_TRUE(m_keyring->deleteCredential("GitHub"));
+    ASSERT_EQ(m_keyring->getCredentials().size(), 0);
+    ASSERT_EQ(m_keyring->getCredential("GitHub"), std::nullopt);
+}
+
+TEST_F(KeyringTest, DeleteCredential3)
+{
+    ASSERT_FALSE(m_keyring->deleteCredential("YouTube"));
+}
+
+TEST_F(KeyringTest, Destroy)
+{
+    ASSERT_TRUE(m_keyring->destroy());
+    ASSERT_EQ(m_keyring->getCredentials().size(), 0);
+    ASSERT_FALSE(m_keyring->isSavingToDisk());
+    ASSERT_FALSE(std::filesystem::exists(m_keyringPath));
 }
