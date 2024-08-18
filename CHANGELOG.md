@@ -3,7 +3,7 @@
 ## 2024.8.3 (next)
 ### Breaking Changes
 #### Keyring
-- The entire keyring module has been rewritten for better performance and a cleaner API. Keyrings created with previous versions of libnick are no longer compatible.
+- The `Nickvision::Keyring::Keyring` class has been rewritten for better performance and a cleaner API. Keyrings created with previous versions of libnick are no longer compatible.
 - Removed `Nickvision::Keyring::KeyringDialogController`
 - Removed `Nickvision::Keyring::Store`
 ### New APIs
