@@ -50,6 +50,16 @@ public:
         m_json["WindowGeometry"]["Height"] = static_cast<Json::Int64>(geometry.getHeight());
         m_json["WindowGeometry"]["IsMaximized"] = geometry.isMaximized();
     }
+
+    bool getAutomaticallyCheckForUpdates() const
+    {
+        return m_json.get("AutomaticallyCheckForUpdates", true).asBool();
+    }
+
+    void setAutomaticallyCheckForUpdates(bool value)
+    {
+        m_json["AutomaticallyCheckForUpdates"] = value;
+    }
 };
 
 class DataFileTest : public testing::Test
@@ -74,13 +84,14 @@ TEST_F(DataFileTest, EnsureDefaultAppConfig)
     ASSERT_EQ(geometry.getWidth(), 800);
     ASSERT_EQ(geometry.getHeight(), 600);
     ASSERT_EQ(geometry.isMaximized(), false);
+    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), true);
 }
 
-TEST_F(DataFileTest, ChangeAppConfig)
+TEST_F(DataFileTest, ChangeAppConfig1)
 {
     AppConfig& config{m_manager->get<AppConfig>("config") };
-    config.setTheme(Theme::Light);
-    config.setWindowGeometry(WindowGeometry{ 1920, 1080, true });
+    ASSERT_NO_THROW(config.setTheme(Theme::Light));
+    ASSERT_NO_THROW(config.setWindowGeometry(WindowGeometry{ 1920, 1080, true }));
     ASSERT_TRUE(config.save());
 }
 
@@ -92,4 +103,17 @@ TEST_F(DataFileTest, EnsureChangeInAppConfig)
     ASSERT_EQ(geometry.getWidth(), 1920);
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
+}
+
+TEST_F(DataFileTest, ChangeAppConfig2)
+{
+    AppConfig& config{ m_manager->get<AppConfig>("config") };
+    ASSERT_NO_THROW(config.setAutomaticallyCheckForUpdates(false));
+    ASSERT_TRUE(config.save());
+}
+
+TEST_F(DataFileTest, EnsureChangeInAppConfig2)
+{
+    AppConfig& config{ m_manager->get<AppConfig>("config") };
+    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
 }
