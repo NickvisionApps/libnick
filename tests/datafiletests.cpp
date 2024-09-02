@@ -26,7 +26,12 @@ public:
 
     Theme getTheme() const
     {
-        return static_cast<Theme>(m_json.get("Theme", (int)Theme::System).asInt());
+        const boost::json::value& theme{ m_json.at("Theme") };
+        if(!theme.is_int64())
+        {
+            return Theme::System;
+        }
+        return static_cast<Theme>(theme.as_int64());
     }
 
     void setTheme(Theme theme)
@@ -37,23 +42,37 @@ public:
     WindowGeometry getWindowGeometry()
     {
         WindowGeometry geometry;
-        const Json::Value json{ m_json["WindowGeometry"] };
-        geometry.setWidth(json.get("Width", 800).asInt64());
-        geometry.setHeight(json.get("Height", 600).asInt64());
-        geometry.setIsMaximized(json.get("IsMaximized", false).asBool());
+        const boost::json::value& obj{ m_json.at("WindowGeometry") };
+        if(obj.is_null())
+        {
+            geometry.setWidth(800);
+            geometry.setHeight(600);
+            geometry.setIsMaximized(false);
+            return geometry;
+        }
+        geometry.setWidth(obj.at("Width").is_int64() ? obj.at("Width").as_int64() : 800);
+        geometry.setHeight(obj.at("Height").is_int64() ? obj.at("Height").as_int64() : 600);
+        geometry.setIsMaximized(obj.at("IsMaximized").is_bool() ? obj.at("IsMaximized").as_bool() : false);
         return geometry;
     }
 
     void setWindowGeometry(const WindowGeometry& geometry)
     {
-        m_json["WindowGeometry"]["Width"] = static_cast<Json::Int64>(geometry.getWidth());
-        m_json["WindowGeometry"]["Height"] = static_cast<Json::Int64>(geometry.getHeight());
-        m_json["WindowGeometry"]["IsMaximized"] = geometry.isMaximized();
+        boost::json::object obj;
+        obj["Width"] = geometry.getWidth();
+        obj["Height"] = geometry.getHeight();
+        obj["IsMaximized"] = geometry.isMaximized();
+        m_json["WindowGeometry"] = obj;
     }
 
     bool getAutomaticallyCheckForUpdates() const
     {
-        return m_json.get("AutomaticallyCheckForUpdates", true).asBool();
+        const boost::json::value& value{ m_json.at("AutomaticallyCheckForUpdates") };
+        if(!value.is_bool())
+        {
+            return true;
+        }
+        return value.as_bool();
     }
 
     void setAutomaticallyCheckForUpdates(bool value)

@@ -25,7 +25,7 @@
 
 #include <filesystem>
 #include <string>
-#include <json/json.h>
+#include <boost/json.hpp>
 #include "events/event.h"
 
 namespace Nickvision::App
@@ -65,7 +65,7 @@ namespace Nickvision::App
         bool save();
 
     protected:
-        Json::Value m_json;
+        boost::json::object m_json;
 
     private:
         std::string m_key;

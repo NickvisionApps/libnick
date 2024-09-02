@@ -25,7 +25,7 @@
 
 #include <filesystem>
 #include <string>
-#include <json/json.h>
+#include <boost/json.hpp>
 #include "curleasy.h"
 
 namespace Nickvision::Network::Web
@@ -41,7 +41,7 @@ namespace Nickvision::Network::Web
      * @param url The url of the json string
      * @return The fetched json object
      */
-    Json::Value fetchJson(const std::string& url);
+    boost::json::object fetchJson(const std::string& url);
     /**
      * @brief Downloads a file to disk.
      * @param url The url of the file to download

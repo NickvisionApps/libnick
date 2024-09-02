@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <vector>
-#include <json/json.h>
+#include <boost/json.hpp>
 #include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
 #include "network/web.h"
