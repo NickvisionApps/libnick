@@ -1,5 +1,13 @@
 # Changelog
 
+## 2024.9.0 (next)
+### Breaking Changes
+- Replaced `jsoncpp` library with `boost-json`
+### New APIs
+None
+### Fixes
+None
+
 ## 2024.8.3
 ### Breaking Changes
 #### Keyring

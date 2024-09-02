@@ -6,12 +6,9 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.8.3
+## 2024.9.0 (next)
 ### Breaking Changes
-#### Keyring
-- The `Nickvision::Keyring::Keyring` class has been rewritten for better performance and a cleaner API. Keyrings created with previous versions of libnick are no longer compatible.
-- Removed `Nickvision::Keyring::KeyringDialogController`
-- Removed `Nickvision::Keyring::Store`
+- Replaced `jsoncpp` library with `boost-json`
 ### New APIs
 None
 ### Fixes
