@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <vector>
-#include <json/json.h>
+#include <boost/json.hpp>
 #include "filesystem/userdirectories.h"
 #include "helpers/stringhelpers.h"
 #include "network/web.h"
@@ -58,26 +58,34 @@ namespace Nickvision::Update
     Version Updater::fetchCurrentVersion(VersionType versionType)
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        Json::Value root{ Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
-        if (!root.empty())
+        boost::json::value root{ Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
+        if (!root.is_array())
         {
-            for (const Json::Value& release : root)
+            return {};
+        }
+        for (const boost::json::value& release : root.as_array())
+        {
+            if(!release.is_object())
             {
-                std::string version{ release.get("tag_name", "NULL").asString() };
-                if (version.empty() || version == "NULL")
-                {
-                    return {};
-                }
-                if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
-                {
-                    m_latestStableReleaseId = release.get("id", -1).asInt();
-                    return version;
-                }
-                if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
-                {
-                    m_latestPreviewReleaseId = release.get("id", -1).asInt();
-                    return version;
-                }
+                continue;
+            }
+            boost::json::object releaseObject{ release.as_object() };
+            const boost::json::value& tagNameValue{ releaseObject["tag_name"] };
+            if (!tagNameValue.is_string())
+            {
+                return {};
+            }
+            std::string version{ tagNameValue.as_string() };
+            const boost::json::value& id{ releaseObject["id"] };
+            if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
+            {
+                m_latestStableReleaseId = id.is_int64() ? static_cast<int>(id.as_int64()) : -1;
+                return version;
+            }
+            if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
+            {
+                m_latestPreviewReleaseId = id.is_int64() ? static_cast<int>(id.as_int64()) : -1;
+                return version;
             }
         }
         return {};
@@ -91,25 +99,43 @@ namespace Nickvision::Update
         {
             return false;
         }
-        Json::Value root{ Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId)) };
-        if (!root.empty())
+        boost::json::value root{ Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId)) };
+        if (!root.is_object())
         {
-            for (const Json::Value& asset : root.get("assets", {}))
+            return false;
+        }
+        boost::json::object rootObject{ root.as_object() };
+        const boost::json::value& assets{ rootObject["assets"] };
+        if (!assets.is_array())
+        {
+            return false;
+        }
+        for (const boost::json::value& asset : assets.as_array())
+        {
+            if (!asset.is_object())
             {
-                std::string name{ asset.get("name", "").asString() };
-                if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
+                continue;
+            }
+            boost::json::object assetObject{ asset.as_object() };
+            const boost::json::value& nameValue{ assetObject["name"] };
+            if(!nameValue.is_string())
+            {
+                return false;
+            }
+            std::string name{ nameValue.as_string() };
+            if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
+            {
+                std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
+                const boost::json::value& urlValue{ assetObject["browser_download_url"] };
+                if (urlValue.is_string() && Web::downloadFile(urlValue.as_string().c_str(), setupPath))
                 {
-                    std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
-                    if (Web::downloadFile(asset.get("browser_download_url", "").asString(), setupPath))
+                    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+                    if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)
                     {
-                        CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-                        if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
-                    return false;
                 }
+                return false;
             }
         }
         return false;

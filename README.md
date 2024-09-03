@@ -14,8 +14,8 @@ Documentation for this library and its modules can be found [here](https://nickv
 The following are a list of dependencies used by libnick. 
 
 ### All Platforms
+- boost-json
 - gtest
-- jsoncpp
 - libcurl
 - libintl
 - maddy
@@ -62,16 +62,16 @@ A C++20 compiler is also required to build libnick.
 1. Set the `VCPKG_ROOT` environment variable to the path of your vcpkg installation's root directory.
 #### Windows
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-windows`
-1. Run `vcpkg install curl gettext-libintl gtest jsoncpp maddy sqlcipher`
+1. Run `vcpkg install boost-json curl gettext-libintl gtest maddy sqlcipher`
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl`
+1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
 #### macOS (Intel)
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-osx`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl`
+1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
 #### macOS (Apple Silicon)
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `arm64-osx`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl`
+1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
 
 ### Building
 1. First, clone/download the repo.

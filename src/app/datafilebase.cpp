@@ -21,8 +21,23 @@ namespace Nickvision::App
         m_path = UserDirectories::get(ApplicationUserDirectory::Config, appName) / (m_key + ".json");
         if (std::filesystem::exists(m_path))
         {
-            std::ifstream in{ m_path };
-            in >> m_json;
+            try
+            {
+                std::ifstream in{ m_path };
+                boost::json::stream_parser parser;
+                std::string line;
+                while(std::getline(in, line))
+                {
+                    parser.write(line);
+                }
+                parser.finish();
+                boost::json::value value{ parser.release() };
+                if(value.is_object())
+                {
+                    m_json = value.as_object();
+                }
+            }
+            catch(...) { }
         }
     }
 
@@ -39,7 +54,7 @@ namespace Nickvision::App
     bool DataFileBase::save()
     {
         std::ofstream out{ m_path };
-        out << m_json;
+        out << m_json << std::endl;
         m_saved({});
         return true;
     }

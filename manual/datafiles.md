@@ -6,7 +6,7 @@ Here are some key points when defining your own configuration objects:
     - Although you will not use `key` and `appName` in your own implementation, it is required for `DataFileBase`'s functionality and will be filled-in by the `DataFileManager`.
 - `DataFileBase` exposes a protected `m_json` object which you must use in your implementation of getting and storing variables of your data object. 
     - If this `m_json` object is not used, your data object will not be stored to disk correctly.
-- You must explicitly call the `save` method on your configuration object when you want to save the configuration to disk. Writing to the `m_json` object is not enough to trigger saving the file on disk.
+- You must explicitly call the `save` method on your configuration object when you want to save the configuration to disk. Writing to the `m_json` (of type `boost::json::object`) object is not enough to trigger saving the file on disk.
 
 Here is an example of a custom configuration object using `DataFileBase`:
 ```cpp
@@ -16,22 +16,26 @@ using namespace Nickvision::Events;
 class AppConfig : public DataFileBase
 {
 public:
-	AppConfig(const std::string& key, const std::string& appName) 
-    : DataFileBase{ key, appName } 
-	{ 
+    AppConfig(const std::string& key, const std::string& appName)
+        : DataFileBase{ key, appName } 
+    { 
 
-	}
+    }
 
-	int getPreviousCount() const
-	{
-    //0 is the default value of PreviousCount (i.e. if it does not exist in the file)
-	  return m_json.get("PreviousCount", 0).asInt();
-	}
+    bool getAutomaticallyCheckForUpdates() const
+    {
+        const boost::json::value& value{ m_json["AutomaticallyCheckForUpdates"] };
+        if(!value.is_bool())
+        {
+            return true;
+        }
+        return value.as_bool();
+    }
 
-	void setPreviousCount(int count)
-	{
-		m_json["PreviousCount"] = count;
-	}
+    void setAutomaticallyCheckForUpdates(bool value)
+    {
+        m_json["AutomaticallyCheckForUpdates"] = value;
+    }
 };
 
 //This object can now be used with the DataFileManager:
