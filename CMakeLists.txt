@@ -85,7 +85,6 @@ endif()
 #libnick Packages
 find_package(Boost REQUIRED COMPONENTS json)
 find_package(CURL REQUIRED)
-find_package(jsoncpp CONFIG REQUIRED)
 find_package(Intl REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost Boost::json CURL::libcurl Intl::Intl)
 if(USING_VCPKG)
