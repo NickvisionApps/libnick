@@ -58,7 +58,7 @@ namespace Nickvision::Update
     Version Updater::fetchCurrentVersion(VersionType versionType)
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        boost::json::value root{ Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases") };
+        boost::json::value root = Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases");
         if (!root.is_array())
         {
             return {};
@@ -69,7 +69,7 @@ namespace Nickvision::Update
             {
                 continue;
             }
-            boost::json::object releaseObject{ release.as_object() };
+            boost::json::object releaseObject = release.as_object();
             const boost::json::value& tagNameValue{ releaseObject["tag_name"] };
             if (!tagNameValue.is_string())
             {
@@ -99,12 +99,12 @@ namespace Nickvision::Update
         {
             return false;
         }
-        boost::json::value root{ Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId)) };
+        boost::json::value root = Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId));
         if (!root.is_object())
         {
             return false;
         }
-        boost::json::object rootObject{ root.as_object() };
+        boost::json::object rootObject = root.as_object();
         const boost::json::value& assets{ rootObject["assets"] };
         if (!assets.is_array())
         {
@@ -116,7 +116,7 @@ namespace Nickvision::Update
             {
                 continue;
             }
-            boost::json::object assetObject{ asset.as_object() };
+            boost::json::object assetObject = asset.as_object();
             const boost::json::value& nameValue{ assetObject["name"] };
             if(!nameValue.is_string())
             {

@@ -26,10 +26,10 @@ namespace Nickvision::App
             std::string line;
             while(std::getline(in, line))
             {
-                parser.write_some(line);
+                parser.write(line);
             }
             parser.finish();
-            boost::json::value value{ parser.release() };
+            boost::json::value value = parser.release();
             if(value.is_object())
             {
                 m_json = value.as_object();
