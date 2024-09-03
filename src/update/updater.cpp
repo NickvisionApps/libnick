@@ -79,12 +79,12 @@ namespace Nickvision::Update
             const boost::json::value& id{ releaseObject["id"] };
             if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
             {
-                m_latestStableReleaseId = id.is_int64() ? id.as_int64() : -1;
+                m_latestStableReleaseId = id.is_int64() ? static_cast<int>(id.as_int64()) : -1;
                 return version;
             }
             if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
             {
-                m_latestPreviewReleaseId = id.is_int64() ? id.as_int64() : -1;
+                m_latestPreviewReleaseId = id.is_int64() ? static_cast<int>(id.as_int64()) : -1;
                 return version;
             }
         }
@@ -116,7 +116,7 @@ namespace Nickvision::Update
             {
                 continue;
             }
-            boost::json::object& assetObject{ asset.as_object() };
+            boost::json::object assetObject{ asset.as_object() };
             const boost::json::value& nameValue{ assetObject["name"] };
             if(!nameValue.is_string())
             {
@@ -127,7 +127,7 @@ namespace Nickvision::Update
             {
                 std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
                 const boost::json::value& urlValue{ assetObject["browser_download_url"] };
-                if (urlValue.is_string() && Web::downloadFile(urlValue.as_string(), setupPath))
+                if (urlValue.is_string() && Web::downloadFile(urlValue.as_string().c_str(), setupPath))
                 {
                     CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
                     if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)
