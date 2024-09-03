@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.9.0 (next)
+## 2024.9.0
 ### Breaking Changes
 - Replaced `jsoncpp` library with `boost-json`
 #### App
