@@ -1,6 +1,6 @@
 # Changelog
 
-## 2024.9.1 (next)
+## 2024.9.1
 ### Breaking Changes
 None
 ### New APIs
