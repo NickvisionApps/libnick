@@ -1,5 +1,14 @@
 # Changelog
 
+## 2024.9.1 (next)
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+### App
+- Fixed an issue where `DataFileBase` was incorrectly parsing JSON files
+
 ## 2024.9.0
 ### Breaking Changes
 - Replaced `jsoncpp` library with `boost-json`

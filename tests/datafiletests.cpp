@@ -136,3 +136,16 @@ TEST_F(DataFileTest, EnsureChangeInAppConfig2)
     AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
 }
+
+TEST_F(DataFileTest, ReloadConfig)
+{
+    m_manager.reset();
+    m_manager = std::make_shared<DataFileManager>("Nickvision Aura Tests");
+    AppConfig& config{ m_manager->get<AppConfig>("config") };
+    ASSERT_EQ(config.getTheme(), Theme::Light);
+    WindowGeometry geometry{ config.getWindowGeometry() };
+    ASSERT_EQ(geometry.getWidth(), 1920);
+    ASSERT_EQ(geometry.getHeight(), 1080);
+    ASSERT_EQ(geometry.isMaximized(), true);
+    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
+}
