@@ -15,7 +15,7 @@ namespace Nickvision::Network
         return curl.perform() == CURLE_OK;
     }
 
-    boost::json::object Web::fetchJson(const std::string& url)
+    boost::json::value Web::fetchJson(const std::string& url)
     {
         if(url.empty())
         {
@@ -31,7 +31,7 @@ namespace Nickvision::Network
             std::string data{ out.str() };
             if(!data.empty())
             {
-                return boost::json::parse(data).as_object();
+                return boost::json::parse(data);
             }
         }
         return {};

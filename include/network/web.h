@@ -39,9 +39,9 @@ namespace Nickvision::Network::Web
     /**
      * @brief Fetches a json string from a url.
      * @param url The url of the json string
-     * @return The fetched json object
+     * @return The fetched json value
      */
-    boost::json::object fetchJson(const std::string& url);
+    boost::json::value fetchJson(const std::string& url);
     /**
      * @brief Downloads a file to disk.
      * @param url The url of the file to download

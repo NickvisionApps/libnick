@@ -31,7 +31,11 @@ namespace Nickvision::App
                     parser.write(line);
                 }
                 parser.finish();
-                m_json = parser.release().as_object();
+                boost::json::value value{ parser.release() };
+                if(value.is_object())
+                {
+                    m_json = value.as_object();
+                }
             }
             catch(...) { }
         }

@@ -22,6 +22,7 @@ TEST(WebTests, DownloadFile1)
 
 TEST(WebTests, FetchJsonString1)
 {
-    Json::Value json{ Web::fetchJson("https://api.github.com/repos/nickvisionapps/denaro/tags") };
-    ASSERT_FALSE(json.empty());
+    boost::json::value json{ Web::fetchJson("https://api.github.com/repos/nickvisionapps/denaro/tags") };
+    ASSERT_FALSE(json.is_null());
+    ASSERT_TRUE(json.is_array());
 }

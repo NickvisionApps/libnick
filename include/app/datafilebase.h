@@ -65,7 +65,7 @@ namespace Nickvision::App
         bool save();
 
     protected:
-        boost::json::object m_json;
+        mutable boost::json::object m_json;
 
     private:
         std::string m_key;

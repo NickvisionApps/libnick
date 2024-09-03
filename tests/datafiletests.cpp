@@ -26,7 +26,7 @@ public:
 
     Theme getTheme() const
     {
-        const boost::json::value& theme{ m_json.at("Theme") };
+        const boost::json::value& theme{ m_json["Theme"] };
         if(!theme.is_int64())
         {
             return Theme::System;
@@ -39,20 +39,20 @@ public:
         m_json["Theme"] = static_cast<int>(theme);
     }
 
-    WindowGeometry getWindowGeometry()
+    WindowGeometry getWindowGeometry() const
     {
         WindowGeometry geometry;
-        const boost::json::value& obj{ m_json.at("WindowGeometry") };
-        if(obj.is_null())
+        if(!m_json["WindowGeometry"].is_object())
         {
             geometry.setWidth(800);
             geometry.setHeight(600);
             geometry.setIsMaximized(false);
             return geometry;
         }
-        geometry.setWidth(obj.at("Width").is_int64() ? obj.at("Width").as_int64() : 800);
-        geometry.setHeight(obj.at("Height").is_int64() ? obj.at("Height").as_int64() : 600);
-        geometry.setIsMaximized(obj.at("IsMaximized").is_bool() ? obj.at("IsMaximized").as_bool() : false);
+        boost::json::object& obj{ m_json["WindowGeometry"].as_object() };
+        geometry.setWidth(obj["Width"].is_int64() ? obj["Width"].as_int64() : 800);
+        geometry.setHeight(obj["Height"].is_int64() ? obj["Height"].as_int64() : 600);
+        geometry.setIsMaximized(obj["IsMaximized"].is_bool() ? obj["IsMaximized"].as_bool() : false);
         return geometry;
     }
 
@@ -67,7 +67,7 @@ public:
 
     bool getAutomaticallyCheckForUpdates() const
     {
-        const boost::json::value& value{ m_json.at("AutomaticallyCheckForUpdates") };
+        const boost::json::value& value{ m_json["AutomaticallyCheckForUpdates"] };
         if(!value.is_bool())
         {
             return true;
