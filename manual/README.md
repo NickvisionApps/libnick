@@ -6,13 +6,14 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.9.0
+## 2024.9.1 (next)
 ### Breaking Changes
-- Replaced `jsoncpp` library with `boost-json`
+None
 ### New APIs
 None
 ### Fixes
-None
+### App
+- Fixed an issue where `DataFileBase` was incorrectly parsing JSON files
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
