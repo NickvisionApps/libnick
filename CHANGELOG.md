@@ -3,6 +3,8 @@
 ## 2024.9.0 (next)
 ### Breaking Changes
 - Replaced `jsoncpp` library with `boost-json`
+#### App
+- `Nickvision::App::DataFileBase`'s `m_json` object is now of type `boost::json::object`
 ### New APIs
 None
 ### Fixes
