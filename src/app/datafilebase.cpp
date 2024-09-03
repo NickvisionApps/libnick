@@ -24,16 +24,20 @@ namespace Nickvision::App
             std::ifstream in{ m_path };
             boost::json::stream_parser parser;
             std::string line;
-            while(std::getline(in, line))
+            try
             {
-                parser.write(line);
+                while(std::getline(in, line))
+                {
+                    parser.write(line);
+                }
+                parser.finish();
+                boost::json::value value = parser.release();
+                if(value.is_object())
+                {
+                    m_json = value.as_object();
+                }
             }
-            parser.finish();
-            boost::json::value value = parser.release();
-            if(value.is_object())
-            {
-                m_json = value.as_object();
-            }
+            catch(...) { }
         }
     }
 
