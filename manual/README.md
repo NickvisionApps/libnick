@@ -6,14 +6,15 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.9.1
+## 2024.9.2
 ### Breaking Changes
 None
 ### New APIs
-None
+#### System
+- Added `Nickvision::System::Environment::hasVariable()`
 ### Fixes
-### App
-- Fixed an issue where `DataFileBase` was incorrectly parsing JSON files
+#### System
+- Fixed an issue where Flatpak deployment mode was not correctly detected
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

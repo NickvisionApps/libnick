@@ -1,5 +1,15 @@
 # Changelog
 
+## 2024.9.2
+### Breaking Changes
+None
+### New APIs
+#### System
+- Added `Nickvision::System::Environment::hasVariable()`
+### Fixes
+#### System
+- Fixed an issue where Flatpak deployment mode was not correctly detected
+
 ## 2024.9.1
 ### Breaking Changes
 None
