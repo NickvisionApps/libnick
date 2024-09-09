@@ -8,7 +8,7 @@ using namespace Nickvision::Update;
 
 TEST(UpdaterTests, ParabolicStableUpdate)
 {
-    if(!Environment::getVariable("GITHUB_ACTIONS").empty())
+    if(Environment::hasVariable("GITHUB_ACTIONS"))
     {
         GTEST_SKIP();
     }
@@ -22,7 +22,7 @@ TEST(UpdaterTests, ParabolicStableUpdate)
 #ifdef _WIN32
 TEST(UpdaterTests, SpotlightWindowsUpdate)
 {
-    if(!Environment::getVariable("GITHUB_ACTIONS").empty())
+    if(Environment::hasVariable("GITHUB_ACTIONS"))
     {
         GTEST_SKIP();
     }

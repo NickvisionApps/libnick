@@ -19,11 +19,11 @@ namespace Nickvision::System
 {
     DeploymentMode Environment::getDeploymentMode()
     {
-        if(std::filesystem::exists("./flatpak-info"))
+        if(hasVariable("container"))
         {
             return DeploymentMode::Flatpak;
         }
-        else if(!getVariable("SNAP").empty())
+        else if(hasVariable("SNAP"))
         {
             return DeploymentMode::Snap;
         }
@@ -74,6 +74,11 @@ namespace Nickvision::System
         catch(...) { }
 #endif
         return "";
+    }
+
+    bool Environment::hasVariable(const std::string& key)
+    {
+        return std::getenv(key.c_str());
     }
 
     std::string Environment::getVariable(const std::string& key)

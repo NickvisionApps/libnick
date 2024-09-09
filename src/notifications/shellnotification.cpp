@@ -45,7 +45,7 @@ namespace Nickvision::Notifications
             GNotification* notification{ g_notification_new(e.getTitle().c_str()) };
             GIcon* icon{ nullptr };
             GFile* fileIcon{ nullptr };
-            if (Environment::getVariable("SNAP").empty())
+            if (!Environment::hasVariable("SNAP"))
             {
                 std::string name{ appId + "-symbolic" };
                 icon = g_themed_icon_new(name.c_str());

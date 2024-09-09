@@ -55,7 +55,7 @@ TEST_F(SystemTest, Exec)
 TEST_F(SystemTest, InhibitSuspend)
 {
 #ifdef __linux__
-    if(!Environment::getVariable("GITHUB_ACTIONS").empty())
+    if(Environment::hasVariable("GITHUB_ACTIONS"))
     {
         GTEST_SKIP();
     }
@@ -67,7 +67,7 @@ TEST_F(SystemTest, InhibitSuspend)
 TEST_F(SystemTest, UninhibitSuspend)
 {
 #ifdef __linux__
-    if(!Environment::getVariable("GITHUB_ACTIONS").empty())
+    if(Environment::hasVariable("GITHUB_ACTIONS"))
     {
         GTEST_SKIP();
     }

@@ -35,7 +35,7 @@ TEST_F(KeyringTest, Create)
 {
     ASSERT_NO_THROW(m_keyring = std::make_unique<Keyring>(KEYRING_NAME));
 #ifdef __APPLE__
-    if(Environment::getVariable("GITHUB_ACTIONS").empty())
+    if(!Environment::hasVariable("GITHUB_ACTIONS"))
     {
         ASSERT_TRUE(m_keyring->isSavingToDisk());
     }

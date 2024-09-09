@@ -68,6 +68,12 @@ namespace Nickvision::System::Environment
      */
     std::string getLocaleName();
     /**
+     * @brief Checks if an environment variable exists.
+     * @param key The environment variable to check
+     * @return True if the environment variable exists, else false
+     */
+    bool hasVariable(const std::string& key);
+    /**
      * @brief Gets the value of an environment variable.
      * @param key The environment variable to get
      * @return The environment variable value if found, else empty string
