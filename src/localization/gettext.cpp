@@ -9,7 +9,7 @@ using namespace Nickvision::System;
 
 namespace Nickvision::Localization
 {
-    static std::string m_domainName;
+    static std::string s_domainName;
 
     bool Gettext::init(const std::string& domainName)
     {
@@ -18,14 +18,14 @@ namespace Nickvision::Localization
         {
             bool res{ true };
             setlocale(LC_ALL, "");
-            m_domainName = StringHelpers::lower(StringHelpers::replace(domainName, " ", ""));
+            s_domainName = StringHelpers::lower(StringHelpers::replace(domainName, " ", ""));
 #ifdef _WIN32
-            res = res && (wbindtextdomain(m_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
+            res = res && (wbindtextdomain(s_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
 #else
-            res = res && (bindtextdomain(m_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
-            res = res && (bind_textdomain_codeset(m_domainName.c_str(), "UTF-8") != nullptr);
+            res = res && (bindtextdomain(s_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
+            res = res && (bind_textdomain_codeset(s_domainName.c_str(), "UTF-8") != nullptr);
 #endif
-            res = res && (textdomain(m_domainName.c_str()) != nullptr);
+            res = res && (textdomain(s_domainName.c_str()) != nullptr);
             initialized = true;
             return res;
         }
@@ -34,12 +34,12 @@ namespace Nickvision::Localization
 
     const std::string& Gettext::getDomainName()
     {
-        return m_domainName;
+        return s_domainName;
     }
 
     const char* Gettext::pgettext(const char* context, const char* msg)
     {
-        const char* translation{ dcgettext(m_domainName.c_str(), context, LC_MESSAGES) };
+        const char* translation{ dcgettext(s_domainName.c_str(), context, LC_MESSAGES) };
         if (translation == context)
         {
             return msg;
@@ -49,7 +49,7 @@ namespace Nickvision::Localization
 
     const char* Gettext::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n)
     {
-        const char* translation{ dcngettext(m_domainName.c_str(), context, msgPlural, n, LC_MESSAGES) };
+        const char* translation{ dcngettext(s_domainName.c_str(), context, msgPlural, n, LC_MESSAGES) };
         if (translation == context || translation == msgPlural)
         {
             return n == 1 ? msg : msgPlural;
