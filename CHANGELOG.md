@@ -1,5 +1,14 @@
 # Changelog
 
+## 2024.10.0
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### Localization
+- Fixed an issue where translated strings did not show UTF-8 characters correctly on Windows
+
 ## 2024.9.2
 ### Breaking Changes
 None

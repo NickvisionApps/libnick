@@ -23,8 +23,8 @@ namespace Nickvision::Localization
             res = res && (wbindtextdomain(s_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
 #else
             res = res && (bindtextdomain(s_domainName.c_str(), Environment::getExecutableDirectory().c_str()) != nullptr);
-            res = res && (bind_textdomain_codeset(s_domainName.c_str(), "UTF-8") != nullptr);
 #endif
+            res = res && (bind_textdomain_codeset(s_domainName.c_str(), "UTF-8") != nullptr);
             res = res && (textdomain(s_domainName.c_str()) != nullptr);
             initialized = true;
             return res;
