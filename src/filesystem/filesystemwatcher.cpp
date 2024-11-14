@@ -7,6 +7,17 @@
 #include <sys/inotify.h>
 #endif
 
+#ifdef __APPLE__
+#include <AvailabilityMacros.h>
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
+    // Only available in 10.7+
+    #define kFSEventStreamCreateFlagFileEvents 0x00000010
+    #define kFSEventStreamEventFlagItemCreated 0x00000100
+    #define kFSEventStreamEventFlagItemRemoved 0x00000200
+    #define kFSEventStreamEventFlagItemRenamed 0x00000800
+#endif
+#endif
+
 namespace Nickvision::Filesystem
 {
     FileSystemWatcher::FileSystemWatcher(const std::filesystem::path& path, bool incudeSubdirectories, WatcherFlags watcherFlags)
