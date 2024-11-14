@@ -3,6 +3,8 @@
 #include <windows.h>
 #elif defined(__linux__)
 #include <gio/gio.h>
+#elif defined(__APPLE__)
+#include <AvailabilityMacros.h>
 #endif
 
 namespace Nickvision::System
@@ -77,11 +79,15 @@ namespace Nickvision::System
         g_variant_unref(result);
         g_object_unref(proxy);
 #elif defined(__APPLE__)
+    #if MAC_OS_X_VERSION_MIN_REQUIRED > 1060
         IOReturn result{ IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleSystemSleep, kIOPMAssertionLevelOn, CFSTR("Nickvision preventing suspend"), &m_cookie) };
         if(result != kIOReturnSuccess)
         {
             return false;
         }
+    #else
+        return false;
+    #endif
 #endif
         m_inhibiting = true;
         return true;
