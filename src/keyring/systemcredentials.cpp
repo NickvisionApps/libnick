@@ -5,18 +5,18 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <wincred.h>
-#elif defined(__linux__)
-#include <libsecret/secret.h>
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) && !defined(APPLE_USE_LIBSECRET)
 #include <CoreFoundation/CoreFoundation.h>
 #include <Security/Security.h>
+#else
+#include <libsecret/secret.h>
 #endif
 
 using namespace Nickvision::Helpers;
 
 namespace Nickvision::Keyring
 {
-#ifdef __linux__
+#if !defined(_WIN32) && (!defined(__APPLE__) || defined(APPLE_USE_LIBSECRET))
     static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.libnick", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
 #endif
 
@@ -37,20 +37,7 @@ namespace Nickvision::Keyring
                 return Credential{ StringHelpers::str(credName), StringHelpers::str(credUrl), StringHelpers::str(credUsername), StringHelpers::str(credPassword) };
             }
         }
-#elif defined(__linux__)
-        GError* error{ nullptr };
-        char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), nullptr) };
-        if (!error && password)
-        {
-            Credential c{ name, "", "default", password };
-            secret_password_free(password);
-            return c;
-        }
-        if (error)
-        {
-            g_error_free(error);
-        }
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) && !defined(APPLE_USE_LIBSECRET)
         CFStringRef nameRef{ CFStringCreateWithCString(nullptr, name.c_str(), kCFStringEncodingUTF8) };
         CFMutableDictionaryRef query{ CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
         CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
@@ -86,6 +73,19 @@ namespace Nickvision::Keyring
         }
         CFRelease(query);
         CFRelease(nameRef);
+#else
+        GError* error{ nullptr };
+        char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), nullptr) };
+        if (!error && password)
+        {
+            Credential c{ name, "", "default", password };
+            secret_password_free(password);
+            return c;
+        }
+        if (error)
+        {
+            g_error_free(error);
+        }
 #endif
         return std::nullopt;
     }
@@ -123,16 +123,7 @@ namespace Nickvision::Keyring
         cred.CredentialBlobSize = static_cast<unsigned long>(password.size() * sizeof(wchar_t));
         cred.CredentialBlob = LPBYTE(password.c_str());
         return CredWriteW(&cred, 0);
-#elif defined(__linux__)
-        GError* error{ nullptr };
-        secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), nullptr);
-        if (error)
-        {
-            g_error_free(error);
-            return false;
-        }
-        return true;
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) && !defined(APPLE_USE_LIBSECRET)
         CFStringRef name{ CFStringCreateWithCString(nullptr, credential.getName().c_str(), kCFStringEncodingUTF8) };
         CFStringRef uri{ CFStringCreateWithCString(nullptr, credential.getUri().c_str(), kCFStringEncodingUTF8) };
         CFStringRef username{ CFStringCreateWithCString(nullptr, credential.getUsername().c_str(), kCFStringEncodingUTF8) };
@@ -153,6 +144,15 @@ namespace Nickvision::Keyring
         CFRelease(name);
         CFRelease(query);
         return status == errSecSuccess;
+#else
+        GError* error{ nullptr };
+        secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), nullptr);
+        if (error)
+        {
+            g_error_free(error);
+            return false;
+        }
+        return true;
 #endif
     }
 
@@ -183,25 +183,7 @@ namespace Nickvision::Keyring
             CredFree(cred);
             return res;
         }
-#elif defined(__linux__)
-        GError* error{ nullptr };
-        char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), nullptr) };
-        if (!error && password)
-        {
-            secret_password_free(password);
-            secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), nullptr);
-            if (error)
-            {
-                g_error_free(error);
-                return false;
-            }
-            return true;
-        }
-        if (error)
-        {
-            g_error_free(error);
-        }
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) && !defined(APPLE_USE_LIBSECRET)
         CFStringRef name{ CFStringCreateWithCString(nullptr, credential.getName().c_str(), kCFStringEncodingUTF8) };
         CFMutableDictionaryRef query{ CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
         CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
@@ -233,6 +215,24 @@ namespace Nickvision::Keyring
         }
         CFRelease(query);
         CFRelease(name);
+#else
+        GError* error{ nullptr };
+        char* password{ secret_password_lookup_sync(&KEYRING_SCHEMA, nullptr, &error, "application", credential.getName().c_str(), nullptr) };
+        if (!error && password)
+        {
+            secret_password_free(password);
+            secret_password_store_sync(&KEYRING_SCHEMA, SECRET_COLLECTION_DEFAULT, credential.getName().c_str(), credential.getPassword().c_str(), nullptr, &error, "application", credential.getName().c_str(), nullptr);
+            if (error)
+            {
+                g_error_free(error);
+                return false;
+            }
+            return true;
+        }
+        if (error)
+        {
+            g_error_free(error);
+        }
 #endif
         return false;
     }
@@ -242,7 +242,16 @@ namespace Nickvision::Keyring
 #ifdef _WIN32
         std::wstring wName{ StringHelpers::wstr(name) };
         return CredDeleteW(wName.c_str(), CRED_TYPE_GENERIC, 0);
-#elif defined(__linux__)
+#elif defined(__APPLE__) && !defined(APPLE_USE_LIBSECRET)
+        CFStringRef nameRef{ CFStringCreateWithCString(nullptr, name.c_str(), kCFStringEncodingUTF8) };
+        CFMutableDictionaryRef query{ CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
+        CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
+        CFDictionaryAddValue(query, kSecAttrService, nameRef);
+        OSStatus status{ SecItemDelete(query) };
+        CFRelease(query);
+        CFRelease(nameRef);
+        return status == errSecSuccess;
+#else
         GError* error{ nullptr };
         bool res{ secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), nullptr) };
         if (!error)
@@ -254,15 +263,6 @@ namespace Nickvision::Keyring
             g_error_free(error);
         }
         return false;
-#elif defined(__APPLE__)
-        CFStringRef nameRef{ CFStringCreateWithCString(nullptr, name.c_str(), kCFStringEncodingUTF8) };
-        CFMutableDictionaryRef query{ CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) };
-        CFDictionaryAddValue(query, kSecClass, kSecClassGenericPassword);
-        CFDictionaryAddValue(query, kSecAttrService, nameRef);
-        OSStatus status{ SecItemDelete(query) };
-        CFRelease(query);
-        CFRelease(nameRef);
-        return status == errSecSuccess;
 #endif
     }
 }
