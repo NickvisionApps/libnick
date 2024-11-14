@@ -1,5 +1,6 @@
 #include "app/interprocesscommunicator.h"
 #include <cstdlib>
+#include <cstring>
 #include <stdexcept>
 #include "helpers/stringhelpers.h"
 #ifndef _WIN32
