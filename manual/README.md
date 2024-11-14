@@ -6,14 +6,13 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.10.0
+## 2024.11.0
 ### Breaking Changes
-None
+- Added the `USE_LIBSECRET` cmake option that can be specified on macOS systems to use `libsecret` for credential management instead of macOS Keychain APIs
 ### New APIs
 None
 ### Fixes
-#### Localization
-- Fixed an issue where translated strings did not show UTF-8 characters correctly on Windows
+- Fixed compilation issues for older macOS systems
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

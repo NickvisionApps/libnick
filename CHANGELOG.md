@@ -1,5 +1,13 @@
 # Changelog
 
+## 2024.11.0
+### Breaking Changes
+- Added the `USE_LIBSECRET` cmake option that can be specified on macOS systems to use `libsecret` for credential management instead of macOS Keychain APIs
+### New APIs
+None
+### Fixes
+- Fixed compilation issues for older macOS systems
+
 ## 2024.10.0
 ### Breaking Changes
 None
