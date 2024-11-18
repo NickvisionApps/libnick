@@ -253,7 +253,7 @@ namespace Nickvision::Keyring
         return status == errSecSuccess;
 #else
         GError* error{ nullptr };
-        bool res{ secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), nullptr) };
+        bool res{ static_cast<bool>(secret_password_clear_sync(&KEYRING_SCHEMA, nullptr, &error, "application", name.c_str(), nullptr)) };
         if (!error)
         {
             return res;
