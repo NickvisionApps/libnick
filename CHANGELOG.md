@@ -1,11 +1,13 @@
 # Changelog
 
-## 2024.12.0 (next)
+## 2024.12.0
 ### Breaking Changes
 None
 ### New APIs
 None
 ### Fixes
+#### Notifications
+- Fixed an issue where `ShellNotification::send()` did not work on non-GTK linux applications
 #### System
 - Fixed an issue where `Environment::getExecutableDirectory()` did not return the correct path on macOS
 
