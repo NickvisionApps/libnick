@@ -31,7 +31,7 @@ namespace Nickvision::Notifications
             icon->notify(e);
             std::thread t{ [icon]()
             { 
-                std::this_thread::sleep_for(std::chrono::seconds(5));
+                std::this_thread::sleep_for(std::chrono::seconds(10));
                 delete icon;
             } };
             t.detach();
@@ -40,6 +40,15 @@ namespace Nickvision::Notifications
 #elif defined(__linux__)
     void ShellNotification::send(const ShellNotificationSentEventArgs& e, const std::string& appId, const std::string& openText)
     {
+        std::string iconPath;
+        if(!Environment::hasVariable("SNAP"))
+        {
+            iconPath = appId + "-symbolic";
+        }
+        else
+        {
+            iconPath = Environment::getVariable("SNAP") + "/usr/share/icons/hicolor/symbolic/apps/" + appId + "-symbolic.svg";
+        }
         if (g_application_get_default())
         {
             GNotification* notification{ g_notification_new(e.getTitle().c_str()) };
@@ -47,13 +56,11 @@ namespace Nickvision::Notifications
             GFile* fileIcon{ nullptr };
             if (!Environment::hasVariable("SNAP"))
             {
-                std::string name{ appId + "-symbolic" };
-                icon = g_themed_icon_new(name.c_str());
+                icon = g_themed_icon_new(iconPath.c_str());
             }
             else
             {
-                std::string path{ Environment::getVariable("SNAP") + "/usr/share/icons/hicolor/symbolic/apps/" + appId + "-symbolic.svg"};
-                fileIcon = g_file_new_for_path(path.c_str());
+                fileIcon = g_file_new_for_path(iconPath.c_str());
                 icon = g_file_icon_new(fileIcon);
             }
             g_notification_set_body(notification, e.getMessage().c_str());
@@ -81,6 +88,21 @@ namespace Nickvision::Notifications
             }
             g_object_unref(G_OBJECT(icon));
             g_object_unref(G_OBJECT(notification));
+        }
+        else
+        {
+            GDBusConnection* connection{ g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr) };
+            if(connection)
+            {
+                GVariant* params{ g_variant_new("(susssasa{sv}i)", appId.c_str(), 0, iconPath.c_str(), e.getTitle().c_str(), e.getMessage().c_str(), nullptr, nullptr, -1) };
+                GVariant* result{ g_dbus_connection_call_sync(connection, "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify", params, nullptr, G_DBUS_CALL_FLAGS_NONE, -1, nullptr, nullptr) };
+                if(result)
+                {
+                    g_variant_unref(result);
+                }
+                g_variant_unref(params);
+                g_object_unref(G_OBJECT(connection));
+            }
         }
     }
 #elif defined(__APPLE__)
