@@ -42,8 +42,9 @@ namespace Nickvision::Notifications::ShellNotification
 #elif defined(__linux__)
     /**
      * @brief Sends a notification to the shell.
-     * @brief Uses Gio.Notification on Linux.
-     * @brief Supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event.
+     * @brief Uses Gio.Notification on GTK applications.
+     * @brief Uses FreeDesktop Notifications on non-GTK applications.
+     * @brief Supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event. (GTK applications only)
      * @param e ShellNotificationSentEventArgs
      * @param appId The application's id
      * @param openText Localized text of "Open"
@@ -52,7 +53,6 @@ namespace Nickvision::Notifications::ShellNotification
 #elif defined(__APPLE__)
     /**
      * @brief Sends a notification to the shell.
-     * @brief Uses NSUserNotification on macOS.
      * @param e ShellNotificationSentEventArgs
      */
     void send(const ShellNotificationSentEventArgs& e);

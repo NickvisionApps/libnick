@@ -6,20 +6,23 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2024.11.1
+## 2024.12.0
 ### Breaking Changes
 None
 ### New APIs
 None
 ### Fixes
-- Fixed compilation issues for older macOS systems
+#### Notifications
+- Fixed an issue where `ShellNotification::send()` did not work on non-GTK linux applications
+#### System
+- Fixed an issue where `Environment::getExecutableDirectory()` did not return the correct path on macOS
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
 
 ### All Platforms
+- boost-json
 - gtest
-- jsoncpp
 - libcurl
 - libintl
 - maddy
@@ -32,14 +35,13 @@ The above dependencies must be installed, *plus* the following for Windows syste
 The above dependencies must be installed, *plus* the following for Linux systems:
 - glib
 - libsecret
-- libuuid
 - openssl
     - Used for sqlcipher, as libnick manually builds sqlcipher on Linux as the vcpkg port is broken.
 
 ### macOS
 The above dependencies must be installed, *plus* the following for macOS systems:
 - glib
-- libsecret
+- libsecret (Only required if `-DUSE_LIBSECRET="ON"`)
 - openssl
     - Used for sqlcipher, as libnick manually builds sqlcipher on macOS as the vcpkg port is broken.
 
@@ -67,16 +69,16 @@ A C++20 compiler is also required to build libnick.
 1. Set the `VCPKG_ROOT` environment variable to the path of your vcpkg installation's root directory.
 #### Windows
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-windows`
-1. Run `vcpkg install curl gettext-libintl gtest jsoncpp maddy sqlcipher`
+1. Run `vcpkg install boost-json curl gettext-libintl gtest maddy sqlcipher`
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret libuuid maddy openssl`
+1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
 #### macOS (Intel)
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-osx`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl`
+1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
 #### macOS (Apple Silicon)
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `arm64-osx`
-1. Run `vcpkg install curl gettext-libintl glib gtest jsoncpp libsecret maddy openssl`
+1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
 
 ### Building
 1. First, clone/download the repo.
@@ -97,6 +99,7 @@ A C++20 compiler is also required to build libnick.
 #### macOS
 1. From the `build` folder, run `cmake .. -DCMAKE_BUILD_TYPE=Release`.
     - To skip building libnick's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
+    - To use `libsecret` instead of macOS's built in security library, add `-DUSE_LIBSECRET="ON"` to the end of the command.
     - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
 1. From the `build` folder, run `cmake --build .`.
 1. After these commands complete, libnick will be successfully built and its binaries can be found in the `build` folder.

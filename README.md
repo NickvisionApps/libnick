@@ -34,7 +34,7 @@ The above dependencies must be installed, *plus* the following for Linux systems
 ### macOS
 The above dependencies must be installed, *plus* the following for macOS systems:
 - glib
-- libsecret
+- libsecret (Only required if `-DUSE_LIBSECRET="ON"`)
 - openssl
     - Used for sqlcipher, as libnick manually builds sqlcipher on macOS as the vcpkg port is broken.
 
@@ -92,6 +92,7 @@ A C++20 compiler is also required to build libnick.
 #### macOS
 1. From the `build` folder, run `cmake .. -DCMAKE_BUILD_TYPE=Release`.
     - To skip building libnick's test suite, add `-DBUILD_TESTING="OFF"` to the end of the command.
+    - To use `libsecret` instead of macOS's built in security library, add `-DUSE_LIBSECRET="ON"` to the end of the command.
     - If you plan to install libnick, add `-DCMAKE_INSTALL_PREFIX=PATH_TO_INSTALL_DIR` to the end of the command, replacing `PATH_TO_INSTALL_DIR` with the path of where you'd like libnick to install to.
 1. From the `build` folder, run `cmake --build .`.
 1. After these commands complete, libnick will be successfully built and its binaries can be found in the `build` folder.
