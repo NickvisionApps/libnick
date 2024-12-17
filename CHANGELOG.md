@@ -6,7 +6,8 @@ None
 ### New APIs
 None
 ### Fixes
-None
+#### System
+- Fixed an issue where `Environment::getExecutableDirectory()` did not return the correct path on macOS
 
 ## 2024.11.1
 ### Breaking Changes

@@ -8,8 +8,8 @@
 #ifdef _WIN32
 #include <windows.h>
 #elif defined(__APPLE__)
-#include <libproc.h>
-#include <unistd.h>
+#include <mach-o/dyld.h>
+#include <sys/syslimits.h>
 #endif
 
 using namespace Nickvision::App;
@@ -47,11 +47,11 @@ namespace Nickvision::System
 #elif defined(__linux__)
         executableDirectory = std::filesystem::canonical("/proc/self/exe").parent_path();
 #elif defined(__APPLE__)
-        char pth[PROC_PIDPATHINFO_MAXSIZE];
-        int len{ proc_pidpath(getpid(), pth, sizeof(pth)) };
-        if(len > 0)
+        char path[PATH_MAX+1];
+        uint32_t size{ sizeof(path) };
+        if(_NSGetExecutablePath(path, &size) == 0)
         {
-            executableDirectory = std::filesystem::path(std::string(pth, len)).parent_path();
+            executableDirectory = std::filesystem::canonical(path).parent_path();
         }
 #endif
         return executableDirectory;

@@ -12,7 +12,8 @@ None
 ### New APIs
 None
 ### Fixes
-None
+#### System
+- Fixed an issue where `Environment::getExecutableDirectory()` did not return the correct path on macOS
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
