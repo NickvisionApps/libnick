@@ -46,7 +46,7 @@ namespace Nickvision::Filesystem
         std::string line;
         while (std::getline(dirs, line))
         {
-            if (line[0] == '#' || line.empty())
+            if (line.empty() || line[0] == '#')
             {
                 continue;
             }

@@ -23,9 +23,9 @@ namespace Nickvision::App
         {
             std::ifstream in{ m_path };
             boost::json::stream_parser parser;
-            std::string line;
             try
             {
+                std::string line;
                 while(std::getline(in, line))
                 {
                     parser.write(line);

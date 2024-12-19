@@ -15,7 +15,7 @@ namespace Nickvision::Network
 
     static int progressCallback(void* data, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
     {
-        CurlProgressFunction& func{ *(static_cast<CurlProgressFunction*>(data)) };
+        const CurlProgressFunction& func{ *(static_cast<CurlProgressFunction*>(data)) };
         return func(dltotal, dlnow, ultotal, ulnow);
     }
 
