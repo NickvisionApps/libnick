@@ -78,7 +78,7 @@ namespace Nickvision::Database
 
     std::string SqlStatement::getColumnString(int index) const
     {
-        return { reinterpret_cast<const char*>(sqlite3_column_text(m_statement.get(), index), static_cast<size_t>(sqlite3_column_bytes(m_statement.get(), index))) };
+        return { (const char*)sqlite3_column_text(m_statement.get(), index), static_cast<size_t>(sqlite3_column_bytes(m_statement.get(), index)) };
     }
 
     std::pair<const void*, size_t> SqlStatement::getColumnBlob(int index) const

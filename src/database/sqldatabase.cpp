@@ -181,7 +181,7 @@ namespace Nickvision::Database
         return sqlite3_create_function(m_database.get(), name.c_str(), expectedArgs, SQLITE_UTF8, &m_custom[name], +[](sqlite3_context* ctx, int argc, sqlite3_value** argv)
         {
             SqlContext context{ ctx, argc, argv };
-            const SqliteCustomFunction& func{ *(static_cast<SqliteCustomFunction*>(context.getUserData())) };
+            SqliteCustomFunction& func{ *(static_cast<SqliteCustomFunction*>(context.getUserData())) };
             func(context);
         }, nullptr, nullptr) == SQLITE_OK;
     }

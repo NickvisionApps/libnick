@@ -30,7 +30,7 @@ namespace Nickvision::Database
 
     std::string SqlValue::getString() const
     {
-        return { reinterpret_cast<const char*>(sqlite3_value_text(m_value), static_cast<size_t>(sqlite3_value_bytes(m_value))) };
+        return { (const char*)sqlite3_value_text(m_value), static_cast<size_t>(sqlite3_value_bytes(m_value)) };
     }
 
     std::pair<const void*, size_t> SqlValue::getBlob() const

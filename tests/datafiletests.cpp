@@ -97,7 +97,7 @@ std::shared_ptr<DataFileManager> DataFileTest::m_manager{ nullptr };
 
 TEST_F(DataFileTest, EnsureDefaultAppConfig)
 {
-    const AppConfig& config{ m_manager->get<AppConfig>("config") };
+    AppConfig& config{ m_manager->get<AppConfig>("config") };
     WindowGeometry geometry{ config.getWindowGeometry() };
     ASSERT_EQ(config.getTheme(), Theme::System);
     ASSERT_EQ(geometry.getWidth(), 800);
@@ -116,7 +116,7 @@ TEST_F(DataFileTest, ChangeAppConfig1)
 
 TEST_F(DataFileTest, EnsureChangeInAppConfig)
 {
-    const AppConfig& config{ m_manager->get<AppConfig>("config") };
+    AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_EQ(config.getTheme(), Theme::Light);
     WindowGeometry geometry{ config.getWindowGeometry() };
     ASSERT_EQ(geometry.getWidth(), 1920);
@@ -133,7 +133,7 @@ TEST_F(DataFileTest, ChangeAppConfig2)
 
 TEST_F(DataFileTest, EnsureChangeInAppConfig2)
 {
-    const AppConfig& config{ m_manager->get<AppConfig>("config") };
+    AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
 }
 
@@ -141,7 +141,7 @@ TEST_F(DataFileTest, ReloadConfig)
 {
     m_manager.reset();
     m_manager = std::make_shared<DataFileManager>("Nickvision Aura Tests");
-    const AppConfig& config{ m_manager->get<AppConfig>("config") };
+    AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_EQ(config.getTheme(), Theme::Light);
     WindowGeometry geometry{ config.getWindowGeometry() };
     ASSERT_EQ(geometry.getWidth(), 1920);
