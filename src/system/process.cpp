@@ -157,7 +157,7 @@ namespace Nickvision::System
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
-        //child
+        //Child
         else if(m_pid == 0)
         {
             //Create process arguments

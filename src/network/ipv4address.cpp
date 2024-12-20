@@ -45,6 +45,11 @@ namespace Nickvision::Network
         return m_fourth;
     }
 
+    unsigned long IPv4Address::getNetworkByteOrder() const
+    {
+        return (static_cast<unsigned long>(m_first) << 24) | (static_cast<unsigned long>(m_second) << 16) | (static_cast<unsigned long>(m_third) << 8) | static_cast<unsigned long>(m_fourth);
+    }
+
     std::string IPv4Address::str() const
     {
         return std::to_string(static_cast<int>(m_first)) + "." + std::to_string(static_cast<int>(m_second)) + "." + std::to_string(static_cast<int>(m_third)) + "." + std::to_string(static_cast<int>(m_fourth));
@@ -52,6 +57,10 @@ namespace Nickvision::Network
 
     std::optional<IPv4Address> IPv4Address::parse(const std::string& address)
     {
+        if(address == "localhost")
+        {
+            return IPv4Address{ 127, 0, 0, 1 };
+        }
         std::vector<std::string> parts{ StringHelpers::split(address, ".") };
         if(parts.size() != 4)
         {
