@@ -35,8 +35,7 @@ namespace Nickvision::Network
     Socket::Socket(SocketPurpose purpose, SocketType type, AddressFamily family, const std::string& address, int port)
         : m_purpose{ purpose },
         m_type{ type },
-        m_family{ family },
-        m_child{ -1 }
+        m_family{ family }
     {
 #ifdef _WIN32
         //Check if winsock is initalized
@@ -51,24 +50,20 @@ namespace Nickvision::Network
             winsockInitialized = true;
         }
 #endif
-        //Create the socket
-        m_socket = socket(static_cast<int>(family), static_cast<int>(type), 0);
-        if(!isSocketValid(m_socket))
-        {
-            throw std::runtime_error("Unable to create socket");
-        }
         //Create the address struct
+        int addrLength;
         switch(m_family)
         {
 #ifndef _WIN32
             case AddressFamily::Unix:
             {
-                std::string path{ "/tmp/" + address };
-                path.resize(MAX_UNIX_PATH_LENGTH);
+                m_domainPath =  "/tmp/" + address;
+                m_domainPath.resize(MAX_UNIX_PATH_LENGTH);
                 struct sockaddr_un* addr = new struct sockaddr_un();
                 addr->sun_family = static_cast<sa_family_t>(family);
-                strcpy(addr->sun_path, path.c_str());
+                strcpy(addr->sun_path, m_domainPath.c_str());
                 m_address = reinterpret_cast<struct sockaddr*>(addr);
+                addrLength = sizeof(struct sockaddr_un);
                 break;
             }
 #endif
@@ -91,18 +86,35 @@ namespace Nickvision::Network
                 addr->sin_addr.s_addr = ipv4->getNetworkByteOrder();
 #endif
                 m_address = reinterpret_cast<struct sockaddr*>(addr);
+                addrLength = sizeof(struct sockaddr_in);
                 break;
             }
+        }
+        //Create the socket
+        m_socket = socket(static_cast<int>(family), static_cast<int>(type), 0);
+        if(!isSocketValid(m_socket))
+        {
+            throw std::runtime_error("Unable to create socket");
         }
         //Bind and listen if server socket
         if(m_purpose == SocketPurpose::Server)
         {
-            if(bind(m_socket, m_address, sizeof(m_address)) != 0)
+            if(bind(m_socket, m_address, addrLength) != 0)
             {
-                throw std::runtime_error("Unable to bind socket");
+#ifdef _WIN32
+                closesocket(m_socket);
+#else
+                close(m_socket);
+#endif
+                throw std::logic_error("Unable to bind socket. Server already exists");
             }
             if(listen(m_socket, BACKLOG) != 0)
             {
+#ifdef _WIN32
+                closesocket(m_socket);
+#else
+                close(m_socket);
+#endif
                 throw std::runtime_error("Unable to listen on socket");
             }
         }
@@ -117,6 +129,7 @@ namespace Nickvision::Network
         closesocket(m_socket);
 #else
         close(m_socket);
+        unlink(m_domainPath.c_str());
 #endif
         //Cleanup the address struct
         if(m_address)

@@ -28,9 +28,10 @@ namespace Nickvision::Network
          * @param family The AddressFamily of the socket
          * @param address The address to bind/connect the socket to
          * @param port The port to bind/connect the socket to (Ignored when AddressFamily::Unix is used)
-         * @throw std::runtime_error Thrown on Windows if winsock cannot be initalized
-         * @throw std::runtime_error Thrown if the socket cannot be created, binded, or listened on
          * @throw std::invalid_argument Thrown if the address is invalid
+         * @throw std::logic_error Thrown if the socket cannot be binded to (i.e. A server socket already exists)
+         * @throw std::runtime_error Thrown on Windows if winsock cannot be initalized
+         * @throw std::runtime_error Thrown if the socket cannot be created or listened
          */
         Socket(SocketPurpose purpose, SocketType type, AddressFamily family, const std::string& address, int port);
         /**
@@ -74,15 +75,13 @@ namespace Nickvision::Network
         SocketPurpose m_purpose;
         SocketType m_type;
         AddressFamily m_family;
-#ifdef _WIN32
-        SOCKET m_socket;
-#else
-        int m_socket;
-#endif
         struct sockaddr* m_address;
 #ifdef _WIN32
+        SOCKET m_socket;
         SOCKET m_child;
 #else
+        std::string m_domainPath;
+        int m_socket;
         int m_child;
 #endif
     };
