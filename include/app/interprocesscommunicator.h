@@ -23,6 +23,7 @@
 #ifndef INTERPROCESSCOMMUNICATOR_H
 #define INTERPROCESSCOMMUNICATOR_H
 
+#include <memory>
 #include <string>
 #include <thread>
 #include <vector>
@@ -31,7 +32,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #else
-#include <sys/un.h>
+#include "network/socket.h"
 #endif
 
 namespace Nickvision::App
@@ -86,12 +87,12 @@ namespace Nickvision::App
         bool m_serverRunning;
         Events::Event<Events::ParamEventArgs<std::vector<std::string>>> m_commandReceived;
         std::thread m_server;
-        std::string m_path;
 #ifdef _WIN32
+        std::wstring m_path;
         HANDLE m_serverPipe;
 #else
-        struct sockaddr_un m_sockaddr;
-        int m_serverSocket;
+        std::string m_id;
+        std::unique_ptr<Network::Socket> m_serverSocket;
 #endif
     };
 }
