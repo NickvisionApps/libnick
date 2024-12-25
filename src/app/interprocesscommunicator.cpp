@@ -112,14 +112,12 @@ namespace Nickvision::App
 #else
             Socket connectionSocket{ SocketPurpose::Client, SocketType::Stream, AddressFamily::Unix, m_id, 0 };
 #endif
-            if(connectionSocket.connect())
+            if(!connectionSocket.connect())
             {
                 return false;
             }
-            for(const std::string& arg : args)
-            {
-                connectionSocket.sendMessage(arg);
-            }
+            std::string msg{ StringHelpers::join(args, "\n") };
+            connectionSocket.sendMessage(msg);
 #endif
         }
         if (exitIfClient)
@@ -160,7 +158,10 @@ namespace Nickvision::App
                     std::string message{ m_serverSocket->receiveMessage() };
                     if(!message.empty())
                     {
-                        args.push_back(message);
+                        for(const std::string& arg : StringHelpers::split(message, "\n"))
+                        {
+                            args.push_back(arg);
+                        }
                     }
                     else
                     {

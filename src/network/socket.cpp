@@ -5,6 +5,7 @@
 #ifndef _WIN32
 #include <unistd.h>
 #include <netinet/in.h>
+#include <sys/socket.h>
 #include <sys/un.h>
 #endif
 #include "network/ipv4address.h"
@@ -35,7 +36,9 @@ namespace Nickvision::Network
     Socket::Socket(SocketPurpose purpose, SocketType type, AddressFamily family, const std::string& address, int port)
         : m_purpose{ purpose },
         m_type{ type },
-        m_family{ family }
+        m_family{ family },
+        m_address{ address },
+        m_port{ port }
     {
 #ifdef _WIN32
         //Check if winsock is initalized
@@ -50,56 +53,56 @@ namespace Nickvision::Network
             winsockInitialized = true;
         }
 #endif
+        //Create the socket
+        m_socket = socket(static_cast<int>(m_family), static_cast<int>(m_type), 0);
+        if(!isSocketValid(m_socket))
+        {
+            throw std::runtime_error("Unable to create socket");
+        }
         //Create the address struct
-        int addrLength;
+        int bindResult;
         switch(m_family)
         {
 #ifndef _WIN32
             case AddressFamily::Unix:
             {
-                m_domainPath =  "/tmp/" + address;
-                m_domainPath.resize(MAX_UNIX_PATH_LENGTH);
-                struct sockaddr_un* addr = new struct sockaddr_un();
-                addr->sun_family = static_cast<sa_family_t>(family);
-                strcpy(addr->sun_path, m_domainPath.c_str());
-                m_address = reinterpret_cast<struct sockaddr*>(addr);
-                addrLength = sizeof(struct sockaddr_un);
+                std::string domainPath{ "/tmp/" + m_address + ".socket" };
+                domainPath.resize(MAX_UNIX_PATH_LENGTH);
+                struct sockaddr_un address;
+                memset(&address, 0, sizeof(address));
+                address.sun_family = AF_UNIX;
+                strcpy(address.sun_path, domainPath.c_str());
+                bindResult = bind(m_socket, reinterpret_cast<const struct sockaddr*>(&address), sizeof(address));
                 break;
             }
 #endif
             case AddressFamily::IPv4:
             {
-                std::optional<IPv4Address> ipv4{ IPv4Address::parse(address) };
+                std::optional<IPv4Address> ipv4{ IPv4Address::parse(m_address) };
                 if(!ipv4)
                 {
                     throw std::invalid_argument("Invalid IPv4 Address");
                 }
-                struct sockaddr_in* addr = new struct sockaddr_in();
-                addr->sin_family = static_cast<sa_family_t>(family);
-                addr->sin_port = port;
+                struct sockaddr_in address;
+                memset(&address, 0, sizeof(address));
+                address.sin_family = AF_INET;
+                address.sin_port = m_port;
 #ifdef _WIN32
-                addr->sin_addr.S_un_b.s_b1 = ipv4->getFirst();
-                addr->sin_addr.S_un_b.s_b2 = ipv4->getSecond();
-                addr->sin_addr.S_un_b.s_b3 = ipv4->getThird();
-                addr->sin_addr.S_un_b.s_b4 = ipv4->getFourth();
+                address.sin_addr.S_un_b.s_b1 = ipv4->getFirst();
+                address.sin_addr.S_un_b.s_b2 = ipv4->getSecond();
+                address.sin_addr.S_un_b.s_b3 = ipv4->getThird();
+                address.sin_addr.S_un_b.s_b4 = ipv4->getFourth();
 #else
-                addr->sin_addr.s_addr = ipv4->getNetworkByteOrder();
+                address.sin_addr.s_addr = ipv4->getNetworkByteOrder();
 #endif
-                m_address = reinterpret_cast<struct sockaddr*>(addr);
-                addrLength = sizeof(struct sockaddr_in);
+                bindResult = bind(m_socket, reinterpret_cast<const struct sockaddr*>(&address), sizeof(address));
                 break;
             }
-        }
-        //Create the socket
-        m_socket = socket(static_cast<int>(family), static_cast<int>(type), 0);
-        if(!isSocketValid(m_socket))
-        {
-            throw std::runtime_error("Unable to create socket");
         }
         //Bind and listen if server socket
         if(m_purpose == SocketPurpose::Server)
         {
-            if(bind(m_socket, m_address, addrLength) != 0)
+            if(bindResult != 0)
             {
 #ifdef _WIN32
                 closesocket(m_socket);
@@ -129,27 +132,17 @@ namespace Nickvision::Network
         closesocket(m_socket);
 #else
         close(m_socket);
-        unlink(m_domainPath.c_str());
-#endif
-        //Cleanup the address struct
-        if(m_address)
+        if(m_family == AddressFamily::Unix)
         {
-            switch(m_family)
-            {
-#ifndef _WIN32
-            case AddressFamily::Unix:
-                delete reinterpret_cast<struct sockaddr_un*>(m_address);
-                break;
-#endif
-            case AddressFamily::IPv4:
-                delete reinterpret_cast<struct sockaddr_in*>(m_address);
-                break;
-            }
+            std::string domainPath{ "/tmp/" + m_address + ".socket" };
+            domainPath.resize(MAX_UNIX_PATH_LENGTH);
+            unlink(domainPath.c_str());
         }
+#endif
     }
 
     bool Socket::connect()
-    {
+    {        
         if(m_purpose == SocketPurpose::Server)
         {
 #ifdef _WIN32
@@ -161,11 +154,42 @@ namespace Nickvision::Network
         }
         else if(m_purpose == SocketPurpose::Client)
         {
-            if(::connect(m_socket, m_address, sizeof(m_address)) != 0)
+            switch(m_family)
             {
-                return false;
+#ifndef _WIN32
+                case AddressFamily::Unix:
+                {
+                    std::string domainPath{ "/tmp/" + m_address + ".socket" };
+                    domainPath.resize(MAX_UNIX_PATH_LENGTH);
+                    struct sockaddr_un address;
+                    memset(&address, 0, sizeof(address));
+                    address.sun_family = AF_UNIX;
+                    strcpy(address.sun_path, domainPath.c_str());
+                    return ::connect(m_socket, reinterpret_cast<const struct sockaddr*>(&address), sizeof(address)) == 0;
+                }
+#endif
+                case AddressFamily::IPv4:
+                {
+                    std::optional<IPv4Address> ipv4{ IPv4Address::parse(m_address) };
+                    if(!ipv4)
+                    {
+                        throw std::invalid_argument("Invalid IPv4 Address");
+                    }
+                    struct sockaddr_in address;
+                    memset(&address, 0, sizeof(address));
+                    address.sin_family = AF_INET;
+                    address.sin_port = m_port;
+#ifdef _WIN32
+                    address.sin_addr.S_un_b.s_b1 = ipv4->getFirst();
+                    address.sin_addr.S_un_b.s_b2 = ipv4->getSecond();
+                    address.sin_addr.S_un_b.s_b3 = ipv4->getThird();
+                    address.sin_addr.S_un_b.s_b4 = ipv4->getFourth();
+#else
+                    address.sin_addr.s_addr = ipv4->getNetworkByteOrder();
+#endif
+                    return ::connect(m_socket, reinterpret_cast<const struct sockaddr*>(&address), sizeof(address)) == 0;
+                }
             }
-            return true;
         }
         return false;
     }

@@ -6,8 +6,6 @@
 #include <vector>
 #ifdef _WIN32
 #include <Winsock2.h>
-#else
-#include <sys/socket.h>
 #endif
 #include "addressfamily.h"
 #include "socketpurpose.h"
@@ -75,12 +73,12 @@ namespace Nickvision::Network
         SocketPurpose m_purpose;
         SocketType m_type;
         AddressFamily m_family;
-        struct sockaddr* m_address;
+        std::string m_address;
+        int m_port;
 #ifdef _WIN32
         SOCKET m_socket;
         SOCKET m_child;
 #else
-        std::string m_domainPath;
         int m_socket;
         int m_child;
 #endif
