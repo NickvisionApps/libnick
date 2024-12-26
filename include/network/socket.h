@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 #ifdef _WIN32
 #include <Winsock2.h>
 #endif
@@ -22,10 +21,10 @@ namespace Nickvision::Network
         /**
          * @brief Constructs a Socket.
          * @param purpose The purpose of the socket
-         * @param type The SocketType of the socket
+         * @param type The SocketType of the socket (Ignored when AddressFamily::Pipe is used)
          * @param family The AddressFamily of the socket
          * @param address The address to bind/connect the socket to
-         * @param port The port to bind/connect the socket to (Ignored when AddressFamily::Unix is used)
+         * @param port The port to bind/connect the socket to (Ignored when AddressFamily::Unix or AddressFamily::Pipe is used)
          * @throw std::invalid_argument Thrown if the address is invalid
          * @throw std::logic_error Thrown if the socket cannot be binded to (i.e. A server socket already exists)
          * @throw std::runtime_error Thrown on Windows if winsock cannot be initalized
@@ -78,6 +77,7 @@ namespace Nickvision::Network
 #ifdef _WIN32
         SOCKET m_socket;
         SOCKET m_child;
+        HANDLE m_pipe;
 #else
         int m_socket;
         int m_child;

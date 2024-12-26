@@ -26,13 +26,9 @@
 #include <memory>
 #include <string>
 #include <thread>
-#include <vector>
 #include "events/event.h"
 #include "events/parameventargs.h"
 #include "network/socket.h"
-#ifdef _WIN32
-#include <windows.h>
-#endif
 
 namespace Nickvision::App
 {
@@ -83,16 +79,11 @@ namespace Nickvision::App
          * @brief Runs the IPC server loop.
          */
         void runServer();
-        bool m_serverRunning;
-        Events::Event<Events::ParamEventArgs<std::vector<std::string>>> m_commandReceived;
-        std::thread m_server;
-#ifdef _WIN32
-        std::wstring m_path;
-        HANDLE m_serverPipe;
-#else
         std::string m_id;
+        bool m_serverRunning;
         std::unique_ptr<Network::Socket> m_serverSocket;
-#endif
+        std::thread m_server;
+        Events::Event<Events::ParamEventArgs<std::vector<std::string>>> m_commandReceived;
     };
 }
 

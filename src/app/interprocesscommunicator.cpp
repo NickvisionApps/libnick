@@ -1,7 +1,5 @@
 #include "app/interprocesscommunicator.h"
-#include <cstdlib>
-#include <cstring>
-#include <stdexcept>
+#include <vector>
 #include "helpers/stringhelpers.h"
 
 using namespace Nickvision::Helpers;
@@ -10,31 +8,14 @@ using namespace Nickvision::Network;
 namespace Nickvision::App
 {
     InterProcessCommunicator::InterProcessCommunicator(const std::string& id)
-        : m_serverRunning{ false },
-#ifdef _WIN32
-        m_path{ L"\\\\.\\pipe\\" + StringHelpers::wstr(id) }
-#else
-        m_id{ id }
-#endif
+        : m_id{ id }, 
+        m_serverRunning{ false }
     {
-#ifdef _WIN32
-        m_serverPipe = nullptr;
-        WIN32_FIND_DATAW fd;
-        HANDLE find{ FindFirstFileW(m_path.c_str(), &fd) };
-        if (find == INVALID_HANDLE_VALUE) //no server exists
-        {
-            m_serverPipe = CreateNamedPipeW(m_path.c_str(), PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, 1, 0, 0, NMPWAIT_USE_DEFAULT_WAIT, nullptr);
-            if (m_serverPipe == INVALID_HANDLE_VALUE)
-            {
-                throw std::runtime_error("Unable to start IPC server.");
-            }
-            m_serverRunning = true;
-            FindClose(find);
-        }
-#else
         try
         {
-#ifdef __linux__
+#ifdef _WIN32
+            m_serverSocket = std::make_unique<Socket>(SocketPurpose::Server, SocketType::Stream, AddressFamily::Pipe, m_id, 0);
+#elif defined(__linux__)
             m_serverSocket = std::make_unique<Socket>(SocketPurpose::Server, SocketType::SequencedPacket, AddressFamily::Unix, m_id, 0);
 #else
             m_serverSocket = std::make_unique<Socket>(SocketPurpose::Server, SocketType::Stream, AddressFamily::Unix, m_id, 0);
@@ -46,7 +27,6 @@ namespace Nickvision::App
         {
             throw;
         }
-#endif
         if(m_serverRunning)
         {
             m_server = std::thread(&InterProcessCommunicator::runServer, this);
@@ -56,15 +36,7 @@ namespace Nickvision::App
     InterProcessCommunicator::~InterProcessCommunicator()
     {
         m_serverRunning = false;
-#ifdef _WIN32
-        if (m_serverPipe)
-        {
-            CancelSynchronousIo(m_serverPipe);
-            CloseHandle(m_serverPipe);
-        }
-#else
         m_serverSocket.reset();
-#endif
         if(m_server.joinable())
         {
             m_server.join();
@@ -96,18 +68,8 @@ namespace Nickvision::App
         if (!args.empty())
         {
 #ifdef _WIN32
-            HANDLE connectPipe{ CreateFileW(m_path.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) };
-            if (connectPipe == INVALID_HANDLE_VALUE)
-            {
-                return false;
-            }
-            for (const std::string& arg : args)
-            {
-                WriteFile(connectPipe, arg.c_str(), DWORD(arg.size()), nullptr, nullptr);
-            }
-            CloseHandle(connectPipe);
-#else   
-#ifdef __linux__
+            Socket connectionSocket{ SocketPurpose::Client, SocketType::Stream, AddressFamily::Pipe, m_id, 0 };
+#elif defined(__linux__)
             Socket connectionSocket{ SocketPurpose::Client, SocketType::SequencedPacket, AddressFamily::Unix, m_id, 0 };
 #else
             Socket connectionSocket{ SocketPurpose::Client, SocketType::Stream, AddressFamily::Unix, m_id, 0 };
@@ -117,8 +79,10 @@ namespace Nickvision::App
                 return false;
             }
             std::string msg{ StringHelpers::join(args, "\n") };
-            connectionSocket.sendMessage(msg);
-#endif
+            if(!connectionSocket.sendMessage(msg))
+            {
+                return false;
+            }
         }
         if (exitIfClient)
         {
@@ -129,30 +93,11 @@ namespace Nickvision::App
 
     void InterProcessCommunicator::runServer()
     {
-#ifdef _WIN32
-        std::vector<char> buffer(1024);
-#endif
         while (m_serverRunning)
         {
-            std::vector<std::string> args;
-#ifdef _WIN32
-            if (ConnectNamedPipe(m_serverPipe, nullptr))
-            {
-                DWORD read;
-                do
-                {
-                    if(!ReadFile(m_serverPipe, &buffer[0], DWORD(buffer.size()), &read, nullptr))
-                    {
-                        break;
-                    }
-                    args.push_back({ &buffer[0], read });
-                } while (read > 0);
-                DisconnectNamedPipe(m_serverPipe);
-                m_commandReceived({ args });
-            }
-#else
             if(m_serverSocket->connect())
             {
+                std::vector<std::string> args;
                 while(true)
                 {
                     std::string message{ m_serverSocket->receiveMessage() };
@@ -174,7 +119,6 @@ namespace Nickvision::App
                     m_commandReceived({ args });
                 }
             }
-#endif
         }
     }
 } 

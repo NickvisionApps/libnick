@@ -2,12 +2,16 @@
 #include <cstdlib>
 #include <cstring>
 #include <stdexcept>
-#ifndef _WIN32
+#include <vector>
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <unistd.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #endif
+#include "helpers/stringhelpers.h"
 #include "network/ipv4address.h"
 
 #ifndef _WIN32
@@ -19,12 +23,19 @@
 #endif
 #define BACKLOG 5
 
+using namespace Nickvision::Helpers;
+
 namespace Nickvision::Network
 {
 #ifdef _WIN32
     static bool isSocketValid(SOCKET socket)
     {
         return socket != INVALID_SOCKET;
+    }
+
+    static bool isSocketValid(HANDLE pipe)
+    {
+        return pipe != INVALID_HANDLE_VALUE;
     }
 #else
     static bool isSocketValid(int socket)
@@ -51,6 +62,30 @@ namespace Nickvision::Network
                 throw std::runtime_error("Unable to initalize winsock");
             }
             winsockInitialized = true;
+        }
+        //Create pipe
+        if(m_family == AddressFamily::Pipe)
+        {
+            if(m_purpose == SocketPurpose::Server)
+            {
+                std::wstring path{ L"\\\\.\\pipe\\" + StringHelpers::wstr(m_address) };
+                WIN32_FIND_DATAW fd;
+                HANDLE find{ FindFirstFileW(path.c_str(), &fd) };
+                if(find == INVALID_HANDLE_VALUE)
+                {
+                    m_pipe = CreateNamedPipeW(path.c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, 1, 0, 0, NMPWAIT_USE_DEFAULT_WAIT, nullptr);
+                    if(m_pipe == INVALID_HANDLE_VALUE)
+                    {
+                        throw std::runtime_error("Unable to create pipe");
+                    }
+                    FindClose(find);
+                }
+                else
+                {
+                    throw std::logic_error("Unable to create pipe. Server already exists");
+                }
+            }
+            return;
         }
 #endif
         //Create the socket
@@ -129,8 +164,19 @@ namespace Nickvision::Network
         disconnect();
         //Close the socket
 #ifdef _WIN32
-        shutdown(m_socket, SD_BOTH);
-        closesocket(m_socket);
+        if(isSocketValid(m_socket))
+        {
+            shutdown(m_socket, SD_BOTH);
+            closesocket(m_socket);
+        }
+        if(isSocketValid(m_pipe))
+        {
+            if(m_purpose == SocketPurpose::Server)
+            {
+                CancelSynchronousIo(m_pipe);
+            }
+            CloseHandle(m_pipe);
+        }
 #else
         shutdown(m_socket, SHUT_RDWR);
         close(m_socket);
@@ -148,17 +194,26 @@ namespace Nickvision::Network
         if(m_purpose == SocketPurpose::Server)
         {
 #ifdef _WIN32
-            m_child = accept(m_socket, nullptr, nullptr);
-#else
-            m_child = accept(m_socket, nullptr, nullptr);
+            if(m_family == AddressFamily::Pipe)
+            {
+                return ConnectNamedPipe(m_pipe, nullptr);
+            }
 #endif
+            m_child = accept(m_socket, nullptr, nullptr);
             return isSocketValid(m_child);
         }
         else if(m_purpose == SocketPurpose::Client)
         {
             switch(m_family)
             {
-#ifndef _WIN32
+#ifdef _WIN32
+                case AddressFamily::Pipe:
+                {
+                    std::wstring path{ L"\\\\.\\pipe\\" + StringHelpers::wstr(m_address) };
+                    m_pipe = CreateFileW(path.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+                    return isSocketValid(m_pipe);
+                }
+#else
                 case AddressFamily::Unix:
                 {
                     std::string domainPath{ "/tmp/" + m_address + ".socket" };
@@ -198,6 +253,12 @@ namespace Nickvision::Network
 
     bool Socket::disconnect()
     {
+#ifdef _WIN32
+        if(m_family == AddressFamily::Pipe && m_purpose == SocketPurpose::Server)
+        {
+            return DisconnectNamedPipe(m_pipe);
+        }
+#endif
         if(!isSocketValid(m_child))
         {
             return false;
@@ -214,7 +275,22 @@ namespace Nickvision::Network
 
     std::string Socket::receiveMessage() const
     {
+        std::vector<char> buffer(1024);
+        std::string message;
 #ifdef _WIN32
+        if(m_family == AddressFamily::Pipe)
+        {
+            DWORD bytes;
+            do
+            {
+                if(!ReadFile(m_pipe, &buffer[0], DWORD(buffer.size()), &bytes, nullptr))
+                {
+                    break;
+                }
+                message += std::string(&buffer[0], static_cast<size_t>(bytes));
+            } while (bytes > 0);
+            return message;
+        }
         SOCKET socket{ m_socket };
 #else
         int socket{ m_socket };
@@ -223,8 +299,6 @@ namespace Nickvision::Network
         {
             socket = m_child;
         }
-        std::vector<char> buffer(1024);
-        std::string message;
 #ifdef _WIN32
         int bytes{ 0 };
 #else
@@ -244,6 +318,10 @@ namespace Nickvision::Network
     bool Socket::sendMessage(const std::string& message) const
     {
 #ifdef _WIN32
+        if(m_family == AddressFamily::Pipe)
+        {
+            return WriteFile(m_pipe, message.c_str(), DWORD(message.size()), nullptr, nullptr);
+        }
         SOCKET socket{ m_socket };
 #else
         int socket{ m_socket };

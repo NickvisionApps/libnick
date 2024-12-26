@@ -14,7 +14,9 @@ namespace Nickvision::Network
      */
     enum class AddressFamily
     {
-#ifndef _WIN32
+#ifdef _WIN32
+        Pipe,
+#else
         Unix = AF_UNIX,
 #endif
         IPv4 = AF_INET
