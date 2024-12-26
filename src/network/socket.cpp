@@ -24,7 +24,7 @@ namespace Nickvision::Network
 #ifdef _WIN32
     static bool isSocketValid(SOCKET socket)
     {
-        return socket != INVALID_SOKCET;
+        return socket != INVALID_SOCKET;
     }
 #else
     static bool isSocketValid(int socket)
@@ -60,7 +60,7 @@ namespace Nickvision::Network
             throw std::runtime_error("Unable to create socket");
         }
         //Create the address struct
-        int bindResult;
+        int bindResult{ 0 };
         switch(m_family)
         {
 #ifndef _WIN32
@@ -68,11 +68,11 @@ namespace Nickvision::Network
             {
                 std::string domainPath{ "/tmp/" + m_address + ".socket" };
                 domainPath.resize(MAX_UNIX_PATH_LENGTH);
-                struct sockaddr_un address;
-                memset(&address, 0, sizeof(address));
-                address.sun_family = AF_UNIX;
-                strcpy(address.sun_path, domainPath.c_str());
-                bindResult = bind(m_socket, reinterpret_cast<const struct sockaddr*>(&address), sizeof(address));
+                struct sockaddr_un addr;
+                memset(&addr, 0, sizeof(addr));
+                addr.sun_family = AF_UNIX;
+                strcpy(addr.sun_path, domainPath.c_str());
+                bindResult = bind(m_socket, reinterpret_cast<const struct sockaddr*>(&addr), sizeof(addr));
                 break;
             }
 #endif
@@ -83,19 +83,19 @@ namespace Nickvision::Network
                 {
                     throw std::invalid_argument("Invalid IPv4 Address");
                 }
-                struct sockaddr_in address;
-                memset(&address, 0, sizeof(address));
-                address.sin_family = AF_INET;
-                address.sin_port = m_port;
+                struct sockaddr_in addr;
+                memset(&addr, 0, sizeof(addr));
+                addr.sin_family = AF_INET;
+                addr.sin_port = m_port;
 #ifdef _WIN32
-                address.sin_addr.S_un_b.s_b1 = ipv4->getFirst();
-                address.sin_addr.S_un_b.s_b2 = ipv4->getSecond();
-                address.sin_addr.S_un_b.s_b3 = ipv4->getThird();
-                address.sin_addr.S_un_b.s_b4 = ipv4->getFourth();
+                addr.sin_addr.S_un.S_un_b.s_b1 = ipv4->getFirst();
+                addr.sin_addr.S_un.S_un_b.s_b2 = ipv4->getSecond();
+                addr.sin_addr.S_un.S_un_b.s_b3 = ipv4->getThird();
+                addr.sin_addr.S_un.S_un_b.s_b4 = ipv4->getFourth();
 #else
-                address.sin_addr.s_addr = ipv4->getNetworkByteOrder();
+                addr.sin_addr.s_addr = ipv4->getNetworkByteOrder();
 #endif
-                bindResult = bind(m_socket, reinterpret_cast<const struct sockaddr*>(&address), sizeof(address));
+                bindResult = bind(m_socket, reinterpret_cast<const struct sockaddr*>(&addr), sizeof(addr));
                 break;
             }
         }
@@ -181,10 +181,10 @@ namespace Nickvision::Network
                     address.sin_family = AF_INET;
                     address.sin_port = m_port;
 #ifdef _WIN32
-                    address.sin_addr.S_un_b.s_b1 = ipv4->getFirst();
-                    address.sin_addr.S_un_b.s_b2 = ipv4->getSecond();
-                    address.sin_addr.S_un_b.s_b3 = ipv4->getThird();
-                    address.sin_addr.S_un_b.s_b4 = ipv4->getFourth();
+                    address.sin_addr.S_un.S_un_b.s_b1 = ipv4->getFirst();
+                    address.sin_addr.S_un.S_un_b.s_b2 = ipv4->getSecond();
+                    address.sin_addr.S_un.S_un_b.s_b3 = ipv4->getThird();
+                    address.sin_addr.S_un.S_un_b.s_b4 = ipv4->getFourth();
 #else
                     address.sin_addr.s_addr = ipv4->getNetworkByteOrder();
 #endif
@@ -203,7 +203,7 @@ namespace Nickvision::Network
         }
 #ifdef _WIN32
         closesocket(m_child);
-        m_child = INVLAID_SOCKET;
+        m_child = INVALID_SOCKET;
 #else
         close(m_child);
         m_child = -1;

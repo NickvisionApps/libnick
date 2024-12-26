@@ -29,10 +29,9 @@
 #include <vector>
 #include "events/event.h"
 #include "events/parameventargs.h"
+#include "network/socket.h"
 #ifdef _WIN32
 #include <windows.h>
-#else
-#include "network/socket.h"
 #endif
 
 namespace Nickvision::App
