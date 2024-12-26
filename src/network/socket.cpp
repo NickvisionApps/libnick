@@ -131,6 +131,7 @@ namespace Nickvision::Network
 #ifdef _WIN32
         closesocket(m_socket);
 #else
+        shutdown(m_socket, SHUT_RDWR);
         close(m_socket);
         if(m_family == AddressFamily::Unix)
         {
