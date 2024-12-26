@@ -129,6 +129,7 @@ namespace Nickvision::Network
         disconnect();
         //Close the socket
 #ifdef _WIN32
+        shutdown(m_socket, SD_BOTH);
         closesocket(m_socket);
 #else
         shutdown(m_socket, SHUT_RDWR);
