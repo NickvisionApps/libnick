@@ -27,7 +27,7 @@ namespace Nickvision::Network
          * @param port The port to bind/connect the socket to (Ignored when AddressFamily::Unix or AddressFamily::Pipe is used)
          * @throw std::invalid_argument Thrown if the address is invalid
          * @throw std::logic_error Thrown if the socket cannot be binded to (i.e. A server socket already exists)
-         * @throw std::runtime_error Thrown on Windows if winsock cannot be initalized
+         * @throw std::runtime_error Thrown on Windows if winsock cannot be initialized
          * @throw std::runtime_error Thrown if the socket cannot be created or listened
          */
         Socket(SocketPurpose purpose, SocketType type, AddressFamily family, const std::string& address, int port);

@@ -52,14 +52,14 @@ namespace Nickvision::Network
         m_port{ port }
     {
 #ifdef _WIN32
-        //Check if winsock is initalized
+        //Check if winsock is initialized
         static bool winsockInitialized{ false };
         if(!winsockInitialized)
         {
             WSADATA wsaData;
             if(WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
             {
-                throw std::runtime_error("Unable to initalize winsock");
+                throw std::runtime_error("Unable to initialize winsock");
             }
             winsockInitialized = true;
         }
