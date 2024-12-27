@@ -24,6 +24,7 @@ public:
     static void TearDownTestSuite()
     {
         m_ipc->commandReceived() -= m_handlerId;
+        m_ipc.reset();
     }
 
 private:
@@ -50,6 +51,6 @@ TEST_F(IPCTest, EnsureServerReceived)
 {
     while(!m_received)
     {
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }

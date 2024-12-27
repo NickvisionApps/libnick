@@ -1,5 +1,14 @@
 # Changelog
 
+## 2024.12.1 (next)
+### Breaking Changes
+None
+### New APIs
+#### Network
+- Added `Nickvision::Network::Socket` class
+### Fixes
+None
+
 ## 2024.12.0
 ### Breaking Changes
 None

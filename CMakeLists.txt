@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2024.12.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2024.12.1 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -64,6 +64,7 @@ add_library (${PROJECT_NAME}
     "src/network/macaddress.cpp"
     "src/network/networkmonitor.cpp"
     "src/network/networkstatechangedeventargs.cpp"
+    "src/network/socket.cpp"
     "src/network/web.cpp"
     "src/notifications/notificationsenteventargs.cpp"
     "src/notifications/notifyicon.cpp"
@@ -97,7 +98,7 @@ if(USING_VCPKG)
 endif()
 if(WIN32)
     find_package(sqlcipher CONFIG REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dnsapi Dwmapi Gdiplus Kernel32 Shell32 UxTheme)
+    target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dnsapi Dwmapi Gdiplus Kernel32 Shell32 UxTheme Ws2_32)
 elseif(APPLE)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_library(CF_LIBRARY CoreFoundation)

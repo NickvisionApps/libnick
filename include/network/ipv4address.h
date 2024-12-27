@@ -68,6 +68,11 @@ namespace Nickvision::Network
          */
         unsigned char getFourth() const;
         /**
+         * @brief Gets the address in network byte order.
+         * @return The address in network byte order
+         */
+        unsigned long getNetworkByteOrder() const;
+        /**
          * @brief Gets the string representation of the address.
          * @return The string representation of the address
          */
