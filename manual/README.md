@@ -6,7 +6,7 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.1.0 (next)
+## 2025.1.0
 ### Breaking Changes
 None
 ### New APIs

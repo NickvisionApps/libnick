@@ -1,6 +1,6 @@
 # Changelog
 
-## 2025.1.0 (next)
+## 2025.1.0
 ### Breaking Changes
 None
 ### New APIs
