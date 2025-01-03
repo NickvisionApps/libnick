@@ -34,14 +34,10 @@ TEST_F(ProcessTest, Start)
 TEST_F(ProcessTest, Kill)
 {
     ASSERT_TRUE(m_proc->kill());
+    ASSERT_EQ(m_proc->waitForExit(), -1);
     ASSERT_FALSE(m_proc->isRunning());
     ASSERT_TRUE(m_proc->hasCompleted());
     ASSERT_EQ(m_proc->getExitCode(), -1);
-}
-
-TEST_F(ProcessTest, Wait)
-{
-    ASSERT_EQ(m_proc->waitForExit(), -1);
 }
 
 TEST_F(ProcessTest, Destroy)
