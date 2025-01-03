@@ -6,7 +6,8 @@ None
 ### New APIs
 None
 ### Fixes
-None
+#### System
+- Fixed an issue where `Process::kill()` did not work on Windows
 
 ## 2024.12.1
 ### Breaking Changes

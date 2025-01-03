@@ -12,7 +12,8 @@ None
 ### New APIs
 None
 ### Fixes
-None
+#### System
+- Fixed an issue where `Process::kill()` did not work on Windows
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
