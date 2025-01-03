@@ -1,5 +1,13 @@
 # Changelog
 
+## 2025.1.0 (next)
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+None
+
 ## 2024.12.1
 ### Breaking Changes
 None
