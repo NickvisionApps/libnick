@@ -30,7 +30,8 @@ namespace Nickvision::System
 #ifdef _WIN32
         m_read{ nullptr },
         m_write{ nullptr },
-        m_pi{ 0 }
+        m_pi{ 0 },
+        m_job{ nullptr }
 #else
         m_pid{ -1 }
 #endif
@@ -45,6 +46,18 @@ namespace Nickvision::System
         {
             throw std::runtime_error("Failed to create pipe.");
         }
+        //Create job
+        JOBOBJECT_EXTENDED_LIMIT_INFORMATION jeli{ 0 };
+        jeli.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+        m_job = CreateJobObjectW(nullptr, nullptr);
+        if(!m_job)
+        {
+            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
+            CloseHandle(m_read);
+            CloseHandle(m_write);
+            throw std::runtime_error("Failed to create job object.");
+        }
+        SetInformationJobObject(m_job, JobObjectExtendedLimitInformation, &jeli, sizeof(jeli));
         //Create process arguments
         std::wstring appArgs{ L"\"" + m_path.wstring() + L"\"" };
         for(const std::string& arg : m_args)
@@ -65,13 +78,14 @@ namespace Nickvision::System
         si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
         si.wShowWindow = SW_HIDE;
         //Create process
-        if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED | CREATE_NEW_PROCESS_GROUP, nullptr, nullptr, &si, &m_pi))
+        if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED, nullptr, nullptr, &si, &m_pi))
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             CloseHandle(m_read);
             CloseHandle(m_write);
             throw std::runtime_error("Failed to create process.");
         }
+        AssignProcessToJobObject(m_job, m_pi.hProcess);
 #else
         if(pipe(m_pipe) < 0)
         {
@@ -88,6 +102,7 @@ namespace Nickvision::System
             m_watchThread.join();
         }
 #ifdef _WIN32
+        CloseHandle(m_job);
         CloseHandle(m_read);
         CloseHandle(m_write);
         CloseHandle(m_pi.hProcess);
@@ -199,37 +214,25 @@ namespace Nickvision::System
             return false;
         }
         //Kill child processes spawned by the process
-#ifdef _WIN32
-        if(!GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, m_pi.dwProcessId))
-        {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
-            return false;
-        }
-#else
+#ifndef _WIN32
         ::kill(-m_pid, SIGTERM);
 #endif
         //Kill process
 #ifdef _WIN32
-        if(!TerminateProcess(m_pi.hProcess, 0))
+        CloseHandle(m_job);
+        m_job = nullptr;
 #else
         if(::kill(m_pid, SIGTERM) < 0)
-#endif
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
-        m_exitCode = -1;
-        m_running = false;
-        m_completed = true;
+#endif
         return true;
     }
 
     int Process::waitForExit()
     {
-        if(hasCompleted())
-        {
-            return m_exitCode;
-        }
         while(!hasCompleted())
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
@@ -294,9 +297,22 @@ namespace Nickvision::System
         }
         std::unique_lock<std::mutex> lock{ m_mutex };
 #ifdef _WIN32
-        DWORD exitCode{ 0 };
-        GetExitCodeProcess(m_pi.hProcess, &exitCode);
-        m_exitCode = static_cast<int>(exitCode);
+        if(!m_job)
+        {
+            m_exitCode = -1;
+        }
+        else
+        {
+            DWORD exitCode{ 0 };
+            if(GetExitCodeProcess(m_pi.hProcess, &exitCode))
+            {
+                m_exitCode = static_cast<int>(exitCode);
+            }
+            else
+            {
+                m_exitCode = -1;
+            }
+        }
 #else
         m_exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
 #endif

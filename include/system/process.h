@@ -124,6 +124,7 @@ namespace Nickvision::System
         HANDLE m_read;
         HANDLE m_write;
         PROCESS_INFORMATION m_pi;
+        HANDLE m_job;
 #else
         int m_pipe[2];
         pid_t m_pid;

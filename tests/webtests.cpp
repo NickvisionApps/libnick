@@ -22,6 +22,12 @@ TEST(WebTests, DownloadFile1)
 
 TEST(WebTests, FetchJsonString1)
 {
+#ifdef _APPLE_
+    if(Environment::hasVariable("GITHUB_ACTIONS"))
+    {
+        GTEST_SKIP();
+    }
+#endif
     boost::json::value json = Web::fetchJson("https://api.github.com/repos/nickvisionapps/denaro/tags");
     ASSERT_FALSE(json.is_null());
     ASSERT_TRUE(json.is_array());
