@@ -198,7 +198,7 @@ namespace Nickvision::System
                 exit(1);
             }
         }
-        //parent
+        //Parent
         close(m_pipe[1]);
 #endif
         m_watchThread = std::thread(&Process::watch, this);
