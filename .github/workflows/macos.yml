@@ -31,7 +31,7 @@ jobs:
         with:
           pkgs: boost-json curl gettext-libintl glib gtest maddy openssl
           triplet: arm64-osx
-          revision: 74ec888e385d189b42d6b398d0bbaa6f1b1d3b0e
+          revision: 29a768542463623c8e44aac6b005031ee87f4f44
           token: ${{ secrets.GITHUB_TOKEN }}
           github-binarycache: true
       - name: "Build"

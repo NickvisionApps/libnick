@@ -10,5 +10,5 @@ TEST(DnsTests, A1)
 
 TEST(DnsTests, TXT1)
 {
-    ASSERT_FALSE(DNS::txt("www.example.com").empty());
+    ASSERT_FALSE(DNS::txt("example.com").empty());
 }

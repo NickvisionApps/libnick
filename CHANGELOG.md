@@ -1,5 +1,16 @@
 # Changelog
 
+## 2025.2.0
+### Breaking Changes
+None
+### New APIs
+#### Helpers
+- Added `Nickvision::Helpers::SizeHelpers` namespace
+#### System
+- Added `Nickvision::System::HardwareInfo` namespace
+### Fixes
+None
+
 ## 2025.1.0
 ### Breaking Changes
 None
