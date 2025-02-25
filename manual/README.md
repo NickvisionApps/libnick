@@ -6,14 +6,16 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.1.0
+## 2025.2.0
 ### Breaking Changes
 None
 ### New APIs
-None
-### Fixes
+#### Helpers
+- Added `Nickvision::Helpers::SizeHelpers` namespace
 #### System
-- Fixed an issue where `Process::kill()` did not work on Windows
+- Added `Nickvision::System::HardwareInfo` namespace
+### Fixes
+None
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2025.1.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2025.2.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -72,6 +72,7 @@ add_library (${PROJECT_NAME}
     "src/notifications/shellnotification.cpp"
     "src/notifications/shellnotificationsenteventargs.cpp"
     "src/system/environment.cpp"
+    "src/system/hardwareinfo.cpp"
     "src/system/process.cpp"
     "src/system/processexitedeventargs.cpp"
     "src/system/suspendinhibitor.cpp"
