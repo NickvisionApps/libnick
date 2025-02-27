@@ -76,5 +76,6 @@ namespace Nickvision::System
             return ram;
         }
 #endif
+        return 0;
     }
 }
