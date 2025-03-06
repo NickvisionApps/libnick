@@ -229,7 +229,7 @@ namespace Nickvision::Helpers
         WideCharToMultiByte(CP_UTF8, 0, s.c_str(), -1, &res[0], size, nullptr, nullptr);
         return res;
 #else
-        std::mbstate_t state;
+        std::mbstate_t state{};
         const wchar_t* ptr{ s.data() };
         size_t size{ 1 + std::wcsrtombs(nullptr, &ptr, 0, &state) };
         if(size == static_cast<std::size_t>(-1))
@@ -319,7 +319,7 @@ namespace Nickvision::Helpers
         MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, &res[0], size);
         return res;
 #else
-        std::mbstate_t state;
+        std::mbstate_t state{};
         const char* ptr{ s.data() };
         size_t size{ 1 + std::mbsrtowcs(nullptr, &ptr, 0, &state) };
         if(size == static_cast<std::size_t>(-1))
