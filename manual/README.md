@@ -6,16 +6,17 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.2.0
+## 2025.3.0
 ### Breaking Changes
 None
 ### New APIs
-#### Helpers
-- Added `Nickvision::Helpers::SizeHelpers` namespace
 #### System
-- Added `Nickvision::System::HardwareInfo` namespace
+- Modified `Nickvision::System::Process`'s constructor to now take an optional working directory parameter
 ### Fixes
-None
+#### Helpers
+- Implemented non-deprecated algorithms for `StringHelpers::str()` and `StringHelpers::wstr()`
+#### Network
+- Improved user agent string used by `Nickvision::Web::fetchJsonString()`
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

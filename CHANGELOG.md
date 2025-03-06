@@ -1,5 +1,17 @@
 # Changelog
 
+## 2025.3.0
+### Breaking Changes
+None
+### New APIs
+#### System
+- Modified `Nickvision::System::Process`'s constructor to now take an optional working directory parameter
+### Fixes
+#### Helpers
+- Implemented non-deprecated algorithms for `StringHelpers::str()` and `StringHelpers::wstr()`
+#### Network
+- Improved user agent string used by `Nickvision::Web::fetchJsonString()`
+
 ## 2025.2.0
 ### Breaking Changes
 None

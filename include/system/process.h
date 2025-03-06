@@ -50,9 +50,10 @@ namespace Nickvision::System
          * @brief Constructs a Process.
          * @param path The path of the process to execute
          * @param args The arguments to pass to the process
+         * @param workingDir An optional working directory to use for a process
          * @throw std::runtime_error Thrown if the process could not be created
          */
-        Process(const std::filesystem::path& path, const std::vector<std::string>& args = {});
+        Process(const std::filesystem::path& path, const std::vector<std::string>& args = {}, const std::filesystem::path& workingDir = {});
         /**
          * @brief Destructs a Process.
          * @brief This method will wait for the process to exit if it is still running.
@@ -114,6 +115,7 @@ namespace Nickvision::System
         mutable std::mutex m_mutex;
         std::filesystem::path m_path;
         std::vector<std::string> m_args;
+        std::filesystem::path m_workingDirectory;
         Events::Event<ProcessExitedEventArgs> m_exited;
         bool m_running;
         bool m_completed;

@@ -29,7 +29,7 @@ jobs:
         with:
           pkgs: boost-json curl gettext-libintl gtest maddy sqlcipher
           triplet: x64-windows
-          revision: 29a768542463623c8e44aac6b005031ee87f4f44
+          revision: 418da99d5a6baef99fe3f2fd69ba561f8bb1fd54
           token: ${{ secrets.GITHUB_TOKEN }}
           github-binarycache: true
       - name: "Build"

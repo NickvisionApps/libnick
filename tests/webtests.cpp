@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include <filesystem>
 #include "network/web.h"
+#include "system/environment.h"
 
 using namespace Nickvision::Network;
+using namespace Nickvision::System;
 
 TEST(WebTests, ValidWebsite1)
 {
@@ -22,7 +24,7 @@ TEST(WebTests, DownloadFile1)
 
 TEST(WebTests, FetchJsonString1)
 {
-#ifdef _APPLE_
+#ifdef __APPLE__
     if(Environment::hasVariable("GITHUB_ACTIONS"))
     {
         GTEST_SKIP();

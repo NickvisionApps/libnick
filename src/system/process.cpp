@@ -2,9 +2,7 @@
 #include <array>
 #include <chrono>
 #include <cstdlib>
-#include <fstream>
 #include <iostream>
-#include <sstream>
 #include <stdexcept>
 #include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
@@ -21,9 +19,10 @@ using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
 {
-    Process::Process(const std::filesystem::path& path, const std::vector<std::string>& args)
+    Process::Process(const std::filesystem::path& path, const std::vector<std::string>& args, const std::filesystem::path& workingDir)
         : m_path{ path },
         m_args{ args },
+        m_workingDirectory{ workingDir },
         m_running{ false },
         m_completed{ false },
         m_exitCode{ -1 },
@@ -78,7 +77,7 @@ namespace Nickvision::System
         si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
         si.wShowWindow = SW_HIDE;
         //Create process
-        if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED, nullptr, nullptr, &si, &m_pi))
+        if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED, nullptr, std::filesystem::is_directory(m_workingDirectory) && std::filesystem::exists(m_workingDirectory) ? m_workingDirectory.wstring().c_str() : nullptr, &si, &m_pi))
         {
             std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             CloseHandle(m_read);
@@ -175,6 +174,11 @@ namespace Nickvision::System
         //Child
         else if(m_pid == 0)
         {
+            //Change working directory
+            if(std::filesystem::is_directory(m_workingDirectory) && std::filesystem::exists(m_workingDirectory))
+            {
+                chdir(m_workingDirectory.string().c_str());
+            }
             //Create process arguments
             std::string filename{ m_path.filename().string() };
             std::vector<char*> appArgs;
