@@ -23,7 +23,7 @@ namespace Nickvision::Network
         }
         CurlEasy curl{ url };
         std::stringstream out;
-        curl.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/120.0");
+        curl.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36");
         curl.setHeaders({ "Content-Type: application/json" });
         curl.setStream(&out);
         if(curl.perform() == CURLE_OK)
