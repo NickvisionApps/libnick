@@ -7,7 +7,8 @@ None
 #### System
 - Added `Nickvision::System::Process` constructor now takes an optional working directory
 ### Fixes
-None
+#### Network
+- Improve user agent string used by `Nickvision::Web::fetchJsonString()`
 
 ## 2025.2.0
 ### Breaking Changes
