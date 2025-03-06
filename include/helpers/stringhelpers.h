@@ -23,8 +23,6 @@
 #ifndef STRINGHELPERS_H
 #define STRINGHELPERS_H
 
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
-
 #include <cstddef>
 #include <cstdint>
 #include <string>

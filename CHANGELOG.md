@@ -7,6 +7,8 @@ None
 #### System
 - Added `Nickvision::System::Process` constructor now takes an optional working directory
 ### Fixes
+#### Helpers
+- Use non-deprecated implementations for `StringHelpers::str()` and `StringHelpers::wstr()`
 #### Network
 - Improve user agent string used by `Nickvision::Web::fetchJsonString()`
 

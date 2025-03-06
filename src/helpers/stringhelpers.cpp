@@ -1,9 +1,9 @@
 #include "helpers/stringhelpers.h"
 #include <algorithm>
 #include <array>
-#include <codecvt>
 #include <cstdlib>
-#include <iomanip>
+#include <cwchar>
+#include <locale>
 #include <limits>
 #include <regex>
 #include <sstream>
@@ -38,10 +38,10 @@ namespace Nickvision::Helpers
         bytes.reserve(3 * base64.size() / 4);
         for(size_t i = 0; i < base64.size(); i += 4)
         {
-            unsigned char b641{ base64[i] <= 122 ? lookup[base64[i]] : static_cast<unsigned char>(0xff) };
-            unsigned char b642{ base64[i + 1] <= 122 ? lookup[base64[i + 1]] : static_cast<unsigned char>(0xff) };
-            unsigned char b643{ base64[i + 2] <= 122 ? lookup[base64[i + 2]] : static_cast<unsigned char>(0xff) };
-            unsigned char b644{ base64[i + 3] <= 122 ? lookup[base64[i + 3]] : static_cast<unsigned char>(0xff) };
+            unsigned char b641{ base64[i] <= 122 ? lookup[static_cast<unsigned char>(base64[i])] : static_cast<unsigned char>(0xff) };
+            unsigned char b642{ base64[i + 1] <= 122 ? lookup[static_cast<unsigned char>(base64[i + 1])] : static_cast<unsigned char>(0xff) };
+            unsigned char b643{ base64[i + 2] <= 122 ? lookup[static_cast<unsigned char>(base64[i + 2])] : static_cast<unsigned char>(0xff) };
+            unsigned char b644{ base64[i + 3] <= 122 ? lookup[static_cast<unsigned char>(base64[i + 3])] : static_cast<unsigned char>(0xff) };
             std::byte b1{ static_cast<unsigned char>(((b641 & 0x3f) << 2) + ((b642 & 0x30) >> 4)) };
             std::byte b2{ static_cast<unsigned char>(((b642 & 0x0f) << 4) + ((b643 & 0x3c) >> 2)) };
             std::byte b3{ static_cast<unsigned char>(((b643 & 0x03) << 6) + (b644 & 0x3f)) };
@@ -219,8 +219,27 @@ namespace Nickvision::Helpers
 
     std::string StringHelpers::str(const std::wstring& s)
     {
-        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-        return converter.to_bytes(s);
+#ifdef _WIN32
+        int size{ WideCharToMultiByte(CP_UTF8, 0, s.c_str(), -1, nullptr, 0, nullptr, nullptr) };
+        if(size <= 0)
+        {
+            return {};
+        }
+        std::string res(size - 1, 0);
+        WideCharToMultiByte(CP_UTF8, 0, s.c_str(), -1, &res[0], size, nullptr, nullptr);
+        return res;
+#else
+        std::mbstate_t state;
+        const wchar_t* ptr{ s.data() };
+        size_t size{ 1 + std::wcsrtombs(nullptr, &ptr, 0, &state) };
+        if(size == static_cast<std::size_t>(-1))
+        {
+            return {};
+        }
+        std::vector<char> buf(size);
+        std::wcsrtombs(buf.data(), &ptr, buf.size(), &state);
+        return std::string(buf.data());
+#endif
     }
 
     unsigned int StringHelpers::stoui(const std::string& s, size_t* idx, int base)
@@ -290,7 +309,26 @@ namespace Nickvision::Helpers
 
     std::wstring StringHelpers::wstr(const std::string& s)
     {
-        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-        return converter.from_bytes(s);
+#ifdef _WIN32
+        int size{ MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, nullptr, 0) };
+        if(size <= 0)
+        {
+            return {};
+        }
+        std::wstring res(size - 1, 0);
+        MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, &res[0], size);
+        return res;
+#else
+        std::mbstate_t state;
+        const char* ptr{ s.data() };
+        size_t size{ 1 + std::mbsrtowcs(nullptr, &ptr, 0, &state) };
+        if(size == static_cast<std::size_t>(-1))
+        {
+            return "";
+        }
+        std::vector<wchar_t> buf(size);
+        std::mbsrtowcs(buf.data(), &ptr, buf.size(), &state);
+        return std::wstring(buf.data());
+#endif
     }
 }
