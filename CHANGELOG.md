@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.3.0
+### Breaking Changes
+None
+### New APIs
+#### System
+- Added `Nickvision::System::Process` constructor now takes an optional working directory
+### Fixes
+None
+
 ## 2025.2.0
 ### Breaking Changes
 None

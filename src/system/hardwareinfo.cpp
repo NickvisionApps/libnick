@@ -28,7 +28,7 @@ namespace Nickvision::System
         status.dwLength = sizeof(status);
         if(GlobalMemoryStatusEx(&status))
         {
-            return status.ullTotalPhys;
+            return static_cast<unsigned long>(status.ullTotalPhys);
         }
 #elif defined(__linux__)
         struct sysinfo info;
@@ -57,7 +57,7 @@ namespace Nickvision::System
         status.dwLength = sizeof(status);
         if(GlobalMemoryStatusEx(&status))
         {
-            return status.ullAvailPhys;
+            return static_cast<unsigned long>(status.ullAvailPhys);
         }
 #elif defined(__linux__)
         struct sysinfo info;
