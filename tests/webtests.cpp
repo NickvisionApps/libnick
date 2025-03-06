@@ -22,7 +22,7 @@ TEST(WebTests, DownloadFile1)
 
 TEST(WebTests, FetchJsonString1)
 {
-#ifdef _APPLE_
+#ifdef __APPLE__
     if(Environment::hasVariable("GITHUB_ACTIONS"))
     {
         GTEST_SKIP();
