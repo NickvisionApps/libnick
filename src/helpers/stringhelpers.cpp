@@ -324,7 +324,7 @@ namespace Nickvision::Helpers
         size_t size{ 1 + std::mbsrtowcs(nullptr, &ptr, 0, &state) };
         if(size == static_cast<std::size_t>(-1))
         {
-            return "";
+            return {};
         }
         std::vector<wchar_t> buf(size);
         std::mbsrtowcs(buf.data(), &ptr, buf.size(), &state);
