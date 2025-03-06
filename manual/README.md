@@ -11,12 +11,12 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 None
 ### New APIs
 #### System
-- Added `Nickvision::System::Process` constructor now takes an optional working directory
+- Modified `Nickvision::System::Process`'s constructor to now take an optional working directory parameter
 ### Fixes
 #### Helpers
-- Use non-deprecated implementations for `StringHelpers::str()` and `StringHelpers::wstr()`
+- Implemented non-deprecated algorithms for `StringHelpers::str()` and `StringHelpers::wstr()`
 #### Network
-- Improve user agent string used by `Nickvision::Web::fetchJsonString()`
+- Improved user agent string used by `Nickvision::Web::fetchJsonString()`
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

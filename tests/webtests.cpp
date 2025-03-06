@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include <filesystem>
 #include "network/web.h"
+#include "system/environment.h"
 
 using namespace Nickvision::Network;
+using namespace Nickvision::System;
 
 TEST(WebTests, ValidWebsite1)
 {
