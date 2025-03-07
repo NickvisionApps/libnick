@@ -6,6 +6,7 @@ None
 ### New APIs
 #### System
 - Added `Process::send()` function
+- Added `Process::sendCommand()` function
 ### Fixes
 None
 

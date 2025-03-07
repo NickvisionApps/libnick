@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
-#include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
 #ifndef _WIN32
 #include <signal.h>
@@ -57,7 +56,6 @@ namespace Nickvision::System
         m_job = CreateJobObjectW(&sa, nullptr);
         if(!m_job)
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             CloseHandle(m_childOutRead);
             CloseHandle(m_childOutWrite);
             CloseHandle(m_childInRead);
@@ -88,7 +86,6 @@ namespace Nickvision::System
         //Create process
         if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED, nullptr, std::filesystem::is_directory(m_workingDirectory) && std::filesystem::exists(m_workingDirectory) ? m_workingDirectory.wstring().c_str() : nullptr, &si, &m_pi))
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             CloseHandle(m_job);
             CloseHandle(m_childOutRead);
             CloseHandle(m_childOutWrite);
@@ -102,12 +99,10 @@ namespace Nickvision::System
 #else
         if(pipe(m_childOutPipes) < 0)
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             throw std::runtime_error("Failed to create output pipes.");
         }
         if(pipe(m_childInPipes) < 0)
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             throw std::runtime_error("Failed to create input pipes.");
         }
 #endif
@@ -183,13 +178,11 @@ namespace Nickvision::System
 #ifdef _WIN32
         if(!ResumeThread(m_pi.hThread))
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
 #else
         if((m_pid = fork()) < 0)
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
         //Child
@@ -220,7 +213,6 @@ namespace Nickvision::System
             //Create process
             if(execvp(m_path.string().c_str(), appArgs.data()) < 0)
             {
-                std::cerr << CodeHelpers::getLastSystemError() << std::endl;
                 m_completed = true;
                 m_exitCode = 1;
                 exit(1);
@@ -253,7 +245,6 @@ namespace Nickvision::System
         if(::kill(m_pid, SIGTERM) < 0)
 #endif
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
         return true;
@@ -279,7 +270,6 @@ namespace Nickvision::System
 #else
         return WriteFile(m_childInWrite, s.data(), static_cast<DWORD>(s.size()), nullptr, nullptr);
 #endif
-        return false;
     }
 
     bool Process::sendCommand(std::string s)
