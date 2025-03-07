@@ -49,17 +49,12 @@ TEST_F(ProcessTest, Send)
 {
 #ifdef _WIN32
     Process p{ Environment::findDependency("cmd.exe") };
-    ASSERT_TRUE(p.start());
-    ASSERT_TRUE(p.sendCommand("echo \"Hello\""));
-    ASSERT_TRUE(p.sendCommand("exit"));
-    p.waitForExit();
-    ASSERT_FALSE(p.getOutput().empty());
 #else
     Process p{ Environment::findDependency("sh") };
+#endif
     ASSERT_TRUE(p.start());
     ASSERT_TRUE(p.sendCommand("echo \"Hello\""));
     ASSERT_TRUE(p.sendCommand("exit"));
     p.waitForExit();
     ASSERT_FALSE(p.getOutput().empty());
-#endif
 }
