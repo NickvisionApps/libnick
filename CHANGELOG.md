@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.3.1
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### System
+- Fixed overflow in `HardwareInfo` functions
+
 ## 2025.3.0
 ### Breaking Changes
 None

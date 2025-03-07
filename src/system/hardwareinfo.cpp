@@ -21,14 +21,14 @@ namespace Nickvision::System
         return std::thread::hardware_concurrency();
     }
 
-    unsigned long HardwareInfo::getTotalRamSize()
+    unsigned long long HardwareInfo::getTotalRamSize()
     {
 #ifdef _WIN32
         MEMORYSTATUSEX status;
         status.dwLength = sizeof(status);
         if(GlobalMemoryStatusEx(&status))
         {
-            return static_cast<unsigned long>(status.ullTotalPhys);
+            return status.ullTotalPhys;
         }
 #elif defined(__linux__)
         struct sysinfo info;
@@ -38,7 +38,7 @@ namespace Nickvision::System
         }
 #elif defined(__APPLE__)
         int mib[2];
-        unsigned long ram;
+        unsigned long long ram;
         size_t len{ sizeof(ram) };
         mib[0] = CTL_HW;
         mib[1] = HW_MEMSIZE;
@@ -50,14 +50,14 @@ namespace Nickvision::System
         return 0;
     }
 
-    unsigned long HardwareInfo::getFreeRamSize()
+    unsigned long long HardwareInfo::getFreeRamSize()
     {
 #ifdef _WIN32
         MEMORYSTATUSEX status;
         status.dwLength = sizeof(status);
         if(GlobalMemoryStatusEx(&status))
         {
-            return static_cast<unsigned long>(status.ullAvailPhys);
+            return status.ullAvailPhys;
         }
 #elif defined(__linux__)
         struct sysinfo info;
@@ -67,7 +67,7 @@ namespace Nickvision::System
         }
 #elif defined(__APPLE__)
         int mib[2];
-        unsigned long ram;
+        unsigned long long ram;
         size_t len{ sizeof(ram) };
         mib[0] = CTL_HW;
         mib[1] = HW_USERMEM;
