@@ -1,10 +1,8 @@
 #include "system/process.h"
-#include <array>
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
-#include "helpers/codehelpers.h"
 #include "helpers/stringhelpers.h"
 #ifndef _WIN32
 #include <signal.h>
@@ -27,8 +25,10 @@ namespace Nickvision::System
         m_completed{ false },
         m_exitCode{ -1 },
 #ifdef _WIN32
-        m_read{ nullptr },
-        m_write{ nullptr },
+        m_childOutRead{ nullptr },
+        m_childOutWrite{ nullptr },
+        m_childInRead{ nullptr },
+        m_childInWrite{ nullptr },
         m_pi{ 0 },
         m_job{ nullptr }
 #else
@@ -36,24 +36,30 @@ namespace Nickvision::System
 #endif
     {
 #ifdef _WIN32
-        //Create console output pipes
         SECURITY_ATTRIBUTES sa{ 0 };
         sa.nLength = sizeof(SECURITY_ATTRIBUTES);
         sa.bInheritHandle = TRUE;
         sa.lpSecurityDescriptor = nullptr;
-        if(!CreatePipe(&m_read, &m_write, &sa, 0))
+        //Create console output pipes
+        if(!CreatePipe(&m_childOutRead, &m_childOutWrite, &sa, 0))
         {
-            throw std::runtime_error("Failed to create pipe.");
+            throw std::runtime_error("Failed to create output pipes.");
+        }
+        //Create console input pipes
+        if(!CreatePipe(&m_childInRead, &m_childInWrite, &sa, 0))
+        {
+            throw std::runtime_error("Failed to create input pipes.");
         }
         //Create job
         JOBOBJECT_EXTENDED_LIMIT_INFORMATION jeli{ 0 };
         jeli.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
-        m_job = CreateJobObjectW(nullptr, nullptr);
+        m_job = CreateJobObjectW(&sa, nullptr);
         if(!m_job)
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
-            CloseHandle(m_read);
-            CloseHandle(m_write);
+            CloseHandle(m_childOutRead);
+            CloseHandle(m_childOutWrite);
+            CloseHandle(m_childInRead);
+            CloseHandle(m_childInWrite);
             throw std::runtime_error("Failed to create job object.");
         }
         SetInformationJobObject(m_job, JobObjectExtendedLimitInformation, &jeli, sizeof(jeli));
@@ -72,24 +78,32 @@ namespace Nickvision::System
         }
         STARTUPINFOW si{ 0 };
         si.cb = sizeof(STARTUPINFOW);
-        si.hStdError = m_write;
-        si.hStdOutput = m_write;
+        si.hStdError = m_childOutWrite;
+        si.hStdOutput = m_childOutWrite;
+        si.hStdInput = m_childInRead;
         si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
         si.wShowWindow = SW_HIDE;
         //Create process
         if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED, nullptr, std::filesystem::is_directory(m_workingDirectory) && std::filesystem::exists(m_workingDirectory) ? m_workingDirectory.wstring().c_str() : nullptr, &si, &m_pi))
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
-            CloseHandle(m_read);
-            CloseHandle(m_write);
+            CloseHandle(m_job);
+            CloseHandle(m_childOutRead);
+            CloseHandle(m_childOutWrite);
+            CloseHandle(m_childInRead);
+            CloseHandle(m_childInWrite);
             throw std::runtime_error("Failed to create process.");
         }
+        CloseHandle(m_childOutWrite);
+        CloseHandle(m_childInRead);
         AssignProcessToJobObject(m_job, m_pi.hProcess);
 #else
-        if(pipe(m_pipe) < 0)
+        if(pipe(m_childOutPipes) < 0)
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
-            throw std::runtime_error("Failed to create pipe.");
+            throw std::runtime_error("Failed to create output pipes.");
+        }
+        if(pipe(m_childInPipes) < 0)
+        {
+            throw std::runtime_error("Failed to create input pipes.");
         }
 #endif
     }
@@ -102,13 +116,15 @@ namespace Nickvision::System
         }
 #ifdef _WIN32
         CloseHandle(m_job);
-        CloseHandle(m_read);
-        CloseHandle(m_write);
+        CloseHandle(m_childOutRead);
+        CloseHandle(m_childInWrite);
         CloseHandle(m_pi.hProcess);
         CloseHandle(m_pi.hThread); 
 #else
-        close(m_pipe[0]);
-        close(m_pipe[1]);
+        close(m_childOutPipes[0]);
+        close(m_childOutPipes[1]);
+        close(m_childInPipes[0]);
+        close(m_childInPipes[1]);
 #endif
     }
 
@@ -162,13 +178,11 @@ namespace Nickvision::System
 #ifdef _WIN32
         if(!ResumeThread(m_pi.hThread))
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
 #else
         if((m_pid = fork()) < 0)
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
         //Child
@@ -189,21 +203,24 @@ namespace Nickvision::System
             }
             appArgs.push_back(nullptr);
             //Redirect console output
-            close(m_pipe[0]);
-            dup2(m_pipe[1], STDERR_FILENO);
-            dup2(m_pipe[1], STDOUT_FILENO);
-            close(m_pipe[1]);
+            close(m_childOutPipes[0]);
+            close(m_childInPipes[1]);
+            dup2(m_childOutPipes[1], STDERR_FILENO);
+            dup2(m_childOutPipes[1], STDOUT_FILENO);
+            dup2(m_childInPipes[0], STDIN_FILENO);
+            close(m_childOutPipes[1]);
+            close(m_childInPipes[0]);
             //Create process
             if(execvp(m_path.string().c_str(), appArgs.data()) < 0)
             {
-                std::cerr << CodeHelpers::getLastSystemError() << std::endl;
                 m_completed = true;
                 m_exitCode = 1;
                 exit(1);
             }
         }
         //Parent
-        close(m_pipe[1]);
+        close(m_childOutPipes[1]);
+        close(m_childInPipes[0]);
 #endif
         m_watchThread = std::thread(&Process::watch, this);
         m_running = true;
@@ -223,15 +240,13 @@ namespace Nickvision::System
 #endif
         //Kill process
 #ifdef _WIN32
-        CloseHandle(m_job);
-        m_job = nullptr;
+        if(!TerminateJobObject(m_job, -1))
 #else
         if(::kill(m_pid, SIGTERM) < 0)
+#endif
         {
-            std::cerr << CodeHelpers::getLastSystemError() << std::endl;
             return false;
         }
-#endif
         return true;
     }
 
@@ -244,6 +259,29 @@ namespace Nickvision::System
         return getExitCode();
     }
 
+    bool Process::send(const std::string& s)
+    {
+        if(!isRunning())
+        {
+            return false;
+        }
+#ifndef _WIN32
+        return write(m_childInPipes[1], s.data(), s.size()) == s.size();
+#else
+        return WriteFile(m_childInWrite, s.data(), static_cast<DWORD>(s.size()), nullptr, nullptr);
+#endif
+    }
+
+    bool Process::sendCommand(std::string s)
+    {
+#ifndef _WIN32
+        s += "\n";
+#else
+        s += "\r\n";
+#endif
+        return send(s);
+    }
+
     void Process::watch()
     {
 #ifndef _WIN32
@@ -254,28 +292,23 @@ namespace Nickvision::System
         {
 #ifdef _WIN32
             //Determine if ended
-            ended = WaitForSingleObject(m_pi.hProcess, PROCESS_WAIT_TIMEOUT) == WAIT_OBJECT_0;
+            ended = WaitForSingleObject(m_pi.hProcess, 0) == WAIT_OBJECT_0;
             //Read console output
             while(true)
             {
-                std::array<char, 1024> buffer;
-                DWORD bytes{ 0 };
                 DWORD available{ 0 };
-                if(!PeekNamedPipe(m_read, nullptr, 0, nullptr, &available, nullptr))
+                if(!PeekNamedPipe(m_childOutRead, nullptr, 0, nullptr, &available, nullptr) || available == 0)
                 {
                     break;
                 }
-                if(!available)
+                std::vector<char> buffer(available);
+                DWORD read{ 0 };
+                if(!ReadFile(m_childOutRead, buffer.data(), static_cast<DWORD>(buffer.size()), &read, nullptr) || read == 0)
                 {
                     break;
                 }
-                if(!ReadFile(m_read, buffer.data(), min(static_cast<unsigned int>(buffer.size()) - 1, available), &bytes, nullptr) || !bytes)
-                {
-                    break;
-                }
-                buffer[bytes] = 0;
                 std::lock_guard<std::mutex> lock{ m_mutex };
-                m_output += buffer.data();
+                m_output += std::string(buffer.data(), buffer.data() + read);
             }
 #else
             //Determine if ended
@@ -284,38 +317,30 @@ namespace Nickvision::System
                 if(WIFEXITED(status) || WIFSIGNALED(status))
                 {
                     ended = true;
-                    close(m_pipe[0]);
+                    close(m_childOutPipes[0]);
                 }
             }
             //Read console output
             char buffer[1024];
             ssize_t bytes{ 0 };
-            while((bytes = read(m_pipe[0], buffer, sizeof(buffer) - 1)) > 0)
+            while((bytes = read(m_childOutPipes[0], buffer, sizeof(buffer) - 1)) > 0)
             {
-                buffer[bytes] = '\0';
                 std::lock_guard<std::mutex> lock{ m_mutex };
-                m_output += buffer;
+                m_output += std::string(buffer, buffer + bytes);
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
 #endif
+            std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
         }
         std::unique_lock<std::mutex> lock{ m_mutex };
 #ifdef _WIN32
-        if(!m_job)
+        DWORD exitCode{ 0 };
+        if(GetExitCodeProcess(m_pi.hProcess, &exitCode))
         {
-            m_exitCode = -1;
+            m_exitCode = static_cast<int>(exitCode);
         }
         else
         {
-            DWORD exitCode{ 0 };
-            if(GetExitCodeProcess(m_pi.hProcess, &exitCode))
-            {
-                m_exitCode = static_cast<int>(exitCode);
-            }
-            else
-            {
-                m_exitCode = -1;
-            }
+            m_exitCode = -1;
         }
 #else
         m_exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : -1;

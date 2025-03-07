@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025.3.2
+### Breaking Changes
+None
+### New APIs
+#### System
+- Added `Process::send()` function
+- Added `Process::sendCommand()` function
+### Fixes
+None
+
 ## 2025.3.1
 ### Breaking Changes
 None

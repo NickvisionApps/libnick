@@ -71,32 +71,32 @@ namespace Nickvision::System
         Events::Event<ProcessExitedEventArgs>& exited();
         /**
          * @brief Gets whether or not the process is running.
-         * @return True if running, else false.
+         * @return True if running, else false
          */
         bool isRunning() const;
         /**
          * @brief Gets whether or not the process has completed.
-         * @return True if completed, else false.
+         * @return True if completed, else false
          */
         bool hasCompleted() const;
         /**
          * @brief Gets the exit code of the process.
-         * @return The exit code of the process. -1 if the process has not completed.
+         * @return The exit code of the process. -1 if the process has not completed
          */
         int getExitCode() const;
         /**
          * @brief Gets the console output of the process.
-         * @return The console output of the process. Empty if the process has not completed.
+         * @return The console output of the process. Empty if the process has not completed
          */
         const std::string& getOutput() const;
         /**
          * @brief Starts the process.
-         * @return True if the process was started, else false.
+         * @return True if the process was started, else false
          */
         bool start();
         /**
          * @brief Kills the process.
-         * @return True if the process was killed, else false.
+         * @return True if the process was killed, else false
          */
         bool kill();
         /**
@@ -106,6 +106,18 @@ namespace Nickvision::System
          * @return The exit code of the process
          */
         int waitForExit();
+        /**
+         * @brief Send text to the process's console.
+         * @param s The text to send
+         * @return True if the text is sent, else false
+         */
+        bool send(const std::string& s);
+        /**
+         * @brief Send text to the process's console and adds the return characters.
+         * @param s The command to send
+         * @return True if the command is sent, else false
+         */
+        bool sendCommand(std::string s);
 
     private:
         /**
@@ -123,12 +135,15 @@ namespace Nickvision::System
         std::string m_output;
         std::thread m_watchThread;
 #ifdef _WIN32
-        HANDLE m_read;
-        HANDLE m_write;
+        HANDLE m_childOutRead;
+        HANDLE m_childOutWrite;
+        HANDLE m_childInRead;
+        HANDLE m_childInWrite;
         PROCESS_INFORMATION m_pi;
         HANDLE m_job;
 #else
-        int m_pipe[2];
+        int m_childOutPipes[2];
+        int m_childInPipes[2];
         pid_t m_pid;
 #endif
     };
