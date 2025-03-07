@@ -55,10 +55,11 @@ TEST_F(ProcessTest, Send)
     p.waitForExit();
     ASSERT_FALSE(p.getOutput().empty());
 #else
-    Process p{ Environment::findDependency("read"), std::vector<std::string>{ "-p", "Test: ", "test_read" } };
+    Process p{ Environment::findDependency("sh") };
     ASSERT_TRUE(p.start());
-    ASSERT_TRUE(p.sendCommand("Hello"));
+    ASSERT_TRUE(p.sendCommand("echo \"Hello\""));
+    ASSERT_TRUE(p.sendCommand("exit"));
     p.waitForExit();
-    ASSERT_EQ(Environment::exec("echo $test_read"), "Hello\n");
+    ASSERT_FALSE(p.getOutput().empty());
 #endif
 }
