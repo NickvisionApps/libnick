@@ -198,7 +198,7 @@ namespace Nickvision::System
             {
                 if(line.find("VmRSS:") != std::string::npos)
                 {
-                    std::vector<std::string> fields{ StringHelpers::split(line, " ") };
+                    std::vector<std::string> fields{ StringHelpers::split(line, ' ', false) };
                     return SizeHelpers::kilobytesToBytes(std::stoull(fields[1]));
                 }
             }
@@ -267,11 +267,11 @@ namespace Nickvision::System
             std::string line;
             //Proc information
             std::getline(proc, line);
-            std::vector<std::string> procTokens{ StringHelpers::split(line, " ") };
+            std::vector<std::string> procTokens{ StringHelpers::split(line, ' ', false) };
             unsigned long long userTime{ std::stoull(procTokens[13]) + std::stoull(procTokens[14]) };
             //Sys information
             std::getline(proc, line);
-            std::vector<std::string> statTokens{ StringHelpers::split(line, " ") };
+            std::vector<std::string> statTokens{ StringHelpers::split(line, ' ', false) };
             unsigned long long systemTime{ 0 };
             for(int i = 1; i < 9; i++)
             {

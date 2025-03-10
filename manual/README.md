@@ -10,11 +10,14 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 ### Breaking Changes
 None
 ### New APIs
+#### Helpers
+- Added `includeEmpty` parameter to `StringHelpers::split()` function
 #### System
 - Added `Process::getRAMUsage()` function
 - Added `Process::getCPUUsage()` function
 ### Fixes
-None
+#### Helpers
+- Improved `StringHelpers::split()` implementation
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
