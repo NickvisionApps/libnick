@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025.3.3
+### Breaking Changes
+None
+### New APIs
+#### System
+- Added `Process::getRAMUsage()` function
+- Added `Process::getCPUUsage()` function
+### Fixes
+None
+
 ## 2025.3.2
 ### Breaking Changes
 None

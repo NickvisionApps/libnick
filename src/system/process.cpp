@@ -1,13 +1,20 @@
 #include "system/process.h"
 #include <chrono>
 #include <cstdlib>
-#include <iostream>
+#include <fstream>
 #include <stdexcept>
+#include "helpers/sizehelpers.h"
 #include "helpers/stringhelpers.h"
-#ifndef _WIN32
+#ifdef _WIN32
+#include <psapi.h>
+#elif defined(__linux__)
 #include <signal.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#elif defined(__APPLE__)
+#include <mach/mach.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
 #endif
 
 #define PROCESS_WAIT_TIMEOUT 50
@@ -30,9 +37,14 @@ namespace Nickvision::System
         m_childInRead{ nullptr },
         m_childInWrite{ nullptr },
         m_pi{ 0 },
-        m_job{ nullptr }
+        m_job{ nullptr },
+        m_lastKernelTime{ 0 },
+        m_lastUserTime{ 0 },
+        m_lastSystemTime{ 0 }
 #else
-        m_pid{ -1 }
+        m_pid{ -1 },
+        m_lastUserTime{ 0 },
+        m_lastSystemTime{ 0 }
 #endif
     {
 #ifdef _WIN32
@@ -162,6 +174,138 @@ namespace Nickvision::System
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_output;
+    }
+
+    unsigned long long Process::getRAMUsage() const
+    {
+        if(!isRunning())
+        {
+            return 0L;
+        }
+#ifdef _WIN32
+        PROCESS_MEMORY_COUNTERS pmc;
+        if(GetProcessMemoryInfo(m_pi.hProcess, &pmc, sizeof(pmc)))
+        {
+            return pmc.WorkingSetSize;
+        }
+#elif defined(__linux__)
+        std::ifstream proc{ "/proc/" + std::to_string(m_pid) + "/status" };
+        if(proc.is_open())
+        {
+            std::string line;
+            while(std::getline(proc, line))
+            {
+                if(line.find("VmRSS:") != std::string::npos)
+                {
+                    std::vector<std::string> fields{ StringHelpers::split(line, " ") };
+                    return SizeHelpers::kilobytesToBytes(std::stoull(fields[1]));
+                }
+            }
+        }
+#elif defined(__APPLE__)
+        task_t task;
+        if(task_for_pid(mach_task_self(), m_pid, &task) == KERN_SUCCESS)
+        {
+            task_basic_info_data_t info;
+            mach_msg_type_number_t count{ TASK_BASIC_INFO_COUNT };
+            if(task_info(task, TASK_BASIC_INFO, static_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
+            {
+                return info.resident_size;
+            }
+        }
+#endif
+        return 0L;
+    }
+
+    double Process::getCPUUsage() const
+    {
+        if(!isRunning())
+        {
+            return 0.0;
+        }
+#ifdef _WIN32
+        FILETIME creationTime;
+        FILETIME exitTime;
+        FILETIME kernelTime;
+        FILETIME userTime;
+        if(GetProcessTimes(m_pi.hProcess, &creationTime, &exitTime, &kernelTime, &userTime))
+        {
+            FILETIME sysIdleTime;
+            FILETIME sysKernelTime;
+            FILETIME sysUserTime;
+            ULARGE_INTEGER kernelTimeInt;
+            ULARGE_INTEGER userTimeInt;
+            ULARGE_INTEGER systemTimeInt;
+            kernelTimeInt.LowPart = kernelTime.dwLowDateTime;
+            kernelTimeInt.HighPart = kernelTime.dwHighDateTime;
+            userTimeInt.LowPart = userTime.dwLowDateTime;
+            userTimeInt.HighPart = userTime.dwHighDateTime;
+            if(GetSystemTimes(&sysIdleTime, &sysKernelTime, &sysUserTime))
+            {
+                systemTimeInt.LowPart = sysKernelTime.dwLowDateTime + sysUserTime.dwLowDateTime;
+                systemTimeInt.HighPart = sysKernelTime.dwHighDateTime + sysUserTime.dwHighDateTime;
+                if(m_lastSystemTime.QuadPart != 0)
+                {
+                    unsigned long long sysDelta{ systemTimeInt.QuadPart - m_lastSystemTime.QuadPart };
+                    unsigned long long procDelta{ (kernelTimeInt.QuadPart - m_lastKernelTime.QuadPart) + (userTimeInt.QuadPart - m_lastUserTime.QuadPart) };
+                    m_lastKernelTime = kernelTimeInt;
+                    m_lastUserTime = userTimeInt;
+                    m_lastSystemTime = systemTimeInt;
+                    if(sysDelta > 0)
+                    {
+                        return (procDelta * 100.0) / sysDelta;
+                    }
+                }
+            }
+        }
+#elif defined(__linux__)
+        std::ifstream proc{ "/proc/" + std::to_string(m_pid) + "/stat" };
+        std::ifstream stat{ "/proc/stat" };
+        if(proc.is_open() && stat.is_open())
+        {
+            std::string line;
+            //Proc information
+            std::getline(proc, line);
+            std::vector<std::string> procTokens{ StringHelpers::split(line, " ") };
+            unsigned long long userTime{ std::stoull(procTokens[13]) + std::stoull(procTokens[14]) };
+            //Sys information
+            std::getline(proc, line);
+            std::vector<std::string> statTokens{ StringHelpers::split(line, " ") };
+            unsigned long long systemTime{ 0 };
+            for(int i = 1; i < 9; i++)
+            {
+                systemTime += std::stoull(statTokens[i]);
+            }
+            //Get usage
+            unsigned long long sysDelta{ systemTime - m_lastSystemTime };
+            unsigned long long procDelta{ userTime - m_lastUserTime };
+            m_lastSystemTime = systemTime;
+            m_lastUserTime = userTime;
+            if(sysDelta > 0)
+            {
+                return (procDelta * 100) / sysDelta;
+            }
+        }
+#elif defined(__APPLE__)
+        task_t task;
+        if(task_for_pid(mach_task_self(), m_pid, &task) == KERN_SUCCESS)
+        {
+            task_basic_info_data_t info;
+            mach_msg_type_number_t count{ TASK_BASIC_INFO_COUNT };
+            if(task_info(task, TASK_BASIC_INFO, static_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
+            {
+                unsigned long long sysDelta{ info.system_time.seconds - m_lastSystemTime };
+                unsigned long long procDelta{ info.user_time.seconds - m_lastUserTime };
+                m_lastSystemTime = info.system_time.seconds;
+                m_lastUserTime = info.user_time.seconds;
+                if(sysDelta > 0)
+                {
+                    return (procDelta * 100) / sysDelta;
+                }
+            }
+        }
+#endif
+        return 0.0;
     }
 
     bool Process::start()
