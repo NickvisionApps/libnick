@@ -43,7 +43,8 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: cmake --install .
       - name: "Test"
-        run: open -n ./${{github.workspace}}/build/libnick_test.app
+        working-directory: ${{github.workspace}}/build
+        run: open -n ./libnick_test.app
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
