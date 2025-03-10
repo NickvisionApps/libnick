@@ -270,7 +270,7 @@ namespace Nickvision::System
             std::vector<std::string> procTokens{ StringHelpers::split(line, ' ', false) };
             unsigned long long userTime{ std::stoull(procTokens[13]) + std::stoull(procTokens[14]) };
             //Sys information
-            std::getline(proc, line);
+            std::getline(stat, line);
             std::vector<std::string> statTokens{ StringHelpers::split(line, ' ', false) };
             unsigned long long systemTime{ 0 };
             for(int i = 1; i < 9; i++)
