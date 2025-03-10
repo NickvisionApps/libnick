@@ -173,9 +173,4 @@ if (BUILD_TESTING)
     "tests/webtests.cpp")
     find_package(GTest CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main ${PROJECT_NAME})
-    if(APPLE)
-        set_target_properties(${PROJECT_NAME}_test PROPERTIES
-            MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/resources/Info.plist")
-    endif()
 endif()
