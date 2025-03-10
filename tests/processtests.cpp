@@ -31,9 +31,13 @@ TEST_F(ProcessTest, Start)
     ASSERT_FALSE(m_proc->hasCompleted());
 }
 
-TEST_F(ProcessTest, Hardware)
+TEST_F(ProcessTest, RAM)
 {
     ASSERT_TRUE(m_proc->getRAMUsage() > 0);
+}
+
+TEST_F(ProcessTest, CPU)
+{
     ASSERT_NO_THROW(m_proc->getCPUUsage());
 }
 

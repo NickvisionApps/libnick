@@ -207,11 +207,11 @@ namespace Nickvision::System
         task_t task;
         if(task_for_pid(mach_task_self(), m_pid, &task) == KERN_SUCCESS)
         {
-            task_basic_info_data_t info;
-            mach_msg_type_number_t count{ TASK_BASIC_INFO_COUNT };
-            if(task_info(task, TASK_BASIC_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
+            task_vm_info_data_t info;
+            mach_msg_type_number_t count{ sizeof(task_vm_info_data_t) };
+            if(task_info(task, TASK_VM_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
             {
-                return info.resident_size;
+                return info.phys_footprint;
             }
         }
 #endif
