@@ -90,6 +90,16 @@ namespace Nickvision::System
          */
         const std::string& getOutput() const;
         /**
+         * @brief Gets the amount of RAM being used by the process in bytes.
+         * @return The amount of RAM used by the process
+         */
+        unsigned long long getRAMUsage() const;
+        /**
+         * @brief Gets the percent of the CPU being used by the process.
+         * @return The CPU usage of the process
+         */
+        double getCPUUsage() const;
+        /**
          * @brief Starts the process.
          * @return True if the process was started, else false
          */
@@ -141,10 +151,15 @@ namespace Nickvision::System
         HANDLE m_childInWrite;
         PROCESS_INFORMATION m_pi;
         HANDLE m_job;
+        mutable ULARGE_INTEGER m_lastKernelTime;
+        mutable ULARGE_INTEGER m_lastUserTime;
+        mutable ULARGE_INTEGER m_lastSystemTime;
 #else
         int m_childOutPipes[2];
         int m_childInPipes[2];
         pid_t m_pid;
+        mutable unsigned long long m_lastUserTime;
+        mutable unsigned long long m_lastSystemTime;
 #endif
     };
 }

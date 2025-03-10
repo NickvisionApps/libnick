@@ -101,39 +101,6 @@ namespace Nickvision::Helpers::StringHelpers
      */
     std::string replace(std::string s, char toReplace, char replace);
     /**
-     * @brief Splits a string based on a delimiter.
-     * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)
-     * @param s The string to split
-     * @param delimiter The delimiter to split the string on
-     * @return The splits of the string
-     */
-    template<StringImplicitlyConstructible T = std::string>
-    std::vector<T> split(std::string s, const std::string& delimiter)
-    {
-        if(s.empty())
-        {
-            return { "" };
-        }
-        std::vector<T> splits;
-        if(delimiter.empty())
-        {
-            splits.push_back(s);
-            return splits;
-        }
-        size_t pos{ 0 };
-        while ((pos = s.find(delimiter)) != std::string::npos)
-        {
-            std::string split{ s.substr(0, pos) };
-            splits.push_back(split);
-            s.erase(0, pos + 1);
-        }
-        if (!s.empty())
-        {
-            splits.push_back(s);
-        }
-        return splits;
-    }
-    /**
      * @brief Splits a string based on argument delimiters.
      * @param s The string to split
      * @return The splits of the argument string
@@ -180,6 +147,50 @@ namespace Nickvision::Helpers::StringHelpers
      * @return The wstring version of the string
      */
     std::wstring wstr(const std::string& s);
+    /**
+     * @brief Splits a string based on a delimiter.
+     * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)
+     * @param s The string to split
+     * @param delimiter The delimiter to split the string on
+     * @param includeEmpty Whether or not to include empty tokens
+     * @return The splits of the string
+     */
+    template<StringImplicitlyConstructible T = std::string>
+    std::vector<T> split(const std::string& s, const std::string& delimiter, bool includeEmpty = true)
+    {
+        std::vector<T> splits;
+        size_t last{ 0 };
+        size_t next{ 0 };
+        while((next = s.find(delimiter, last)) != std::string::npos)
+        {
+            std::string token{ s.substr(last, next - last) };
+            if(includeEmpty || !trim(token).empty())
+            {
+                splits.push_back(token);
+            }
+            last = next + delimiter.length();
+
+        }
+        std::string finalToken{ s.substr(last) };
+        if(includeEmpty || !trim(finalToken).empty())
+        {
+            splits.push_back(finalToken);
+        }
+        return splits;
+    }
+    /**
+     * @brief Splits a string based on a delimiter.
+     * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)
+     * @param s The string to split
+     * @param delimiter The delimiter to split the string on
+     * @param includeEmpty Whether or not to include empty tokens
+     * @return The splits of the string
+     */
+    template<StringImplicitlyConstructible T = std::string>
+    std::vector<T> split(const std::string& s, char delimiter, bool includeEmpty = true)
+    {
+        return split<T>(s, std::string(1, delimiter), includeEmpty);
+    }
 }
 
 #endif // STRINGHELPERS_H

@@ -6,15 +6,18 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.3.2
+## 2025.3.3
 ### Breaking Changes
 None
 ### New APIs
+#### Helpers
+- Added `includeEmpty` parameter to `StringHelpers::split()` function
 #### System
-- Added `Process::send()` function
-- Added `Process::sendCommand()` function
+- Added `Process::getRAMUsage()` function
+- Added `Process::getCPUUsage()` function
 ### Fixes
-None
+#### Helpers
+- Improved `StringHelpers::split()` implementation
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
