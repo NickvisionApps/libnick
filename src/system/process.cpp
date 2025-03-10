@@ -7,11 +7,12 @@
 #include "helpers/stringhelpers.h"
 #ifdef _WIN32
 #include <psapi.h>
-#elif defined(__linux__)
+#else
 #include <signal.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#elif defined(__APPLE__)
+#endif
+#ifdef __APPLE__
 #include <mach/mach.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
@@ -208,7 +209,7 @@ namespace Nickvision::System
         {
             task_basic_info_data_t info;
             mach_msg_type_number_t count{ TASK_BASIC_INFO_COUNT };
-            if(task_info(task, TASK_BASIC_INFO, static_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
+            if(task_info(task, TASK_BASIC_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
             {
                 return info.resident_size;
             }
@@ -292,7 +293,7 @@ namespace Nickvision::System
         {
             task_basic_info_data_t info;
             mach_msg_type_number_t count{ TASK_BASIC_INFO_COUNT };
-            if(task_info(task, TASK_BASIC_INFO, static_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
+            if(task_info(task, TASK_BASIC_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
             {
                 unsigned long long sysDelta{ info.system_time.seconds - m_lastSystemTime };
                 unsigned long long procDelta{ info.user_time.seconds - m_lastUserTime };
