@@ -70,6 +70,16 @@ TEST(StringTests, Split3)
     ASSERT_EQ(cmd[2], "display notification \"Message\" with title \"Title\"");
 }
 
+TEST(StringTests, Split4)
+{
+    std::vector<std::string> cmd{ StringHelpers::split("libnick -t fg -y", ' ')};
+    ASSERT_EQ(cmd.size(), 4);
+    ASSERT_EQ(cmd[0], "libnick");
+    ASSERT_EQ(cmd[1], "-t");
+    ASSERT_EQ(cmd[2], "fg");
+    ASSERT_EQ(cmd[3], "-y");
+}
+
 TEST(StringTests, Uuid1)
 {
     std::string s;

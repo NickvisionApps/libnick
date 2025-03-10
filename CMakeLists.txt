@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2025.3.2 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2025.3.3 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -148,29 +148,29 @@ export(EXPORT "${PROJECT_NAME}Targets" FILE "${CMAKE_BINARY_DIR}/cmake/${PROJECT
 
 #libnick Test
 if (BUILD_TESTING)
-	add_executable(${PROJECT_NAME}_test
-        "tests/codetests.cpp"
-        "tests/databasetests.cpp"
-        "tests/datafiletests.cpp"
-        "tests/dnstests.cpp"
-        "tests/eventtests.cpp"
-        "tests/filewatchertests.cpp"
-        "tests/hardwaretests.cpp"
-        "tests/ipctests.cpp"
-        "tests/keyringtests.cpp"
-        "tests/loggingtests.cpp"
-        "tests/main.cpp"
-        "tests/networktests.cpp"
-        "tests/notificationtests.cpp"
-        "tests/passwordtests.cpp"
-        "tests/processtests.cpp"
-        "tests/stringtests.cpp"
-        "tests/systemcredentialstests.cpp"
-        "tests/systemtests.cpp"
-        "tests/taskbartests.cpp"
-        "tests/updatertests.cpp"
-        "tests/versiontests.cpp"
-        "tests/webtests.cpp")
-	find_package(GTest CONFIG REQUIRED)
-	target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main ${PROJECT_NAME})
+    add_executable(${PROJECT_NAME}_test
+    "tests/codetests.cpp"
+    "tests/databasetests.cpp"
+    "tests/datafiletests.cpp"
+    "tests/dnstests.cpp"
+    "tests/eventtests.cpp"
+    "tests/filewatchertests.cpp"
+    "tests/hardwaretests.cpp"
+    "tests/ipctests.cpp"
+    "tests/keyringtests.cpp"
+    "tests/loggingtests.cpp"
+    "tests/main.cpp"
+    "tests/networktests.cpp"
+    "tests/notificationtests.cpp"
+    "tests/passwordtests.cpp"
+    "tests/processtests.cpp"
+    "tests/stringtests.cpp"
+    "tests/systemcredentialstests.cpp"
+    "tests/systemtests.cpp"
+    "tests/taskbartests.cpp"
+    "tests/updatertests.cpp"
+    "tests/versiontests.cpp"
+    "tests/webtests.cpp")
+    find_package(GTest CONFIG REQUIRED)
+    target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main ${PROJECT_NAME})
 endif()
