@@ -16,6 +16,7 @@
 #include <mach/mach.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#include <AvailabilityMacros.h>
 #endif
 
 #define PROCESS_WAIT_TIMEOUT 50
@@ -207,12 +208,23 @@ namespace Nickvision::System
         task_t task;
         if(task_for_pid(mach_task_self(), m_pid, &task) == KERN_SUCCESS)
         {
+    /* Code for modern macOS */
+    #if MAC_OS_X_VERSION_MIN_REQUIRED >= 1090
             task_vm_info_data_t info;
             mach_msg_type_number_t count{ sizeof(task_vm_info_data_t) };
             if(task_info(task, TASK_VM_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
             {
                 return info.phys_footprint;
             }
+    /* Fallback for macOS < 10.9 */
+    #else
+            task_basic_info_data_t info;
+            mach_msg_type_number_t count{ TASK_BASIC_INFO_COUNT };
+            if(task_info(task, TASK_BASIC_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
+            {
+                return info.resident_size;
+            }
+    #endif
         }
 #endif
         return 0L;
