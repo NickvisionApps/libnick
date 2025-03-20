@@ -292,10 +292,10 @@ namespace Nickvision::System
             FILETIME sysUserTime;
             if(GetSystemTimes(&sysIdleTime, &sysKernelTime, &sysUserTime))
             {
-                unsigned long long sysKernel{ static_cast<unsigned long long>(sysKernelTime.dwHighDateTime << 32) | sysKernelTime.dwLowDateTime };
-                unsigned long long sysUser{ static_cast<unsigned long long>(sysUserTime.dwHighDateTime << 32) | sysUserTime.dwLowDateTime };
-                unsigned long long procKernel{ static_cast<unsigned long long>(kernelTime.dwHighDateTime << 32) | kernelTime.dwLowDateTime };
-                unsigned long long procUser{ static_cast<unsigned long long>(userTime.dwHighDateTime << 32) | userTime.dwLowDateTime };
+                unsigned long long sysKernel{ (static_cast<unsigned long long>(sysKernelTime.dwHighDateTime) << 32) | sysKernelTime.dwLowDateTime };
+                unsigned long long sysUser{ (static_cast<unsigned long long>(sysUserTime.dwHighDateTime) << 32) | sysUserTime.dwLowDateTime };
+                unsigned long long procKernel{ (static_cast<unsigned long long>(kernelTime.dwHighDateTime) << 32) | kernelTime.dwLowDateTime };
+                unsigned long long procUser{ (static_cast<unsigned long long>(userTime.dwHighDateTime) << 32) | userTime.dwLowDateTime };
                 unsigned long long sysDelta{ (sysKernel - m_lastSysKernelTime) + (sysUser - m_lastSysUserTime) };
                 unsigned long long procDelta{ (procKernel - m_lastProcKernelTime) + (procUser - m_lastProcUserTime) };
                 m_lastSysKernelTime = sysKernel;
