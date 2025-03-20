@@ -7,6 +7,7 @@
 #include "helpers/stringhelpers.h"
 #ifdef _WIN32
 #include <psapi.h>
+#include <tlhelp32.h>
 #else
 #include <signal.h>
 #include <unistd.h>
@@ -26,6 +27,35 @@ using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
 {
+#ifdef _WIN32
+    static std::vector<DWORD> getChildPIDs(HANDLE parent)
+    {
+        std::vector<DWORD> children;
+        DWORD parentPID{ GetProcessId(parent) };
+        if(parentPID != 0)
+        {
+            HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) };
+            if(snapshot != INVALID_HANDLE_VALUE)
+            {
+                PROCESSENTRY32 pe;
+                pe.dwSize = sizeof(PROCESSENTRY32);
+                if(Process32First(snapshot, &pe))
+                {
+                    do
+                    {
+                        if(pe.th32ParentProcessID == parentPID)
+                        {
+                            children.push_back(pe.th32ProcessID);
+                        }
+                    } while(Process32Next(snapshot, &pe));
+                }
+            }
+            CloseHandle(snapshot);
+        }
+        return children;
+    }
+#endif
+
     Process::Process(const std::filesystem::path& path, const std::vector<std::string>& args, const std::filesystem::path& workingDir)
         : m_path{ path },
         m_args{ args },
@@ -40,9 +70,10 @@ namespace Nickvision::System
         m_childInWrite{ nullptr },
         m_pi{ 0 },
         m_job{ nullptr },
-        m_lastKernelTime{ 0 },
-        m_lastUserTime{ 0 },
-        m_lastSystemTime{ 0 }
+        m_lastProcKernelTime{ 0 },
+        m_lastProcUserTime{ 0 },
+        m_lastSysKernelTime{ 0 },
+        m_lastSysUserTime{ 0 }
 #else
         m_pid{ -1 },
         m_lastUserTime{ 0 },
@@ -188,7 +219,20 @@ namespace Nickvision::System
         PROCESS_MEMORY_COUNTERS pmc;
         if(GetProcessMemoryInfo(m_pi.hProcess, &pmc, sizeof(pmc)))
         {
-            return pmc.WorkingSetSize;
+            unsigned long long mem{ pmc.WorkingSetSize };
+            for(DWORD child : getChildPIDs(m_pi.hProcess))
+            {
+                HANDLE cProcess{ OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, child) };
+                if(cProcess)
+                {
+                    if(GetProcessMemoryInfo(cProcess, &pmc, sizeof(pmc)))
+                    {
+                        mem += pmc.WorkingSetSize;
+                    }
+                    CloseHandle(cProcess);
+                }
+            }
+            return mem;
         }
 #elif defined(__linux__)
         std::ifstream proc{ "/proc/" + std::to_string(m_pid) + "/status" };
@@ -246,28 +290,21 @@ namespace Nickvision::System
             FILETIME sysIdleTime;
             FILETIME sysKernelTime;
             FILETIME sysUserTime;
-            ULARGE_INTEGER kernelTimeInt;
-            ULARGE_INTEGER userTimeInt;
-            ULARGE_INTEGER systemTimeInt;
-            kernelTimeInt.LowPart = kernelTime.dwLowDateTime;
-            kernelTimeInt.HighPart = kernelTime.dwHighDateTime;
-            userTimeInt.LowPart = userTime.dwLowDateTime;
-            userTimeInt.HighPart = userTime.dwHighDateTime;
             if(GetSystemTimes(&sysIdleTime, &sysKernelTime, &sysUserTime))
             {
-                systemTimeInt.LowPart = sysKernelTime.dwLowDateTime + sysUserTime.dwLowDateTime;
-                systemTimeInt.HighPart = sysKernelTime.dwHighDateTime + sysUserTime.dwHighDateTime;
-                if(m_lastSystemTime.QuadPart != 0)
+                unsigned long long sysKernel{ static_cast<unsigned long long>(sysKernelTime.dwHighDateTime << 32) | sysKernelTime.dwLowDateTime };
+                unsigned long long sysUser{ static_cast<unsigned long long>(sysUserTime.dwHighDateTime << 32) | sysUserTime.dwLowDateTime };
+                unsigned long long procKernel{ static_cast<unsigned long long>(kernelTime.dwHighDateTime << 32) | kernelTime.dwLowDateTime };
+                unsigned long long procUser{ static_cast<unsigned long long>(userTime.dwHighDateTime << 32) | userTime.dwLowDateTime };
+                unsigned long long sysDelta{ (sysKernel - m_lastSysKernelTime) + (sysUser - m_lastSysUserTime) };
+                unsigned long long procDelta{ (procKernel - m_lastProcKernelTime) + (procUser - m_lastProcUserTime) };
+                m_lastSysKernelTime = sysKernel;
+                m_lastSysUserTime = sysUser;
+                m_lastProcKernelTime = procKernel;
+                m_lastProcUserTime = procUser;
+                if(sysDelta != 0)
                 {
-                    unsigned long long sysDelta{ systemTimeInt.QuadPart - m_lastSystemTime.QuadPart };
-                    unsigned long long procDelta{ (kernelTimeInt.QuadPart - m_lastKernelTime.QuadPart) + (userTimeInt.QuadPart - m_lastUserTime.QuadPart) };
-                    m_lastKernelTime = kernelTimeInt;
-                    m_lastUserTime = userTimeInt;
-                    m_lastSystemTime = systemTimeInt;
-                    if(sysDelta > 0)
-                    {
-                        return (procDelta * 100.0) / sysDelta;
-                    }
+                    return (static_cast<double>(procDelta) / sysDelta) * 100.0;
                 }
             }
         }

@@ -1,5 +1,17 @@
 # Changelog
 
+## 2025.3.4
+### Breaking Changes
+None
+### New APIs
+#### Events
+- Added `*` and `->` operator support to `ParamEventArgs`
+### Fixes
+- Fixed an issue where could not compiler on older macOS systems
+#### System
+- Fixed an issue where `Process::getRAMUsage()` did not account for child processes on Windows
+- Improved the implementation of `Process::getCPUUsage()` on Windows
+
 ## 2025.3.3
 ### Breaking Changes
 None

@@ -56,6 +56,38 @@ namespace Nickvision::Events
         {
             return m_param;
         }
+        /**
+         * @brief Gets the param stored in the event args.
+         * @return The param stored
+         */
+        const T& operator->() const
+        {
+            return m_param;
+        }
+        /**
+         * @brief Gets the param stored in the event args.
+         * @return The param stored
+         */
+        T& operator->()
+        {
+            return m_param;
+        }
+        /**
+         * @brief Gets the param stored in the event args.
+         * @return The param stored
+         */
+        const T& operator*() const
+        {
+            return m_param;
+        }
+        /**
+         * @brief Gets the param stored in the event args.
+         * @return The param stored
+         */
+        T& operator*()
+        {
+            return m_param;
+        }
 
     private:
         T m_param;

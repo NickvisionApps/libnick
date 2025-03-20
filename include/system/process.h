@@ -151,9 +151,10 @@ namespace Nickvision::System
         HANDLE m_childInWrite;
         PROCESS_INFORMATION m_pi;
         HANDLE m_job;
-        mutable ULARGE_INTEGER m_lastKernelTime;
-        mutable ULARGE_INTEGER m_lastUserTime;
-        mutable ULARGE_INTEGER m_lastSystemTime;
+        mutable unsigned long long m_lastProcKernelTime;
+        mutable unsigned long long m_lastProcUserTime;
+        mutable unsigned long long m_lastSysKernelTime;
+        mutable unsigned long long m_lastSysUserTime;
 #else
         int m_childOutPipes[2];
         int m_childInPipes[2];

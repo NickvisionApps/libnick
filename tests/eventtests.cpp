@@ -1,40 +1,23 @@
 #include <gtest/gtest.h>
 #include "events/event.h"
+#include "events/parameventargs.h"
 
 using namespace Nickvision::Events;
-
-class StateChangedEventArgs : EventArgs
-{
-public:
-    StateChangedEventArgs(bool state)
-        : m_state{ state }
-    {
-
-    }
-
-    bool getState() const
-    {
-        return m_state;
-    }
-
-private:
-    bool m_state;
-};
 
 TEST(EventTests, Event1)
 {
     int count{ 0 };
-    Event<StateChangedEventArgs> e;
-    e += [&count](const StateChangedEventArgs& e)
+    Event<ParamEventArgs<bool>> e;
+    e += [&count](const ParamEventArgs<bool>& e)
     {
-        if (e.getState())
+        if (*e)
         {
             count++;
         }
     };
-    e += [&count](const StateChangedEventArgs& e)
+    e += [&count](const ParamEventArgs<bool>& e)
     {
-        if (!e.getState())
+        if (!*e)
         {
             count--;
         }
