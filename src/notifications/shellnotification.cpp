@@ -7,7 +7,7 @@
 #include "system/environment.h"
 #ifdef _WIN32
 #include <wintoastlib.h>
-#elif defined(__linux__)
+#else
 #include <gio/gio.h>
 #endif
 
@@ -97,11 +97,11 @@ namespace Nickvision::Notifications
         std::string iconPath;
         if(!Environment::hasVariable("SNAP"))
         {
-            iconPath = appId + "-symbolic";
+            iconPath = info.getId() + "-symbolic";
         }
         else
         {
-            iconPath = Environment::getVariable("SNAP") + "/usr/share/icons/hicolor/symbolic/apps/" + appId + "-symbolic.svg";
+            iconPath = Environment::getVariable("SNAP") + "/usr/share/icons/hicolor/symbolic/apps/" + info.getId() + "-symbolic.svg";
         }
         if (g_application_get_default())
         {
@@ -135,7 +135,7 @@ namespace Nickvision::Notifications
             {
                 g_notification_add_button_with_target_value(notification, openText.c_str(), "app.open", g_variant_new_string(e.getActionParam().c_str()));
             }
-            g_application_send_notification(g_application_get_default(), appId.c_str(), notification);
+            g_application_send_notification(g_application_get_default(), info.getId().c_str(), notification);
             if (fileIcon)
             {
                 g_object_unref(G_OBJECT(fileIcon));
@@ -149,7 +149,7 @@ namespace Nickvision::Notifications
             GDBusConnection* connection{ g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr) };
             if(connection)
             {
-                GVariant* params{ g_variant_new("(susssasa{sv}i)", appId.c_str(), 0, iconPath.c_str(), e.getTitle().c_str(), e.getMessage().c_str(), nullptr, nullptr, -1) };
+                GVariant* params{ g_variant_new("(susssasa{sv}i)", info.getId().c_str(), 0, iconPath.c_str(), e.getTitle().c_str(), e.getMessage().c_str(), nullptr, nullptr, -1) };
                 GVariant* result{ g_dbus_connection_call_sync(connection, "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify", params, nullptr, G_DBUS_CALL_FLAGS_NONE, -1, nullptr, nullptr) };
                 if(result)
                 {
@@ -159,7 +159,7 @@ namespace Nickvision::Notifications
                 g_object_unref(G_OBJECT(connection));
             }
 #elif defined(__APPLE__)
-            Environment::exec("osascript -e 'display notification \"" + e.getMessage() + "\" with title \"" + e.getTitle() + "\"'");
+            Environment::exec("osascript -e 'display notification \"" + e.getMessage() + "\" with title \"" + e.getTitle() + "\" subtitle \"" + info.getEnglishShortName() + "\"'");
 #endif
         }
 #endif
