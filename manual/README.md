@@ -9,7 +9,7 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 ## 2025.3.5
 ### Breaking Changes
 #### Notifications
-- Removed `NotifyIcon::notify()` as `ShellNotifications::send()` should be used instead
+- Removed `NotifyIcon` as UI platform should be used instead
 ### New APIs
 #### Notifications
 - Standardized `ShellNotifications::send()` to take the same parameters across platforms

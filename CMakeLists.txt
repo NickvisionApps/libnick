@@ -67,8 +67,6 @@ add_library (${PROJECT_NAME}
     "src/network/socket.cpp"
     "src/network/web.cpp"
     "src/notifications/notificationsenteventargs.cpp"
-    "src/notifications/notifyicon.cpp"
-    "src/notifications/notifyiconmenu.cpp"
     "src/notifications/shellnotification.cpp"
     "src/notifications/shellnotificationsenteventargs.cpp"
     "src/system/environment.cpp"
