@@ -24,39 +24,23 @@
 #define SHELLNOTIFICATION_H
 
 #include <string>
+#include "app/appinfo.h"
 #include "shellnotificationsenteventargs.h"
-#ifdef _WIN32
-#include <windows.h>
-#endif
 
 namespace Nickvision::Notifications::ShellNotification
 {
-#ifdef _WIN32
     /**
      * @brief Sends a notification to the desktop.
+     * @brief On Windows, uses toast notifications.
+     * @brief On GTK, uses Gio.Notification.
+     * @brief On non-GTK, uses FreeDesktop notification spec on Linux or osascript on Apple.
      * @brief Supports the action "open" with action param being a path of a file or folder to open.
+     * @brief On GTK, the app must define an "app.open" action to handle this event.
      * @param e ShellNotificationSentEventArgs
-     * @param hwnd The handle to the main application window
-     */
-    void send(const ShellNotificationSentEventArgs& e, HWND hwnd);
-#elif defined(__linux__)
-    /**
-     * @brief Sends a notification to the shell.
-     * @brief Uses Gio.Notification on GTK applications.
-     * @brief Uses FreeDesktop Notifications on non-GTK applications.
-     * @brief Supports the action "open" with action param being a path of a file or folder to open. The app must define an "app.open" action to handle this event. (GTK applications only)
-     * @param e ShellNotificationSentEventArgs
-     * @param appId The application's id
+     * @param info The application information
      * @param openText Localized text of "Open"
      */
-    void send(const ShellNotificationSentEventArgs& e, const std::string& appId, const std::string& openText);
-#elif defined(__APPLE__)
-    /**
-     * @brief Sends a notification to the shell.
-     * @param e ShellNotificationSentEventArgs
-     */
-    void send(const ShellNotificationSentEventArgs& e);
-#endif
+    void send(const ShellNotificationSentEventArgs& e, const App::AppInfo& info, const std::string& openText);
 }
 
 #endif //SHELLNOTIFICATION_H

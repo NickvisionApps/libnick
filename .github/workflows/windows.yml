@@ -27,9 +27,9 @@ jobs:
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: boost-json curl gettext-libintl gtest maddy sqlcipher
+          pkgs: boost-json curl gettext-libintl gtest maddy sqlcipher wintoast
           triplet: x64-windows
-          revision: 418da99d5a6baef99fe3f2fd69ba561f8bb1fd54
+          revision: a7d06b3a72d5ec48353bacb84152bd027ee9999b
           token: ${{ secrets.GITHUB_TOKEN }}
           github-binarycache: true
       - name: "Build"
