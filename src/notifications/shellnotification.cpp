@@ -3,43 +3,97 @@
 #include <memory>
 #include <string>
 #include <thread>
+#include "helpers/stringhelpers.h"
 #include "system/environment.h"
 #ifdef _WIN32
-#include "notifications/notifyicon.h"
-#include "notifications/notifyiconmenu.h"
+#include <wintoastlib.h>
 #elif defined(__linux__)
 #include <gio/gio.h>
 #endif
 
+using namespace Nickvision::App;
+using namespace Nickvision::Helpers;
 using namespace Nickvision::System;
+
+#ifdef _WIN32
+using namespace WinToastLib;
+
+class WinToastHandler : public IWinToastHandler
+{
+public:
+    WinToastHandler()
+    {
+
+    }
+
+    WinToastHandler(const std::filesystem::path& openPath)
+        : m_openPath{ openPath }
+    {
+
+    }
+
+    void toastActivated() const override
+    {
+
+    }
+
+    void toastActivated(int actionIndex) const override
+    {
+        //First and only button --> "Open"
+        if(actionIndex == 0 && !m_openPath.empty())
+        {
+            ShellExecuteW(nullptr, L"open", m_openPath.wstring().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
+        }
+    }
+
+    void toastActivated(const char*) const override
+    {
+
+    }
+
+    void toastDismissed(WinToastDismissalReason) const override
+    {
+
+    }
+
+    void toastFailed() const override
+    {
+
+    }
+
+private:
+    std::filesystem::path m_openPath;
+};
+#endif
 
 namespace Nickvision::Notifications
 {
-#ifdef _WIN32
-    void ShellNotification::send(const ShellNotificationSentEventArgs& e, HWND hwnd)
+    void ShellNotification::send(const ShellNotificationSentEventArgs& e, const AppInfo& info, const std::string& openText)
     {
-        NotifyIcon* icon{ NotifyIcon::getFromHWND(hwnd) };
-        if(icon)
+#ifdef _WIN32
+        WinToast::WinToastError err;
+        static bool initialized{ false };
+        if(!initialized)
         {
-            icon->notify(e);
+            WinToast::instance()->setAppName(StringHelpers::wstr(info.getEnglishShortName()));
+            WinToast::instance()->setAppUserModelId(StringHelpers::wstr(info.getEnglishShortName()));
+            initialized = WinToast::instance()->initialize(&err);
+        }
+        WinToastTemplate tmpl{ WinToastTemplate::Text02 };
+        IWinToastHandler* handler{ nullptr };
+        tmpl.setTextField(StringHelpers::wstr(e.getTitle()), WinToastTemplate::FirstLine);
+        tmpl.setTextField(StringHelpers::wstr(e.getMessage()), WinToastTemplate::SecondLine);
+        if(e.getAction() == "open" && std::filesystem::exists(e.getActionParam()))
+        {
+            tmpl.addAction(StringHelpers::wstr(openText));
+            handler = new WinToastHandler(e.getActionParam());
         }
         else
         {
-            std::vector<wchar_t> title(static_cast<size_t>(GetWindowTextLengthW(hwnd)));
-            GetWindowTextW(hwnd, title.data(), static_cast<int>(title.size()));
-            icon = new NotifyIcon(hwnd, std::wstring(title.data(), title.size()), { }, false);
-            icon->notify(e);
-            std::thread t{ [icon]()
-            { 
-                std::this_thread::sleep_for(std::chrono::seconds(10));
-                delete icon;
-            } };
-            t.detach();
+            handler = new WinToastHandler();
         }
-    }
-#elif defined(__linux__)
-    void ShellNotification::send(const ShellNotificationSentEventArgs& e, const std::string& appId, const std::string& openText)
-    {
+        WinToast::instance()->showToast(tmpl, handler);
+#else
         std::string iconPath;
         if(!Environment::hasVariable("SNAP"))
         {
@@ -91,6 +145,7 @@ namespace Nickvision::Notifications
         }
         else
         {
+#ifdef __linux__
             GDBusConnection* connection{ g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr) };
             if(connection)
             {
@@ -103,12 +158,10 @@ namespace Nickvision::Notifications
                 g_variant_unref(params);
                 g_object_unref(G_OBJECT(connection));
             }
-        }
-    }
 #elif defined(__APPLE__)
-    void ShellNotification::send(const ShellNotificationSentEventArgs& e)
-    {
-        Environment::exec("osascript -e 'display notification \"" + e.getMessage() + "\" with title \"" + e.getTitle() + "\"'");
-    }
+            Environment::exec("osascript -e 'display notification \"" + e.getMessage() + "\" with title \"" + e.getTitle() + "\"'");
 #endif
+        }
+#endif
+    }
 }

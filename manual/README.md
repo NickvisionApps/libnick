@@ -6,17 +6,15 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.3.4
+## 2025.3.5
 ### Breaking Changes
-None
+#### Notifications
+- Removed `NotifyIcon::notify()` as `ShellNotifications::send()` should be used instead
 ### New APIs
-#### Events
-- Added `*` and `->` operator support to `ParamEventArgs`
+#### Notifications
+- Standardized `ShellNotifications::send()` to take the same parameters across platforms
 ### Fixes
-- Fixed an issue where could not compiler on older macOS systems
-#### System
-- Fixed an issue where `Process::getRAMUsage()` did not account for child processes on Windows
-- Improved the implementation of `Process::getCPUUsage()` on Windows
+None
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

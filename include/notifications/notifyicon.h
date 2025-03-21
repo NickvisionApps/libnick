@@ -33,7 +33,6 @@
 #include <windows.h>
 #include <shellapi.h>
 #include "notifyiconmenu.h"
-#include "shellnotificationsenteventargs.h"
 
 namespace Nickvision::Notifications
 {
@@ -89,13 +88,6 @@ namespace Nickvision::Notifications
          * @return True if the context menu was updated, else false
          */
         bool setContextMenu(const NotifyIconMenu& menu);
-        /**
-         * @brief Shows a notification from the icon.
-         * @brief Supports the action "open" with action param being a path of a file or folder to open.
-         * @param e ShellNotificationSentEventArgs
-         * @return True if notification was shown from the icon
-         */
-        bool notify(const ShellNotificationSentEventArgs& e);
 
     public:
         /**

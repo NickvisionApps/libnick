@@ -157,38 +157,6 @@ namespace Nickvision::Notifications
         return createContextMenu();
     }
 
-    bool NotifyIcon::notify(const ShellNotificationSentEventArgs& e)
-    {
-        std::wstring message{ StringHelpers::wstr(e.getMessage()) };
-        std::wstring title{ StringHelpers::wstr(e.getTitle()) };
-        NOTIFYICONDATAW notify{ getBaseNotifyIconData() };
-        notify.uFlags |= NIF_INFO;
-        StringCchCopyW(notify.szInfo, ARRAYSIZE(notify.szInfo), message.c_str());
-        StringCchCopyW(notify.szInfoTitle, ARRAYSIZE(notify.szInfoTitle), title.c_str());
-        notify.dwInfoFlags = NIIF_RESPECT_QUIET_TIME;
-        if (e.getSeverity() == NotificationSeverity::Warning)
-        {
-            notify.dwInfoFlags |= NIIF_WARNING;
-        }
-        else if(e.getSeverity() == NotificationSeverity::Error)
-        {
-            notify.dwInfoFlags |= NIIF_ERROR;
-        }
-        else
-        {
-            notify.dwInfoFlags |= NIIF_NONE;
-        }
-        if (e.getAction() == "open" && std::filesystem::exists(e.getActionParam()))
-        {
-            m_openPath = e.getActionParam();
-        }
-        else
-        {
-            m_openPath = std::filesystem::path();
-        }
-        return Shell_NotifyIconW(NIM_MODIFY, &notify) == TRUE;
-    }
-
     NotifyIcon* NotifyIcon::getFromHWND(HWND hwnd)
     {
         if (m_icons.contains(hwnd))
@@ -283,13 +251,6 @@ namespace Nickvision::Notifications
                 }
                 TrackPopupMenuEx(m_hmenu, flags, point.x, point.y, m_hwnd, nullptr);
                 return 0;
-            }
-            else if (LOWORD(lParam) == NIN_BALLOONUSERCLICK) //Ballon clicked ("open" event)
-            {
-                if (std::filesystem::exists(m_openPath))
-                {
-                    ShellExecuteW(nullptr, L"open", m_openPath.wstring().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
-                }
             }
             NOTIFYICONDATAW notify{ getBaseNotifyIconData() };
             Shell_NotifyIconW(NIM_MODIFY, &notify);
