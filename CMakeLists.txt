@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2025.3.4 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2025.3.5 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -66,9 +66,8 @@ add_library (${PROJECT_NAME}
     "src/network/networkstatechangedeventargs.cpp"
     "src/network/socket.cpp"
     "src/network/web.cpp"
+    "src/notifications/appnotification.cpp"
     "src/notifications/notificationsenteventargs.cpp"
-    "src/notifications/notifyicon.cpp"
-    "src/notifications/notifyiconmenu.cpp"
     "src/notifications/shellnotification.cpp"
     "src/notifications/shellnotificationsenteventargs.cpp"
     "src/system/environment.cpp"
@@ -98,6 +97,10 @@ if(USING_VCPKG)
     target_link_libraries(${PROJECT_NAME} PUBLIC unofficial::maddy::maddy)
 endif()
 if(WIN32)
+    if(USING_VCPKG)
+        find_package(unofficial-wintoast CONFIG REQUIRED)
+        target_link_libraries(${PROJECT_NAME} PUBLIC unofficial::wintoast::wintoast)
+    endif()
     find_package(sqlcipher CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dnsapi Dwmapi Gdiplus Kernel32 Shell32 UxTheme Ws2_32)
 elseif(APPLE)
