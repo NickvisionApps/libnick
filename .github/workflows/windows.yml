@@ -29,7 +29,7 @@ jobs:
         with:
           pkgs: boost-json curl gettext-libintl gtest maddy sqlcipher wintoast
           triplet: x64-windows
-          revision: a7d06b3a72d5ec48353bacb84152bd027ee9999b
+          revision: 670f6dddaafc59c5dfe0587a130d59a35c48ea38
           token: ${{ secrets.GITHUB_TOKEN }}
           github-binarycache: true
       - name: "Build"

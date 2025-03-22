@@ -3,10 +3,11 @@
 ## 2025.3.5
 ### Breaking Changes
 #### Notifications
+- Standardized `ShellNotifications::send()` to take the same parameters across platforms
 - Removed `NotifyIcon` as UI platform should be used instead
 ### New APIs
 #### Notifications
-- Standardized `ShellNotifications::send()` to take the same parameters across platforms
+- Added `AppNotification` namespace to allow applications to send app notifications anywhere
 ### Fixes
 None
 

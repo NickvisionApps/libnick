@@ -66,6 +66,7 @@ add_library (${PROJECT_NAME}
     "src/network/networkstatechangedeventargs.cpp"
     "src/network/socket.cpp"
     "src/network/web.cpp"
+    "src/notifications/appnotification.cpp"
     "src/notifications/notificationsenteventargs.cpp"
     "src/notifications/shellnotification.cpp"
     "src/notifications/shellnotificationsenteventargs.cpp"
