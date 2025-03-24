@@ -1,5 +1,13 @@
 # Changelog
 
+## 2025.3.6
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+- Library linking on Windows
+
 ## 2025.3.5
 ### Breaking Changes
 #### Notifications
