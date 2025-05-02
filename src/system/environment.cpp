@@ -57,6 +57,33 @@ namespace Nickvision::System
         return executableDirectory;
     }
 
+    const std::filesystem::path& Environment::getExecutablePath()
+    {
+        static std::filesystem::path executablePath;
+        if (!executablePath.empty())
+        {
+            return executablePath;
+        }
+#ifdef _WIN32
+        wchar_t pth[MAX_PATH];
+        DWORD len{ GetModuleFileNameW(nullptr, pth, sizeof(pth)) };
+        if(len > 0)
+        {
+            executablePath = std::filesystem::path(std::wstring(pth, len));
+        }
+#elif defined(__linux__)
+        executablePath = std::filesystem::canonical("/proc/self/exe");
+#elif defined(__APPLE__)
+        char path[PATH_MAX+1];
+        uint32_t size{ sizeof(path) };
+        if(_NSGetExecutablePath(path, &size) == 0)
+        {
+            executablePath = std::filesystem::canonical(path);
+        }
+#endif
+        return executablePath;
+    }
+
     std::string Environment::getLocaleName()
     {
 #ifdef _WIN32

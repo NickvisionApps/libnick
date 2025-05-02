@@ -39,8 +39,10 @@ namespace Nickvision::Notifications::ShellNotification
      * @param e ShellNotificationSentEventArgs
      * @param info The application information
      * @param openText Localized text of "Open"
+     * @return True if notification sent
+     * @return False if notification not sent
      */
-    void send(const ShellNotificationSentEventArgs& e, const App::AppInfo& info, const std::string& openText);
+    void send(const ShellNotificationSentEventArgs& e, const App::AppInfo& info, const std::string& openText = "");
 }
 
 #endif //SHELLNOTIFICATION_H

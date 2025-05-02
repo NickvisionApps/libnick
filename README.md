@@ -23,7 +23,6 @@ The following are a list of dependencies used by libnick.
 ### Windows
 The above dependencies must be installed, *plus* the following for Windows systems:
 - sqlcipher
-- wintoast
 
 ### Linux
 The above dependencies must be installed, *plus* the following for Linux systems:
@@ -63,7 +62,7 @@ A C++20 compiler is also required to build libnick.
 1. Set the `VCPKG_ROOT` environment variable to the path of your vcpkg installation's root directory.
 #### Windows
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-windows`
-1. Run `vcpkg install boost-json curl gettext-libintl gtest maddy sqlcipher wintoast`
+1. Run `vcpkg install boost-json curl gettext-libintl gtest maddy sqlcipher`
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
 1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
