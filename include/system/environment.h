@@ -63,6 +63,11 @@ namespace Nickvision::System::Environment
      */
     const std::filesystem::path& getExecutableDirectory();
     /**
+     * @brief Gets the path of the executable file.
+     * @return The executable file's path
+     */
+    const std::filesystem::path& getExecutablePath();
+    /**
      * @brief Gets the name of the current locale.
      * @return The locale name
      */

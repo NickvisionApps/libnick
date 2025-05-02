@@ -1,5 +1,16 @@
 # Changelog
 
+## 2025.5.0
+### Breaking Changes
+#### Notifications
+- Removed dependency of `wintoast` on Windows
+### New APIs
+#### System
+- Added `Environment::getExecutablePath()` function
+### Fixes
+#### Notifications
+- Fixed an issue where `ShellNotifications::send()` did not work on Windows
+
 ## 2025.3.6
 ### Breaking Changes
 None

@@ -1,98 +1,106 @@
 #include "notifications/shellnotification.h"
 #include <filesystem>
-#include <memory>
-#include <string>
 #include <thread>
-#include "helpers/stringhelpers.h"
 #include "system/environment.h"
 #ifdef _WIN32
-#include <wintoastlib.h>
+#include <windows.h>
+#include <shellapi.h>
 #else
 #include <gio/gio.h>
 #endif
 
-using namespace Nickvision::App;
-using namespace Nickvision::Helpers;
-using namespace Nickvision::System;
-
 #ifdef _WIN32
-using namespace WinToastLib;
-
-class WinToastHandler : public IWinToastHandler
-{
-public:
-    WinToastHandler()
-    {
-
-    }
-
-    WinToastHandler(const std::filesystem::path& openPath)
-        : m_openPath{ openPath }
-    {
-
-    }
-
-    void toastActivated() const override
-    {
-
-    }
-
-    void toastActivated(int actionIndex) const override
-    {
-        //First and only button --> "Open"
-        if(actionIndex == 0 && !m_openPath.empty())
-        {
-            ShellExecuteW(nullptr, L"open", m_openPath.wstring().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
-        }
-    }
-
-    void toastActivated(const char*) const override
-    {
-
-    }
-
-    void toastDismissed(WinToastDismissalReason) const override
-    {
-
-    }
-
-    void toastFailed() const override
-    {
-
-    }
-
-private:
-    std::filesystem::path m_openPath;
-};
+#define WM_TRAYICON WM_APP + 1
+#define TRAYICON_ID 1001
+#define TIMER_ID 1002
 #endif
+
+using namespace Nickvision::App;
+using namespace Nickvision::System;
 
 namespace Nickvision::Notifications
 {
     void ShellNotification::send(const ShellNotificationSentEventArgs& e, const AppInfo& info, const std::string& openText)
     {
 #ifdef _WIN32
-        WinToast::WinToastError err;
-        static bool initialized{ false };
-        if(!initialized)
+        std::thread worker{ [e, info]()
         {
-            WinToast::instance()->setAppName(StringHelpers::wstr(info.getEnglishShortName()));
-            WinToast::instance()->setAppUserModelId(StringHelpers::wstr(info.getEnglishShortName()));
-            initialized = WinToast::instance()->initialize(&err);
-        }
-        WinToastTemplate tmpl{ WinToastTemplate::Text02 };
-        IWinToastHandler* handler{ nullptr };
-        tmpl.setTextField(StringHelpers::wstr(e.getTitle()), WinToastTemplate::FirstLine);
-        tmpl.setTextField(StringHelpers::wstr(e.getMessage()), WinToastTemplate::SecondLine);
-        if(e.getAction() == "open" && std::filesystem::exists(e.getActionParam()))
-        {
-            tmpl.addAction(StringHelpers::wstr(openText));
-            handler = new WinToastHandler(e.getActionParam());
-        }
-        else
-        {
-            handler = new WinToastHandler();
-        }
-        WinToast::instance()->showToast(tmpl, handler);
+            static std::filesystem::path path{ e.getAction() == "open" ? e.getActionParam() : "" };
+            std::string className{ "libnick_notification" };
+            WNDCLASSA wc{};
+            wc.lpfnWndProc = +[](HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) -> LRESULT
+            {
+                if(msg == WM_TRAYICON)
+                {
+                    if(lParam == NIN_BALLOONUSERCLICK)
+                    {
+                        if(std::filesystem::exists(path))
+                        {
+                            ShellExecuteA(hwnd, "open", path.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
+                        }
+                    }
+                }
+                else if(msg == WM_TIMER)
+                {
+                    if(wParam == TIMER_ID)
+                    {
+                        KillTimer(hwnd, TIMER_ID);
+                        PostQuitMessage(0);
+                    }
+                }
+                else if(msg == WM_DESTROY)
+                {
+                    PostQuitMessage(0);
+                }
+                return DefWindowProcA(hwnd, msg, wParam, lParam);
+            };
+            wc.hInstance = GetModuleHandleA(nullptr);
+            wc.lpszClassName = className.c_str();
+            RegisterClassA(&wc);
+            HWND hwnd{ CreateWindowExA(0, className.c_str(), info.getShortName().c_str(), 0, 0, 0, 0, 0, nullptr, nullptr, GetModuleHandleA(nullptr), nullptr) };
+            if(!hwnd)
+            {
+                return;
+            }
+            HICON icn;
+            ExtractIconExA(Environment::getExecutablePath().string().c_str(), 0, nullptr, &icn, 1);
+            NOTIFYICONDATAA nid{};
+            nid.cbSize = sizeof(NOTIFYICONDATAA);
+            nid.hWnd = hwnd;
+            nid.uID = TRAYICON_ID;
+            nid.uFlags = NIF_INFO | NIF_ICON | NIF_TIP | NIF_MESSAGE;
+            nid.uCallbackMessage = WM_TRAYICON;
+            nid.hIcon = icn ? icn : LoadIconA(nullptr, IDI_APPLICATION);
+            switch(e.getSeverity())
+            {
+            case NotificationSeverity::Error:
+                nid.dwInfoFlags = NIIF_ERROR;
+                break;
+            case NotificationSeverity::Warning:
+                nid.dwInfoFlags = NIIF_WARNING;
+                break;
+            default:
+                nid.dwInfoFlags = NIIF_INFO;
+                break;
+            }
+            strcpy_s(nid.szTip, info.getShortName().c_str());
+            strcpy_s(nid.szInfoTitle, e.getTitle().c_str());
+            strcpy_s(nid.szInfo, e.getMessage().c_str());
+            Shell_NotifyIconA(NIM_ADD, &nid);
+            SetTimer(hwnd, TIMER_ID, 5000, nullptr);
+            MSG msg;
+            while(GetMessageA(&msg, nullptr, 0, 0))
+            {
+                TranslateMessage(&msg);
+                DispatchMessageA(&msg);
+            }
+            Shell_NotifyIconA(NIM_DELETE, &nid);
+            if(icn)
+            {
+                DestroyIcon(icn);
+            }
+        } };
+        worker.detach();
 #else
         std::string iconPath;
         if(!Environment::hasVariable("SNAP"))
