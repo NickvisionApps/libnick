@@ -2,6 +2,18 @@
 
 ## 2025.5.0
 ### Breaking Changes
+#### System
+- A Process' status can now be queued with `Process::getState()` which returns a `ProcessState` value
+### New APIs
+#### System
+- Added `ProcessState` enum
+- Added `Process::pause()` function
+- Added `Process::resume()` function
+### Fixes
+None
+
+## 2025.5.0
+### Breaking Changes
 #### Notifications
 - Removed dependency of `wintoast` on Windows
 ### New APIs
