@@ -400,7 +400,7 @@ namespace Nickvision::System
             //Create process
             if(execvp(m_path.string().c_str(), appArgs.data()) < 0)
             {
-                m_state = Process::Completed;
+                m_state = ProcessState::Completed;
                 m_exitCode = 1;
                 exit(1);
             }

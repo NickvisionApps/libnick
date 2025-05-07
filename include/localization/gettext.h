@@ -25,6 +25,7 @@
 
 #include <format>
 #include <string>
+#include <vector>
 #include <libintl.h>
 
 #define GETTEXT_CONTEXT_SEPARATOR "\004"
@@ -38,7 +39,7 @@ namespace Nickvision::Localization::Gettext
 {
     /**
      * @brief Initializes the gettext system. This function should only be called once, regardless of with different domain names.
-     * @param domainName The domain name to use for gettext translations. Must be lowercase and contain no spaces.
+     * @param domainName The domain name to use for gettext translations. Must be lowercase and contain no spaces
      * @return True if initialized, else false
      */
     bool init(const std::string& domainName);
@@ -47,6 +48,11 @@ namespace Nickvision::Localization::Gettext
      * @return The gettext domain name
      */
     const std::string& getDomainName();
+    /**
+     * @brief Gets the list of available translated languages.
+     * @return The list of available translated languages.
+     */
+    const std::vector<std::string>& getAvailableLanguages();
     /**
      * @brief Translates a message and formats it with the given arguments.
      * @param msg The message to translate
