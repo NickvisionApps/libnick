@@ -5,6 +5,8 @@
 #### System
 - A Process' status can now be queued with `Process::getState()` which returns a `ProcessState` value
 ### New APIs
+#### Localizationm
+- Added `_f()` macro for creating strings with translated format strings
 #### System
 - Added `ProcessState` enum
 - Added `Process::pause()` function

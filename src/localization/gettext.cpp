@@ -1,5 +1,4 @@
 #include "localization/gettext.h"
-#include <filesystem>
 #include <cstdlib>
 #include "helpers/stringhelpers.h"
 #include "system/environment.h"

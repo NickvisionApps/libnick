@@ -157,6 +157,7 @@ if (BUILD_TESTING)
     "tests/hardwaretests.cpp"
     "tests/ipctests.cpp"
     "tests/keyringtests.cpp"
+    "tests/localizationtests.cpp"
     "tests/loggingtests.cpp"
     "tests/main.cpp"
     "tests/networktests.cpp"
