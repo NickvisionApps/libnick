@@ -32,6 +32,7 @@
 #include <vector>
 #include "events/event.h"
 #include "processexitedeventargs.h"
+#include "processstate.h"
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -60,25 +61,20 @@ namespace Nickvision::System
          */
         ~Process();
         /**
-         * @brief Gets the path of the process.
-         * @return The path of the process
-         */
-        const std::filesystem::path& getPath() const;
-        /**
          * @brief Gets the event for when the process has exited.
          * @return The process exited event
          */
         Events::Event<ProcessExitedEventArgs>& exited();
         /**
-         * @brief Gets whether or not the process is running.
-         * @return True if running, else false
+         * @brief Gets the path of the process.
+         * @return The path of the process
          */
-        bool isRunning() const;
+        const std::filesystem::path& getPath() const;
         /**
-         * @brief Gets whether or not the process has completed.
-         * @return True if completed, else false
+         * @brief Gets the state of the proicess.
+         * @return The state of the process.
          */
-        bool hasCompleted() const;
+        ProcessState getState() const;
         /**
          * @brief Gets the exit code of the process.
          * @return The exit code of the process. -1 if the process has not completed
@@ -90,17 +86,18 @@ namespace Nickvision::System
          */
         const std::string& getOutput() const;
         /**
-         * @brief Gets the amount of RAM being used by the process in bytes.
-         * @return The amount of RAM used by the process
-         */
-        unsigned long long getRAMUsage() const;
-        /**
          * @brief Gets the percent of the CPU being used by the process.
          * @return The CPU usage of the process
          */
         double getCPUUsage() const;
         /**
+         * @brief Gets the amount of RAM being used by the process in bytes.
+         * @return The amount of RAM used by the process
+         */
+        unsigned long long getRAMUsage() const;
+        /**
          * @brief Starts the process.
+         * @brief Use Process::resume() to start again a paused process.
          * @return True if the process was started, else false
          */
         bool start();
@@ -110,20 +107,30 @@ namespace Nickvision::System
          */
         bool kill();
         /**
+         * @brief Resumes the process.
+         * @return True if the process was resumed, else false
+         */
+        bool resume();
+        /**
+         * @brief Pauses the process.
+         * @return True if the process was paused, else false
+         */
+        bool pause();
+        /**
          * @brief Waits for the process to exit.
          * @brief This function will block until the process has exited.
-         * @brief Make sure to call start() before calling this function.
+         * @brief Make sure to call start() / resume() before calling this function.
          * @return The exit code of the process
          */
         int waitForExit();
         /**
-         * @brief Send text to the process's console.
+         * @brief Sends text to the process' console.
          * @param s The text to send
          * @return True if the text is sent, else false
          */
         bool send(const std::string& s);
         /**
-         * @brief Send text to the process's console and adds the return characters.
+         * @brief Sends text to the process' console and adds the return characters.
          * @param s The command to send
          * @return True if the command is sent, else false
          */
@@ -139,8 +146,7 @@ namespace Nickvision::System
         std::vector<std::string> m_args;
         std::filesystem::path m_workingDirectory;
         Events::Event<ProcessExitedEventArgs> m_exited;
-        bool m_running;
-        bool m_completed;
+        ProcessState m_state;
         int m_exitCode;
         std::string m_output;
         std::thread m_watchThread;

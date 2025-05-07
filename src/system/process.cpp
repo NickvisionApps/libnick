@@ -60,15 +60,14 @@ namespace Nickvision::System
         : m_path{ path },
         m_args{ args },
         m_workingDirectory{ workingDir },
-        m_running{ false },
-        m_completed{ false },
+        m_state{ ProcessState::Created },
         m_exitCode{ -1 },
 #ifdef _WIN32
         m_childOutRead{ nullptr },
         m_childOutWrite{ nullptr },
         m_childInRead{ nullptr },
         m_childInWrite{ nullptr },
-        m_pi{ 0 },
+        m_pi{},
         m_job{ nullptr },
         m_lastProcKernelTime{ 0 },
         m_lastProcUserTime{ 0 },
@@ -81,7 +80,7 @@ namespace Nickvision::System
 #endif
     {
 #ifdef _WIN32
-        SECURITY_ATTRIBUTES sa{ 0 };
+        SECURITY_ATTRIBUTES sa{};
         sa.nLength = sizeof(SECURITY_ATTRIBUTES);
         sa.bInheritHandle = TRUE;
         sa.lpSecurityDescriptor = nullptr;
@@ -96,7 +95,7 @@ namespace Nickvision::System
             throw std::runtime_error("Failed to create input pipes.");
         }
         //Create job
-        JOBOBJECT_EXTENDED_LIMIT_INFORMATION jeli{ 0 };
+        JOBOBJECT_EXTENDED_LIMIT_INFORMATION jeli{};
         jeli.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
         m_job = CreateJobObjectW(&sa, nullptr);
         if(!m_job)
@@ -121,7 +120,7 @@ namespace Nickvision::System
                 appArgs += L" " + StringHelpers::wstr(arg);
             }
         }
-        STARTUPINFOW si{ 0 };
+        STARTUPINFOW si{};
         si.cb = sizeof(STARTUPINFOW);
         si.hStdError = m_childOutWrite;
         si.hStdOutput = m_childOutWrite;
@@ -173,28 +172,22 @@ namespace Nickvision::System
 #endif
     }
 
-    const std::filesystem::path& Process::getPath() const
-    {
-        std::lock_guard<std::mutex> lock{ m_mutex };
-        return m_path;
-    }
-
     Event<ProcessExitedEventArgs>& Process::exited()
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_exited;
     }
 
-    bool Process::isRunning() const
+    const std::filesystem::path& Process::getPath() const
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        return m_running;
+        return m_path;
     }
 
-    bool Process::hasCompleted() const
+    ProcessState Process::getState() const
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        return m_completed;
+        return m_state;
     }
 
     int Process::getExitCode() const
@@ -209,74 +202,9 @@ namespace Nickvision::System
         return m_output;
     }
 
-    unsigned long long Process::getRAMUsage() const
-    {
-        if(!isRunning())
-        {
-            return 0L;
-        }
-#ifdef _WIN32
-        PROCESS_MEMORY_COUNTERS pmc;
-        if(GetProcessMemoryInfo(m_pi.hProcess, &pmc, sizeof(pmc)))
-        {
-            unsigned long long mem{ pmc.WorkingSetSize };
-            for(DWORD child : getChildPIDs(m_pi.hProcess))
-            {
-                HANDLE cProcess{ OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, child) };
-                if(cProcess)
-                {
-                    if(GetProcessMemoryInfo(cProcess, &pmc, sizeof(pmc)))
-                    {
-                        mem += pmc.WorkingSetSize;
-                    }
-                    CloseHandle(cProcess);
-                }
-            }
-            return mem;
-        }
-#elif defined(__linux__)
-        std::ifstream proc{ "/proc/" + std::to_string(m_pid) + "/status" };
-        if(proc.is_open())
-        {
-            std::string line;
-            while(std::getline(proc, line))
-            {
-                if(line.find("VmRSS:") != std::string::npos)
-                {
-                    std::vector<std::string> fields{ StringHelpers::split(line, ' ', false) };
-                    return SizeHelpers::kilobytesToBytes(std::stoull(fields[1]));
-                }
-            }
-        }
-#elif defined(__APPLE__)
-        task_t task;
-        if(task_for_pid(mach_task_self(), m_pid, &task) == KERN_SUCCESS)
-        {
-    /* Code for modern macOS */
-    #if MAC_OS_X_VERSION_MIN_REQUIRED >= 1090
-            task_vm_info_data_t info;
-            mach_msg_type_number_t count{ sizeof(task_vm_info_data_t) };
-            if(task_info(task, TASK_VM_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
-            {
-                return info.phys_footprint;
-            }
-    /* Fallback for macOS < 10.9 */
-    #else
-            task_basic_info_data_t info;
-            mach_msg_type_number_t count{ TASK_BASIC_INFO_COUNT };
-            if(task_info(task, TASK_BASIC_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
-            {
-                return info.resident_size;
-            }
-    #endif
-        }
-#endif
-        return 0L;
-    }
-
     double Process::getCPUUsage() const
     {
-        if(!isRunning())
+        if(m_state != ProcessState::Running)
         {
             return 0.0;
         }
@@ -358,19 +286,84 @@ namespace Nickvision::System
         return 0.0;
     }
 
+    unsigned long long Process::getRAMUsage() const
+    {
+        if(m_state != ProcessState::Running)
+        {
+            return 0L;
+        }
+#ifdef _WIN32
+        PROCESS_MEMORY_COUNTERS pmc{};
+        if(GetProcessMemoryInfo(m_pi.hProcess, &pmc, sizeof(pmc)))
+        {
+            unsigned long long mem{ pmc.WorkingSetSize };
+            for(DWORD child : getChildPIDs(m_pi.hProcess))
+            {
+                HANDLE cProcess{ OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, child) };
+                if(cProcess)
+                {
+                    if(GetProcessMemoryInfo(cProcess, &pmc, sizeof(pmc)))
+                    {
+                        mem += pmc.WorkingSetSize;
+                    }
+                    CloseHandle(cProcess);
+                }
+            }
+            return mem;
+        }
+#elif defined(__linux__)
+        std::ifstream proc{ "/proc/" + std::to_string(m_pid) + "/status" };
+        if(proc.is_open())
+        {
+            std::string line;
+            while(std::getline(proc, line))
+            {
+                if(line.find("VmRSS:") != std::string::npos)
+                {
+                    std::vector<std::string> fields{ StringHelpers::split(line, ' ', false) };
+                    return SizeHelpers::kilobytesToBytes(std::stoull(fields[1]));
+                }
+            }
+        }
+#elif defined(__APPLE__)
+        task_t task;
+        if(task_for_pid(mach_task_self(), m_pid, &task) == KERN_SUCCESS)
+        {
+    /* Code for modern macOS */
+    #if MAC_OS_X_VERSION_MIN_REQUIRED >= 1090
+            task_vm_info_data_t info;
+            mach_msg_type_number_t count{ sizeof(task_vm_info_data_t) };
+            if(task_info(task, TASK_VM_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
+            {
+                return info.phys_footprint;
+            }
+    /* Fallback for macOS < 10.9 */
+    #else
+            task_basic_info_data_t info;
+            mach_msg_type_number_t count{ TASK_BASIC_INFO_COUNT };
+            if(task_info(task, TASK_BASIC_INFO, reinterpret_cast<task_info_t>(&info), &count) == KERN_SUCCESS)
+            {
+                return info.resident_size;
+            }
+    #endif
+        }
+#endif
+        return 0L;
+    }
+
     bool Process::start()
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        if(m_running)
+        if(m_state == ProcessState::Running)
         {
             return true;
         }
-        if(m_completed)
+        else if(m_state != ProcessState::Created)
         {
             return false;
         }
 #ifdef _WIN32
-        if(!ResumeThread(m_pi.hThread))
+        if(ResumeThread(m_pi.hThread) == static_cast<DWORD>(-1))
         {
             return false;
         }
@@ -407,7 +400,7 @@ namespace Nickvision::System
             //Create process
             if(execvp(m_path.string().c_str(), appArgs.data()) < 0)
             {
-                m_completed = true;
+                m_state = ProcessState::Completed;
                 m_exitCode = 1;
                 exit(1);
             }
@@ -417,14 +410,14 @@ namespace Nickvision::System
         close(m_childInPipes[0]);
 #endif
         m_watchThread = std::thread(&Process::watch, this);
-        m_running = true;
+        m_state = ProcessState::Running;
         return true;
     }
 
     bool Process::kill()
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        if(!m_running)
+        if(m_state != ProcessState::Running && m_state != ProcessState::Paused)
         {
             return false;
         }
@@ -441,12 +434,61 @@ namespace Nickvision::System
         {
             return false;
         }
+        m_state = ProcessState::Killed;
+        return true;
+    }
+
+    bool Process::resume()
+    {
+        std::lock_guard<std::mutex> lock{ m_mutex };
+        if(m_state != ProcessState::Paused)
+        {
+            return false;
+        }
+        //Continue child processes spawned by the process
+#ifndef _WIN32
+        ::kill(-m_pid, SIGCONT);
+#endif
+        //Continue process
+#ifdef _WIN32
+        if(ResumeThread(m_pi.hThread) == static_cast<DWORD>(-1))
+#else
+        if(::kill(m_pid, SIGCONT) < 0)
+#endif
+        {
+            return false;
+        }
+        m_state = ProcessState::Running;
+        return true;
+    }
+
+    bool Process::pause()
+    {
+        std::lock_guard<std::mutex> lock{ m_mutex };
+        if(m_state != ProcessState::Running)
+        {
+            return false;
+        }
+        //Pause child processes spawned by the process
+#ifndef _WIN32
+        ::kill(-m_pid, SIGSTOP);
+#endif
+        //Pause process
+#ifdef _WIN32
+        if(SuspendThread(m_pi.hThread) == static_cast<DWORD>(-1))
+#else
+        if(::kill(m_pid, SIGSTOP) < 0)
+#endif
+        {
+            return false;
+        }
+        m_state = ProcessState::Paused;
         return true;
     }
 
     int Process::waitForExit()
     {
-        while(!hasCompleted())
+        while(getState() != ProcessState::Completed)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
         }
@@ -455,7 +497,7 @@ namespace Nickvision::System
 
     bool Process::send(const std::string& s)
     {
-        if(!isRunning())
+        if(m_state != ProcessState::Running)
         {
             return false;
         }
@@ -539,8 +581,7 @@ namespace Nickvision::System
 #else
         m_exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
 #endif
-        m_running = false;
-        m_completed = true;
+        m_state = ProcessState::Completed;
         lock.unlock();
         m_exited.invoke({ m_exitCode, m_output });
     }

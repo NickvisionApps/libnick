@@ -24,7 +24,7 @@ namespace Nickvision::System
     unsigned long long HardwareInfo::getTotalRamSize()
     {
 #ifdef _WIN32
-        MEMORYSTATUSEX status;
+        MEMORYSTATUSEX status{};
         status.dwLength = sizeof(status);
         if(GlobalMemoryStatusEx(&status))
         {
@@ -53,7 +53,7 @@ namespace Nickvision::System
     unsigned long long HardwareInfo::getFreeRamSize()
     {
 #ifdef _WIN32
-        MEMORYSTATUSEX status;
+        MEMORYSTATUSEX status{};
         status.dwLength = sizeof(status);
         if(GlobalMemoryStatusEx(&status))
         {

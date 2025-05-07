@@ -1,6 +1,6 @@
 #include "localization/gettext.h"
-#include <filesystem>
 #include <cstdlib>
+#include <filesystem>
 #include "helpers/stringhelpers.h"
 #include "system/environment.h"
 
@@ -35,6 +35,22 @@ namespace Nickvision::Localization
     const std::string& Gettext::getDomainName()
     {
         return s_domainName;
+    }
+
+    const std::vector<std::string>& Gettext::getAvailableLanguages()
+    {
+        static std::vector<std::string> langs;
+        if(langs.empty())
+        {
+            for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(Environment::getExecutableDirectory()))
+            {
+                if (e.is_directory() && std::filesystem::exists(e.path() / (getDomainName() + ".mo")))
+                {
+                    langs.push_back(e.path().filename().string());
+                }
+            }
+        }
+        return langs;
     }
 
     const char* Gettext::pgettext(const char* context, const char* msg)

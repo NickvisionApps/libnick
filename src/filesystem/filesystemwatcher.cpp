@@ -140,7 +140,7 @@ namespace Nickvision::Filesystem
         {
             return;
         }
-        OVERLAPPED overlapped{ 0 };
+        OVERLAPPED overlapped{};
         overlapped.hEvent = CreateEvent(nullptr, 1, 0, nullptr);
         if (!overlapped.hEvent)
         {

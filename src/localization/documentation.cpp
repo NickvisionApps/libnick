@@ -25,25 +25,13 @@ namespace Nickvision::Localization
 #endif
         if (!sysLocale.empty() && sysLocale != "C" && sysLocale != "en_US" && sysLocale != "*")
         {
-            /*
-            * Because the translations of a Nickvision application are stored in the application's running
-            * directory, we can look at the list of directory names and see if they contain a translation
-            * file (.mo) for the sysLocale string. If a directory contains an mo file, we can set the 
-            * documentation lang to the sysLocale. If no directory contains an mo file for the sysLocale, 
-            * we can try to match using the two-letter language code. If that doesn't work, the default
-            * English docs will be used.
-            */
             std::string twoLetter{ StringHelpers::split(sysLocale, "_")[0] };
-            for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(Environment::getExecutableDirectory()))
+            for(const std::string& l : Gettext::getAvailableLanguages())
             {
-                if (e.is_directory() && std::filesystem::exists(e.path() / (Gettext::getDomainName() + ".mo")))
+                if(l == sysLocale || l == twoLetter)
                 {
-                    std::string l{ e.path().filename().string() };
-                    if(l == sysLocale || l == twoLetter)
-                    {
-                        lang = l;
-                        break;
-                    }
+                    lang = l;
+                    break;
                 }
             }
         }

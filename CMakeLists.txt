@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2025.5.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2025.5.1 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -157,6 +157,7 @@ if (BUILD_TESTING)
     "tests/hardwaretests.cpp"
     "tests/ipctests.cpp"
     "tests/keyringtests.cpp"
+    "tests/localizationtests.cpp"
     "tests/loggingtests.cpp"
     "tests/main.cpp"
     "tests/networktests.cpp"
