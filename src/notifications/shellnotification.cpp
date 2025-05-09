@@ -18,42 +18,48 @@
 using namespace Nickvision::App;
 using namespace Nickvision::System;
 
+#ifdef _WIN32
+static std::filesystem::path s_openPath;
+
+static LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if(msg == WM_TRAYICON)
+    {
+        if(lParam == NIN_BALLOONUSERCLICK)
+        {
+            if(std::filesystem::exists(s_openPath))
+            {
+                ShellExecuteA(hwnd, "open", s_openPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
+            }
+        }
+    }
+    else if(msg == WM_TIMER)
+    {
+        if(wParam == TIMER_ID)
+        {
+            KillTimer(hwnd, TIMER_ID);
+            PostQuitMessage(0);
+        }
+    }
+    else if(msg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+    }
+    return DefWindowProcA(hwnd, msg, wParam, lParam);
+}
+#endif
+
 namespace Nickvision::Notifications
 {
     void ShellNotification::send(const ShellNotificationSentEventArgs& e, const AppInfo& info, const std::string& openText)
     {
 #ifdef _WIN32
+        s_openPath = e.getAction() == "open" ? e.getActionParam() : "";
         std::thread worker{ [e, info]()
         {
-            static std::filesystem::path path{ e.getAction() == "open" ? e.getActionParam() : "" };
             std::string className{ "libnick_notification" };
             WNDCLASSA wc{};
-            wc.lpfnWndProc = +[](HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) -> LRESULT
-            {
-                if(msg == WM_TRAYICON)
-                {
-                    if(lParam == NIN_BALLOONUSERCLICK)
-                    {
-                        if(std::filesystem::exists(path))
-                        {
-                            ShellExecuteA(hwnd, "open", path.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT);
-                        }
-                    }
-                }
-                else if(msg == WM_TIMER)
-                {
-                    if(wParam == TIMER_ID)
-                    {
-                        KillTimer(hwnd, TIMER_ID);
-                        PostQuitMessage(0);
-                    }
-                }
-                else if(msg == WM_DESTROY)
-                {
-                    PostQuitMessage(0);
-                }
-                return DefWindowProcA(hwnd, msg, wParam, lParam);
-            };
+            wc.lpfnWndProc = wndProc;
             wc.hInstance = GetModuleHandleA(nullptr);
             wc.lpszClassName = className.c_str();
             RegisterClassA(&wc);

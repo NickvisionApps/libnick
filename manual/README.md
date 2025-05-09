@@ -6,20 +6,14 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.5.1
+## 2025.5.2
 ### Breaking Changes
-#### System
-- A Process' status can now be queued with `Process::getState()` which returns a `ProcessState` value
-### New APIs
-#### Localizationm
-- Added `_f()` macro for creating strings with translated format strings
-- Added `Gettext::getAvailableLanguages()` function
-#### System
-- Added `ProcessState` enum
-- Added `Process::pause()` method
-- Added `Process::resume()` method
-### Fixes
 None
+### New APIs
+#### Localization
+- Added `_fn()` macro for creating strings with translated plural format strings
+### Fixes
+- Fixed compilation on x86 Windows
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

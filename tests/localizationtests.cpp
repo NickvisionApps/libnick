@@ -31,6 +31,12 @@ TEST(LocalizationTests, fgettext)
     ASSERT_EQ(std::string(_f("Hello {} {}", "World", count)), std::string("Hello World 1"));
 }
 
+TEST(LocalizationTests, fngettext)
+{
+    int count{ 2 };
+    ASSERT_EQ(std::string(_fn("Hello {}", "Hellos {}", count, "World")), std::string("Hellos World"));
+}
+
 TEST(LocalizationTests, pgettext)
 {
     ASSERT_EQ(std::string(_p("Test", "Hello")), std::string("Hello"));
