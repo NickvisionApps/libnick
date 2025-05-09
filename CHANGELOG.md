@@ -1,11 +1,20 @@
 # Changelog
 
+## 2025.5.2
+### Breaking Changes
+None
+### New APIs
+#### Localization
+- Added `_fn()` macro for creating strings with translated plural format strings
+### Fixes
+- Fixed compilation on x86 Windows
+
 ## 2025.5.1
 ### Breaking Changes
 #### System
 - A Process' status can now be queued with `Process::getState()` which returns a `ProcessState` value
 ### New APIs
-#### Localizationm
+#### Localization
 - Added `_f()` macro for creating strings with translated format strings
 - Added `Gettext::getAvailableLanguages()` function
 #### System

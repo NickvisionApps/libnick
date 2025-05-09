@@ -32,6 +32,7 @@
 #define _(String) dgettext(::Nickvision::Localization::Gettext::getDomainName().c_str(), String)
 #define _n(String, StringPlural, N) dngettext(::Nickvision::Localization::Gettext::getDomainName().c_str(), String, StringPlural, static_cast<unsigned long>(N))
 #define _f(String, ...) ::Nickvision::Localization::Gettext::fgettext(String, __VA_ARGS__)
+#define _fn(String, StringPlural, N, ...) ::Nickvision::Localization::Gettext::fngettext(String, StringPlural, static_cast<unsigned long>(N), __VA_ARGS__)
 #define _p(Context, String) ::Nickvision::Localization::Gettext::pgettext(Context GETTEXT_CONTEXT_SEPARATOR String, String)
 #define _pn(Context, String, StringPlural, N) ::Nickvision::Localization::Gettext::pngettext(Context GETTEXT_CONTEXT_SEPARATOR String, String, StringPlural, static_cast<unsigned long>(N))
 
@@ -63,6 +64,20 @@ namespace Nickvision::Localization::Gettext
     {
         static std::string res;
         res = std::vformat(_(msg), std::make_format_args(args...));
+        return res.c_str();
+    }
+    /**
+     * @brief Translates a plural message and formats it with the given arguments.
+     * @param msg The message to translate
+     * @param msgPlural The plural version of the message to translate
+     * @param n The number of objects (used to determine whether or not to use the plural version of the message)
+     * @param args The arguments to format the translated message with
+     */
+    template<typename... Args>
+    const char* fngettext(const char* msg, const char* msgPlural, unsigned long n, Args&&... args)
+    {
+        static std::string res;
+        res = std::vformat(_n(msg, msgPlural, n), std::make_format_args(args...));
         return res.c_str();
     }
     /**
