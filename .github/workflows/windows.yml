@@ -30,7 +30,7 @@ jobs:
           pkgs: boost-json curl gettext-libintl gtest maddy sqlcipher
           triplet: x64-windows
           revision: 61c70ce627a2a4ffff809f887e4188ff39ce0a14
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           github-binarycache: true
       - name: "Build"
         working-directory: ${{github.workspace}}/build
