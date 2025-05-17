@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025.5.3
+### Breaking Changes
+#### Localization
+- `_f()` and `_fn()` macros now return `std::string` instead of `const char*`
+### New APIs
+None
+### Fixes
+#### System
+- Fixed `Process::pause()` and `Process::resume()` not working on Windows
+
 ## 2025.5.2
 ### Breaking Changes
 None

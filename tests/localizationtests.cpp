@@ -28,13 +28,13 @@ TEST(LocalizationTests, ngettext)
 TEST(LocalizationTests, fgettext)
 {
     int count{ 1 };
-    ASSERT_EQ(std::string(_f("Hello {} {}", "World", count)), std::string("Hello World 1"));
+    ASSERT_EQ(_f("Hello {} {}", "World", count), "Hello World 1");
 }
 
 TEST(LocalizationTests, fngettext)
 {
     int count{ 2 };
-    ASSERT_EQ(std::string(_fn("Hello {}", "Hellos {}", count, "World")), std::string("Hellos World"));
+    ASSERT_EQ(_fn("Hello {}", "Hellos {}", count, "World"), "Hellos World");
 }
 
 TEST(LocalizationTests, pgettext)

@@ -16,9 +16,9 @@ std::unique_ptr<Process> ProcessTest::m_proc{ nullptr };
 TEST_F(ProcessTest, Create)
 {
 #ifdef _WIN32
-    ASSERT_NO_THROW(m_proc = std::make_unique<Process>(Environment::findDependency("cmd.exe"), std::vector<std::string>{ "/c", "start", "/min", "timeout.exe", "10" }));
+    ASSERT_NO_THROW(m_proc = std::make_unique<Process>(Environment::findDependency("cmd.exe"), std::vector<std::string>{ "/c", "start", "/min", "timeout.exe", "60" }));
 #else
-    ASSERT_NO_THROW(m_proc = std::make_unique<Process>(Environment::findDependency("sleep"), std::vector<std::string>{ "10" }));
+    ASSERT_NO_THROW(m_proc = std::make_unique<Process>(Environment::findDependency("sleep"), std::vector<std::string>{ "60" }));
 #endif
     ASSERT_EQ(m_proc->getState(), ProcessState::Created);
 }
@@ -45,7 +45,7 @@ TEST_F(ProcessTest, Pause)
 {
     ASSERT_TRUE(m_proc->pause());
     ASSERT_EQ(m_proc->getState(), ProcessState::Paused);
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(8));
 }
 
 TEST_F(ProcessTest, Resume)

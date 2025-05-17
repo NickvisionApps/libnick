@@ -60,11 +60,9 @@ namespace Nickvision::Localization::Gettext
      * @param args The arguments to format the translated message with
      */
     template<typename... Args>
-    const char* fgettext(const char* msg, Args&&... args)
+    std::string fgettext(const char* msg, Args&&... args)
     {
-        static std::string res;
-        res = std::vformat(_(msg), std::make_format_args(args...));
-        return res.c_str();
+        return std::vformat(_(msg), std::make_format_args(args...));
     }
     /**
      * @brief Translates a plural message and formats it with the given arguments.
@@ -74,11 +72,9 @@ namespace Nickvision::Localization::Gettext
      * @param args The arguments to format the translated message with
      */
     template<typename... Args>
-    const char* fngettext(const char* msg, const char* msgPlural, unsigned long n, Args&&... args)
+    std::string fngettext(const char* msg, const char* msgPlural, unsigned long n, Args&&... args)
     {
-        static std::string res;
-        res = std::vformat(_n(msg, msgPlural, n), std::make_format_args(args...));
-        return res.c_str();
+        return std::vformat(_n(msg, msgPlural, n), std::make_format_args(args...));
     }
     /**
      * @brief Translates a message for a given context.

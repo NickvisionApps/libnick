@@ -28,31 +28,33 @@ using namespace Nickvision::Helpers;
 namespace Nickvision::System
 {
 #ifdef _WIN32
-    static std::vector<DWORD> getChildPIDs(HANDLE parent)
+    static std::vector<HANDLE> openProcesses(const PROCESS_INFORMATION* pi, DWORD access)
     {
-        std::vector<DWORD> children;
-        DWORD parentPID{ GetProcessId(parent) };
-        if(parentPID != 0)
+        std::vector<HANDLE> processes;
+        processes.push_back(pi->hProcess);
+        HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) };
+        if(snapshot != INVALID_HANDLE_VALUE)
         {
-            HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) };
-            if(snapshot != INVALID_HANDLE_VALUE)
+            PROCESSENTRY32 pe;
+            pe.dwSize = sizeof(PROCESSENTRY32);
+            if(Process32First(snapshot, &pe))
             {
-                PROCESSENTRY32 pe;
-                pe.dwSize = sizeof(PROCESSENTRY32);
-                if(Process32First(snapshot, &pe))
+                do
                 {
-                    do
+                    if(pe.th32ParentProcessID == pi->dwProcessId)
                     {
-                        if(pe.th32ParentProcessID == parentPID)
+                        HANDLE process{ OpenProcess(access, false, pe.th32ProcessID) };
+                        if(!process)
                         {
-                            children.push_back(pe.th32ProcessID);
+                            continue;
                         }
-                    } while(Process32Next(snapshot, &pe));
-                }
+                        processes.push_back(process);
+                    }
+                } while(Process32Next(snapshot, &pe));
             }
             CloseHandle(snapshot);
         }
-        return children;
+        return processes;
     }
 #endif
 
@@ -96,7 +98,7 @@ namespace Nickvision::System
         }
         //Create job
         JOBOBJECT_EXTENDED_LIMIT_INFORMATION jeli{};
-        jeli.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+        jeli.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE | JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION;
         m_job = CreateJobObjectW(&sa, nullptr);
         if(!m_job)
         {
@@ -128,7 +130,7 @@ namespace Nickvision::System
         si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
         si.wShowWindow = SW_HIDE;
         //Create process
-        if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED, nullptr, std::filesystem::is_directory(m_workingDirectory) && std::filesystem::exists(m_workingDirectory) ? m_workingDirectory.wstring().c_str() : nullptr, &si, &m_pi))
+        if(!CreateProcessW(nullptr, appArgs.data(), nullptr, nullptr, TRUE, CREATE_SUSPENDED, nullptr, std::filesystem::exists(m_workingDirectory) && std::filesystem::is_directory(m_workingDirectory) ? m_workingDirectory.wstring().c_str() : nullptr, &si, &m_pi))
         {
             CloseHandle(m_job);
             CloseHandle(m_childOutRead);
@@ -294,23 +296,19 @@ namespace Nickvision::System
         }
 #ifdef _WIN32
         PROCESS_MEMORY_COUNTERS pmc{};
-        if(GetProcessMemoryInfo(m_pi.hProcess, &pmc, sizeof(pmc)))
+        unsigned long long mem{ 0 };
+        for(HANDLE process : openProcesses(&m_pi, PROCESS_QUERY_INFORMATION))
         {
-            unsigned long long mem{ pmc.WorkingSetSize };
-            for(DWORD child : getChildPIDs(m_pi.hProcess))
+            if(GetProcessMemoryInfo(process, &pmc, sizeof(pmc)))
             {
-                HANDLE cProcess{ OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, child) };
-                if(cProcess)
-                {
-                    if(GetProcessMemoryInfo(cProcess, &pmc, sizeof(pmc)))
-                    {
-                        mem += pmc.WorkingSetSize;
-                    }
-                    CloseHandle(cProcess);
-                }
+                mem += pmc.WorkingSetSize;
             }
-            return mem;
+            if(process != m_pi.hProcess)
+            {
+                CloseHandle(process);
+            }
         }
+        return mem;
 #elif defined(__linux__)
         std::ifstream proc{ "/proc/" + std::to_string(m_pid) + "/status" };
         if(proc.is_open())
@@ -421,15 +419,11 @@ namespace Nickvision::System
         {
             return false;
         }
-        //Kill child processes spawned by the process
 #ifndef _WIN32
         ::kill(-m_pid, SIGTERM);
-#endif
-        //Kill process
-#ifdef _WIN32
-        if(!TerminateJobObject(m_job, -1))
-#else
         if(::kill(m_pid, SIGTERM) < 0)
+#else
+        if(!TerminateJobObject(m_job, -1))
 #endif
         {
             return false;
@@ -445,19 +439,19 @@ namespace Nickvision::System
         {
             return false;
         }
-        //Continue child processes spawned by the process
 #ifndef _WIN32
         ::kill(-m_pid, SIGCONT);
-#endif
-        //Continue process
-#ifdef _WIN32
-        if(ResumeThread(m_pi.hThread) == static_cast<DWORD>(-1))
-#else
         if(::kill(m_pid, SIGCONT) < 0)
+#else
+        if(!DebugActiveProcessStop(m_pi.dwProcessId))
 #endif
+
         {
             return false;
         }
+#ifdef _WIN32
+        DebugSetProcessKillOnExit(false);
+#endif
         m_state = ProcessState::Running;
         return true;
     }
@@ -469,15 +463,11 @@ namespace Nickvision::System
         {
             return false;
         }
-        //Pause child processes spawned by the process
 #ifndef _WIN32
         ::kill(-m_pid, SIGSTOP);
-#endif
-        //Pause process
-#ifdef _WIN32
-        if(SuspendThread(m_pi.hThread) == static_cast<DWORD>(-1))
-#else
         if(::kill(m_pid, SIGSTOP) < 0)
+#else
+        if(!DebugActiveProcess(m_pi.dwProcessId))
 #endif
         {
             return false;
