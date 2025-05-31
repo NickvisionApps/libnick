@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.6.0
+### Breaking Changes
+None
+### New APIs
+#### App
+- Added the ability for `WindowGeometry` to remeber window poisition on Windows
+### Fixes
+None
+
 ## 2025.5.3
 ### Breaking Changes
 #### Localization

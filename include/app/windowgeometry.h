@@ -23,6 +23,7 @@
 #ifndef WINDOWGEOMETRY_H
 #define WINDOWGEOMETRY_H
 
+#include <boost/json.hpp>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -49,10 +50,20 @@ namespace Nickvision::App
 #ifdef _WIN32
         /**
          * @brief Construct a WindowGeometry.
+         * @param width The width of the window
+         * @param height The height of the window
+         * @param isMaximized Whether or not the window is maximized
+         * @param x The x position of the window
+         * @param y The y position of the window
+         */
+        WindowGeometry(long width, long height, bool isMaximized, long x, long y);
+        /**
+         * @brief Construct a WindowGeometry.
          * @param hwnd The window handle to get the geometry from
          */
         WindowGeometry(HWND hwnd);
 #endif
+        WindowGeometry(boost::json::object json);
         /**
          * @brief Gets the width of the window.
          * @return The width of the window 
@@ -91,11 +102,16 @@ namespace Nickvision::App
          */
         bool apply(HWND hwnd) const;
 #endif
+        boost::json::object toJson() const;
 
     private:
         long m_width;
         long m_height;
         bool m_isMaximized;
+#ifdef _WIN32
+        long m_x;
+        long m_y;
+#endif
     };
 }
 
