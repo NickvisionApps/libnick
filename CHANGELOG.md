@@ -1,11 +1,20 @@
 # Changelog
 
+## 2025.6.1
+### Breaking Changes
+None
+### New APIs
+#### App
+- Expanded `X` and `Y` properties of `WindowGeometry` to all platforms
+### Fixes
+None
+
 ## 2025.6.0
 ### Breaking Changes
 None
 ### New APIs
 #### App
-- Added the ability for `WindowGeometry` to remeber window poisition on Windows
+- Added the ability for `WindowGeometry` to remember window position on Windows
 ### Fixes
 None
 

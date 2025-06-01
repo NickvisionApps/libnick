@@ -31,8 +31,8 @@ jobs:
           xdg-user-dirs-gtk-update
           sudo locale-gen en_US.UTF-8
           sudo update-locale LANG=en_US.UTF-8
-          sudo update-alternatives --install /usr/bin/gcc gcc /home/linuxbrew/.linuxbrew/bin/gcc-14 100
-          sudo update-alternatives --install /usr/bin/g++ g++ /home/linuxbrew/.linuxbrew/bin/g++-14 100
+          sudo update-alternatives --install /usr/bin/gcc gcc /home/linuxbrew/.linuxbrew/bin/gcc-15 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /home/linuxbrew/.linuxbrew/bin/g++-15 100
           sudo update-alternatives --install /usr/bin/cmake cmake /home/linuxbrew/.linuxbrew/bin/cmake 100
       - name: "Unlock Keyring"
         uses: t1m0thyj/unlock-keyring@v1
@@ -42,7 +42,7 @@ jobs:
         with:
           pkgs: boost-json curl gettext-libintl glib gtest libsecret maddy openssl
           triplet: x64-linux
-          revision: f26ec398c25c4980f33a50391f00a75f7ad62ef7
+          revision: 89dc8be6dbcf18482a5a1bf86a2f4615c939b0fb
           token: ${{ github.token }}
           github-binarycache: true
       - name: "Build"

@@ -6,12 +6,12 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.6.0
+## 2025.6.1
 ### Breaking Changes
 None
 ### New APIs
 #### App
-- Added the ability for `WindowGeometry` to remeber window poisition on Windows
+- Expanded `X` and `Y` properties of `WindowGeometry` to all platforms
 ### Fixes
 None
 

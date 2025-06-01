@@ -24,9 +24,6 @@
 #define WINDOWGEOMETRY_H
 
 #include <boost/json.hpp>
-#ifdef _WIN32
-#include <windows.h>
-#endif
 
 namespace Nickvision::App
 {
@@ -47,7 +44,6 @@ namespace Nickvision::App
          * @param isMaximized Whether or not the window is maximized
          */
         WindowGeometry(long width, long height, bool isMaximized);
-#ifdef _WIN32
         /**
          * @brief Construct a WindowGeometry.
          * @param width The width of the window
@@ -58,11 +54,9 @@ namespace Nickvision::App
          */
         WindowGeometry(long width, long height, bool isMaximized, long x, long y);
         /**
-         * @brief Construct a WindowGeometry.
-         * @param hwnd The window handle to get the geometry from
+         * @brief Constructs a WindowGeometry.
+         * @param json The json object
          */
-        WindowGeometry(HWND hwnd);
-#endif
         WindowGeometry(boost::json::object json);
         /**
          * @brief Gets the width of the window.
@@ -94,24 +88,38 @@ namespace Nickvision::App
          * @param isMaximized True if maximized, else false
          */
         void setIsMaximized(bool isMaximized);
-#ifdef _WIN32
         /**
-         * @brief Applies the geometry to a window.
-         * @param hwnd The window handle to apply the geometry to
-         * @return True if successful, else false
+         * @brief Gets the x position of the window.
+         * @return The x position of the window
          */
-        bool apply(HWND hwnd) const;
-#endif
+        long getX() const;
+        /**
+         * @brief Sets the x position of the window.
+         * @param x The new x position of the window
+         */
+        void setX(long x);
+        /**
+         * @brief Gets the y position of the window.
+         * @return The y position of the window
+         */
+        long getY() const;
+        /**
+         * @brief Sets the y position of the window.
+         * @param x The new y position of the window
+         */
+        void setY(long y);
+        /**
+         * @brief Converts the WindowGeometry to a json object.
+         * @return The json representation of the WindowGeometry
+         */
         boost::json::object toJson() const;
 
     private:
         long m_width;
         long m_height;
         bool m_isMaximized;
-#ifdef _WIN32
         long m_x;
         long m_y;
-#endif
     };
 }
 
