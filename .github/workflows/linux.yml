@@ -35,13 +35,13 @@ jobs:
           mkdir build
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 
           sudo apt-get install firefox xdg-user-dirs xdg-user-dirs-gtk gettext tzdata locales libsqlcipher-dev -y
-          brew install gcc cmake
+          brew install gcc@14 cmake
           xdg-user-dirs-update
           xdg-user-dirs-gtk-update
           sudo locale-gen en_US.UTF-8
           sudo update-locale LANG=en_US.UTF-8
-          sudo update-alternatives --install /usr/bin/gcc gcc /home/linuxbrew/.linuxbrew/bin/gcc-15 100
-          sudo update-alternatives --install /usr/bin/g++ g++ /home/linuxbrew/.linuxbrew/bin/g++-15 100
+          sudo update-alternatives --install /usr/bin/gcc gcc /home/linuxbrew/.linuxbrew/bin/gcc-14 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /home/linuxbrew/.linuxbrew/bin/g++-14 100
           sudo update-alternatives --install /usr/bin/cmake cmake /home/linuxbrew/.linuxbrew/bin/cmake 100
       - name: "Unlock Keyring"
         uses: t1m0thyj/unlock-keyring@v1
