@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025.6.2
+### Breaking Changes
+#### Database
+- sqlcipher is no longer provided for Linux and macOS builds. The system must provide it via it's package manager as it is not available via vcpkg
+### New APIs
+#### Update
+- Added a `CurlFunctionParameter` parameter to `Updater::windowsUpdate` 
+### Fixes
+None
+
 ## 2025.6.1
 ### Breaking Changes
 None

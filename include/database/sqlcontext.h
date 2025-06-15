@@ -29,11 +29,7 @@
 
 #include <string>
 #include <vector>
-#ifdef _WIN32
 #include <sqlcipher/sqlite3.h>
-#else
-#include "sqlite3.h"
-#endif
 #include "sqlvalue.h"
 
 namespace Nickvision::Database

@@ -14,8 +14,17 @@ env:
   VCPKG_ROOT: ${{github.workspace}}/vcpkg
 jobs:
   build:
-    name: "Build on x64"
-    runs-on: ubuntu-latest
+    name: "Build on Linux"
+    strategy:
+      matrix:
+        variant:
+          - arch: x64
+            runner: ubuntu-latest
+            triplet: x64-linux
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+            triplet: arm64-linux
+    runs-on: ${{ matrix.variant.runner }}
     steps:
       - name: "Checkout"  
         uses: actions/checkout@v4
@@ -25,7 +34,7 @@ jobs:
         run: |
           mkdir build
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 
-          sudo apt-get install firefox xdg-user-dirs xdg-user-dirs-gtk gettext tzdata locales -y
+          sudo apt-get install firefox xdg-user-dirs xdg-user-dirs-gtk gettext tzdata locales libsqlcipher-dev -y
           brew install gcc cmake
           xdg-user-dirs-update
           xdg-user-dirs-gtk-update
@@ -40,9 +49,9 @@ jobs:
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: boost-json curl gettext-libintl glib gtest libsecret maddy openssl
-          triplet: x64-linux
-          revision: 89dc8be6dbcf18482a5a1bf86a2f4615c939b0fb
+          pkgs: boost-json curl gettext-libintl glib gtest libsecret maddy
+          triplet: ${{ matrix.variant.triplet }}
+          revision: b0b4f9904e2791bc16b9fd8003243a9f55c42e6e
           token: ${{ github.token }}
           github-binarycache: true
       - name: "Build"
@@ -59,4 +68,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: ${{github.workspace}}/install
-          name: Linux-x64-Release
+          name: Linux-${{ matrix.variant.arch }}-Release
