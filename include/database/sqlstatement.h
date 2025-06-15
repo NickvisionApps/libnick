@@ -30,7 +30,11 @@
 #include <memory>
 #include <string>
 #include <utility>
+#ifdef _WIN32
 #include <sqlcipher/sqlite3.h>
+#else
+#include <sqlite3.h>
+#endif
 
 namespace Nickvision::Database
 {
