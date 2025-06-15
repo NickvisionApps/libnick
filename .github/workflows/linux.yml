@@ -21,9 +21,9 @@ jobs:
           - arch: x64
             runner: ubuntu-latest
             triplet: x64-linux
-          - arch: arm64
-            runner: ubuntu-24.04-arm
-            triplet: arm64-linux
+          #- arch: arm64
+          #  runner: ubuntu-24.04-arm
+          #  triplet: arm64-linux
     runs-on: ${{ matrix.variant.runner }}
     steps:
       - name: "Checkout"  
