@@ -92,7 +92,7 @@ namespace Nickvision::Update
     }
 
 #ifdef _WIN32
-    bool Updater::windowsUpdate(VersionType versionType)
+    bool Updater::windowsUpdate(VersionType versionType, const CurlProgressFunction& progress)
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
@@ -127,7 +127,7 @@ namespace Nickvision::Update
             {
                 std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
                 const boost::json::value& urlValue{ assetObject["browser_download_url"] };
-                if (urlValue.is_string() && Web::downloadFile(urlValue.as_string().c_str(), setupPath))
+                if (urlValue.is_string() && Web::downloadFile(urlValue.as_string().c_str(), setupPath, progress))
                 {
                     CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
                     if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)

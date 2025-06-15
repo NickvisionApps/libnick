@@ -25,6 +25,7 @@
 
 #include <mutex>
 #include <string>
+#include "network/curleasy.h"
 #include "version.h"
 
 namespace Nickvision::Update
@@ -63,9 +64,10 @@ namespace Nickvision::Update
          * @brief Downloads and installs an application update for Windows. 
          * @brief fetchCurrentVersion should be called first before running this method.
          * @param versionType The type of version update to install
+         * @param progress An optional CurlProgressFunction to track the downloading update
          * @return True if successful, else false
          */
-        bool windowsUpdate(VersionType versionType);
+        bool windowsUpdate(VersionType versionType, const Network::CurlProgressFunction& progress = {});
 #endif
         /**
          * @brief Copies an Updater.

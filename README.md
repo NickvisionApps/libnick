@@ -13,30 +13,21 @@ Documentation for this library and its modules can be found [here](https://nickv
 ## Dependencies
 The following are a list of dependencies used by libnick. 
 
+The recommendation and below commands will use vcpkg to pull these dependencies. However, vcpkg is not a requirement as long as the system provides these dependencies correctly.
+
 ### All Platforms
 - boost-json
 - gtest
 - libcurl
 - libintl
 - maddy
+- sqlcipher (Must be provided by the system on Linux and macOS as sqlcipher is not available via vcpkg for these systems)
 
-### Windows
-The above dependencies must be installed, *plus* the following for Windows systems:
-- sqlcipher
-
-### Linux
-The above dependencies must be installed, *plus* the following for Linux systems:
+### Linux and macOS
+The above dependencies must be installed, *plus* the following for Linux and macOS systems:
 - glib
 - libsecret
-- openssl
-    - Used for sqlcipher, as libnick manually builds sqlcipher on Linux as the vcpkg port is broken.
-
-### macOS
-The above dependencies must be installed, *plus* the following for macOS systems:
-- glib
-- libsecret (Only required if `-DUSE_LIBSECRET="ON"`)
-- openssl
-    - Used for sqlcipher, as libnick manually builds sqlcipher on macOS as the vcpkg port is broken.
+  - For macOS: Only required if `-DUSE_LIBSECRET="ON"`
 
 ## Consuming libnick via vcpkg
 libnick is available through `vcpkg`. 
@@ -52,9 +43,9 @@ target_link_libraries(main PRIVATE libnick::libnick)
 ```
 
 ## Building and Installing Manually
-libnick uses `vcpkg` to manage its dependencies and `cmake` as its build system.
+libnick uses `cmake` as its build system and `vcpkg` to *optionally* manage its dependencies.
 
-Ensure both `vcpkg` and `cmake` are installed on your system before building and installing libnick.
+Ensure `cmake` and `vcpkg` are installed on your system before building and installing libnick.
 
 A C++20 compiler is also required to build libnick.
 
@@ -65,13 +56,10 @@ A C++20 compiler is also required to build libnick.
 1. Run `vcpkg install boost-json curl gettext-libintl gtest maddy sqlcipher`
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
-1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
-#### macOS (Intel)
-1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-osx`
-1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
+1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy`
 #### macOS (Apple Silicon)
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `arm64-osx`
-1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy openssl`
+1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy`
 
 ### Building
 1. First, clone/download the repo.

@@ -32,7 +32,7 @@
 #ifdef _WIN32
 #include <sqlcipher/sqlite3.h>
 #else
-#include "sqlite3.h"
+#include <sqlite3.h>
 #endif
 #include "sqlvalue.h"
 

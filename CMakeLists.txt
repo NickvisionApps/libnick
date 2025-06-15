@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2025.6.1 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2025.6.2 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -42,7 +42,6 @@ add_library (${PROJECT_NAME}
     "src/app/windowgeometry.cpp"
     "src/database/sqlcontext.cpp"
     "src/database/sqldatabase.cpp"
-    "src/database/sqlite3.c"
     "src/database/sqlstatement.cpp"
     "src/database/sqlvalue.cpp"
     "src/filesystem/filesystemchangedeventargs.cpp"
@@ -105,8 +104,8 @@ elseif(APPLE)
     find_library(CS_LIBRARY CoreServices)
     find_library(IOKIT_LIBRARY IOKit)
     find_package(Threads REQUIRED)
-    find_package(OpenSSL REQUIRED)
     find_package(PkgConfig REQUIRED)
+    pkg_check_modules(sqlcipher REQUIRED IMPORTED_TARGET sqlcipher)
     pkg_check_modules(glib REQUIRED IMPORTED_TARGET glib-2.0)
     pkg_check_modules(gio REQUIRED IMPORTED_TARGET gio-2.0)
     pkg_check_modules(gmodule REQUIRED IMPORTED_TARGET gmodule-2.0)
@@ -115,23 +114,23 @@ elseif(APPLE)
     if(USE_LIBSECRET)
         pkg_check_modules(libsecret REQUIRED IMPORTED_TARGET libsecret-1)
         add_compile_definitions(APPLE_USE_LIBSECRET)
-        target_link_libraries(${PROJECT_NAME} PUBLIC ${CF_LIBRARY} ${CS_LIBRARY} ${IOKIT_LIBRARY} Threads::Threads OpenSSL::SSL OpenSSL::Crypto PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret)
+        target_link_libraries(${PROJECT_NAME} PUBLIC ${CF_LIBRARY} ${CS_LIBRARY} ${IOKIT_LIBRARY} Threads::Threads PkgConfig::sqlcipher PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret)
     else()
         find_library(SECURITY_LIBRARY Security)
-        target_link_libraries(${PROJECT_NAME} PUBLIC ${CF_LIBRARY} ${CS_LIBRARY} ${IOKIT_LIBRARY} ${SECURITY_LIBRARY} Threads::Threads OpenSSL::SSL OpenSSL::Crypto PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread)
+        target_link_libraries(${PROJECT_NAME} PUBLIC ${CF_LIBRARY} ${CS_LIBRARY} ${IOKIT_LIBRARY} ${SECURITY_LIBRARY} Threads::Threads PkgConfig::sqlcipher PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread)
     endif()
-else()
+elseif(LINUX)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)
-    find_package(OpenSSL REQUIRED)
     find_package(PkgConfig REQUIRED)
+    pkg_check_modules(sqlcipher REQUIRED IMPORTED_TARGET sqlcipher)
     pkg_check_modules(glib REQUIRED IMPORTED_TARGET glib-2.0)
     pkg_check_modules(gio REQUIRED IMPORTED_TARGET gio-2.0)
     pkg_check_modules(gmodule REQUIRED IMPORTED_TARGET gmodule-2.0)
     pkg_check_modules(gobject REQUIRED IMPORTED_TARGET gobject-2.0)
     pkg_check_modules(gthread REQUIRED IMPORTED_TARGET gthread-2.0)
     pkg_check_modules(libsecret REQUIRED IMPORTED_TARGET libsecret-1)
-    target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads OpenSSL::SSL OpenSSL::Crypto PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret)
+    target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads PkgConfig::sqlcipher PkgConfig::glib PkgConfig::gio PkgConfig::gmodule PkgConfig::gobject PkgConfig::gthread PkgConfig::libsecret)
 endif()
 
 #libnick Install
