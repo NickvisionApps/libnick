@@ -6,15 +6,13 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.6.2
+## 2025.6.3
 ### Breaking Changes
-#### Database
-- sqlcipher is no longer provided for Linux and macOS builds. The system must provide it via it's package manager as it is not available via vcpkg
-### New APIs
-#### Update
-- Added a `CurlFunctionParameter` parameter to `Updater::windowsUpdate`
-### Fixes
 None
+### New APIs
+None
+### Fixes
+- Fixed an issue with the cmake configuration file
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

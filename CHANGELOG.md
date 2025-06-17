@@ -1,5 +1,13 @@
 # Changelog
 
+## 2025.6.3
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+- Fixed an issue with the cmake configuration file
+
 ## 2025.6.2
 ### Breaking Changes
 #### Database
