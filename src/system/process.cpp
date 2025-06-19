@@ -540,13 +540,10 @@ namespace Nickvision::System
 
     void Process::watch()
     {
-#ifndef _WIN32
-        int status{ 0 };
-#endif
+#ifdef _WIN32
         DWORD exitCode{ 0 };
         do
         {
-#ifdef _WIN32
             //Determine if ended
             if(!GetExitCodeProcess(m_pi.hProcess, &exitCode))
             {
@@ -569,7 +566,13 @@ namespace Nickvision::System
                 std::lock_guard<std::mutex> lock{ m_mutex };
                 m_output += std::string(buffer.data(), buffer.data() + read);
             }
+            std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
+        } while(exitCode == STILL_ACTIVE);
 #else
+        int status{ 0 };
+        bool ended{ false };
+        while(!ended)
+        {
             //Determine if ended
             while(waitpid(m_pid, &status, WNOHANG | WUNTRACED) > 0)
             {
@@ -587,9 +590,9 @@ namespace Nickvision::System
                 std::lock_guard<std::mutex> lock{ m_mutex };
                 m_output += std::string(buffer, buffer + bytes);
             }
-#endif
             std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
-        } while(exitCode == STILL_ACTIVE);
+        }
+#endif
         std::unique_lock<std::mutex> lock{ m_mutex };
 #ifdef _WIN32
         m_exitCode = static_cast<int>(exitCode);

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2025.6.5
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+- Fixed an issue where the build failed on Unix systems
+
 ## 2025.6.4
 ### Breaking Changes
 None
