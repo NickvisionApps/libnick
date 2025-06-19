@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.6.4
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### System
+- Fixed an issue where `Process::pause()` and `Process::resume()` did not work correctly on Windows
+
 ## 2025.6.3
 ### Breaking Changes
 None

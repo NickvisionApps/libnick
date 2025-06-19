@@ -16,7 +16,7 @@ std::unique_ptr<Process> ProcessTest::m_proc{ nullptr };
 TEST_F(ProcessTest, Create)
 {
 #ifdef _WIN32
-    ASSERT_NO_THROW(m_proc = std::make_unique<Process>(Environment::findDependency("cmd.exe"), std::vector<std::string>{ "/c", "start", "/min", "timeout.exe", "60" }));
+    ASSERT_NO_THROW(m_proc = std::make_unique<Process>(Environment::findDependency("cmd.exe"), std::vector<std::string>{ "/c", "ping -n 60 127.0.0.1" }));
 #else
     ASSERT_NO_THROW(m_proc = std::make_unique<Process>(Environment::findDependency("sleep"), std::vector<std::string>{ "60" }));
 #endif

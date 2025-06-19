@@ -442,15 +442,28 @@ namespace Nickvision::System
 #ifndef _WIN32
         ::kill(-m_pid, SIGCONT);
         if(::kill(m_pid, SIGCONT) < 0)
-#else
-        if(!DebugActiveProcessStop(m_pi.dwProcessId))
-#endif
-
         {
             return false;
         }
-#ifdef _WIN32
-        DebugSetProcessKillOnExit(false);
+#else
+        HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0) };
+        THREADENTRY32 entry{ sizeof(THREADENTRY32) };
+        if(Thread32First(snapshot, &entry))
+        {
+            do
+            {
+                if(entry.th32OwnerProcessID == m_pi.dwProcessId)
+                {
+                    HANDLE thread{ OpenThread(THREAD_SUSPEND_RESUME, false, entry.th32ThreadID) };
+                    if(thread)
+                    {
+                        ResumeThread(thread);
+                        CloseHandle(thread);
+                    }
+                }
+            } while(Thread32Next(snapshot, &entry));
+        }
+        CloseHandle(snapshot);
 #endif
         m_state = ProcessState::Running;
         return true;
@@ -466,12 +479,29 @@ namespace Nickvision::System
 #ifndef _WIN32
         ::kill(-m_pid, SIGSTOP);
         if(::kill(m_pid, SIGSTOP) < 0)
-#else
-        if(!DebugActiveProcess(m_pi.dwProcessId))
-#endif
         {
             return false;
         }
+#else
+        HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0) };
+        THREADENTRY32 entry{ sizeof(THREADENTRY32) };
+        if(Thread32First(snapshot, &entry))
+        {
+            do
+            {
+                if(entry.th32OwnerProcessID == m_pi.dwProcessId)
+                {
+                    HANDLE thread{ OpenThread(THREAD_SUSPEND_RESUME, false, entry.th32ThreadID) };
+                    if(thread)
+                    {
+                        SuspendThread(thread);
+                        CloseHandle(thread);
+                    }
+                }
+            } while(Thread32Next(snapshot, &entry));
+        }
+        CloseHandle(snapshot);
+#endif
         m_state = ProcessState::Paused;
         return true;
     }
@@ -513,12 +543,15 @@ namespace Nickvision::System
 #ifndef _WIN32
         int status{ 0 };
 #endif
-        bool ended{ false };
-        while(!ended)
+        DWORD exitCode{ 0 };
+        do
         {
 #ifdef _WIN32
             //Determine if ended
-            ended = WaitForSingleObject(m_pi.hProcess, 0) == WAIT_OBJECT_0;
+            if(!GetExitCodeProcess(m_pi.hProcess, &exitCode))
+            {
+                exitCode = STILL_ACTIVE;
+            }
             //Read console output
             while(true)
             {
@@ -556,18 +589,10 @@ namespace Nickvision::System
             }
 #endif
             std::this_thread::sleep_for(std::chrono::milliseconds(PROCESS_WAIT_TIMEOUT));
-        }
+        } while(exitCode == STILL_ACTIVE);
         std::unique_lock<std::mutex> lock{ m_mutex };
 #ifdef _WIN32
-        DWORD exitCode{ 0 };
-        if(GetExitCodeProcess(m_pi.hProcess, &exitCode))
-        {
-            m_exitCode = static_cast<int>(exitCode);
-        }
-        else
-        {
-            m_exitCode = -1;
-        }
+        m_exitCode = static_cast<int>(exitCode);
 #else
         m_exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
 #endif
