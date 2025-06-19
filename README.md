@@ -13,7 +13,7 @@ Documentation for this library and its modules can be found [here](https://nickv
 ## Dependencies
 The following are a list of dependencies used by libnick. 
 
-The recommendation and below commands will use vcpkg to pull these dependencies. However, vcpkg is not a requirement as long as the system provides these dependencies correctly.
+The recommendation is to (and below commands will) use vcpkg to pull these dependencies. However, vcpkg is not a requirement as long as the system provides these dependencies correctly.
 
 ### All Platforms
 - boost-json
