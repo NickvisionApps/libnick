@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2025.6.5 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2025.7.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -35,6 +35,64 @@ if(NOT WIN32)
     add_compile_definitions(HAVE_USLEEP)
 endif()
 add_library (${PROJECT_NAME}
+    "include/app/appinfo.h"
+    "include/app/datafilebase.h"
+    "include/app/datafilemanager.h"
+    "include/app/interprocesscommunicator.h"
+    "include/app/windowgeometry.h"
+    "include/database/sqlcontext.h"
+    "include/database/sqldatabase.h"
+    "include/database/sqlstatement.h"
+    "include/database/sqlvalue.h"
+    "include/events/event.h"
+    "include/events/eventargs.h"
+    "include/events/parameventargs.h"
+    "include/filesystem/applicationuserdirectory.h"
+    "include/filesystem/fileaction.h"
+    "include/filesystem/filesystemchangedeventargs.h"
+    "include/filesystem/filesystemwatcher.h"
+    "include/filesystem/userdirectories.h"
+    "include/filesystem/userdirectory.h"
+    "include/filesystem/watcherflags.h"
+    "include/helpers/codehelpers.h"
+    "include/helpers/stringhelpers.h"
+    "include/keyring/credential.h"
+    "include/keyring/credentialcheckstatus.h"
+    "include/keyring/keyring.h"
+    "include/keyring/passwordcontent.h"
+    "include/keyring/passwordgenerator.h"
+    "include/keyring/passwordstrength.h"
+    "include/keyring/systemcredentials.h"
+    "include/localization/documentation.h"
+    "include/localization/gettext.h"
+    "include/network/addressfamily.h"
+    "include/network/dns.h"
+    "include/network/ipv4address.h"
+    "include/network/macaddress.h"
+    "include/network/networkmonitor.h"
+    "include/network/networkstate.h"
+    "include/network/networkstatechangedeventargs.h"
+    "include/network/socket.h"
+    "include/network/sockettype.h"
+    "include/network/web.h"
+    "include/notifications/appnotification.h"
+    "include/notifications/notificationsenteventargs.h"
+    "include/notifications/notificationseverity.h"
+    "include/notifications/shellnotification.h"
+    "include/notifications/shellnotificationsenteventargs.h"
+    "include/system/deploymentmode.h"
+    "include/system/environment.h"
+    "include/system/hardwareinfo.h"
+    "include/system/operatingsystem.h"
+    "include/system/process.h"
+    "include/system/processexitedeventargs.h"
+    "include/system/processstate.h"
+    "include/system/suspendinhibitor.h"
+    "include/taskbar/progressstate.h"
+    "include/taskbar/taskbaritem.h"
+    "include/update/updater.h"
+    "include/update/version.h"
+    "include/update/versiontype.h"
     "src/app/appinfo.cpp"
     "src/app/datafilebase.cpp"
     "src/app/datafilemanager.cpp"
@@ -56,8 +114,6 @@ add_library (${PROJECT_NAME}
     "src/keyring/systemcredentials.cpp"
     "src/localization/documentation.cpp"
     "src/localization/gettext.cpp"
-    "src/logging/logger.cpp"
-    "src/network/curleasy.cpp"
     "src/network/dns.cpp"
     "src/network/ipv4address.cpp"
     "src/network/macaddress.cpp"
@@ -88,9 +144,9 @@ endif()
 
 #libnick Packages
 find_package(Boost REQUIRED COMPONENTS json)
-find_package(CURL REQUIRED)
+find_package(cpr CONFIG REQUIRED)
 find_package(Intl REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC Boost::json CURL::libcurl Intl::Intl)
+target_link_libraries(${PROJECT_NAME} PUBLIC Boost::json cpr::cpr Intl::Intl)
 if(USING_VCPKG)
     find_package(unofficial-maddy CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE unofficial::maddy::maddy)
@@ -157,7 +213,6 @@ if (BUILD_TESTING)
     "tests/ipctests.cpp"
     "tests/keyringtests.cpp"
     "tests/localizationtests.cpp"
-    "tests/loggingtests.cpp"
     "tests/main.cpp"
     "tests/networktests.cpp"
     "tests/notificationtests.cpp"

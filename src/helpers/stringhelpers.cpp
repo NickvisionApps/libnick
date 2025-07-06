@@ -7,7 +7,6 @@
 #include <limits>
 #include <regex>
 #include <sstream>
-#include <curl/curl.h>
 #include "system/environment.h"
 #ifdef _WIN32
 #include <windows.h>
@@ -106,10 +105,8 @@ namespace Nickvision::Helpers
         {
             return false;
         }
-        CURLU* url{ curl_url() };
-        int res{ curl_url_set(url, CURLUPART_URL, s.c_str(), 0) };
-        curl_url_cleanup(url);
-        return res == CURLUE_OK;
+        static std::regex urlRegex{ R"(^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$)" };
+        return std::regex_match(s, urlRegex);
     }
 
     std::string StringHelpers::join(const std::vector<std::string>& values, const std::string& separator, bool separateLast)

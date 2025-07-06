@@ -1,5 +1,18 @@
 # Changelog
 
+## 2025.7.0
+### Breaking Changes
+#### Logging
+- Removed module
+#### Network
+- Replaced dependency of `libcurl` with `cpr`
+- Renamed `Web::fetchJson()` to `Web::getJson()`
+- Removed `CurlEasy` class
+### New APIs
+None
+### Fixes
+None
+
 ## 2025.6.5
 ### Breaking Changes
 None
