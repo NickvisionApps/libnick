@@ -99,10 +99,10 @@ TEST_F(SystemTest, DependencyCheck)
     std::filesystem::path systemDependency{ Environment::findDependency("cmd", DependencySearchOption::System) };
     std::filesystem::path localDependency{ Environment::findDependency("cmd", DependencySearchOption::Local) };
 #else
-    std::filesystem::path globalDependency{ Environment::findDependency("ls",, DependencySearchOption::Global) };
-    std::filesystem::path appDependency{ Environment::findDependency("ls",, DependencySearchOption::App) };
-    std::filesystem::path systemDependency{ Environment::findDependency("ls",, DependencySearchOption::System) };
-    std::filesystem::path localDependency{ Environment::findDependency("ls",, DependencySearchOption::Local) };
+    std::filesystem::path globalDependency{ Environment::findDependency("ls", DependencySearchOption::Global) };
+    std::filesystem::path appDependency{ Environment::findDependency("ls", DependencySearchOption::App) };
+    std::filesystem::path systemDependency{ Environment::findDependency("ls", DependencySearchOption::System) };
+    std::filesystem::path localDependency{ Environment::findDependency("ls", DependencySearchOption::Local) };
 #endif
     ASSERT_TRUE(!globalDependency.empty());
     ASSERT_TRUE(std::filesystem::exists(globalDependency));

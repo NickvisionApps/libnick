@@ -28,33 +28,20 @@ using namespace Nickvision::Helpers;
 namespace Nickvision::System
 {
 #ifdef _WIN32
-    static std::vector<HANDLE> openProcesses(const PROCESS_INFORMATION* pi, DWORD access)
+    static std::vector<DWORD> getJobProcesses(HANDLE job)
     {
-        std::vector<HANDLE> processes;
-        processes.push_back(pi->hProcess);
-        HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) };
-        if(snapshot != INVALID_HANDLE_VALUE)
+        std::vector<DWORD> pids;
+        size_t bufferSize{ sizeof(JOBOBJECT_BASIC_PROCESS_ID_LIST) + 255 * sizeof(ULONG_PTR) };
+        JOBOBJECT_BASIC_PROCESS_ID_LIST* buffer{ reinterpret_cast<JOBOBJECT_BASIC_PROCESS_ID_LIST*>(malloc(bufferSize)) };
+        if(QueryInformationJobObject(job, JobObjectBasicProcessIdList, buffer, static_cast<DWORD>(bufferSize), nullptr))
         {
-            PROCESSENTRY32 pe;
-            pe.dwSize = sizeof(PROCESSENTRY32);
-            if(Process32First(snapshot, &pe))
+            for(DWORD i{ 0 }; i < buffer->NumberOfProcessIdsInList; i++)
             {
-                do
-                {
-                    if(pe.th32ParentProcessID == pi->dwProcessId)
-                    {
-                        HANDLE process{ OpenProcess(access, false, pe.th32ProcessID) };
-                        if(!process)
-                        {
-                            continue;
-                        }
-                        processes.push_back(process);
-                    }
-                } while(Process32Next(snapshot, &pe));
+                pids.push_back(static_cast<DWORD>(buffer->ProcessIdList[i]));
             }
-            CloseHandle(snapshot);
         }
-        return processes;
+        free(buffer);
+        return pids;
     }
 #endif
 
@@ -297,16 +284,31 @@ namespace Nickvision::System
 #ifdef _WIN32
         PROCESS_MEMORY_COUNTERS pmc{};
         unsigned long long mem{ 0 };
-        for(HANDLE process : openProcesses(&m_pi, PROCESS_QUERY_INFORMATION))
+        HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) };
+        if(snapshot != INVALID_HANDLE_VALUE)
         {
-            if(GetProcessMemoryInfo(process, &pmc, sizeof(pmc)))
+            PROCESSENTRY32 pe{};
+            pe.dwSize = sizeof(PROCESSENTRY32);
+            if(Process32First(snapshot, &pe))
             {
-                mem += pmc.WorkingSetSize;
+                do
+                {
+                    if(pe.th32ParentProcessID == m_pi.dwProcessId || pe.th32ProcessID == m_pi.dwProcessId)
+                    {
+                        HANDLE process{ OpenProcess(PROCESS_QUERY_INFORMATION, false, pe.th32ProcessID) };
+                        if(!process)
+                        {
+                            continue;
+                        }
+                        if(K32GetProcessMemoryInfo(process, &pmc, sizeof(pmc)))
+                        {
+                            mem += pmc.WorkingSetSize;
+                        }
+                        CloseHandle(process);
+                    }
+                } while(Process32Next(snapshot, &pe));
             }
-            if(process != m_pi.hProcess)
-            {
-                CloseHandle(process);
-            }
+            CloseHandle(snapshot);
         }
         return mem;
 #elif defined(__linux__)
@@ -446,24 +448,32 @@ namespace Nickvision::System
             return false;
         }
 #else
-        HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0) };
-        THREADENTRY32 entry{ sizeof(THREADENTRY32) };
-        if(Thread32First(snapshot, &entry))
+        std::vector<DWORD> pids{ getJobProcesses(m_job) };
+        for(DWORD pid : pids)
         {
-            do
+            HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0) };
+            if(snapshot != INVALID_HANDLE_VALUE)
             {
-                if(entry.th32OwnerProcessID == m_pi.dwProcessId)
+                THREADENTRY32 entry{};
+                entry.dwSize = sizeof(THREADENTRY32);
+                if(Thread32First(snapshot, &entry))
                 {
-                    HANDLE thread{ OpenThread(THREAD_SUSPEND_RESUME, false, entry.th32ThreadID) };
-                    if(thread)
+                    do
                     {
-                        ResumeThread(thread);
-                        CloseHandle(thread);
-                    }
+                        if(entry.th32OwnerProcessID == pid)
+                        {
+                            HANDLE thread{ OpenThread(THREAD_SUSPEND_RESUME, false, entry.th32ThreadID) };
+                            if(thread)
+                            {
+                                ResumeThread(thread);
+                                CloseHandle(thread);
+                            }
+                        }
+                    } while(Thread32Next(snapshot, &entry));
                 }
-            } while(Thread32Next(snapshot, &entry));
+                CloseHandle(snapshot);
+            }
         }
-        CloseHandle(snapshot);
 #endif
         m_state = ProcessState::Running;
         return true;
@@ -483,24 +493,32 @@ namespace Nickvision::System
             return false;
         }
 #else
-        HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0) };
-        THREADENTRY32 entry{ sizeof(THREADENTRY32) };
-        if(Thread32First(snapshot, &entry))
+        std::vector<DWORD> pids{ getJobProcesses(m_job) };
+        for(DWORD pid : pids)
         {
-            do
+            HANDLE snapshot{ CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0) };
+            if(snapshot != INVALID_HANDLE_VALUE)
             {
-                if(entry.th32OwnerProcessID == m_pi.dwProcessId)
+                THREADENTRY32 entry{};
+                entry.dwSize = sizeof(THREADENTRY32);
+                if(Thread32First(snapshot, &entry))
                 {
-                    HANDLE thread{ OpenThread(THREAD_SUSPEND_RESUME, false, entry.th32ThreadID) };
-                    if(thread)
+                    do
                     {
-                        SuspendThread(thread);
-                        CloseHandle(thread);
-                    }
+                        if(entry.th32OwnerProcessID == pid)
+                        {
+                            HANDLE thread{ OpenThread(THREAD_SUSPEND_RESUME, false, entry.th32ThreadID) };
+                            if(thread)
+                            {
+                                SuspendThread(thread);
+                                CloseHandle(thread);
+                            }
+                        }
+                    } while(Thread32Next(snapshot, &entry));
                 }
-            } while(Thread32Next(snapshot, &entry));
+                CloseHandle(snapshot);
+            }
         }
-        CloseHandle(snapshot);
 #endif
         m_state = ProcessState::Paused;
         return true;
