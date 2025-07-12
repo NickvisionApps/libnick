@@ -2,12 +2,14 @@
 #include <fstream>
 #include <stdexcept>
 #include "filesystem/userdirectories.h"
+#include "system/environment.h"
 
 using namespace Nickvision::Filesystem;
+using namespace Nickvision::System;
 
 namespace Nickvision::App
 {
-    DataFileBase::DataFileBase(const std::string& key, const std::string& appName)
+    DataFileBase::DataFileBase(const std::string& key, const std::string& appName, bool isPortable)
         : m_key{ key }
     {
         if (m_key.empty())
@@ -18,7 +20,7 @@ namespace Nickvision::App
         {
             throw std::invalid_argument("Application name must not be empty.");
         }
-        m_path = UserDirectories::get(ApplicationUserDirectory::Config, appName) / (m_key + ".json");
+        m_path = (isPortable ? Environment::getExecutableDirectory() : UserDirectories::get(ApplicationUserDirectory::Config, appName)) / (m_key + ".json");
         if (std::filesystem::exists(m_path))
         {
             try

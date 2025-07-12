@@ -59,6 +59,13 @@ namespace Nickvision::Helpers::CodeHelpers
      * @return True if successful, false otherwise. False is returned if overwrite is false and the file exists.
      */
     bool writeFileBytes(const std::filesystem::path& path, const std::vector<std::byte>& bytes, bool overwrite = true);
+    /**
+     * @brief Combines two hash values together.
+     * @param a The first hash value
+     * @param b The second hash value
+     * @return The combined hash value
+     */
+    size_t combineHash(size_t a, size_t b);
 }
 
 #endif //CODEHELPERS_H

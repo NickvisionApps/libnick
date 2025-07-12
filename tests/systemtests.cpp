@@ -94,10 +94,22 @@ TEST_F(SystemTest, RunningInformationChecks)
 TEST_F(SystemTest, DependencyCheck)
 {
 #ifdef _WIN32
-    std::filesystem::path dependency{ Environment::findDependency("cmd") };
+    std::filesystem::path globalDependency{ Environment::findDependency("cmd", DependencySearchOption::Global) };
+    std::filesystem::path appDependency{ Environment::findDependency("cmd", DependencySearchOption::App) };
+    std::filesystem::path systemDependency{ Environment::findDependency("cmd", DependencySearchOption::System) };
+    std::filesystem::path localDependency{ Environment::findDependency("cmd", DependencySearchOption::Local) };
 #else
-    std::filesystem::path dependency{ Environment::findDependency("ls") };
+    std::filesystem::path globalDependency{ Environment::findDependency("ls", DependencySearchOption::Global) };
+    std::filesystem::path appDependency{ Environment::findDependency("ls", DependencySearchOption::App) };
+    std::filesystem::path systemDependency{ Environment::findDependency("ls", DependencySearchOption::System) };
+    std::filesystem::path localDependency{ Environment::findDependency("ls", DependencySearchOption::Local) };
 #endif
-    ASSERT_TRUE(!dependency.empty());
-    ASSERT_TRUE(std::filesystem::exists(dependency));
+    ASSERT_TRUE(!globalDependency.empty());
+    ASSERT_TRUE(std::filesystem::exists(globalDependency));
+    ASSERT_TRUE(appDependency.empty());
+    ASSERT_TRUE(!std::filesystem::exists(appDependency));
+    ASSERT_TRUE(!systemDependency.empty());
+    ASSERT_TRUE(std::filesystem::exists(systemDependency));
+    ASSERT_TRUE(localDependency.empty());
+    ASSERT_TRUE(!std::filesystem::exists(localDependency));
 }

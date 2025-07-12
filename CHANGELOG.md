@@ -1,5 +1,28 @@
 # Changelog
 
+## 2025.7.0
+### Breaking Changes
+#### App
+- Removed `App:InterProcessCommunicator` (can be easily recreated using the `Network::Socket` class)
+#### Logging
+- Removed module
+#### Network
+- Replaced dependency of `libcurl` with `cpr`
+- Renamed `Web::fetchJson()` to `Web::getJson()`
+- Removed `CurlEasy` class
+### New APIs
+#### App
+- Added `isPortable` parameter to `DataFileManager` to store config files in the executable directory instead
+#### Helpers
+- Added `PairHash` class
+- Added `CodeHelpers::combineHash()` function
+#### System
+- Added `DependencySearchOption` enum
+- Added `search` parameter to `Environment::findDependency()` to specify a `DependencySearchOption`
+### Fixes
+#### System
+- Fixed `Process::pause()` and `Process::resume()` not working
+
 ## 2025.6.5
 ### Breaking Changes
 None

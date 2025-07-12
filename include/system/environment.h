@@ -31,6 +31,7 @@
 #include <string>
 #include <vector>
 #include "app/appinfo.h"
+#include "dependencysearchoption.h"
 #include "deploymentmode.h"
 #include "operatingsystem.h"
 
@@ -117,12 +118,11 @@ namespace Nickvision::System::Environment
     std::string exec(const std::string& cmd);
     /**
      * @brief Finds the path of a given executable dependency in the system.
-     * @brief The current executable's directory is searched first, then the system's PATH.
-     * @brief Windows UWP (Store) apps are not supported.
      * @param dependency The name of the executable dependency to find
+     * @param search The DependencySearchOption to use in the dependency search
      * @return The path to the executable dependency if found, else empty path
      */
-    const std::filesystem::path& findDependency(std::string dependency);
+    const std::filesystem::path& findDependency(std::string dependency, DependencySearchOption search = DependencySearchOption::Global);
     /**
      * @brief Gets a debug information string about the user's environment.
      * @brief appInfo The application's AppInfo
