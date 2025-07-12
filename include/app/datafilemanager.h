@@ -43,8 +43,9 @@ namespace Nickvision::App
         /**
          * @brief Constructs a DataFileManager.
          * @param appName The name of the application (used in determining the path to store data files on disk)
+         * @param isPortable Whether or not the application is portable (the config files should live in the same exe directory)
          */
-        DataFileManager(const std::string& appName);
+        DataFileManager(const std::string& appName, bool isPortable);
         // Delete copy and move constructors and assignment operators
         DataFileManager(const DataFileManager&) = delete;
         DataFileManager(DataFileManager&&) = delete;
@@ -66,13 +67,14 @@ namespace Nickvision::App
             }
             if (!m_files.contains(key))
             {
-                m_files[key] = std::make_unique<T>(key, m_appName);
+                m_files[key] = std::make_unique<T>(key, m_appName, m_isPortable);
             }
             return *static_cast<T*>(m_files[key].get());
         }
 
     private:
         std::string m_appName;
+        bool m_isPortable;
         std::unordered_map<std::string, std::unique_ptr<DataFileBase>> m_files;
     };
 }

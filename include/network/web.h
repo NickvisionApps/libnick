@@ -26,7 +26,7 @@
 #include <filesystem>
 #include <string>
 #include <boost/json.hpp>
-#include "curleasy.h"
+#include <cpr/callback.h>
 
 namespace Nickvision::Network::Web
 {
@@ -37,24 +37,20 @@ namespace Nickvision::Network::Web
      */
     bool getWebsiteExists(const std::string& url);
     /**
-     * @brief Fetches a json string from a url.
-     * @param url The url of the json string
-     * @return The fetched json value
+     * @brief Makes a GET request for json from a url.
+     * @param url The url of the json resource
+     * @return The parsed json value
+     * @return An empty json value if error
      */
-    boost::json::value fetchJson(const std::string& url);
+    boost::json::value getJson(const std::string& url);
     /**
      * @brief Downloads a file to disk.
      * @param url The url of the file to download
      * @param path The path on disk to save the file
-     * @param progress An optional function to receive progress on the download \n
-     * std::function<int(curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)> \n 
-     *	dltotal - The total number of bytes to be downloaded \n 
-     *	dlnow   - The total number of bytes currently downloaded \n 
-     *  ultotal - The total number of bytes to be uploaded (will always be 0) \n 
-     *	ulnow   - The total number of bytes currently uploaded (will always be 0) \n 
+     * @param progress An optional function to receive progress on the download
      * @param overwrite Whether or not to overwrite existing files on disk
      */
-    bool downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress = {}, bool overwrite = true);
+    bool downloadFile(const std::string& url, const std::filesystem::path& path, const cpr::ProgressCallback& progress = {}, bool overwrite = true);
 }
 
 #endif //WEB_H

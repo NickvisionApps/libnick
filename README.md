@@ -17,8 +17,8 @@ The recommendation is to (and below commands will) use vcpkg to pull these depen
 
 ### All Platforms
 - boost-json
+- cpr
 - gtest
-- libcurl
 - libintl
 - maddy
 - sqlcipher (Must be provided by the system on Linux and macOS as sqlcipher is not available via vcpkg for these systems)
@@ -53,13 +53,13 @@ A C++20 compiler is also required to build libnick.
 1. Set the `VCPKG_ROOT` environment variable to the path of your vcpkg installation's root directory.
 #### Windows
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-windows`
-1. Run `vcpkg install boost-json curl gettext-libintl gtest maddy sqlcipher`
+1. Run `vcpkg install boost-json cpr gettext-libintl gtest maddy sqlcipher`
 #### Linux
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `x64-linux`
-1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy`
+1. Run `vcpkg install boost-json cpr gettext-libintl glib gtest libsecret maddy`
 #### macOS (Apple Silicon)
 1. Set the `VCPKG_DEFAULT_TRIPLET` environment variable to `arm64-osx`
-1. Run `vcpkg install boost-json curl gettext-libintl glib gtest libsecret maddy`
+1. Run `vcpkg install boost-json cpr gettext-libintl glib gtest libsecret maddy`
 
 ### Building
 1. First, clone/download the repo.

@@ -1,5 +1,21 @@
 # Changelog
 
+## 2025.7.0
+### Breaking Changes
+#### App
+- Removed `App:InterProcessCommunicator` (can be easily recreated using the `Network::Socket` class)
+- Added `isPortable` parameter to `DataFileManager` to store config files in the executable directory instead
+#### Logging
+- Removed module
+#### Network
+- Replaced dependency of `libcurl` with `cpr`
+- Renamed `Web::fetchJson()` to `Web::getJson()`
+- Removed `CurlEasy` class
+### New APIs
+None
+### Fixes
+None
+
 ## 2025.6.5
 ### Breaking Changes
 None

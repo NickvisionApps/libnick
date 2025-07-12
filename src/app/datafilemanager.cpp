@@ -2,8 +2,9 @@
 
 namespace Nickvision::App
 {
-    DataFileManager::DataFileManager(const std::string& appName)
-        : m_appName{ appName }
+    DataFileManager::DataFileManager(const std::string& appName, bool isPortable)
+        : m_appName{ appName },
+        m_isPortable{ isPortable }
     {
         
     }

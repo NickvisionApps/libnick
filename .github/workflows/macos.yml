@@ -29,7 +29,7 @@ jobs:
         uses: johnwason/vcpkg-action@v6
         id: vcpkg
         with:
-          pkgs: boost-json curl gettext-libintl glib gtest maddy
+          pkgs: boost-json cpr gettext-libintl glib gtest maddy
           triplet: arm64-osx
           revision: 47313591da1d14a8a9b209f4bee39d29acc39b31
           token: ${{ github.token }}

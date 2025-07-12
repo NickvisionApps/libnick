@@ -58,7 +58,7 @@ namespace Nickvision::Update
     Version Updater::fetchCurrentVersion(VersionType versionType)
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
-        boost::json::value root = Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases");
+        boost::json::value root = Web::getJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases");
         if (!root.is_array())
         {
             return {};
@@ -92,14 +92,14 @@ namespace Nickvision::Update
     }
 
 #ifdef _WIN32
-    bool Updater::windowsUpdate(VersionType versionType, const CurlProgressFunction& progress)
+    bool Updater::windowsUpdate(VersionType versionType, const cpr::ProgressCallback& progress)
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
         {
             return false;
         }
-        boost::json::value root = Web::fetchJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId));
+        boost::json::value root = Web::getJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases/" + std::to_string(versionType == VersionType::Stable ? m_latestStableReleaseId : m_latestPreviewReleaseId));
         if (!root.is_object())
         {
             return false;

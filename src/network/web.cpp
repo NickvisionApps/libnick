@@ -1,73 +1,84 @@
 #include "network/web.h"
 #include <fstream>
 #include <sstream>
+#include <cpr/session.h>
 #include "system/environment.h"
 
 using namespace Nickvision::System;
 
 namespace Nickvision::Network
 {
+    static bool isResponseOk(const cpr::Response& response)
+    {
+        if(response.status_code == 0)
+        {
+            return response.error.code == cpr::ErrorCode::OK;
+        }
+        return response.status_code >= 100 && response.status_code < 400;
+    }
+
     bool Web::getWebsiteExists(const std::string& url)
     {
         if(url.empty())
         {
             return false;
         }
-        CurlEasy curl{ url };
-        curl.setNoBody(true);
-        return curl.perform() == CURLE_OK;
+        cpr::Session session;
+        session.SetUrl({ url });
+        return isResponseOk(session.Get());
     }
 
-    boost::json::value Web::fetchJson(const std::string& url)
+    boost::json::value Web::getJson(const std::string& url)
     {
         if(url.empty())
         {
             return {};
         }
-        CurlEasy curl{ url };
-        std::stringstream out;
+        cpr::Session session;
+        session.SetUrl({ url });
         switch(Environment::getOperatingSystem())
         {
         case OperatingSystem::Windows:
-            curl.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/131.0.2903.86");
+            session.SetUserAgent({ "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0" });
             break;
         case OperatingSystem::Linux:
-            curl.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36");
+            session.SetUserAgent({ "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1" });
             break;
         case OperatingSystem::MacOS:
-            curl.setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 14_7_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/131.0.2903.86");
+            session.SetUserAgent({ "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3.1 Safari/605.1.15" });
             break;
         default:
             break;
         }
-        curl.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36");
-        curl.setHeaders({ "Content-Type: application/json" });
-        curl.setStream(&out);
-        if(curl.perform() == CURLE_OK)
+        cpr::Response response{ session.Get() };
+        if(isResponseOk(response) && !response.text.empty())
         {
-            std::string data{ out.str() };
-            if(!data.empty())
-            {
-                return boost::json::parse(data);
-            }
+            return boost::json::parse(response.text);
         }
         return {};
     }
 
-    bool Web::downloadFile(const std::string& url, const std::filesystem::path& path, const CurlProgressFunction& progress, bool overwrite)
+    bool Web::downloadFile(const std::string& url, const std::filesystem::path& path, const cpr::ProgressCallback& progress, bool overwrite)
     {
         if(url.empty())
         {
             return false;
         }
-        if(std::filesystem::exists(path) && !overwrite)
+        if(std::filesystem::exists(path))
         {
-            return false;
+            if(!overwrite)
+            {
+                return false;
+            }
+            std::filesystem::remove(path);
         }
-        CurlEasy curl{ url };
-        std::ofstream out{ path, std::ios::binary | std::ios::trunc };
-        curl.setStream(&out);
-        curl.setProgressFunction(progress);
-        return curl.perform() == CURLE_OK;
+        std::ofstream out{ path, std::ios::binary };
+        cpr::Session session;
+        session.SetUrl(url);
+        if(progress.callback)
+        {
+            session.SetProgressCallback(progress);
+        }
+        return isResponseOk(session.Download(out));
     }
 }
