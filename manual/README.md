@@ -8,6 +8,8 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 
 ## 2025.7.0
 ### Breaking Changes
+#### App
+- Removed `App:InterProcessCommunicator` (can be easily recreated using the `Network::Socket` class)
 #### Logging
 - Removed module
 #### Network
@@ -18,6 +20,7 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 None
 ### Fixes
 None
+
 ## Dependencies
 The following are a list of dependencies used by libnick. 
 

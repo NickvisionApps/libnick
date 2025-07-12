@@ -2,6 +2,8 @@
 
 ## 2025.7.0
 ### Breaking Changes
+#### App
+- Removed `App:InterProcessCommunicator` (can be easily recreated using the `Network::Socket` class)
 #### Logging
 - Removed module
 #### Network
