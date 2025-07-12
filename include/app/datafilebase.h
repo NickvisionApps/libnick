@@ -40,10 +40,11 @@ namespace Nickvision::App
          * @brief Constructs a DataFileBase, loading the file from disk.
          * @param key The key of the config file
          * @param appName The name of the application the data file belongs to
+         * @param isPortable Whether or not the config file is portable
          * @throw std::invalid_argument Thrown if key is empty
          * @throw std::invalid_argument Thrown if appName is empty
          */
-        DataFileBase(const std::string& key, const std::string& appName);
+        DataFileBase(const std::string& key, const std::string& appName, bool isPortable);
         /**
          * @brief Destructs a DataFileBase. 
          */
