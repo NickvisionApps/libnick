@@ -57,4 +57,17 @@ namespace Nickvision::Helpers
         }
         return false;
     }
+
+    size_t CodeHelpers::combineHash(size_t a, size_t b)
+    {
+        if constexpr(sizeof(size_t) >= 8)
+        {
+            a ^= b + 0x517cc1b727220a95 + (a << 6) + (a >> 2);
+        }
+        else
+        {
+            a ^= b + 0x9e3779b9 + (a << 6) + (a >> 2);
+        }
+        return a;
+    }
 }

@@ -99,7 +99,7 @@ public:
     {
         m_manager.reset();
         m_portableManager.reset();
-        std::filesystem::remove(UserDirectories::get(ApplicationUserDirectory::Config, "Nickvision Aura Tests"));
+        std::filesystem::remove_all(UserDirectories::get(ApplicationUserDirectory::Config, "Nickvision Aura Tests"));
         std::filesystem::remove("config.json");
     }
 };

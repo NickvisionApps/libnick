@@ -10,7 +10,6 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 ### Breaking Changes
 #### App
 - Removed `App:InterProcessCommunicator` (can be easily recreated using the `Network::Socket` class)
-- Added `isPortable` parameter to `DataFileManager` to store config files in the executable directory instead
 #### Logging
 - Removed module
 #### Network
@@ -18,7 +17,14 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 - Renamed `Web::fetchJson()` to `Web::getJson()`
 - Removed `CurlEasy` class
 ### New APIs
-None
+#### App
+- Added `isPortable` parameter to `DataFileManager` to store config files in the executable directory instead
+#### Helpers
+- Added `PairHash` class
+- Added `CodeHelpers::combineHash()` function
+#### System
+- Added `DependencySearchOption` enum
+- Added `search` parameter to `Environment::findDependency()` to specify a `DependencySearchOption`
 ### Fixes
 None
 

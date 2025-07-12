@@ -3,6 +3,9 @@
 #include <locale>
 #include <sstream>
 #include <unordered_map>
+#include <utility>
+#include "filesystem/userdirectories.h"
+#include "helpers/pairhash.h"
 #include "helpers/stringhelpers.h"
 #include "system/process.h"
 #ifdef _WIN32
@@ -13,6 +16,7 @@
 #endif
 
 using namespace Nickvision::App;
+using namespace Nickvision::Filesystem;
 using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
@@ -180,19 +184,20 @@ namespace Nickvision::System
         return "";
     }
 
-    const std::filesystem::path& Environment::findDependency(std::string dependency)
+    const std::filesystem::path& Environment::findDependency(std::string dependency, DependencySearchOption search)
     {
-        static std::unordered_map<std::string, std::filesystem::path> dependencies;
+        static std::unordered_map<std::pair<std::string, DependencySearchOption>, std::filesystem::path, PairHash> dependencies;
 #ifdef _WIN32
         if(!std::filesystem::path(dependency).has_extension())
         {
             dependency += ".exe";
         }
 #endif
+        std::pair<std::string, DependencySearchOption> pair{ std::make_pair(dependency, search) };
         //Dependency already found once before
-        if(dependencies.contains(dependency))
+        if(dependencies.contains(pair))
         {
-            const std::filesystem::path& location{ dependencies[dependency] };
+            const std::filesystem::path& location{ dependencies[pair] };
             //Return if path is still valid
             if(std::filesystem::exists(location))
             {
@@ -200,28 +205,57 @@ namespace Nickvision::System
             }
         }
         //Search for dependency
-        dependencies[dependency] = std::filesystem::path();
-        //Search in current executable's directory
-        std::filesystem::path path{ getExecutableDirectory() / dependency };
-        if(std::filesystem::exists(path))
+        dependencies[pair] = std::filesystem::path();
+        if(search == DependencySearchOption::Global) //Executable directory, than PATH
         {
-            dependencies[dependency] = path;
+            std::filesystem::path path{ getExecutableDirectory() / dependency };
+            if(std::filesystem::exists(path))
+            {
+                dependencies[pair] = path;
+            }
+            else
+            {
+                for(const std::filesystem::path& dir : getPath())
+                {
+                    path = { dir / dependency };
+                    if(std::filesystem::exists(path) && dir.string().find("AppData\\Local\\Microsoft\\WindowsApps") == std::string::npos)
+                    {
+                        dependencies[pair] = path;
+                        break;
+                    }
+                }
+            }
         }
-        //Search in system PATH
-        else
+        else if(search == DependencySearchOption::App) //Executable directory only
         {
+            std::filesystem::path path{ getExecutableDirectory() / dependency };
+            if(std::filesystem::exists(path))
+            {
+                dependencies[pair] = path;
+            }
+        }
+        else if(search == DependencySearchOption::System) //PATH only
+        {
+            std::filesystem::path path;
             for(const std::filesystem::path& dir : getPath())
             {
                 path = { dir / dependency };
                 if(std::filesystem::exists(path) && dir.string().find("AppData\\Local\\Microsoft\\WindowsApps") == std::string::npos)
                 {
-                    dependencies[dependency] = path;
+                    dependencies[pair] = path;
                     break;
                 }
             }
         }
-        //Return newly cached dependency path
-        return dependencies[dependency];
+        else if(search == DependencySearchOption::Local) //Local data folder only
+        {
+            std::filesystem::path path{ UserDirectories::get(UserDirectory::LocalData) / dependency };
+            if(std::filesystem::exists(path))
+            {
+                dependencies[pair] = path;
+            }
+        }
+        return dependencies[pair];
     }
 
     std::string Environment::getDebugInformation(const AppInfo& appInfo, const std::string& extraInformation)
