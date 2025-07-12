@@ -20,7 +20,8 @@
 - Added `DependencySearchOption` enum
 - Added `search` parameter to `Environment::findDependency()` to specify a `DependencySearchOption`
 ### Fixes
-None
+#### System
+- Fixed `Process::pause()` and `Process::resume()` not working
 
 ## 2025.6.5
 ### Breaking Changes

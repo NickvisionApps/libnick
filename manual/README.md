@@ -26,7 +26,8 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 - Added `DependencySearchOption` enum
 - Added `search` parameter to `Environment::findDependency()` to specify a `DependencySearchOption`
 ### Fixes
-None
+#### System
+- Fixed `Process::pause()` and `Process::resume()` not working
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 
