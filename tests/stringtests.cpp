@@ -100,12 +100,22 @@ TEST(StringTests, UrlValidity2)
 
 TEST(StringTests, UrlValidity3)
 {
-    ASSERT_TRUE(StringHelpers::isValidUrl("https://microsoft"));
+    ASSERT_FALSE(StringHelpers::isValidUrl("https://microsoft"));
 }
 
 TEST(StringTests, UrlValidity4)
 {
     ASSERT_FALSE(StringHelpers::isValidUrl("asderm"));
+}
+
+TEST(StringTests, UrlValidity5)
+{
+    ASSERT_TRUE(StringHelpers::isValidUrl("https://www.youtube.com/watch?v=eCq3G6LGhe8"));
+}
+
+TEST(StringTests, UrlValidity6)
+{
+    ASSERT_TRUE(StringHelpers::isValidUrl("https://www.youtube.com/watch?v=UKwSQSFN4Nw&list=PLXJg25X-OulsVsnvZ7RVtSDW-id9_RzAO"));
 }
 
 TEST(StringTests, Join1)

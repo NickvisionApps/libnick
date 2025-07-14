@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.7.1
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### Helpers
+- Fixed an issue where `StringHelpers::isValidUrl()` did not work correctly
+
 ## 2025.7.0
 ### Breaking Changes
 #### App
