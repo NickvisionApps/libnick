@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.7.2
+### Breaking Changes
+None
+### New APIs
+#### Localization
+- Added `Gettext::changeLanguage()` function
+### Fixes
+None
+
 ## 2025.7.1
 ### Breaking Changes
 None

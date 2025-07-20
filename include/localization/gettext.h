@@ -55,6 +55,12 @@ namespace Nickvision::Localization::Gettext
      */
     const std::vector<std::string>& getAvailableLanguages();
     /**
+     * @brief Changes the current language for gettext translations.
+     * @param language The language code to change translations to
+     * @return True if the language was changed successfully, else false
+     */
+    bool changeLanguage(const std::string& language);
+    /**
      * @brief Translates a message and formats it with the given arguments.
      * @param msg The message to translate
      * @param args The arguments to format the translated message with

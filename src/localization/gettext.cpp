@@ -53,6 +53,17 @@ namespace Nickvision::Localization
         return langs;
     }
 
+    bool Gettext::changeLanguage(const std::string& language)
+    {
+        const std::vector<std::string>& langs{ Gettext::getAvailableLanguages() };
+        if (std::find(langs.begin(), langs.end(), language) == langs.end())
+        {
+            return false;
+        }
+        Environment::setVariable("LANGUAGE", language);
+        return true;
+    }
+
     const char* Gettext::pgettext(const char* context, const char* msg)
     {
         const char* translation{ dcgettext(s_domainName.c_str(), context, LC_MESSAGES) };
