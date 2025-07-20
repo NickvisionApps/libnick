@@ -44,17 +44,24 @@ namespace Nickvision::Localization
         {
             for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(Environment::getExecutableDirectory()))
             {
-                if (e.is_directory() && std::filesystem::exists(e.path() / (getDomainName() + ".mo")))
+                if (e.is_directory() && std::filesystem::exists(e.path() / "LC_MESSAGES" / (getDomainName() + ".mo")))
                 {
                     langs.push_back(e.path().filename().string());
                 }
             }
+            std::sort(langs.begin(), langs.end());
         }
         return langs;
     }
 
     bool Gettext::changeLanguage(const std::string& language)
     {
+        if(language == "C")
+        {
+            Environment::setVariable("LANGUAGE", "");
+            setlocale(LC_ALL, "C");
+            return true;
+        }
         const std::vector<std::string>& langs{ Gettext::getAvailableLanguages() };
         if (std::find(langs.begin(), langs.end(), language) == langs.end())
         {

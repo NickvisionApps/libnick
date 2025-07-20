@@ -51,12 +51,13 @@ namespace Nickvision::Localization::Gettext
     const std::string& getDomainName();
     /**
      * @brief Gets the list of available translated languages.
+     * @brief Does not include the "C" language (the default language).
      * @return The list of available translated languages.
      */
     const std::vector<std::string>& getAvailableLanguages();
     /**
      * @brief Changes the current language for gettext translations.
-     * @param language The language code to change translations to
+     * @param language The language code to change translations to (use "C" to turn off translations and use the default language)
      * @return True if the language was changed successfully, else false
      */
     bool changeLanguage(const std::string& language);

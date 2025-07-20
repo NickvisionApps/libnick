@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025.7.3
+### Breaking Changes
+None
+### New APIs
+#### Localization
+- You can now specify "C" in the `Gettext::changeLanguage()` function to turn off translations.
+### Fixes
+#### Localization
+- Improved `Gettext::getAvailableLanguages()`'s search for languages
+
 ## 2025.7.2
 ### Breaking Changes
 None
