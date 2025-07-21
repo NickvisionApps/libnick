@@ -6,15 +6,15 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.7.3
+## 2025.7.4
 ### Breaking Changes
 None
 ### New APIs
-#### Localization
-- You can now specify "C" in the `Gettext::changeLanguage()` function to turn off translations.
+#### App
+- Added `CancellationToken` class
 ### Fixes
 #### Localization
-- Improved `Gettext::getAvailableLanguages()`'s search for languages
+- Fixed included headers
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025.7.4
+### Breaking Changes
+None
+### New APIs
+#### App
+- Added `CancellationToken` class
+### Fixes
+#### Localization
+- Fixed included headers
+
 ## 2025.7.3
 ### Breaking Changes
 None
