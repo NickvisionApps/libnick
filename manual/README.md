@@ -8,13 +8,14 @@ libnick provides Nickvision apps with a common set of cross-platform APIs for ma
 
 ## 2025.7.4
 ### Breaking Changes
-None
+- `maddy` dependency requires >= 1.6.0
 ### New APIs
 #### App
 - Added `CancellationToken` class
 ### Fixes
 #### Localization
 - Fixed included headers
+- Fixed Gettext::changeLanguage("C") not turning off translations
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

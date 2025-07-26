@@ -2,13 +2,14 @@
 
 ## 2025.7.4
 ### Breaking Changes
-None
+- `maddy` dependency requires >= 1.6.0
 ### New APIs
 #### App
 - Added `CancellationToken` class
 ### Fixes
 #### Localization
 - Fixed included headers
+- Fixed Gettext::changeLanguage("C") not turning off translations
 
 ## 2025.7.3
 ### Breaking Changes
