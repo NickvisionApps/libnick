@@ -29,8 +29,8 @@
 #include <libintl.h>
 
 #define GETTEXT_CONTEXT_SEPARATOR "\004"
-#define _(String) dgettext(::Nickvision::Localization::Gettext::getDomainName().c_str(), String)
-#define _n(String, StringPlural, N) dngettext(::Nickvision::Localization::Gettext::getDomainName().c_str(), String, StringPlural, static_cast<unsigned long>(N))
+#define _(String) ::Nickvision::Localization::Gettext::dgettext(String)
+#define _n(String, StringPlural, N) ::Nickvision::Localization::Gettext::dngettext(String, StringPlural, static_cast<unsigned long>(N))
 #define _f(String, ...) ::Nickvision::Localization::Gettext::fgettext(String, __VA_ARGS__)
 #define _fn(String, StringPlural, N, ...) ::Nickvision::Localization::Gettext::fngettext(String, StringPlural, static_cast<unsigned long>(N), __VA_ARGS__)
 #define _p(Context, String) ::Nickvision::Localization::Gettext::pgettext(Context GETTEXT_CONTEXT_SEPARATOR String, String)
@@ -57,19 +57,34 @@ namespace Nickvision::Localization::Gettext
     const std::vector<std::string>& getAvailableLanguages();
     /**
      * @brief Changes the current language for gettext translations.
-     * @param language The language code to change translations to (use "C" to turn off translations and use the default language)
+     * @param language The language code to change translations to (use "C" to turn off translations; use "" to use the system default language)
      * @return True if the language was changed successfully, else false
      */
     bool changeLanguage(const std::string& language);
     /**
+     * @brief Translates a message.
+     * @param msgid The message to translate
+     * @return The translated message
+     */
+    const char* dgettext(const char* msgid);
+    /**
+     * @brief Translates a plural message.
+     * @param msg The message to translate
+     * @param msgPlural The plural version of the message to translate
+     * @param n The number of objects (used to determine whether or not to use the plural version of the message)
+     * @return The translated message for the given number of objects
+     */
+    const char* dngettext(const char* msg, const char* msgPlural, unsigned long n);
+    /**
      * @brief Translates a message and formats it with the given arguments.
      * @param msg The message to translate
      * @param args The arguments to format the translated message with
+     * @return The formatted translated message
      */
     template<typename... Args>
     std::string fgettext(const char* msg, Args&&... args)
     {
-        return std::vformat(_(msg), std::make_format_args(args...));
+        return std::vformat(Nickvision::Localization::Gettext::dgettext(msg), std::make_format_args(args...));
     }
     /**
      * @brief Translates a plural message and formats it with the given arguments.
@@ -77,11 +92,12 @@ namespace Nickvision::Localization::Gettext
      * @param msgPlural The plural version of the message to translate
      * @param n The number of objects (used to determine whether or not to use the plural version of the message)
      * @param args The arguments to format the translated message with
+     * @return The formatted translated message for the given number of objects
      */
     template<typename... Args>
     std::string fngettext(const char* msg, const char* msgPlural, unsigned long n, Args&&... args)
     {
-        return std::vformat(_n(msg, msgPlural, n), std::make_format_args(args...));
+        return std::vformat(Nickvision::Localization::Gettext::dngettext(msg, msgPlural, n), std::make_format_args(args...));
     }
     /**
      * @brief Translates a message for a given context.

@@ -112,7 +112,10 @@ namespace Nickvision::Events
             std::lock_guard<std::mutex> lock{ m_mutex };
             for (const std::function<void(const T&)>& handler : m_handlers)
             {
-                handler(param);
+                if(handler)
+                {
+                    handler(param);
+                }
             }
         }
         /**

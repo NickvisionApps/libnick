@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2025.7.3 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2025.7.4 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -36,6 +36,7 @@ if(NOT WIN32)
 endif()
 add_library (${PROJECT_NAME}
     "include/app/appinfo.h"
+    "include/app/cancellationtoken.h"
     "include/app/datafilebase.h"
     "include/app/datafilemanager.h"
     "include/app/windowgeometry.h"
@@ -95,6 +96,7 @@ add_library (${PROJECT_NAME}
     "include/update/version.h"
     "include/update/versiontype.h"
     "src/app/appinfo.cpp"
+    "src/app/cancellationtoken.cpp"
     "src/app/datafilebase.cpp"
     "src/app/datafilemanager.cpp"
     "src/app/windowgeometry.cpp"
@@ -146,11 +148,8 @@ endif()
 find_package(Boost REQUIRED COMPONENTS json)
 find_package(cpr CONFIG REQUIRED)
 find_package(Intl REQUIRED)
-target_link_libraries(${PROJECT_NAME} PUBLIC Boost::json cpr::cpr Intl::Intl)
-if(USING_VCPKG)
-    find_package(unofficial-maddy CONFIG REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PRIVATE unofficial::maddy::maddy)
-endif()
+find_package(maddy CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC Boost::json cpr::cpr Intl::Intl maddy::maddy)
 if(WIN32)
     find_package(sqlcipher CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dnsapi Dwmapi Gdiplus Kernel32 Shell32 UxTheme Ws2_32)

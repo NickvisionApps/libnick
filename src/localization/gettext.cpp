@@ -10,7 +10,8 @@ using namespace Nickvision::System;
 
 namespace Nickvision::Localization
 {
-    static std::string s_domainName;
+    static std::string s_domainName{};
+    static bool s_translationsOff{ false };
 
     bool Gettext::init(const std::string& domainName)
     {
@@ -57,10 +58,18 @@ namespace Nickvision::Localization
 
     bool Gettext::changeLanguage(const std::string& language)
     {
-        if(language == "C")
+        if(language.empty())
         {
-            Environment::setVariable("LANGUAGE", "");
-            setlocale(LC_ALL, "C");
+            if(Environment::hasVariable("LANGUAGE"))
+            {
+                Environment::clearVariable("LANGUAGE");
+            }
+            s_translationsOff = false;
+            return true;
+        }
+        else if(language == "C")
+        {
+            s_translationsOff = true;
             return true;
         }
         const std::vector<std::string>& langs{ Gettext::getAvailableLanguages() };
@@ -69,12 +78,35 @@ namespace Nickvision::Localization
             return false;
         }
         Environment::setVariable("LANGUAGE", language);
+        s_translationsOff = false;
         return true;
+    }
+
+    const char* Gettext::dgettext(const char* msgid)
+    {
+        if(s_translationsOff)
+        {
+            return msgid;
+        }
+        return ::dgettext(s_domainName.c_str(), msgid);
+    }
+
+    const char* Gettext::dngettext(const char* msg, const char* msgPlural, unsigned long n)
+    {
+        if(s_translationsOff)
+        {
+            return n == 1 ? msg : msgPlural;
+        }
+        return ::dngettext(s_domainName.c_str(), msg, msgPlural, n);
     }
 
     const char* Gettext::pgettext(const char* context, const char* msg)
     {
-        const char* translation{ dcgettext(s_domainName.c_str(), context, LC_MESSAGES) };
+        if(s_translationsOff)
+        {
+            return msg;
+        }
+        const char* translation{ ::dcgettext(s_domainName.c_str(), context, LC_MESSAGES) };
         if (translation == context)
         {
             return msg;
@@ -84,7 +116,11 @@ namespace Nickvision::Localization
 
     const char* Gettext::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n)
     {
-        const char* translation{ dcngettext(s_domainName.c_str(), context, msgPlural, n, LC_MESSAGES) };
+        if(s_translationsOff)
+        {
+            return n == 1 ? msg : msgPlural;
+        }
+        const char* translation{ ::dcngettext(s_domainName.c_str(), context, msgPlural, n, LC_MESSAGES) };
         if (translation == context || translation == msgPlural)
         {
             return n == 1 ? msg : msgPlural;
