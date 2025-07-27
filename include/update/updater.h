@@ -23,6 +23,7 @@
 #ifndef UPDATER_H
 #define UPDATER_H
 
+#include <filesystem>
 #include <mutex>
 #include <string>
 #include <cpr/callback.h>
@@ -31,7 +32,7 @@
 namespace Nickvision::Update
 {
     /**
-     * @brief An object to check for application updates through GitHub.
+     * @brief An object to check for and download new releases through GitHub.
      */
     class Updater
     {
@@ -54,15 +55,27 @@ namespace Nickvision::Update
         Updater(Updater&& u) noexcept;
         /**
          * @brief Gets the latest version of the provided type from the GitHub repo.
-         * @brief This method looks for tags in the format major.minor.build-dev for preview versions and major.minor.build for stable versions.
+         * @brief This method looks for tags in the format major.minor.build-dev or major.minor.build.dev for preview versions and major.minor.build for stable versions.
          * @param versionType The type of the version to get
          * @return The current version of the provided type if available, else empty Version
          */
         Version fetchCurrentVersion(VersionType versionType);
+        /**
+         * @brief Downloads an update for the application.
+         * @brief fetchCurrentVersion should be called first before running this method.
+         * @param versionType The type of version update to download
+         * @param path The path to save the downloaded file
+         * @param assetName The name of the asset to download
+         * @param exactMatch If true, the asset name must match exactly, else it can be a substring
+         * @param progress An optional cpr::ProgressCallback to track the downloading update
+         * @return True if successful, else false
+         */
+        bool downloadUpdate(VersionType versionType, const std::filesystem::path& path, const std::string& assetName, bool exactMatch = true, const cpr::ProgressCallback& progress = {});
 #ifdef _WIN32
         /**
          * @brief Downloads and installs an application update for Windows. 
          * @brief fetchCurrentVersion should be called first before running this method.
+         * @brief This method will download the asset that contains "setup.exe" in its name and run it.
          * @param versionType The type of version update to install
          * @param progress An optional cpr::ProgressCallback to track the downloading update
          * @return True if successful, else false

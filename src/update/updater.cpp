@@ -63,6 +63,8 @@ namespace Nickvision::Update
         {
             return {};
         }
+        std::string stableVersion;
+        std::string previewVersion;
         for (const boost::json::value& release : root.as_array())
         {
             if(!release.is_object())
@@ -76,23 +78,27 @@ namespace Nickvision::Update
                 return {};
             }
             std::string version{ tagNameValue.as_string() };
+            size_t splitCount{ StringHelpers::split(version, ".", false).size() };
             const boost::json::value& id{ releaseObject["id"] };
-            if (versionType == VersionType::Stable && version.find('-') == std::string::npos)
+            if (stableVersion.empty() && versionType == VersionType::Stable && version.find('-') == std::string::npos && splitCount == 3)
             {
                 m_latestStableReleaseId = id.is_int64() ? static_cast<int>(id.as_int64()) : -1;
-                return version;
+                stableVersion = version;
             }
-            if (versionType == VersionType::Preview && version.find('-') != std::string::npos)
+            if (previewVersion.empty() && versionType == VersionType::Preview && (version.find('-') != std::string::npos || splitCount == 4))
             {
                 m_latestPreviewReleaseId = id.is_int64() ? static_cast<int>(id.as_int64()) : -1;
-                return version;
+                previewVersion = version;
+            }
+            if (!stableVersion.empty() && !previewVersion.empty())
+            {
+                break;
             }
         }
-        return {};
+        return versionType == VersionType::Stable ? Version(stableVersion) : Version(previewVersion);
     }
 
-#ifdef _WIN32
-    bool Updater::windowsUpdate(VersionType versionType, const cpr::ProgressCallback& progress)
+    bool Updater::downloadUpdate(VersionType versionType, const std::filesystem::path& path, const std::string& assetName, bool exactMatch, const cpr::ProgressCallback& progress)
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
@@ -123,19 +129,29 @@ namespace Nickvision::Update
                 return false;
             }
             std::string name{ nameValue.as_string() };
-            if (StringHelpers::lower(name).find("setup.exe") != std::string::npos)
+            if ((exactMatch && StringHelpers::lower(name) == StringHelpers::lower(assetName)) || (!exactMatch && StringHelpers::lower(name).find(StringHelpers::lower(assetName)) != std::string::npos))
             {
-                std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / name };
                 const boost::json::value& urlValue{ assetObject["browser_download_url"] };
-                if (urlValue.is_string() && Web::downloadFile(urlValue.as_string().c_str(), setupPath, progress))
+                if (urlValue.is_string() && Web::downloadFile(urlValue.as_string().c_str(), path, progress))
                 {
-                    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-                    if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
                 return false;
+            }
+        }
+        return false;
+    }
+
+#ifdef _WIN32
+    bool Updater::windowsUpdate(VersionType versionType, const cpr::ProgressCallback& progress)
+    {
+        std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / (m_repoOwner + "_" + m_repoName + "_Setup.exe") };
+        if(downloadUpdate(versionType, setupPath, "setup.exe", false, progress))
+        {
+            CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+            if (reinterpret_cast<INT_PTR>(ShellExecuteA(nullptr, "open", setupPath.string().c_str(), nullptr, nullptr, SW_SHOWDEFAULT)) > 32)
+            {
+                return true;
             }
         }
         return false;

@@ -53,7 +53,7 @@ namespace Nickvision::Update
          * @param minor The minor number
          * @param build The build number
          * @param dev The dev string
-         * @throw std::invalid_argument Thrown when the dev version does not contain a "-"
+         * @throw std::invalid_argument Thrown when the dev version does not contain a "-" or a "." as the first character
          */
         Version(int major, int minor, int build, const std::string& dev);
         /**

@@ -29,7 +29,7 @@ namespace Nickvision::Update
         m_dev{ dev },
         m_str{ std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(build) + dev }
     {
-        if (m_dev[0] != '-')
+        if (m_dev[0] != '-' && m_dev[0] != '.')
         {
             throw std::invalid_argument("Dev version must contain a '-'.");
         }

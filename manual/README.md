@@ -6,16 +6,14 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.7.4
+## 2025.7.5
 ### Breaking Changes
-- `maddy` dependency requires >= 1.6.0
+None
 ### New APIs
-#### App
-- Added `CancellationToken` class
+#### Update
+- Added `Updater::downloadUpdate()` method for all platforms
 ### Fixes
-#### Localization
-- Fixed included headers
-- Fixed Gettext::changeLanguage("C") not turning off translations
+None
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

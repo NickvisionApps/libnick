@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.7.5
+### Breaking Changes
+None
+### New APIs
+#### Update
+- Added `Updater::downloadUpdate()` method for all platforms
+### Fixes
+None
+
 ## 2025.7.4
 ### Breaking Changes
 - `maddy` dependency requires >= 1.6.0
