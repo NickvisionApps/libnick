@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.7.6
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### Updater
+- Exceptions thrown
+
 ## 2025.7.5
 ### Breaking Changes
 None

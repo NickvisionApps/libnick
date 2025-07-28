@@ -95,7 +95,15 @@ namespace Nickvision::Update
                 break;
             }
         }
-        return versionType == VersionType::Stable ? Version(stableVersion) : Version(previewVersion);
+        if(versionType == VersionType::Stable)
+        {
+            return stableVersion.empty() ? Version() : Version(stableVersion);
+        }
+        else if(versionType == VersionType::Preview)
+        {
+            return previewVersion.empty() ? Version() : Version(previewVersion);
+        }
+        return Version();
     }
 
     bool Updater::downloadUpdate(VersionType versionType, const std::filesystem::path& path, const std::string& assetName, bool exactMatch, const cpr::ProgressCallback& progress)
