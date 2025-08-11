@@ -60,17 +60,17 @@ namespace Nickvision::Events
          * @brief Gets the param stored in the event args.
          * @return The param stored
          */
-        const T& operator->() const
+        const T* operator->() const
         {
-            return m_param;
+            return &m_param;
         }
         /**
          * @brief Gets the param stored in the event args.
          * @return The param stored
          */
-        T& operator->()
+        T* operator->()
         {
-            return m_param;
+            return &m_param;
         }
         /**
          * @brief Gets the param stored in the event args.
