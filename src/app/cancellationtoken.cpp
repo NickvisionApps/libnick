@@ -42,6 +42,13 @@ namespace Nickvision::App
         }
     }
 
+    void CancellationToken::reset()
+    {
+        std::lock_guard<std::mutex> lock{ m_mutex };
+        m_cancelled = false;
+        m_cancelFunction = {};
+    }
+
     CancellationToken::operator bool() const
     {
         std::lock_guard<std::mutex> lock{ m_mutex };

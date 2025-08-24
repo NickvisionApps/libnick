@@ -37,6 +37,11 @@ namespace Nickvision::App
          */
         void cancel();
         /**
+         * @brief Resets the token to its initial state.
+         * @brief Removes the cancel function and sets the cancelled state to false.
+         */
+        void reset();
+        /**
          * @brief Converts the token to a boolean.
          * @return True if token is cancelled, else false
          */

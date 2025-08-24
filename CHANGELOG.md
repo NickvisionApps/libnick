@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025.8.0
+### Breaking Changes
+None
+### New APIs
+#### App
+- Added `reset()` method to `CancellationToken`
+### Fixes
+#### Events
+- Fixed the `operator->()` method for `ParamEventArgs`
+
 ## 2025.7.6
 ### Breaking Changes
 None
