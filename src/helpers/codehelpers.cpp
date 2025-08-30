@@ -9,7 +9,30 @@
 
 namespace Nickvision::Helpers
 {
-    std::string CodeHelpers::getLastSystemError()
+    size_t CodeHelpers::combineHash(size_t a, size_t b) noexcept
+    {
+        if constexpr(sizeof(size_t) >= 8)
+        {
+            a ^= b + 0x517cc1b727220a95 + (a << 6) + (a >> 2);
+        }
+        else
+        {
+            a ^= b + 0x9e3779b9 + (a << 6) + (a >> 2);
+        }
+        return a;
+    }
+
+    std::vector<std::string> CodeHelpers::convertUrlMapToVector(const std::unordered_map<std::string, std::string>& urls) noexcept
+    {
+        std::vector<std::string> vec;
+        for (const std::pair<const std::string, std::string>& pair : urls)
+        {
+            vec.push_back(pair.first + " " + pair.second);
+        }
+        return vec;
+    }
+
+    std::string CodeHelpers::getLastSystemError() noexcept
     {
 #ifdef _WIN32
         DWORD errorMessageID{ GetLastError() };
@@ -27,7 +50,7 @@ namespace Nickvision::Helpers
 #endif
     }
 
-    std::vector<std::byte> CodeHelpers::readFileBytes(const std::filesystem::path& path)
+    std::vector<std::byte> CodeHelpers::readFileBytes(const std::filesystem::path& path) noexcept
     {
         if(!std::filesystem::exists(path))
         {
@@ -43,7 +66,7 @@ namespace Nickvision::Helpers
         return {};
     }
 
-    bool CodeHelpers::writeFileBytes(const std::filesystem::path& path, const std::vector<std::byte>& bytes, bool overwrite)
+    bool CodeHelpers::writeFileBytes(const std::filesystem::path& path, const std::vector<std::byte>& bytes, bool overwrite) noexcept
     {
         if(std::filesystem::exists(path) && !overwrite)
         {
@@ -56,18 +79,5 @@ namespace Nickvision::Helpers
             return true;
         }
         return false;
-    }
-
-    size_t CodeHelpers::combineHash(size_t a, size_t b)
-    {
-        if constexpr(sizeof(size_t) >= 8)
-        {
-            a ^= b + 0x517cc1b727220a95 + (a << 6) + (a >> 2);
-        }
-        else
-        {
-            a ^= b + 0x9e3779b9 + (a << 6) + (a >> 2);
-        }
-        return a;
     }
 }

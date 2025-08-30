@@ -23,6 +23,8 @@
 #ifndef WATCHERFLAGS_H
 #define WATCHERFLAGS_H
 
+#include "helpers/codehelpers.h"
+
 namespace Nickvision::Filesystem
 {
     /**
@@ -38,40 +40,7 @@ namespace Nickvision::Filesystem
         LastAccess = 32 ///< The last access time of an item in the file system object has changed.
     };
 
-    constexpr WatcherFlags operator~(WatcherFlags a)
-    {
-        return static_cast<WatcherFlags>(~static_cast<int>(a));
-    }
-
-    constexpr WatcherFlags operator|(WatcherFlags a, WatcherFlags b)
-    {
-        return static_cast<WatcherFlags>(static_cast<int>(a) | static_cast<int>(b));
-    }
-
-    constexpr WatcherFlags operator&(WatcherFlags a, WatcherFlags b)
-    {
-        return static_cast<WatcherFlags>(static_cast<int>(a) & static_cast<int>(b));
-    }
-
-    constexpr WatcherFlags operator^(WatcherFlags a, WatcherFlags b)
-    {
-        return static_cast<WatcherFlags>(static_cast<int>(a) ^ static_cast<int>(b));
-    }
-
-    inline WatcherFlags& operator|=(WatcherFlags& a, WatcherFlags b)
-    {
-        return reinterpret_cast<WatcherFlags&>(reinterpret_cast<int&>(a) |= static_cast<int>(b));
-    }
-
-    inline WatcherFlags& operator&=(WatcherFlags& a, WatcherFlags b)
-    {
-        return reinterpret_cast<WatcherFlags&>(reinterpret_cast<int&>(a) &= static_cast<int>(b));
-    }
-
-    inline WatcherFlags& operator^=(WatcherFlags& a, WatcherFlags b)
-    {
-        return reinterpret_cast<WatcherFlags&>(reinterpret_cast<int&>(a) ^= static_cast<int>(b));
-    }
+    DEFINE_ENUM_FLAGS(WatcherFlags)
 }
 
 #endif

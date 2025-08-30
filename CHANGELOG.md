@@ -1,5 +1,21 @@
 # Changelog
 
+## 2025.9.0
+### Breaking Changes
+#### App
+- Renamed `DataFileBase` to `JsonFileBase`
+- Renamed `DataFileManager` to `JsonFileManager`
+- Moved `AppInfo::convertUrlMapToVector()` to `CodeHelpers` namespace
+- Moved `App::CancellationToken` to `Helpers` namespace
+#### Taskbar
+- Removed module
+### New APIs
+#### Helpers
+- Added `DEFINE_ENUM_FLAGS()` macro to `CodeHelpers`
+- Added `IJsonSerializable` interface
+### Fixes
+- Marked functions and methods with `noexcept` where applicable
+
 ## 2025.8.0
 ### Breaking Changes
 None

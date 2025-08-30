@@ -36,7 +36,7 @@ namespace Nickvision::Filesystem::UserDirectories
      * @param directory The UserDirectory to get the path of
      * @return The path of the directory
      */
-    std::filesystem::path get(UserDirectory directory);
+    std::filesystem::path get(UserDirectory directory) noexcept;
     /**
      * @brief Gets the path of an application user directory.
      * @brief Supports XDG directories on Linux.
@@ -44,7 +44,7 @@ namespace Nickvision::Filesystem::UserDirectories
      * @param appName The application name
      * @return The path of the directory
      */
-    std::filesystem::path get(ApplicationUserDirectory directory, const std::string& appName);
+    std::filesystem::path get(ApplicationUserDirectory directory, const std::string& appName) noexcept;
 }
 
 #endif //USERDIRECTORIES_H

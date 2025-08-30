@@ -34,7 +34,7 @@ namespace Nickvision::Events
         /**
          * @brief Constructs an EventArgs.
          */
-        EventArgs() = default;
+        EventArgs() noexcept = default;
     };
 }
 

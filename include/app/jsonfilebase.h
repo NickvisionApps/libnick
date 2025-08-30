@@ -20,35 +20,36 @@
  * A base class for json data files.
  */
 
-#ifndef DATAFILEBASE_H
-#define DATAFILEBASE_H
+#ifndef JSONFILEBASE_H
+#define JSONFILEBASE_H
 
 #include <filesystem>
 #include <string>
 #include <boost/json.hpp>
 #include "events/event.h"
+#include "helpers/ijsonserializable.h"
 
 namespace Nickvision::App
 {
     /**
      * @brief A base class for json data files.
      */
-    class DataFileBase
+    class JsonFileBase : public Helpers::IJsonSerializable
     {
     public:
         /**
-         * @brief Constructs a DataFileBase, loading the file from disk.
+         * @brief Constructs a JsonFileBase, loading the file from disk.
          * @param key The key of the config file
          * @param appName The name of the application the data file belongs to
-         * @param isPortable Whether or not the config file is portable
+         * @param isPortable Whether or not the config file is portable (will save to executable directory instead of config directory)
          * @throw std::invalid_argument Thrown if key is empty
          * @throw std::invalid_argument Thrown if appName is empty
          */
-        DataFileBase(const std::string& key, const std::string& appName, bool isPortable);
+        JsonFileBase(const std::string& key, const std::string& appName, bool isPortable);
         /**
-         * @brief Destructs a DataFileBase. 
+         * @brief Destructs a JsonFileBase.
          */
-        virtual ~DataFileBase() = default;
+        virtual ~JsonFileBase() = default;
         /**
          * Gets the key of the config file.
          * @return The key of the config file
@@ -64,6 +65,11 @@ namespace Nickvision::App
          * @return True if saved to disk, else false
          */
         bool save();
+        /**
+         * @brief Serializes the object to Json.
+         * @return The Json representation of the object
+         */
+        boost::json::value toJson() const noexcept override;
 
     protected:
         mutable boost::json::object m_json;
@@ -75,4 +81,4 @@ namespace Nickvision::App
     };
 }
 
-#endif //DATAFILEBASE_H
+#endif //JSONFILEBASE_H

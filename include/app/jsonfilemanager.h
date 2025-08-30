@@ -17,48 +17,49 @@
  *
  * @section DESCRIPTION
  *
- * A manager of data files for an application.
+ * A manager of json files for an application.
  */
 
-#ifndef DATAFILEMANAGER_H
-#define DATAFILEMANAGER_H
+#ifndef JSONFILEMANAGER_H
+#define JSONFILEMANAGER_H
 
 #include <memory>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
-#include "datafilebase.h"
+#include "jsonfilebase.h"
 
 namespace Nickvision::App
 {
     template<typename T>
-    concept DerivedDataFileBase = std::is_base_of_v<DataFileBase, T>;
+    concept DerivedJsonFileBase = std::is_base_of_v<JsonFileBase, T>;
 
     /**
-     * @brief A manager of data files for an application.
+     * @brief A manager of json files for an application.
      */
-    class DataFileManager
+    class JsonFileManager
     {
     public:
         /**
-         * @brief Constructs a DataFileManager.
-         * @param appName The name of the application (used in determining the path to store data files on disk)
+         * @brief Constructs a JsonFileManager.
+         * @param appName The name of the application (used in determining the path to store json files on disk)
          * @param isPortable Whether or not the application is portable (the config files should live in the same exe directory)
          */
-        DataFileManager(const std::string& appName, bool isPortable);
-        // Delete copy and move constructors and assignment operators
-        DataFileManager(const DataFileManager&) = delete;
-        DataFileManager(DataFileManager&&) = delete;
-        void operator=(const DataFileManager&) = delete;
-        void operator=(DataFileManager&&) = delete;
+        JsonFileManager(const std::string& appName, bool isPortable);
+        JsonFileManager(const JsonFileManager&) = delete;
         /**
-         * @brief Gets a data object.
-         * @tparam T Derived type of DataFileBase
-         * @param key The key of the data file
-         * @throw std::invalid_argument Thrown if key is empty
-         * @return The data object
+         * @brief Constructs a JsonFileManager via move.
+         * @param other The other JsonFileManager to move
          */
-        template<DerivedDataFileBase T>
+        JsonFileManager(JsonFileManager&& other) noexcept;
+        /**
+         * @brief Gets a json object.
+         * @tparam T Derived type of JsonFileBase
+         * @param key The key of the json file
+         * @throw std::invalid_argument Thrown if key is empty
+         * @return The json object
+         */
+        template<DerivedJsonFileBase T>
         T& get(const std::string& key)
         {
             if (key.empty())
@@ -71,11 +72,18 @@ namespace Nickvision::App
             }
             return *static_cast<T*>(m_files[key].get());
         }
+        JsonFileManager& operator=(const JsonFileManager&) = delete;
+        /**
+         * @brief Assigns a JsonFileManager via move.
+         * @param other The other JsonFileManager to move
+         * @return A reference to this JsonFileManager
+         */
+        JsonFileManager& operator=(JsonFileManager&& other) noexcept;
 
     private:
         std::string m_appName;
         bool m_isPortable;
-        std::unordered_map<std::string, std::unique_ptr<DataFileBase>> m_files;
+        std::unordered_map<std::string, std::unique_ptr<JsonFileBase>> m_files;
     };
 }
 

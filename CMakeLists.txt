@@ -20,7 +20,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 #libnick Definition
-project ("libnick" LANGUAGES C CXX VERSION 2025.8.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
+project ("libnick" LANGUAGES C CXX VERSION 2025.9.0 DESCRIPTION "A cross-platform base for native Nickvision applications.")
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 include(CTest)
@@ -36,9 +36,8 @@ if(NOT WIN32)
 endif()
 add_library (${PROJECT_NAME}
     "include/app/appinfo.h"
-    "include/app/cancellationtoken.h"
-    "include/app/datafilebase.h"
-    "include/app/datafilemanager.h"
+    "include/app/jsonfilebase.h"
+    "include/app/jsonfilemanager.h"
     "include/app/windowgeometry.h"
     "include/database/sqlcontext.h"
     "include/database/sqldatabase.h"
@@ -54,7 +53,9 @@ add_library (${PROJECT_NAME}
     "include/filesystem/userdirectories.h"
     "include/filesystem/userdirectory.h"
     "include/filesystem/watcherflags.h"
+    "include/helpers/cancellationtoken.h"
     "include/helpers/codehelpers.h"
+    "include/helpers/ijsonserializable.h"
     "include/helpers/pairhash.h"
     "include/helpers/stringhelpers.h"
     "include/keyring/credential.h"
@@ -90,15 +91,12 @@ add_library (${PROJECT_NAME}
     "include/system/processexitedeventargs.h"
     "include/system/processstate.h"
     "include/system/suspendinhibitor.h"
-    "include/taskbar/progressstate.h"
-    "include/taskbar/taskbaritem.h"
     "include/update/updater.h"
     "include/update/version.h"
     "include/update/versiontype.h"
     "src/app/appinfo.cpp"
-    "src/app/cancellationtoken.cpp"
-    "src/app/datafilebase.cpp"
-    "src/app/datafilemanager.cpp"
+    "src/app/jsonfilebase.cpp"
+    "src/app/jsonfilemanager.cpp"
     "src/app/windowgeometry.cpp"
     "src/database/sqlcontext.cpp"
     "src/database/sqldatabase.cpp"
@@ -107,6 +105,7 @@ add_library (${PROJECT_NAME}
     "src/filesystem/filesystemchangedeventargs.cpp"
     "src/filesystem/filesystemwatcher.cpp"
     "src/filesystem/userdirectories.cpp"
+    "src/helpers/cancellationtoken.cpp"
     "src/helpers/codehelpers.cpp"
     "src/helpers/stringhelpers.cpp"
     "src/keyring/credential.cpp"
@@ -132,7 +131,6 @@ add_library (${PROJECT_NAME}
     "src/system/process.cpp"
     "src/system/processexitedeventargs.cpp"
     "src/system/suspendinhibitor.cpp"
-    "src/taskbar/taskbaritem.cpp"
     "src/update/updater.cpp"
     "src/update/version.cpp")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>" "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>")
@@ -204,11 +202,11 @@ if (BUILD_TESTING)
     add_executable(${PROJECT_NAME}_test
     "tests/codetests.cpp"
     "tests/databasetests.cpp"
-    "tests/datafiletests.cpp"
     "tests/dnstests.cpp"
     "tests/eventtests.cpp"
     "tests/filewatchertests.cpp"
     "tests/hardwaretests.cpp"
+    "tests/jsonfiletests.cpp"
     "tests/keyringtests.cpp"
     "tests/localizationtests.cpp"
     "tests/main.cpp"
@@ -219,7 +217,6 @@ if (BUILD_TESTING)
     "tests/stringtests.cpp"
     "tests/systemcredentialstests.cpp"
     "tests/systemtests.cpp"
-    "tests/taskbartests.cpp"
     "tests/updatertests.cpp"
     "tests/versiontests.cpp"
     "tests/webtests.cpp")

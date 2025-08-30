@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <memory>
-#include "app/datafilebase.h"
-#include "app/datafilemanager.h"
+#include "app/jsonfilebase.h"
+#include "app/jsonfilemanager.h"
 #include "app/windowgeometry.h"
 #include "filesystem/userdirectories.h"
 
@@ -15,12 +15,12 @@ enum class Theme
     System
 };
 
-class AppConfig : public DataFileBase
+class AppConfig : public JsonFileBase
 {
 public:
     AppConfig(const std::string& key, const std::string& appName, bool isPortable)
-        : DataFileBase{ key, appName, isPortable }
-    { 
+        : JsonFileBase{ key, appName, isPortable }
+    {
 
     }
 
@@ -81,18 +81,18 @@ public:
     }
 };
 
-class DataFileTest : public testing::Test
+class JsonFileTest : public testing::Test
 {
 public:
-    static std::shared_ptr<DataFileManager> m_manager;
-    static std::shared_ptr<DataFileManager> m_portableManager;
+    static std::shared_ptr<JsonFileManager> m_manager;
+    static std::shared_ptr<JsonFileManager> m_portableManager;
 
     static void SetUpTestSuite()
     {
         std::filesystem::remove(UserDirectories::get(ApplicationUserDirectory::Config, "Nickvision Aura Tests") / ("config.json"));
         std::filesystem::remove("config.json");
-        m_manager = std::make_shared<DataFileManager>("Nickvision Aura Tests", false);
-        m_portableManager = std::make_shared<DataFileManager>("Nickvision Aura Tests", true);
+        m_manager = std::make_shared<JsonFileManager>("Nickvision Aura Tests", false);
+        m_portableManager = std::make_shared<JsonFileManager>("Nickvision Aura Tests", true);
     }
 
     static void TearDownTestSuite()
@@ -104,10 +104,10 @@ public:
     }
 };
 
-std::shared_ptr<DataFileManager> DataFileTest::m_manager{ nullptr };
-std::shared_ptr<DataFileManager> DataFileTest::m_portableManager{ nullptr };
+std::shared_ptr<JsonFileManager> JsonFileTest::m_manager{ nullptr };
+std::shared_ptr<JsonFileManager> JsonFileTest::m_portableManager{ nullptr };
 
-TEST_F(DataFileTest, EnsureDefaultAppConfig)
+TEST_F(JsonFileTest, EnsureDefaultAppConfig)
 {
     AppConfig& config{ m_manager->get<AppConfig>("config") };
     WindowGeometry geometry{ config.getWindowGeometry() };
@@ -118,7 +118,7 @@ TEST_F(DataFileTest, EnsureDefaultAppConfig)
     ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), true);
 }
 
-TEST_F(DataFileTest, EnsureDefaultPortableAppConfig)
+TEST_F(JsonFileTest, EnsureDefaultPortableAppConfig)
 {
     AppConfig& config{ m_portableManager->get<AppConfig>("config") };
     WindowGeometry geometry{ config.getWindowGeometry() };
@@ -129,7 +129,7 @@ TEST_F(DataFileTest, EnsureDefaultPortableAppConfig)
     ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), true);
 }
 
-TEST_F(DataFileTest, ChangeAppConfig1)
+TEST_F(JsonFileTest, ChangeAppConfig1)
 {
     AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_NO_THROW(config.setTheme(Theme::Light));
@@ -137,7 +137,7 @@ TEST_F(DataFileTest, ChangeAppConfig1)
     ASSERT_TRUE(config.save());
 }
 
-TEST_F(DataFileTest, ChangePortableAppConfig1)
+TEST_F(JsonFileTest, ChangePortableAppConfig1)
 {
     AppConfig& config{ m_portableManager->get<AppConfig>("config") };
     ASSERT_NO_THROW(config.setTheme(Theme::Light));
@@ -145,7 +145,7 @@ TEST_F(DataFileTest, ChangePortableAppConfig1)
     ASSERT_TRUE(config.save());
 }
 
-TEST_F(DataFileTest, EnsureChangeInAppConfig)
+TEST_F(JsonFileTest, EnsureChangeInAppConfig)
 {
     AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_EQ(config.getTheme(), Theme::Light);
@@ -155,7 +155,7 @@ TEST_F(DataFileTest, EnsureChangeInAppConfig)
     ASSERT_EQ(geometry.isMaximized(), true);
 }
 
-TEST_F(DataFileTest, EnsureChangeInPortableAppConfig)
+TEST_F(JsonFileTest, EnsureChangeInPortableAppConfig)
 {
     AppConfig& config{ m_portableManager->get<AppConfig>("config") };
     ASSERT_EQ(config.getTheme(), Theme::Light);
@@ -165,36 +165,36 @@ TEST_F(DataFileTest, EnsureChangeInPortableAppConfig)
     ASSERT_EQ(geometry.isMaximized(), true);
 }
 
-TEST_F(DataFileTest, ChangeAppConfig2)
+TEST_F(JsonFileTest, ChangeAppConfig2)
 {
     AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_NO_THROW(config.setAutomaticallyCheckForUpdates(false));
     ASSERT_TRUE(config.save());
 }
 
-TEST_F(DataFileTest, ChangePortableAppConfig2)
+TEST_F(JsonFileTest, ChangePortableAppConfig2)
 {
     AppConfig& config{ m_portableManager->get<AppConfig>("config") };
     ASSERT_NO_THROW(config.setAutomaticallyCheckForUpdates(false));
     ASSERT_TRUE(config.save());
 }
 
-TEST_F(DataFileTest, EnsureChangeInAppConfig2)
+TEST_F(JsonFileTest, EnsureChangeInAppConfig2)
 {
     AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
 }
 
-TEST_F(DataFileTest, EnsureChangeInPortableAppConfig2)
+TEST_F(JsonFileTest, EnsureChangeInPortableAppConfig2)
 {
     AppConfig& config{ m_portableManager->get<AppConfig>("config") };
     ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
 }
 
-TEST_F(DataFileTest, ReloadAndCheckConfig)
+TEST_F(JsonFileTest, ReloadAndCheckConfig)
 {
     m_manager.reset();
-    m_manager = std::make_shared<DataFileManager>("Nickvision Aura Tests", false);
+    m_manager = std::make_shared<JsonFileManager>("Nickvision Aura Tests", false);
     AppConfig& config{ m_manager->get<AppConfig>("config") };
     ASSERT_EQ(config.getTheme(), Theme::Light);
     WindowGeometry geometry{ config.getWindowGeometry() };
@@ -204,10 +204,10 @@ TEST_F(DataFileTest, ReloadAndCheckConfig)
     ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
 }
 
-TEST_F(DataFileTest, ReloadAndCheckPortableConfig)
+TEST_F(JsonFileTest, ReloadAndCheckPortableConfig)
 {
     m_portableManager.reset();
-    m_portableManager = std::make_shared<DataFileManager>("Nickvision Aura Tests", true);
+    m_portableManager = std::make_shared<JsonFileManager>("Nickvision Aura Tests", true);
     AppConfig& config{ m_portableManager->get<AppConfig>("config") };
     ASSERT_EQ(config.getTheme(), Theme::Light);
     WindowGeometry geometry{ config.getWindowGeometry() };

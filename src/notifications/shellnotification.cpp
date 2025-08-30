@@ -21,7 +21,7 @@ using namespace Nickvision::System;
 #ifdef _WIN32
 static std::filesystem::path s_openPath;
 
-static LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     if(msg == WM_TRAYICON)
     {
@@ -51,7 +51,7 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 namespace Nickvision::Notifications
 {
-    void ShellNotification::send(const ShellNotificationSentEventArgs& e, const AppInfo& info, const std::string& openText)
+    void ShellNotification::send(const ShellNotificationSentEventArgs& e, const AppInfo& info, const std::string& openText) noexcept
     {
 #ifdef _WIN32
         s_openPath = e.getAction() == "open" ? e.getActionParam() : "";

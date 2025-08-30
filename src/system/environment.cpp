@@ -277,7 +277,7 @@ namespace Nickvision::System
             builder << "Unknown OS" << std::endl;
             break;
         }
-        builder << appInfo.getVersion() << std::endl << std::endl;
+        builder << appInfo.getVersion().str() << std::endl << std::endl;
         builder << "Deployment Mode: ";
         switch(getDeploymentMode())
         {

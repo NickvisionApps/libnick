@@ -1,4 +1,4 @@
-#include "app/datafilebase.h"
+#include "app/jsonfilebase.h"
 #include <fstream>
 #include <stdexcept>
 #include "filesystem/userdirectories.h"
@@ -9,7 +9,7 @@ using namespace Nickvision::System;
 
 namespace Nickvision::App
 {
-    DataFileBase::DataFileBase(const std::string& key, const std::string& appName, bool isPortable)
+    JsonFileBase::JsonFileBase(const std::string& key, const std::string& appName, bool isPortable)
         : m_key{ key }
     {
         if (m_key.empty())
@@ -43,21 +43,26 @@ namespace Nickvision::App
         }
     }
 
-    const std::string& DataFileBase::getKey() const
+    const std::string& JsonFileBase::getKey() const
     {
         return m_key;
     }
 
-    Events::Event<Events::EventArgs>& DataFileBase::saved()
+    Events::Event<Events::EventArgs>& JsonFileBase::saved()
     {
         return m_saved;
     }
 
-    bool DataFileBase::save()
+    bool JsonFileBase::save()
     {
         std::ofstream out{ m_path };
         out << m_json << std::endl;
         m_saved({});
         return true;
+    }
+
+    boost::json::value JsonFileBase::toJson() const noexcept
+    {
+        return m_json;
     }
 }

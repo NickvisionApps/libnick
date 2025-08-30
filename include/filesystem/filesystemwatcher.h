@@ -55,57 +55,57 @@ namespace Nickvision::Filesystem
         /**
          * @brief Destructs a FileSystemWatcher. 
          */
-        ~FileSystemWatcher();
+        ~FileSystemWatcher() noexcept;
         /**
          * @brief Gets the path of the folder being watched.
          * @return The path of the folder being watched
          */
-        const std::filesystem::path& getPath() const;
+        const std::filesystem::path& getPath() const noexcept;
         /**
          * @brief Gets the flags of what to watch changes for.
          * @return The flags of watched properties
          */
-        WatcherFlags getWatcherFlags() const;
+        WatcherFlags getWatcherFlags() const noexcept;
         /**
          * @brief Gets whether or not subdirectories of the folder are watched.
          * @return True if subdirectories watched, else false
          */
-        bool getIncludeSubdirectories() const;
+        bool getIncludeSubdirectories() const noexcept;
         /**
          * @brief Gets the event for when a watched flag of the folder is changed.
          * @return The changed event
          */
-        Events::Event<FileSystemChangedEventArgs>& changed();
+        Events::Event<FileSystemChangedEventArgs>& changed() noexcept;
         /**
          * @brief Gets whether or not a file extension is being watched.
          * @param extension The file extension to check
          * @return True if extension is being watched, else false
          * @return True if list of extension filters is empty
          */
-        bool isExtensionWatched(const std::filesystem::path& extension);
+        bool isExtensionWatched(const std::filesystem::path& extension) const noexcept;
         /**
          * @brief Adds an extension of a file to watch for changes in the folder.
          * @param extension The file extension to add
          * @return True if successful, else false
          */
-        bool addExtensionFilter(const std::filesystem::path& extension);
+        bool addExtensionFilter(const std::filesystem::path& extension) noexcept;
         /**
          * @brief Removes an extension of a file to watch for changes in the folder.
          * @param extension The file extension to remove
          * @return True if successful, else false
          */
-        bool removeExtensionFilter(const std::filesystem::path& extension);
+        bool removeExtensionFilter(const std::filesystem::path& extension) noexcept;
         /**
          * @brief Clears all watched extension filters. This will cause all extensions to be implicitly watched.
          * @return True if successful, else false
          */
-        bool clearExtensionFilters();
+        bool clearExtensionFilters() noexcept;
 
     private:
         /**
          * @brief Runs the loop to watch a folder for changes.
          */
-        void watch();
+        void watch() noexcept;
         std::thread m_watchThread;
         mutable std::mutex m_mutex;
         std::filesystem::path m_path;
@@ -119,7 +119,7 @@ namespace Nickvision::Filesystem
 #elif defined(__linux__)
         int m_notify;
 #elif defined(__APPLE__)
-        static void callback(ConstFSEventStreamRef stream, void* clientCallBackInfo, size_t numEvents, void* eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]);
+        static void callback(ConstFSEventStreamRef stream, void* clientCallBackInfo, size_t numEvents, void* eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]) noexcept;
         FSEventStreamRef m_stream;
         CFRunLoopRef m_runLoop;
 #endif

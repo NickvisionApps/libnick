@@ -13,7 +13,7 @@ namespace Nickvision::Localization
     static std::string s_domainName{};
     static bool s_translationsOff{ false };
 
-    bool Gettext::init(const std::string& domainName)
+    bool Gettext::init(const std::string& domainName) noexcept
     {
         static bool initialized{ false };
         if(!initialized)
@@ -34,12 +34,12 @@ namespace Nickvision::Localization
         return true;
     }
 
-    const std::string& Gettext::getDomainName()
+    const std::string& Gettext::getDomainName() noexcept
     {
         return s_domainName;
     }
 
-    const std::vector<std::string>& Gettext::getAvailableLanguages()
+    const std::vector<std::string>& Gettext::getAvailableLanguages() noexcept
     {
         static std::vector<std::string> langs;
         if(langs.empty())
@@ -56,7 +56,7 @@ namespace Nickvision::Localization
         return langs;
     }
 
-    bool Gettext::changeLanguage(const std::string& language)
+    bool Gettext::changeLanguage(const std::string& language) noexcept
     {
         if(language.empty())
         {
@@ -82,7 +82,7 @@ namespace Nickvision::Localization
         return true;
     }
 
-    const char* Gettext::dgettext(const char* msgid)
+    const char* Gettext::dgettext(const char* msgid) noexcept
     {
         if(s_translationsOff)
         {
@@ -91,7 +91,7 @@ namespace Nickvision::Localization
         return ::dgettext(s_domainName.c_str(), msgid);
     }
 
-    const char* Gettext::dngettext(const char* msg, const char* msgPlural, unsigned long n)
+    const char* Gettext::dngettext(const char* msg, const char* msgPlural, unsigned long n) noexcept
     {
         if(s_translationsOff)
         {
@@ -100,7 +100,7 @@ namespace Nickvision::Localization
         return ::dngettext(s_domainName.c_str(), msg, msgPlural, n);
     }
 
-    const char* Gettext::pgettext(const char* context, const char* msg)
+    const char* Gettext::pgettext(const char* context, const char* msg) noexcept
     {
         if(s_translationsOff)
         {
@@ -114,7 +114,7 @@ namespace Nickvision::Localization
         return translation;
     }
 
-    const char* Gettext::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n)
+    const char* Gettext::pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n) noexcept
     {
         if(s_translationsOff)
         {

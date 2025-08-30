@@ -24,26 +24,29 @@
 #define WINDOWGEOMETRY_H
 
 #include <boost/json.hpp>
+#include "helpers/ijsonserializable.h"
 
 namespace Nickvision::App
 {
     /**
-     * @brief A model of a window's geometry. 
+     * @brief A model of a window's geometry.
      */
-    class WindowGeometry
+    class WindowGeometry : public Helpers::IJsonSerializable
     {
     public:
         /**
          * @brief Construct a WindowGeometry.
          */
-        WindowGeometry();
+        WindowGeometry() noexcept;
+        WindowGeometry(const WindowGeometry&) noexcept = default;
+        WindowGeometry(WindowGeometry&&) noexcept = default;
         /**
          * @brief Construct a WindowGeometry.
          * @param width The width of the window
          * @param height The height of the window
          * @param isMaximized Whether or not the window is maximized
          */
-        WindowGeometry(long width, long height, bool isMaximized);
+        WindowGeometry(long width, long height, bool isMaximized) noexcept;
         /**
          * @brief Construct a WindowGeometry.
          * @param width The width of the window
@@ -52,67 +55,69 @@ namespace Nickvision::App
          * @param x The x position of the window
          * @param y The y position of the window
          */
-        WindowGeometry(long width, long height, bool isMaximized, long x, long y);
+        WindowGeometry(long width, long height, bool isMaximized, long x, long y) noexcept;
         /**
          * @brief Constructs a WindowGeometry.
          * @param json The json object
          */
-        WindowGeometry(boost::json::object json);
+        WindowGeometry(boost::json::object json) noexcept;
         /**
          * @brief Gets the width of the window.
          * @return The width of the window 
          */
-        long getWidth() const;
+        long getWidth() const noexcept;
         /**
          * @brief Sets the width of the window.
          * @param width The new width of the window
          */
-        void setWidth(long width);
+        void setWidth(long width) noexcept;
         /**
          * @brief Gets the height of the window.
          * @return The height of the window 
          */
-        long getHeight() const;
+        long getHeight() const noexcept;
         /**
          * @brief Sets the height of the window.
          * @param height The new height of the window
          */
-        void setHeight(long height);
+        void setHeight(long height) noexcept;
         /**
          * @brief Gets whether or not the window is maximized.
          * @return True if maximized, else false
          */
-        bool isMaximized() const;
+        bool isMaximized() const noexcept;
         /**
          * @brief Sets whether or not the window is maximized.
          * @param isMaximized True if maximized, else false
          */
-        void setIsMaximized(bool isMaximized);
+        void setIsMaximized(bool isMaximized) noexcept;
         /**
          * @brief Gets the x position of the window.
          * @return The x position of the window
          */
-        long getX() const;
+        long getX() const noexcept;
         /**
          * @brief Sets the x position of the window.
          * @param x The new x position of the window
          */
-        void setX(long x);
+        void setX(long x) noexcept;
         /**
          * @brief Gets the y position of the window.
          * @return The y position of the window
          */
-        long getY() const;
+        long getY() const noexcept;
         /**
          * @brief Sets the y position of the window.
          * @param x The new y position of the window
          */
-        void setY(long y);
+        void setY(long y) noexcept;
         /**
-         * @brief Converts the WindowGeometry to a json object.
-         * @return The json representation of the WindowGeometry
+         * @brief Serializes the object to Json.
+         * @return The Json representation of the object
          */
-        boost::json::object toJson() const;
+        boost::json::value toJson() const noexcept override;
+        WindowGeometry& operator=(const WindowGeometry&) noexcept = default;
+        WindowGeometry& operator=(WindowGeometry&&) noexcept = default;
 
     private:
         long m_width;

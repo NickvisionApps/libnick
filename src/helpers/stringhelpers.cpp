@@ -18,7 +18,7 @@ using namespace Nickvision::System;
 
 namespace Nickvision::Helpers
 {
-    std::vector<std::byte> StringHelpers::decode(const std::string& base64)
+    std::vector<std::byte> StringHelpers::decode(const std::string& base64) noexcept
     {
         if(base64.empty() || base64.size() % 4 != 0)
         {
@@ -60,7 +60,7 @@ namespace Nickvision::Helpers
         return bytes;
     }
 
-    std::string StringHelpers::encode(const std::vector<std::byte>& bytes)
+    std::string StringHelpers::encode(const std::vector<std::byte>& bytes) noexcept
     {
         if(bytes.empty())
         {
@@ -99,7 +99,7 @@ namespace Nickvision::Helpers
         return string;
     }
 
-    bool StringHelpers::isValidUrl(const std::string& s)
+    bool StringHelpers::isValidUrl(const std::string& s) noexcept
     {
         if (s.empty())
         {
@@ -109,7 +109,7 @@ namespace Nickvision::Helpers
         return std::regex_match(s, urlRegex);
     }
 
-    std::string StringHelpers::join(const std::vector<std::string>& values, const std::string& separator, bool separateLast)
+    std::string StringHelpers::join(const std::vector<std::string>& values, const std::string& separator, bool separateLast) noexcept
     {
         std::stringstream builder;
         for(size_t i = 0; i < values.size(); i++)
@@ -124,7 +124,13 @@ namespace Nickvision::Helpers
         return builder.str();
     }
 
-    std::string StringHelpers::newUuid()
+    std::string StringHelpers::lower(std::string s) noexcept
+    {
+        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+        return s;
+    }
+
+    std::string StringHelpers::newUuid() noexcept
     {
 #ifdef _WIN32
         GUID guid;
@@ -144,12 +150,12 @@ namespace Nickvision::Helpers
 #endif
     }
 
-    std::string StringHelpers::newGuid()
+    std::string StringHelpers::newGuid() noexcept
     {
         return newUuid();
     }
 
-    std::string StringHelpers::normalizeForFilename(const std::string& s, bool windowsOnly)
+    std::string StringHelpers::normalizeForFilename(const std::string& s, bool windowsOnly) noexcept
     {
         std::string result{ s };
         result = replace(result, '/', '_'); //invalid on all operating systems
@@ -167,7 +173,7 @@ namespace Nickvision::Helpers
         return result;
     }
 
-    std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace)
+    std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace) noexcept
     {
         if (s.empty() || toReplace.empty())
         {
@@ -182,7 +188,7 @@ namespace Nickvision::Helpers
         return s;
     }
 
-    std::string StringHelpers::replace(std::string s, char toReplace, char replace)
+    std::string StringHelpers::replace(std::string s, char toReplace, char replace) noexcept
     {
         if (s.empty())
         {
@@ -192,7 +198,7 @@ namespace Nickvision::Helpers
         return s;
     }
 
-    std::vector<std::string> StringHelpers::splitArgs(std::string s)
+    std::vector<std::string> StringHelpers::splitArgs(std::string s) noexcept
     {
         std::vector<std::string> args;
         std::regex regex{ "((?:[^\\s'\"]+|\"[^\"]*\"|'[^']*')+)" };
@@ -214,7 +220,7 @@ namespace Nickvision::Helpers
         return args;
     }
 
-    std::string StringHelpers::str(const std::wstring& s)
+    std::string StringHelpers::str(const std::wstring& s) noexcept
     {
 #ifdef _WIN32
         int size{ WideCharToMultiByte(CP_UTF8, 0, s.c_str(), -1, nullptr, 0, nullptr, nullptr) };
@@ -239,7 +245,7 @@ namespace Nickvision::Helpers
 #endif
     }
 
-    unsigned int StringHelpers::stoui(const std::string& s, size_t* idx, int base)
+    unsigned int StringHelpers::stoui(const std::string& s, size_t* idx, int base) noexcept
     {
         try
         {
@@ -256,19 +262,7 @@ namespace Nickvision::Helpers
         }
     }
 
-    std::string StringHelpers::lower(std::string s)
-    {
-        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
-        return s;
-    }
-
-    std::string StringHelpers::upper(std::string s)
-    {
-        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::toupper(c); });
-        return s;
-    }
-
-    std::string StringHelpers::trim(const std::string& s)
+    std::string StringHelpers::trim(const std::string& s) noexcept
     {
         if(s.empty())
         {
@@ -286,7 +280,7 @@ namespace Nickvision::Helpers
         return result;
     }
 
-    std::string StringHelpers::trim(const std::string& s, char delimiter)
+    std::string StringHelpers::trim(const std::string& s, char delimiter) noexcept
     {
         if(s.empty())
         {
@@ -304,7 +298,13 @@ namespace Nickvision::Helpers
         return result;
     }
 
-    std::wstring StringHelpers::wstr(const std::string& s)
+    std::string StringHelpers::upper(std::string s) noexcept
+    {
+        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::toupper(c); });
+        return s;
+    }
+
+    std::wstring StringHelpers::wstr(const std::string& s) noexcept
     {
 #ifdef _WIN32
         int size{ MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, nullptr, 0) };

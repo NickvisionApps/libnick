@@ -18,7 +18,7 @@ using namespace Nickvision::System;
 namespace Nickvision::Filesystem
 {
 #ifdef _WIN32
-    static std::filesystem::path getKnownDir(REFKNOWNFOLDERID rfid)
+    static std::filesystem::path getKnownDir(REFKNOWNFOLDERID rfid) noexcept
     {
         std::filesystem::path result;
         wchar_t* p{ nullptr };
@@ -30,7 +30,7 @@ namespace Nickvision::Filesystem
         return result;
     }
 #elif defined(__linux__)
-    static std::filesystem::path getXDGDir(const std::string& key)
+    static std::filesystem::path getXDGDir(const std::string& key) noexcept
     {
         std::string var{ Environment::getVariable(key) };
         if (!var.empty())
@@ -64,7 +64,7 @@ namespace Nickvision::Filesystem
     }
 #endif
 
-    std::filesystem::path UserDirectories::get(UserDirectory directory)
+    std::filesystem::path UserDirectories::get(UserDirectory directory) noexcept
     {
         std::filesystem::path result;
         switch(directory)
@@ -206,7 +206,7 @@ namespace Nickvision::Filesystem
         return result;
     }
 
-    std::filesystem::path UserDirectories::get(ApplicationUserDirectory directory, const std::string& appName)
+    std::filesystem::path UserDirectories::get(ApplicationUserDirectory directory, const std::string& appName) noexcept
     {
         std::filesystem::path result;
         if(appName.empty())
