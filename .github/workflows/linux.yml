@@ -51,9 +51,9 @@ jobs:
         with:
           pkgs: boost-json cpr gettext-libintl glib gtest libsecret maddy
           triplet: ${{ matrix.variant.triplet }}
-          revision: 4103f46cb1ebb69ef5511cab840ecea0f441fbd7
+          revision: b1b19307e2d2ec1eefbdb7ea069de7d4bcd31f01
           token: ${{ github.token }}
-          cache-key: ${{ matrix.variant.triplet }}-4103f46cb1ebb69ef5511cab840ecea0f441fbd7
+          cache-key: ${{ matrix.variant.triplet }}-b1b19307e2d2ec1eefbdb7ea069de7d4bcd31f01
       - name: "Build"
         working-directory: ${{github.workspace}}/build
         run: |
