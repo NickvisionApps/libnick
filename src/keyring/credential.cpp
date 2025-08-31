@@ -1,12 +1,8 @@
 #include "keyring/credential.h"
-#include "keyring/passwordstrength.h"
-#include "helpers/stringhelpers.h"
-
-using namespace Nickvision::Helpers;
 
 namespace Nickvision::Keyring
 {
-    Credential::Credential(const std::string& name, const std::string& uri, const std::string& username, const std::string& password)
+    Credential::Credential(const std::string& name, const std::string& uri, const std::string& username, const std::string& password) noexcept
         : m_name{ name },
         m_uri{ uri },
         m_username{ username },
@@ -15,73 +11,43 @@ namespace Nickvision::Keyring
 
     }
 
-    const std::string& Credential::getName() const
+    const std::string& Credential::getName() const noexcept
     {
         return m_name;
     }
 
-    void Credential::setName(const std::string& name)
+    void Credential::setName(const std::string& name) noexcept
     {
         m_name = name;
     }
 
-    const std::string& Credential::getUri() const
+    const std::string& Credential::getUri() const noexcept
     {
         return m_uri;
     }
 
-    void Credential::setUri(const std::string& uri)
+    void Credential::setUri(const std::string& uri) noexcept
     {
         m_uri = uri;
     }
 
-    const std::string& Credential::getUsername() const
+    const std::string& Credential::getUsername() const noexcept
     {
         return m_username;
     }
 
-    void Credential::setUsername(const std::string& username)
+    void Credential::setUsername(const std::string& username) noexcept
     {
         m_username = username;
     }
 
-    const std::string& Credential::getPassword() const
+    const std::string& Credential::getPassword() const noexcept
     {
         return m_password;
     }
 
-    void Credential::setPassword(const std::string& password)
+    void Credential::setPassword(const std::string& password) noexcept
     {
         m_password = password;
-    }
-
-    bool Credential::operator<(const Credential& compare) const
-    {
-        return m_name < compare.m_name;
-    }
-
-    bool Credential::operator>(const Credential& compare) const
-    {
-        return m_name > compare.m_name;
-    }
-
-    bool Credential::operator==(const Credential& compare) const
-    {
-        return m_name == compare.m_name;
-    }
-
-    bool Credential::operator!=(const Credential& compare) const
-    {
-        return m_name != compare.m_name;
-    }
-
-    std::ostream& operator<<(std::ostream& os, const Credential& credential)
-    {
-        os << "[CRED: " << credential.getName() << "] " << std::endl;
-        os << "Uri: " << credential.getUri() << std::endl;
-        os << "Username: " << credential.getUsername() << std::endl;
-        os << "Password: " << credential.getPassword() << std::endl;
-        os << "Strength: " << (int)getPasswordStrength(credential.getPassword()) << std::endl;
-        return os;
     }
 }

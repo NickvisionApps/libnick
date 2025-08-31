@@ -1,13 +1,16 @@
 #include <gtest/gtest.h>
 #include <memory>
+#include "system/credentials.h"
 #include "system/environment.h"
 #include "system/suspendinhibitor.h"
 
+using namespace Nickvision::Keyring;
 using namespace Nickvision::System;
 
 class SystemTest : public testing::Test
 {
 public:
+    static std::string m_randCredentialName;
     static std::unique_ptr<SuspendInhibitor> m_inhibitor;
 
     static void SetUpTestSuite()
@@ -16,7 +19,72 @@ public:
     }
 };
 
+std::string SystemTest::m_randCredentialName = "RandomAuraTestCredential1";
 std::unique_ptr<SuspendInhibitor> SystemTest::m_inhibitor = nullptr;
+
+TEST_F(SystemTest, GetRandomCredential)
+{
+    ASSERT_EQ(Credentials::get(m_randCredentialName), std::nullopt);
+}
+
+TEST_F(SystemTest, CreateRandomCredential)
+{
+    std::optional<Credential> cred{ Credentials::create(m_randCredentialName) };
+    ASSERT_TRUE(cred.has_value());
+    ASSERT_EQ(cred.value().getName(), m_randCredentialName);
+    ASSERT_TRUE(!cred.value().getPassword().empty());
+}
+
+TEST_F(SystemTest, FetchRandCredential)
+{
+    std::optional<Credential> cred{ Credentials::get(m_randCredentialName) };
+    ASSERT_TRUE(cred.has_value());
+    ASSERT_EQ(cred.value().getName(), m_randCredentialName);
+    ASSERT_TRUE(!cred.value().getPassword().empty());
+}
+
+TEST_F(SystemTest, UpdateRandCredential)
+{
+    Credential updatedCred{ m_randCredentialName, "", "", "abc123" };
+    ASSERT_TRUE(Credentials::update(updatedCred));
+}
+
+TEST_F(SystemTest, FetchUpdatedRandCredential)
+{
+    std::optional<Credential> cred{ Credentials::get(m_randCredentialName) };
+    ASSERT_TRUE(cred.has_value());
+    ASSERT_EQ(cred.value().getName(), m_randCredentialName);
+    ASSERT_EQ(cred.value().getPassword(), "abc123");
+}
+
+TEST_F(SystemTest, RemoveRandomCredential)
+{
+    ASSERT_TRUE(Credentials::remove(m_randCredentialName));
+}
+
+TEST_F(SystemTest, InhibitSuspend)
+{
+#ifdef __linux__
+    if(Environment::hasVariable("GITHUB_ACTIONS"))
+    {
+        GTEST_SKIP();
+    }
+#endif
+    ASSERT_TRUE(SystemTest::m_inhibitor->inhibit());
+    ASSERT_TRUE(SystemTest::m_inhibitor->isInhibiting());
+}
+
+TEST_F(SystemTest, UninhibitSuspend)
+{
+#ifdef __linux__
+    if(Environment::hasVariable("GITHUB_ACTIONS"))
+    {
+        GTEST_SKIP();
+    }
+#endif
+    ASSERT_TRUE(SystemTest::m_inhibitor->uninhibit());
+    ASSERT_FALSE(SystemTest::m_inhibitor->isInhibiting());
+}
 
 TEST_F(SystemTest, GetPath)
 {
@@ -50,30 +118,6 @@ TEST_F(SystemTest, Exec)
 #else
     ASSERT_EQ(Environment::exec("echo \"Hello World\""), "Hello World\n");
 #endif
-}
-
-TEST_F(SystemTest, InhibitSuspend)
-{
-#ifdef __linux__
-    if(Environment::hasVariable("GITHUB_ACTIONS"))
-    {
-        GTEST_SKIP();
-    }
-#endif
-    ASSERT_TRUE(SystemTest::m_inhibitor->inhibit());
-    ASSERT_TRUE(SystemTest::m_inhibitor->isInhibiting());
-}
-
-TEST_F(SystemTest, UninhibitSuspend)
-{
-#ifdef __linux__
-    if(Environment::hasVariable("GITHUB_ACTIONS"))
-    {
-        GTEST_SKIP();
-    }
-#endif
-    ASSERT_TRUE(SystemTest::m_inhibitor->uninhibit());
-    ASSERT_FALSE(SystemTest::m_inhibitor->isInhibiting());
 }
 
 TEST_F(SystemTest, RunningInformationChecks)

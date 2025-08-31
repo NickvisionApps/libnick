@@ -17,29 +17,15 @@
  *
  * @section DESCRIPTION
  *
- * Flags to describe the content of a password.
+ * Results of a SQLite statement step.
  */
 
-#ifndef PASSWORDCONTENT_H
-#define PASSWORDCONTENT_H
-
-#include "helpers/codehelpers.h"
-
-namespace Nickvision::Keyring
+namespace Nickvision::Database
 {
-    /**
-     * @brief Flags to describe the content of a password.
-     */
-    enum class PasswordContent
+    enum class SqliteStepResult
     {
-        Numeric = 1, ///< The password contains numeric characters.
-        Uppercase = 2, ///< The password contains uppercase characters.
-        Lowercase = 4, ///< The password contains lowercase characters.
-        Special = 8, ///< The password contains special characters.
-        Space = 16 ///< The password contains spaces.
+        Error,
+        Row = 100,
+        Done = 101
     };
-
-    DEFINE_ENUM_FLAGS(PasswordContent)
 }
-
-#endif //PASSWORDCONTENT_H

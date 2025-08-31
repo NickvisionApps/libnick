@@ -1,26 +1,26 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <string>
-#include "database/sqldatabase.h"
+#include "database/sqlitedatabase.h"
 
 using namespace Nickvision::Database;
 
 class Person
 {
 public:
-    Person(const std::string& name, int age)
+    Person(const std::string& name, int age) noexcept
         : m_name{ name },
         m_age{ age }
     {
 
     }
 
-    const std::string& getName() const
+    const std::string& getName() const noexcept
     {
         return m_name;
     }
 
-    int getAge() const
+    int getAge() const noexcept
     {
         return m_age;
     }
@@ -33,96 +33,91 @@ private:
 class DatabaseTest : public testing::Test
 {
 public:
-    static std::filesystem::path m_encryptedPath;
-    static std::string m_encryptedPassword;
-    static std::unique_ptr<SqlDatabase> m_encrypted;
-
-    static void SetUpTestSuite()
-    {
-        m_encrypted = std::make_unique<SqlDatabase>(m_encryptedPath, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE);
-    }
+    static std::filesystem::path m_path;
+    static std::unique_ptr<SqliteDatabase> m_database;
 
     static void TearDownTestSuite()
     {
-        m_encrypted.reset();
-        std::filesystem::remove(m_encryptedPath);
+        m_database.reset();
+        std::filesystem::remove(m_path);
     }
 
-    static Person getPerson1()
+    static const Person& getPerson1()
     {
-        return { "Bob Hope", 67 };
+        static Person one{ "Bob Hope", 67 };
+        return one;
     }
 
-    static Person getPerson2()
+    static const Person& getPerson2()
     {
-        return { "Chris Pratt", 32 };
+        static Person two{ "Chris Pratt", 32 };
+        return two;
     }
 };
 
-std::filesystem::path DatabaseTest::m_encryptedPath = "enc.sqlite3";
-std::string DatabaseTest::m_encryptedPassword = "abc3845@#$";
-std::unique_ptr<SqlDatabase> DatabaseTest::m_encrypted = nullptr;
+std::filesystem::path DatabaseTest::m_path = "enc.sqlite3";
+std::unique_ptr<SqliteDatabase> DatabaseTest::m_database = nullptr;
 
-TEST_F(DatabaseTest, EncryptDatabase)
+TEST_F(DatabaseTest, OpenDatabase)
 {
-    ASSERT_FALSE(m_encrypted->isEncrypted());
-    ASSERT_TRUE(m_encrypted->unlock(""));
-    ASSERT_TRUE(m_encrypted->changePassword(m_encryptedPassword));
-    ASSERT_TRUE(m_encrypted->isEncrypted());
+    ASSERT_NO_THROW(m_database = std::make_unique<SqliteDatabase>(m_path));
+    ASSERT_TRUE(m_database->isUnlocked());
+    ASSERT_FALSE(m_database->isEncrypted());
 }
 
 TEST_F(DatabaseTest, AddTable)
 {
-    ASSERT_TRUE(m_encrypted->exec("CREATE TABLE people (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)"));
+    ASSERT_TRUE(m_database->execute("CREATE TABLE people (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)"));
+}
+
+TEST_F(DatabaseTest, EncryptDatabase)
+{
+    ASSERT_TRUE(m_database->setPassword("abc3845@#$"));
+    ASSERT_TRUE(m_database->isEncrypted());
+    ASSERT_TRUE(m_database->isUnlocked());
 }
 
 TEST_F(DatabaseTest, AddPerson1)
 {
-    Person p1{ getPerson1() };
-    SqlStatement statement{ m_encrypted->createStatement("INSERT INTO people (id, name, age) VALUES (?,?,?)") };
+    SqliteStatement statement{ m_database->createStatement("INSERT INTO people (id, name, age) VALUES (?,?,?)") };
     statement.bind(1, 1);
-    statement.bind(2, p1.getName());
-    statement.bind(3, p1.getAge());
-    ASSERT_FALSE(statement.step());
+    statement.bind(2, getPerson1().getName());
+    statement.bind(3, getPerson1().getAge());
+    ASSERT_EQ(statement.step(), SqliteStepResult::Done);
 }
 
 TEST_F(DatabaseTest, AddPerson2)
 {
-    Person p2{ getPerson2() };
-    SqlStatement statement{ m_encrypted->createStatement("INSERT INTO people (id, name, age) VALUES (?,?,?)") };
+    SqliteStatement statement{ m_database->createStatement("INSERT INTO people (id, name, age) VALUES (?,?,?)") };
     statement.bind(1, 2);
-    statement.bind(2, p2.getName());
-    statement.bind(3, p2.getAge());
-    ASSERT_FALSE(statement.step());
+    statement.bind(2, getPerson2().getName());
+    statement.bind(3, getPerson2().getAge());
+    ASSERT_EQ(statement.step(), SqliteStepResult::Done);
 }
 
 TEST_F(DatabaseTest, GetPerson1)
 {
-    Person p1{ getPerson1() };
-    SqlStatement statement{ m_encrypted->createStatement("SELECT * FROM people WHERE id = 1") };
-    ASSERT_TRUE(statement.step());
-    ASSERT_EQ(statement.getColumnInt(0), 1);
-    ASSERT_EQ(statement.getColumnString(1), p1.getName());
-    ASSERT_EQ(statement.getColumnInt(2), p1.getAge());
-    ASSERT_FALSE(statement.step());
-}
-
-TEST_F(DatabaseTest, GetPerson2)
-{
-    Person p2{ getPerson2() };
-    SqlStatement statement{ m_encrypted->createStatement("SELECT * FROM people WHERE id = 2") };
-    ASSERT_TRUE(statement.step());
-    ASSERT_EQ(statement.getColumnInt(0), 2);
-    ASSERT_EQ(statement.getColumnString(1), p2.getName());
-    ASSERT_EQ(statement.getColumnInt(2), p2.getAge());
-    ASSERT_FALSE(statement.step());
+    SqliteStatement statement{ m_database->createStatement("SELECT * FROM people WHERE id = 1") };
+    ASSERT_EQ(statement.step(), SqliteStepResult::Row);
+    ASSERT_EQ(statement.getColumn<int>(0), 1);
+    ASSERT_EQ(statement.getColumn<std::string>(1), getPerson1().getName());
+    ASSERT_EQ(statement.getColumn<int>(2), getPerson1().getAge());
+    ASSERT_EQ(statement.step(), SqliteStepResult::Done);
 }
 
 TEST_F(DatabaseTest, DecryptDatabase)
 {
-    ASSERT_TRUE(m_encrypted->changePassword(""));
-    ASSERT_FALSE(m_encrypted->isEncrypted());
-    SqlStatement statement{ m_encrypted->createStatement("SELECT COUNT(id) FROM people") };
-    ASSERT_TRUE(statement.step());
-    ASSERT_EQ(statement.getColumnInt(0), 2);
+    ASSERT_TRUE(m_database->setPassword(""));
+    ASSERT_FALSE(m_database->isEncrypted());
+    ASSERT_TRUE(m_database->isUnlocked());
+}
+
+TEST_F(DatabaseTest, GetPerson2)
+{
+    SqliteStatement statement{ m_database->createStatement("SELECT * FROM people WHERE id = 2") };
+    ASSERT_EQ(statement.step(), SqliteStepResult::Row);
+    ASSERT_EQ(statement.getColumn<int>(0), 2);
+    ASSERT_EQ(statement.getColumn<std::string>(1), getPerson2().getName());
+    ASSERT_EQ(statement.getColumn<int>(2), getPerson2().getAge());
+    ASSERT_EQ(statement.step(), SqliteStepResult::Done);
 }

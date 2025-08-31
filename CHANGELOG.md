@@ -5,14 +5,24 @@
 #### App
 - Renamed `DataFileBase` to `JsonFileBase`
 - Renamed `DataFileManager` to `JsonFileManager`
-- Moved `AppInfo::convertUrlMapToVector()` to `CodeHelpers` namespace
+- Moved `AppInfo::convertUrlMapToVector()` to `Helpers::CodeHelpers` namespace
 - Moved `App::CancellationToken` to `Helpers` namespace
+#### Database
+- Rewrote all classes with a more modern interface
+- Renamed all classes with `Sqlite` prefix
+#### Keyring
+- Rewrote `Keyring` class with a more modern interface
+- Moved `SystemCredentials` to `System::Credentials` namespace
+- Removed `CredentialCheckStatus` enum
+- Removed `PasswordStrength` module
 #### Taskbar
 - Removed module
 ### New APIs
 #### Helpers
 - Added `DEFINE_ENUM_FLAGS()` macro to `CodeHelpers`
 - Added `IJsonSerializable` interface
+#### Keyring
+- Added `Space` value to `PasswordContent`
 ### Fixes
 - Marked functions and methods with `noexcept` where applicable
 
