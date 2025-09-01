@@ -28,17 +28,17 @@ using namespace Nickvision::Helpers;
 namespace Nickvision::Network
 {
 #ifdef _WIN32
-    static bool isSocketValid(SOCKET socket)
+    static bool isSocketValid(SOCKET socket) noexcept
     {
         return socket != INVALID_SOCKET;
     }
 
-    static bool isSocketValid(HANDLE pipe)
+    static bool isSocketValid(HANDLE pipe) noexcept
     {
         return pipe != INVALID_HANDLE_VALUE;
     }
 #else
-    static bool isSocketValid(int socket)
+    static bool isSocketValid(int socket) noexcept
     {
         return socket != -1;
     }

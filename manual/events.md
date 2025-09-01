@@ -1,12 +1,12 @@
 # Defining Events In Your Classes
 libnick events are designed to easily integrate within your classes to easily notify consumers of changes in state of an object.
 
-Let's take a look at `Nickvision::App::DataFileBase` and how it defines and uses events.
+Let's take a look at `Nickvision::Helpers::JsonFileBase` and how it defines and uses events.
 
 ```cpp
-namespace Nickvision::App
+namespace Nickvision::Helpers
 {
-  class DataFileBase
+  class JsonFileBase
   {
   public:
       ...
@@ -29,12 +29,12 @@ namespace Nickvision::App
 }
 ```
 
-Here we can see how `Nickvision::App::DataFileBase` defines a `saved` event, exposes it to the consumer, and triggers/invokes the event within its `save` method.
+Here we can see how `Nickvision::Helpers::JsonFileBase` defines a `saved` `Nickvision::Events::Event`, exposes it to the consumer, and triggers/invokes the event within its `save` method.
 
-A consumer of `Nickvision::App::DataFileBase` can easily subscribe to the event and have its handler called when the configuration object is saved:
+A consumer of `Nickvision::Helpers::JsonFileBase` can easily subscribe to the event, via the `subscribe()` method or `+=` operator, and have its handler called when the configuration object is saved:
 ```cpp
-using namespace Nickvision::App;
 using namespace Nickvision::Events;
+using namespace Nickvision::Helpers;
 
 void handler(const EventArgs& e)
 {
@@ -43,7 +43,7 @@ void handler(const EventArgs& e)
 
 int main()
 {
-    DataFileBase base{ ... };
+    JsonFileBase base{ ... };
     base.saved() += handler;
     base.save();
 }

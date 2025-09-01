@@ -1,37 +1,43 @@
 # Performing Inter-Process Communication
-libnick uses named-pipes on Windows and Unix Domain Sockets on Linux and macOS to establish inter process server and client communicators, while abstracting all of that away from the consumer in the easy to use `Nickvision::App::InterProcessCommunicator` API.
+libnick allows for the use of `Nickvision::Network::Socket`s to establish inter-process communication via named pipes on Windows and domain sockets on Linux and macOS.
 
-Upon creating an `Nickvision::App::InterProcessCommunicator` object, either `isServer()` or `isClient()` will return true depending on whether or not this instance is a server or client respectively. Server instances should register a callback to the `CommandReceived` event to be invoked when clients send commands to the server.
-
-NOTE: Server instance of `Nickvision::App::InterProcessCommunicator` should be kept alive for the entire need for the communicator. This includes when the need to receive client messages is present.
-
-Let's consider an example scenario for using the `Nickvision::App::InterProcessCommunicator`. Assume we have an application where we want the first instance to be considered the main, running instance. Assume that if other instances of said application are started, we want its arguments to be passed to the main instance and then have said other instances be closed. This will allow, for example, a GUI main instance to be manipulated via secondary CLI instances. 
-
-Here's the code for this:
+A process must first create a server socket object that will act as the "receiver" for when other client processes send messages:
 ```cpp
-using namespace Nickvision::App;
-using namespace Nickvision::Events;
+using namespace Nickvision::Network;
 
-int main(int argc, char*[] argv)
+#ifdef _WIN32
+Socket receiver{ SocketPurpose::Server, SocketType::Stream, AddressFamily::Pipe, "org.nickvision.libnick.tests", 0 };
+#else
+Socket receiver{ SocketPurpose::Server, SocketType::Stream, AddressFamily::Unix, "org.nickvision.libnick.tests", 0 };
+#endif
+while(true)
 {
-    std::vector<std::string> modernArgs;
-    for(int i = 0; i < argc; i++)
+    if(receiver.connect()) // Wait for and connect to new client
     {
-        if(argv[i])
-        {
-            modernArgs.push_back({ argv[i] });
-        }
+        std::string msg{ receiver.receiveMessage() }; // Wait for and receive message from client
+        // Handle msg
+        receiver.sendMessage("ACK"); // Send a message back to connected client
+        receiver.disconnect(); // Close connection with client
     }
-    InterProcessCommunicator& ipc{ "appid" };
-    ipc.commandReceived() += handleArguments;
-    ipc.communicate(modernArgs, true);
-}
-
-void handleArguments(const ParamEventArgs<std::vector<std::string>>& args)
-{
-  ...
+    else
+    {
+        // There was an error connecting to this client
+    }
 }
 ```
-If this program is ran for the first time, `ipc` will be the server instance. The `handleArguments` function will be invoked after `communicate` with its own arguments, as `communicate` still invokes `CommandReceived` even if ipc is the server instance. 
 
-If this program is ran *not* for the first time, its arguments will be sent to the first instance and this instance itself will close (as `true` was passed as the second argument of `communicate`). The first instance's `handleArguments` function will be called as a result of `CommandReceived` being invoked by the ipc server receiving the command. 
+A child/client process can now create client sockets of the same name to send messages to the receiver:
+```cpp
+using namespace Nickvision::Network;
+
+#ifdef _WIN32
+Socket receiver{ SocketPurpose::Client, SocketType::Stream, AddressFamily::Pipe, "org.nickvision.libnick.tests", 0 };
+#else
+Socket receiver{ SocketPurpose::Client, SocketType::Stream, AddressFamily::Unix, "org.nickvision.libnick.tests", 0 };
+#endif
+receiver.connect() // Wait for and connect to server
+receiver.sendMessage("Hello") // Send message to server
+std::string msg{ receiver.receiveMessage() } // Wait for and receive message from server
+// Handle msg
+receiver.disconnect() // Close connection with server
+```
