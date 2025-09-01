@@ -64,14 +64,11 @@ add_library (${PROJECT_NAME}
     "include/keyring/passwordgenerator.h"
     "include/localization/documentation.h"
     "include/localization/gettext.h"
-    "include/network/addressfamily.h"
     "include/network/ipv4address.h"
     "include/network/macaddress.h"
     "include/network/networkmonitor.h"
     "include/network/networkstate.h"
     "include/network/networkstatechangedeventargs.h"
-    "include/network/socket.h"
-    "include/network/sockettype.h"
     "include/network/web.h"
     "include/notifications/appnotification.h"
     "include/notifications/notificationsenteventargs.h"
@@ -113,7 +110,6 @@ add_library (${PROJECT_NAME}
     "src/network/macaddress.cpp"
     "src/network/networkmonitor.cpp"
     "src/network/networkstatechangedeventargs.cpp"
-    "src/network/socket.cpp"
     "src/network/web.cpp"
     "src/notifications/appnotification.cpp"
     "src/notifications/notificationsenteventargs.cpp"
@@ -144,7 +140,7 @@ find_package(maddy CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Boost::json cpr::cpr Intl::Intl maddy::maddy)
 if(WIN32)
     find_package(sqlcipher CONFIG REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dnsapi Dwmapi Gdiplus Kernel32 Shell32 UxTheme Ws2_32)
+    target_link_libraries(${PROJECT_NAME} PUBLIC sqlcipher::sqlcipher Advapi32 Dnsapi Dwmapi Gdiplus Kernel32 Shell32 UxTheme)
 elseif(APPLE)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_library(CF_LIBRARY CoreFoundation)
@@ -207,7 +203,6 @@ if (BUILD_TESTING)
     "tests/notificationtests.cpp"
     "tests/passwordtests.cpp"
     "tests/processtests.cpp"
-    "tests/sockettests.cpp"
     "tests/stringtests.cpp"
     "tests/systemtests.cpp"
     "tests/updatertests.cpp"

@@ -17,6 +17,7 @@
 - Removed `PasswordStrength` module
 #### Network
 - Removed `DNS` module
+- Removed `Socket` and related classes
 #### Taskbar
 - Removed module
 ### New APIs
