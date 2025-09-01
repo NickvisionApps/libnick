@@ -23,7 +23,6 @@
 #ifndef CREDENTIAL_H
 #define CREDENTIAL_H
 
-#include <iostream>
 #include <string>
 
 namespace Nickvision::Keyring
@@ -36,80 +35,62 @@ namespace Nickvision::Keyring
     public:
         /**
          * @brief Constructs a credential.
+         */
+        Credential() = default;
+        /**
+         * @brief Constructs a credential.
          * @param name The name of the credential
          * @param uri The uri of the credential
          * @param username The username of the credential
          * @param password The password of the credential
          */
-        Credential(const std::string& name, const std::string& uri, const std::string& username, const std::string& password);
+        Credential(const std::string& name, const std::string& uri, const std::string& username, const std::string& password) noexcept;
         /**
          * @brief Gets the name of the credential
          * @return The name of the credential
          */
-        const std::string& getName() const;
+        const std::string& getName() const noexcept;
         /**
          * @brief Sets the name of the credential
          * @param name The name of the credential
          */
-        void setName(const std::string& name);
+        void setName(const std::string& name) noexcept;
         /**
          * @brief Gets the uri of the credential (can also be used as a comment for the Credential)
          * @return The uri of the credential
          */
-        const std::string& getUri() const;
+        const std::string& getUri() const noexcept;
         /**
          * @brief Sets the uri of the credential (can also be used as a comment for the Credential)
          * @param uri The uri of the credential
          */
-        void setUri(const std::string& uri);
+        void setUri(const std::string& uri) noexcept;
         /**
          * @brief Gets the username of the credential
          * @return The username of the credential
          */
-        const std::string& getUsername() const;
+        const std::string& getUsername() const noexcept;
         /**
          * @brief Sets the username of the credential
          * @param username The username of the credential
          */
-        void setUsername(const std::string& username);
+        void setUsername(const std::string& username) noexcept;
         /**
          * @brief Gets the password of the credential
          * @return The password of the credential
          */
-        const std::string& getPassword() const;
+        const std::string& getPassword() const noexcept;
         /**
          * @brief Sets the password of the credential
          * @param password The password of the credential
          */
-        void setPassword(const std::string& password);
+        void setPassword(const std::string& password) noexcept;
         /**
-         * @brief Compares Credential objects via < operator
+         * @brief Compares Credential objects via spaceship operator
          * @param compare The Credential object to compare too
-         * @return True if this < compare
+         * @return A strong_ordering value representing the comparison
          */
-        bool operator<(const Credential& compare) const;
-        /**
-         * @brief Compares Credential objects via > operator
-         * @param compare The Credential object to compare too
-         * @return True if this > compare
-         */
-        bool operator>(const Credential& compare) const;
-        /**
-         * @brief Compares Credential objects via == operator
-         * @param compare The Credential object to compare too
-         * @return True if this == compare
-         */
-        bool operator==(const Credential& compare) const;
-        /**
-         * @brief Compares Credential objects via != operator
-         * @param compare The Credential object to compare too
-         * @return True if this != compare
-         */
-        bool operator!=(const Credential& compare) const;
-        /**
-         * @brief Outputs the Credential object
-         */
-        friend std::ostream& operator<<(std::ostream& os, const Credential& credential);
+        std::strong_ordering operator<=>(const Credential&) const noexcept = default;
 
     private:
         std::string m_name;

@@ -42,7 +42,7 @@ namespace Nickvision::Notifications::ShellNotification
      * @return True if notification sent
      * @return False if notification not sent
      */
-    void send(const ShellNotificationSentEventArgs& e, const App::AppInfo& info, const std::string& openText = "");
+    void send(const ShellNotificationSentEventArgs& e, const App::AppInfo& info, const std::string& openText = "") noexcept;
 }
 
 #endif //SHELLNOTIFICATION_H

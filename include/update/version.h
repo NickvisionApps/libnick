@@ -39,14 +39,14 @@ namespace Nickvision::Update
         /**
          * @brief Constructs a Version. 
          */
-        Version();
+        Version() noexcept;
         /**
          * @brief Constructs a Version.
          * @param major The major number
          * @param minor The minor number
          * @param build The build number
          */
-        Version(int major, int minor, int build);
+        Version(int major, int minor, int build) noexcept;
         /**
          * @brief Constructs a Version.
          * @param major The major number
@@ -66,77 +66,73 @@ namespace Nickvision::Update
          * @brief Gets the major number of the version.
          * @return The major number
          */
-        int getMajor() const;
+        int getMajor() const noexcept;
         /**
          * @brief Gets the minor number of the version.
          * @return The minor number
          */
-        int getMinor() const;
+        int getMinor() const noexcept;
         /**
          * @brief Gets the build number of the version.
          * @return The build number
          */
-        int getBuild() const;
+        int getBuild() const noexcept;
         /**
          * @brief Gets the dev string of the version.
          * @return The dev string
          */
-        const std::string& getDev() const;
+        const std::string& getDev() const noexcept;
         /**
          * @brief Gets the type of the version.
          * @return VersionType
          */
-        VersionType getVersionType() const;
+        VersionType getVersionType() const noexcept;
         /**
          * @brief Gets a string representation of the Version.
          * @return The string representation of the Version
          */
-        const std::string& str() const;
+        const std::string& str() const noexcept;
         /**
          * @brief Gets whether or not the Version object is empty
          * @return True if empty, else false
          */
-        bool empty() const;
+        bool empty() const noexcept;
         /**
          * @brief Compares Version objects via < operator
          * @param compare The Version object to compare too
          * @return True if this < compare
          */
-        bool operator<(const Version& compare) const;
+        bool operator<(const Version& compare) const noexcept;
         /**
          * @brief Compares Version objects via <= operator
          * @param compare The Version object to compare too
          * @return True if this <= compare
          */
-        bool operator<=(const Version& compare) const;
+        bool operator<=(const Version& compare) const noexcept;
         /**
          * @brief Compares Version objects via > operator
          * @param compare The Version object to compare too
          * @return True if this > compare
          */
-        bool operator>(const Version& compare) const;
+        bool operator>(const Version& compare) const noexcept;
         /**
          * @brief Compares Version objects via >= operator
          * @param compare The Version object to compare too
          * @return True if this >= compare
          */
-        bool operator>=(const Version& compare) const;
+        bool operator>=(const Version& compare) const noexcept;
         /**
          * @brief Compares Version objects via == operator
          * @param compare The Version object to compare too
          * @return True if this == compare
          */
-        bool operator==(const Version& compare) const;
+        bool operator==(const Version& compare) const noexcept;
         /**
          * @brief Compares Version objects via != operator
          * @param compare The Version object to compare too
          * @return True if this != compare
          */
-        bool operator!=(const Version& compare) const;
-        /**
-         * @brief Outputs the Version object 
-         */
-        friend std::ostream& operator<<(std::ostream& os, const Version& version);
+        bool operator!=(const Version& compare) const noexcept;
 
     private:
         int m_major;

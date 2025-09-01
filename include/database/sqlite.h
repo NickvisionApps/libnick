@@ -17,25 +17,33 @@
  *
  * @section DESCRIPTION
  *
- * States of progress on a taskbar button.
+ * Headers and common definitions for SQLite database interactions.
  */
 
-#ifndef PROGRESSSTATE_H
-#define PROGRESSSTATE_H
+#ifndef SQLITE_H
+#define SQLITE_H
 
-namespace Nickvision::Taskbar
+#ifndef SQLITE_HAS_CODEC
+#define SQLITE_HAS_CODEC
+#endif
+
+#include <cstdint>
+#include <string>
+#include <type_traits>
+#ifdef _WIN32
+#include <sqlcipher/sqlite3.h>
+#else
+#include <sqlite3.h>
+#endif
+
+namespace Nickvision::Database
 {
-    /**
-     * @brief States of progress on a taskbar button.
-     */
-    enum class ProgressState
-    {
-        NoProgress = 0, ///< The taskbar item is in a no progress state.
-        Indeterminate = 1, ///< The taskbar item is in an indeterminate progress state.
-        Normal = 2, ///< The taskbar item is in a normal progress state.
-        Error = 4, ///< The taskbar item is in an error progress state.
-        Paused = 8 ///< The taskbar item is in a paused progress state.
-    };
+    template<typename T>
+    concept SupportedSqliteValue = std::is_same_v<T, int> || 
+        std::is_same_v<T, std::int64_t> || 
+        std::is_same_v<T, double> || 
+        std::is_same_v<T, bool> || 
+        std::is_same_v<T, std::string>;
 }
 
-#endif //PROGRESSSTATE_H
+#endif //SQLITE_H

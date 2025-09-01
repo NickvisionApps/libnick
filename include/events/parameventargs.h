@@ -43,16 +43,18 @@ namespace Nickvision::Events
          * @brief Constructs a ParamEventArgs.
          * @param param The parameter to store in the event args
          */
-        ParamEventArgs(const T& param)
+        ParamEventArgs(const T& param) noexcept
             : m_param{ param }
         {
 
         }
+        ParamEventArgs(const ParamEventArgs&) noexcept = default;
+        ParamEventArgs(ParamEventArgs&&) noexcept = default;
         /**
          * @brief Gets the param stored in the event args.
          * @return The param stored
          */
-        const T& getParam() const
+        const T& getParam() const noexcept
         {
             return m_param;
         }
@@ -60,7 +62,7 @@ namespace Nickvision::Events
          * @brief Gets the param stored in the event args.
          * @return The param stored
          */
-        const T* operator->() const
+        const T* operator->() const noexcept
         {
             return &m_param;
         }
@@ -68,7 +70,7 @@ namespace Nickvision::Events
          * @brief Gets the param stored in the event args.
          * @return The param stored
          */
-        T* operator->()
+        T* operator->() noexcept
         {
             return &m_param;
         }
@@ -76,7 +78,7 @@ namespace Nickvision::Events
          * @brief Gets the param stored in the event args.
          * @return The param stored
          */
-        const T& operator*() const
+        const T& operator*() const noexcept
         {
             return m_param;
         }
@@ -84,10 +86,12 @@ namespace Nickvision::Events
          * @brief Gets the param stored in the event args.
          * @return The param stored
          */
-        T& operator*()
+        T& operator*() noexcept
         {
             return m_param;
         }
+        ParamEventArgs& operator=(const ParamEventArgs&) noexcept = default;
+        ParamEventArgs& operator=(ParamEventArgs&&) noexcept = default;
 
     private:
         T m_param;

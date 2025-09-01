@@ -23,8 +23,8 @@
 #ifndef PASSWORDGENERATOR_H
 #define PASSWORDGENERATOR_H
 
+#include <random>
 #include <string>
-#include <vector>
 #include "passwordcontent.h"
 
 namespace Nickvision::Keyring
@@ -37,28 +37,30 @@ namespace Nickvision::Keyring
     public:
         /**
          * @brief Constructs a PasswordGenerator.
-         * @param contentFlags Flags of possible characters in a generated password
+         * @param contentFlags Flags of possible characters for the generator to use
          */
-        PasswordGenerator(PasswordContent contentFlags = PasswordContent::Numeric | PasswordContent::Uppercase | PasswordContent::Lowercase | PasswordContent::Special);
+        PasswordGenerator(PasswordContent contentFlags = PasswordContent::Numeric | PasswordContent::Uppercase | PasswordContent::Lowercase | PasswordContent::Special | PasswordContent::Space) noexcept;
         /**
-         * @brief Gets the flags of possible characters in a generated password.
-         * @return The flags of possible characters in a generated password
+         * @brief Gets the flags of possible characters for the generator to use.
+         * @return The flags of possible characters for the generator to use
          */
-        PasswordContent getContentFlags() const;
+        PasswordContent getContentFlags() const noexcept;
         /**
-         * @brief Sets the flags of possible characters in a generated password.
-         * @param contentFlags Flags of possible characters in a generated password
+         * @brief Sets the flags of possible characters for the generator to use.
+         * @param contentFlags Flags of possible characters for the generator to use
          */
-        void setContentFlags(PasswordContent contentFlags);
+        void setContentFlags(PasswordContent contentFlags) noexcept;
         /**
          * @brief Generates a new password
          * @param length The length of the generated password
          * @return The generated password
          */
-        std::string next(size_t length = 16);
+        std::string next(size_t length = 16) noexcept;
 
     private:
         PasswordContent m_contentFlags;
+        std::random_device m_randomDevice;
+        std::mt19937 m_randomEngine;
     };
 }
 

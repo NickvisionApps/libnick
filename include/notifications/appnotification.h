@@ -10,12 +10,12 @@ namespace Nickvision::Notifications::AppNotification
      * @brief Gets the event for when an app notification is sent.
      * @return The app notification sent event
      */
-    Events::Event<NotificationSentEventArgs>& sent();
+    Events::Event<NotificationSentEventArgs>& sent() noexcept;
     /**
      * @brief Sends a notification to the app.
      * @param args NotificationSentEventArgs
      */
-    void send(const NotificationSentEventArgs& args);
+    void send(const NotificationSentEventArgs& args) noexcept;
 }
 
 #endif //APPNOTIFICATION_H

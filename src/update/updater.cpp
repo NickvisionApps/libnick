@@ -37,7 +37,7 @@ namespace Nickvision::Update
         }
     }
 
-    Updater::Updater(const Updater& u)
+    Updater::Updater(const Updater& u) noexcept
     {
         std::lock_guard<std::mutex> lock{ u.m_mutex };
         m_repoOwner = u.m_repoOwner;
@@ -55,7 +55,7 @@ namespace Nickvision::Update
         m_latestPreviewReleaseId = std::move(u.m_latestPreviewReleaseId);
     }
 
-    Version Updater::fetchCurrentVersion(VersionType versionType)
+    Version Updater::fetchCurrentVersion(VersionType versionType) noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         boost::json::value root = Web::getJson("https://api.github.com/repos/" + m_repoOwner + "/" + m_repoName + "/releases");
@@ -106,7 +106,7 @@ namespace Nickvision::Update
         return Version();
     }
 
-    bool Updater::downloadUpdate(VersionType versionType, const std::filesystem::path& path, const std::string& assetName, bool exactMatch, const cpr::ProgressCallback& progress)
+    bool Updater::downloadUpdate(VersionType versionType, const std::filesystem::path& path, const std::string& assetName, bool exactMatch, const cpr::ProgressCallback& progress) noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if (versionType == VersionType::Stable ? m_latestStableReleaseId == -1 : m_latestPreviewReleaseId == -1)
@@ -151,7 +151,7 @@ namespace Nickvision::Update
     }
 
 #ifdef _WIN32
-    bool Updater::windowsUpdate(VersionType versionType, const cpr::ProgressCallback& progress)
+    bool Updater::windowsUpdate(VersionType versionType, const cpr::ProgressCallback& progress) noexcept
     {
         std::filesystem::path setupPath{ UserDirectories::get(UserDirectory::Cache) / (m_repoOwner + "_" + m_repoName + "_Setup.exe") };
         if(downloadUpdate(versionType, setupPath, "setup.exe", false, progress))
@@ -166,7 +166,7 @@ namespace Nickvision::Update
     }
 #endif
 
-    Updater& Updater::operator=(const Updater& u)
+    Updater& Updater::operator=(const Updater& u) noexcept
     {
         if (this != &u)
         {

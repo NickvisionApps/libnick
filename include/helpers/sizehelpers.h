@@ -11,37 +11,37 @@ namespace Nickvision::Helpers::SizeHelpers
     concept Numeric = std::is_arithmetic_v<T>;
 
     template<Numeric T>
-    constexpr T bytesToKilobytes(const T value)
+    constexpr T bytesToKilobytes(const T value) noexcept
     {
         return value / FACTOR;
     }
 
     template<Numeric T>
-    constexpr T kilobytesToBytes(const T value)
+    constexpr T kilobytesToBytes(const T value) noexcept
     {
         return value * FACTOR;
     }
 
     template<Numeric T>
-    constexpr T bytesToMegabytes(const T value)
+    constexpr T bytesToMegabytes(const T value) noexcept
     {
         return value / (FACTOR * FACTOR);
     }
 
     template<Numeric T>
-    constexpr T megabytesToBytes(const T value)
+    constexpr T megabytesToBytes(const T value) noexcept
     {
         return value * (FACTOR * FACTOR);
     }
 
     template<Numeric T>
-    constexpr T bytesToGigabytes(const T value)
+    constexpr T bytesToGigabytes(const T value) noexcept
     {
         return value / (FACTOR * FACTOR * FACTOR);
     }
 
     template<Numeric T>
-    constexpr T gigabytesToBytes(const T value)
+    constexpr T gigabytesToBytes(const T value) noexcept
     {
         return value * (FACTOR * FACTOR * FACTOR);
     }

@@ -21,7 +21,7 @@ using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
 {
-    DeploymentMode Environment::getDeploymentMode()
+    DeploymentMode Environment::getDeploymentMode() noexcept
     {
         if(hasVariable("container"))
         {
@@ -34,34 +34,13 @@ namespace Nickvision::System
         return DeploymentMode::Local;
     }
 
-    const std::filesystem::path& Environment::getExecutableDirectory()
+    const std::filesystem::path& Environment::getExecutableDirectory() noexcept
     {
-        static std::filesystem::path executableDirectory;
-        if (!executableDirectory.empty())
-        {
-            return executableDirectory;
-        }
-#ifdef _WIN32
-        wchar_t pth[MAX_PATH];
-        DWORD len{ GetModuleFileNameW(nullptr, pth, sizeof(pth)) };
-        if(len > 0)
-        {
-            executableDirectory = std::filesystem::path(std::wstring(pth, len)).parent_path();
-        }
-#elif defined(__linux__)
-        executableDirectory = std::filesystem::canonical("/proc/self/exe").parent_path();
-#elif defined(__APPLE__)
-        char path[PATH_MAX+1];
-        uint32_t size{ sizeof(path) };
-        if(_NSGetExecutablePath(path, &size) == 0)
-        {
-            executableDirectory = std::filesystem::canonical(path).parent_path();
-        }
-#endif
+        static std::filesystem::path executableDirectory{ getExecutablePath().parent_path() };
         return executableDirectory;
     }
 
-    const std::filesystem::path& Environment::getExecutablePath()
+    const std::filesystem::path& Environment::getExecutablePath() noexcept
     {
         static std::filesystem::path executablePath;
         if (!executablePath.empty())
@@ -88,7 +67,7 @@ namespace Nickvision::System
         return executablePath;
     }
 
-    std::string Environment::getLocaleName()
+    std::string Environment::getLocaleName() noexcept
     {
 #ifdef _WIN32
         LCID lcid{ GetThreadLocale() };
@@ -107,12 +86,12 @@ namespace Nickvision::System
         return "";
     }
 
-    bool Environment::hasVariable(const std::string& key)
+    bool Environment::hasVariable(const std::string& key) noexcept
     {
         return std::getenv(key.c_str());
     }
 
-    std::string Environment::getVariable(const std::string& key)
+    std::string Environment::getVariable(const std::string& key) noexcept
     {
         char* var{ std::getenv(key.c_str()) };
         if (var)
@@ -122,7 +101,7 @@ namespace Nickvision::System
         return "";
     }
 
-    bool Environment::setVariable(const std::string& key, const std::string& value)
+    bool Environment::setVariable(const std::string& key, const std::string& value) noexcept
     {
 #ifdef _WIN32
         return _putenv_s(key.c_str(), value.c_str()) == 0;
@@ -131,12 +110,12 @@ namespace Nickvision::System
 #endif
     }
 
-    bool Environment::clearVariable(const std::string& key)
+    bool Environment::clearVariable(const std::string& key) noexcept
     {
         return setVariable(key, "");
     }
     
-    bool Environment::testVariable(const std::string& key)
+    bool Environment::testVariable(const std::string& key) noexcept
     {
         std::string value{ getVariable(key) };
         if(value.empty())
@@ -147,7 +126,7 @@ namespace Nickvision::System
         return value == "true" || value == "t" || value == "yes" || value == "y" || value == "1";
     }
 
-    std::vector<std::filesystem::path> Environment::getPath()
+    std::vector<std::filesystem::path> Environment::getPath() noexcept
     {
         std::string env{ getVariable("PATH") };
         if (!env.empty())
@@ -161,17 +140,16 @@ namespace Nickvision::System
         return {};
     }
 
-    std::string Environment::exec(const std::string& command)
+    std::string Environment::exec(const std::string& command) noexcept
     {
         if(command.empty())
         {
             return "";
         }
-        std::vector<std::string> args{ StringHelpers::splitArgs(command) };
 #ifdef _WIN32
-        args.insert(args.begin(), "/c");
-        Process process{ findDependency("cmd.exe"), args };
+        Process process{ findDependency("cmd.exe"), { "/c", command } };
 #else
+        std::vector<std::string> args{ StringHelpers::splitArgs(command) };
         std::string cmd{ args[0] };
         args.erase(args.begin());
         Process process{ cmd, args };
@@ -184,7 +162,12 @@ namespace Nickvision::System
         return "";
     }
 
-    const std::filesystem::path& Environment::findDependency(std::string dependency, DependencySearchOption search)
+    std::future<std::string> Environment::execAsync(const std::string& command) noexcept
+    {
+        return std::async(std::launch::async, [command]() { return exec(command); });
+    }
+
+    const std::filesystem::path& Environment::findDependency(std::string dependency, DependencySearchOption search) noexcept
     {
         static std::unordered_map<std::pair<std::string, DependencySearchOption>, std::filesystem::path, PairHash> dependencies;
 #ifdef _WIN32
@@ -258,7 +241,7 @@ namespace Nickvision::System
         return dependencies[pair];
     }
 
-    std::string Environment::getDebugInformation(const AppInfo& appInfo, const std::string& extraInformation)
+    std::string Environment::getDebugInformation(const AppInfo& appInfo, const std::string& extraInformation) noexcept
     {
         std::stringstream builder;
         builder << appInfo.getId() << std::endl;
@@ -277,7 +260,7 @@ namespace Nickvision::System
             builder << "Unknown OS" << std::endl;
             break;
         }
-        builder << appInfo.getVersion() << std::endl << std::endl;
+        builder << appInfo.getVersion().str() << std::endl << std::endl;
         builder << "Deployment Mode: ";
         switch(getDeploymentMode())
         {

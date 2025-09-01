@@ -23,6 +23,8 @@
 #ifndef PASSWORDCONTENT_H
 #define PASSWORDCONTENT_H
 
+#include "helpers/codehelpers.h"
+
 namespace Nickvision::Keyring
 {
     /**
@@ -33,43 +35,11 @@ namespace Nickvision::Keyring
         Numeric = 1, ///< The password contains numeric characters.
         Uppercase = 2, ///< The password contains uppercase characters.
         Lowercase = 4, ///< The password contains lowercase characters.
-        Special = 8 ///< The password contains special characters.
+        Special = 8, ///< The password contains special characters.
+        Space = 16 ///< The password contains spaces.
     };
 
-    constexpr PasswordContent operator~(PasswordContent a)
-    {
-        return static_cast<PasswordContent>(~static_cast<int>(a));
-    }
-
-    constexpr PasswordContent operator|(PasswordContent a, PasswordContent b)
-    {
-        return static_cast<PasswordContent>(static_cast<int>(a) | static_cast<int>(b));
-    }
-
-    constexpr PasswordContent operator&(PasswordContent a, PasswordContent b)
-    {
-        return static_cast<PasswordContent>(static_cast<int>(a) & static_cast<int>(b));
-    }
-
-    constexpr PasswordContent operator^(PasswordContent a, PasswordContent b)
-    {
-        return static_cast<PasswordContent>(static_cast<int>(a) ^ static_cast<int>(b));
-    }
-
-    inline PasswordContent& operator|=(PasswordContent& a, PasswordContent b)
-    {
-        return reinterpret_cast<PasswordContent&>(reinterpret_cast<int&>(a) |= static_cast<int>(b));
-    }
-
-    inline PasswordContent& operator&=(PasswordContent& a, PasswordContent b)
-    {
-        return reinterpret_cast<PasswordContent&>(reinterpret_cast<int&>(a) &= static_cast<int>(b));
-    }
-
-    inline PasswordContent& operator^=(PasswordContent& a, PasswordContent b)
-    {
-        return reinterpret_cast<PasswordContent&>(reinterpret_cast<int&>(a) ^= static_cast<int>(b));
-    }
+    DEFINE_ENUM_FLAGS(PasswordContent)
 }
 
 #endif //PASSWORDCONTENT_H

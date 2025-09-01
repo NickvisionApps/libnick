@@ -43,30 +43,30 @@ namespace Nickvision::Localization::Gettext
      * @param domainName The domain name to use for gettext translations. Must be lowercase and contain no spaces
      * @return True if initialized, else false
      */
-    bool init(const std::string& domainName);
+    bool init(const std::string& domainName) noexcept;
     /**
      * @brief Gets the domain name used for gettext translations.
      * @return The gettext domain name
      */
-    const std::string& getDomainName();
+    const std::string& getDomainName() noexcept;
     /**
      * @brief Gets the list of available translated languages.
      * @brief Does not include the "C" language (the default language).
      * @return The list of available translated languages.
      */
-    const std::vector<std::string>& getAvailableLanguages();
+    const std::vector<std::string>& getAvailableLanguages() noexcept;
     /**
      * @brief Changes the current language for gettext translations.
      * @param language The language code to change translations to (use "C" to turn off translations; use "" to use the system default language)
      * @return True if the language was changed successfully, else false
      */
-    bool changeLanguage(const std::string& language);
+    bool changeLanguage(const std::string& language) noexcept;
     /**
      * @brief Translates a message.
      * @param msgid The message to translate
      * @return The translated message
      */
-    const char* dgettext(const char* msgid);
+    const char* dgettext(const char* msgid) noexcept;
     /**
      * @brief Translates a plural message.
      * @param msg The message to translate
@@ -74,7 +74,7 @@ namespace Nickvision::Localization::Gettext
      * @param n The number of objects (used to determine whether or not to use the plural version of the message)
      * @return The translated message for the given number of objects
      */
-    const char* dngettext(const char* msg, const char* msgPlural, unsigned long n);
+    const char* dngettext(const char* msg, const char* msgPlural, unsigned long n) noexcept;
     /**
      * @brief Translates a message and formats it with the given arguments.
      * @param msg The message to translate
@@ -82,7 +82,7 @@ namespace Nickvision::Localization::Gettext
      * @return The formatted translated message
      */
     template<typename... Args>
-    std::string fgettext(const char* msg, Args&&... args)
+    std::string fgettext(const char* msg, Args&&... args) noexcept
     {
         return std::vformat(Nickvision::Localization::Gettext::dgettext(msg), std::make_format_args(args...));
     }
@@ -95,7 +95,7 @@ namespace Nickvision::Localization::Gettext
      * @return The formatted translated message for the given number of objects
      */
     template<typename... Args>
-    std::string fngettext(const char* msg, const char* msgPlural, unsigned long n, Args&&... args)
+    std::string fngettext(const char* msg, const char* msgPlural, unsigned long n, Args&&... args) noexcept
     {
         return std::vformat(Nickvision::Localization::Gettext::dngettext(msg, msgPlural, n), std::make_format_args(args...));
     }
@@ -105,7 +105,7 @@ namespace Nickvision::Localization::Gettext
      * @param msg The message to translate
      * @return The translated message for the given context.
      */
-    const char* pgettext(const char* context, const char* msg);
+    const char* pgettext(const char* context, const char* msg) noexcept;
     /**
      * @brief Translates a plural message for a given context.
      * @param context The context of the message
@@ -114,7 +114,7 @@ namespace Nickvision::Localization::Gettext
      * @param n The number of objects (used to determine whether or not to use the plural version of the message)
      * @return The translated message for the given context and number of objects.
      */
-    const char* pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n);
+    const char* pngettext(const char* context, const char* msg, const char* msgPlural, unsigned long n) noexcept;
 }
 
 #endif //GETTEXT_H

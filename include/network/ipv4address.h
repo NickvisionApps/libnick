@@ -41,48 +41,48 @@ namespace Nickvision::Network
          * @param third The third byte of the address
          * @param fourth The fourth byte of the address
          */
-        IPv4Address(unsigned char first, unsigned char second, unsigned char third, unsigned char fourth);
+        IPv4Address(unsigned char first, unsigned char second, unsigned char third, unsigned char fourth) noexcept;
         /**
          * @brief Constructs an IPv4Address.
          * @param address The address as a long
          */
-        IPv4Address(unsigned long address);
-        /**
-         * @brief Gets the first byte of the address.
-         * @return The first byte of the address
-         */
-        unsigned char getFirst() const;
-        /**
-         * @brief Gets the second byte of the address.
-         * @return The second byte of the address
-         */
-        unsigned char getSecond() const;
-        /**
-         * @brief Gets the third byte of the address.
-         * @return The third byte of the address
-         */
-        unsigned char getThird() const;
-        /**
-         * @brief Gets the fourth byte of the address.
-         * @return The fourth byte of the address
-         */
-        unsigned char getFourth() const;
-        /**
-         * @brief Gets the address in network byte order.
-         * @return The address in network byte order
-         */
-        unsigned long getNetworkByteOrder() const;
-        /**
-         * @brief Gets the string representation of the address.
-         * @return The string representation of the address
-         */
-        std::string str() const;
+        IPv4Address(unsigned long address) noexcept;
         /**
          * @brief Parses an IPv4Address from a string.
          * @param address The string address to parse
          * @return The parsed address if successful, else std::nullopt
          */
-        static std::optional<IPv4Address> parse(const std::string& address);
+        static std::optional<IPv4Address> parse(const std::string& address) noexcept;
+        /**
+         * @brief Gets the first byte of the address.
+         * @return The first byte of the address
+         */
+        unsigned char getFirst() const noexcept;
+        /**
+         * @brief Gets the second byte of the address.
+         * @return The second byte of the address
+         */
+        unsigned char getSecond() const noexcept;
+        /**
+         * @brief Gets the third byte of the address.
+         * @return The third byte of the address
+         */
+        unsigned char getThird() const noexcept;
+        /**
+         * @brief Gets the fourth byte of the address.
+         * @return The fourth byte of the address
+         */
+        unsigned char getFourth() const noexcept;
+        /**
+         * @brief Gets the address in network byte order.
+         * @return The address in network byte order
+         */
+        unsigned long getNetworkByteOrder() const noexcept;
+        /**
+         * @brief Gets the string representation of the address.
+         * @return The string representation of the address
+         */
+        std::string str() const noexcept;
 
     private:
         unsigned char m_first;

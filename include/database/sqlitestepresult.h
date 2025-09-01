@@ -17,30 +17,15 @@
  *
  * @section DESCRIPTION
  *
- * Functions for working with DNS.
+ * Results of a SQLite statement step.
  */
 
-#ifndef DNS_H
-#define DNS_H
-
-#include <string>
-#include <vector>
-#include "ipv4address.h"
-
-namespace Nickvision::Network::DNS
+namespace Nickvision::Database
 {
-    /**
-     * @brief Resolves a hostname to IPv4 addresses.
-     * @param hostname The hostname to resolve
-     * @return A list of IPv4 addresses that the hostname resolves to
-     */
-    std::vector<IPv4Address> a(const std::string& hostname);
-    /**
-     * @brief Gets text records for a hostname.
-     * @param hostname The hostname to resolve
-     * @return A list of text records for the hostname
-     */
-    std::vector<std::string> txt(const std::string& hostname);
+    enum class SqliteStepResult
+    {
+        Error,
+        Row = 100,
+        Done = 101
+    };
 }
-
-#endif //DNS_H

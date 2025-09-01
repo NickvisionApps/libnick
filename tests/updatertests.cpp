@@ -16,17 +16,34 @@ TEST(UpdaterTests, ParabolicStableUpdate)
     Version stable{ updater.fetchCurrentVersion(VersionType::Stable) };
     ASSERT_TRUE(!stable.empty());
     ASSERT_TRUE(stable.getVersionType() == VersionType::Stable);
-    ASSERT_TRUE(stable >= Version("2023.12.0"));
+    ASSERT_TRUE(stable >= Version("2025.8.0"));
 }
 
-#ifdef _WIN32
-TEST(UpdaterTests, SpotlightWindowsUpdate)
+TEST(UpdaterTests, YtdlpUpdate)
 {
     if(Environment::hasVariable("GITHUB_ACTIONS"))
     {
         GTEST_SKIP();
     }
-    Updater updater{ "https://github.com/NickvisionApps/Spotlight" };
+    std::filesystem::path downloadPath{ Environment::getExecutableDirectory() / "yt-dlp" };
+    Updater updater{ "https://github.com/yt-dlp/yt-dlp" };
+    Version stable{ updater.fetchCurrentVersion(VersionType::Stable) };
+    ASSERT_TRUE(!stable.empty());
+    ASSERT_TRUE(stable.getVersionType() == VersionType::Stable);
+    ASSERT_TRUE(stable >= Version("2025.8.11"));
+    ASSERT_TRUE(updater.downloadUpdate(VersionType::Stable, downloadPath, "yt-dlp"));
+    ASSERT_TRUE(std::filesystem::exists(downloadPath));
+    ASSERT_TRUE(std::filesystem::remove(downloadPath));
+}
+
+#ifdef _WIN32
+TEST(UpdaterTests, ParabolicWindowsUpdate)
+{
+    if(Environment::hasVariable("GITHUB_ACTIONS"))
+    {
+        GTEST_SKIP();
+    }
+    Updater updater{ "https://github.com/NickvisionApps/Parabolic" };
     Version stable{ updater.fetchCurrentVersion(VersionType::Stable) };
     ASSERT_TRUE(!stable.empty());
     ASSERT_TRUE(updater.windowsUpdate(VersionType::Stable));

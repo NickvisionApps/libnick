@@ -24,76 +24,92 @@
 #define KEYRING_H
 
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <string>
 #include <vector>
 #include "credential.h"
-#include "database/sqldatabase.h"
+#include "database/sqlitedatabase.h"
 
 namespace Nickvision::Keyring
 {
     /**
      * @brief A model of a keyring object for managing credentials.
-     * @brief The keyring is encrypted with a password stored in the system's credential manager.
+     * @brief The keyring is an sqlite database, encrypted with a password stored in the system's credential manager.
      */
     class Keyring
     {
     public:
         /**
          * @brief Constructs a Keyring.
-         * @brief If the system credential manager is not available, the object will be functional but will not save any data to disk.
+         * @brief If the system credential manager is not available, an in-memory database will be used (credentials will not be saved to disk).
          * @param name The name of the keyring
+         * @throw std::runtime_error Thrown if error in database operations
          */
         Keyring(const std::string& name);
+        Keyring(const Keyring&) = delete;
+        /**
+         * @brief Constructs a Keyring via move.
+         * @param other The Keyring to move
+         */
+        Keyring(Keyring&& other) noexcept;
         /**
          * @brief Gets the name of the keyring.
          * @return The name of the keyring.
          */
-        const std::string& getName() const;
+        const std::string& getName() const noexcept;
         /**
          * @brief Gets whether the keyring is saving data to disk.
          * @return True if saving data to disk, else false
          */
-        bool isSavingToDisk() const;
+        bool isSavingToDisk() const noexcept;
         /**
          * @brief Gets all credentials in the keyring.
          * @return The list of all credentials
          */
-        const std::vector<Credential>& getCredentials() const;
+        const std::vector<Credential>& getAll() const noexcept;
         /**
          * @brief Gets the credential matching the provided name.
          * @param name The name of the credential
          * @return The credential matching the name, std::nullopt if no matching credential found
          */
-        std::optional<Credential> getCredential(const std::string& name);
+        std::optional<Credential> get(const std::string& name) noexcept;
         /**
          * @brief Adds a credential to the keyring.
          * @param credential The credential to add
          * @return True if successful, else false
          */
-        bool addCredential(const Credential& credential);
+        bool add(const Credential& credential) noexcept;
         /**
          * @brief Updates a credential in the keyring.
          * @param credential The credential to update
          * @return True if successful, else false
          */
-        bool updateCredential(const Credential& credential);
+        bool update(const Credential& credential) noexcept;
         /**
          * @brief Deletes a credential from the keyring.
          * @param name The name of the credential to delete
          * @return True if successful, else false
          */
-        bool deleteCredential(const std::string& name);
+        bool remove(const std::string& name) noexcept;
         /**
          * @brief Destroys the keyring.
-         * @brief This will delete all data in the keyring and put the object in a state where no data can be saved to disk.
+         * @brief This will delete all data in the keyring and remove it from the system.
+         * @brief The object should not be used after as all methods will return false.
          * @return True if successful, else false
          */
-        bool destroy();
+        bool destroy() noexcept;
+        Keyring& operator=(const Keyring&) = delete;
+        /**
+         * @brief Assigns a Keyring via move.
+         * @param other The Keyring to move
+         */
+        Keyring& operator=(Keyring&& other) noexcept;
 
     private:
+        mutable std::mutex m_mutex;
         std::string m_name;
-        std::shared_ptr<Database::SqlDatabase> m_database;
+        std::unique_ptr<Database::SqliteDatabase> m_database;
         std::vector<Credential> m_credentials;
     };
 }

@@ -8,7 +8,7 @@ using namespace Nickvision::System;
 
 namespace Nickvision::Localization
 {
-    std::string Documentation::getHelpUrl(const std::string& englishShortName, const std::string& htmlDocStore, const std::string& pageName)
+    std::string Documentation::getHelpUrl(const std::string& englishShortName, const std::string& htmlDocStore, const std::string& pageName) noexcept
     {
 #ifdef __linux__
         if (Environment::getDeploymentMode() != DeploymentMode::Snap)

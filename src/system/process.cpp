@@ -28,7 +28,7 @@ using namespace Nickvision::Helpers;
 namespace Nickvision::System
 {
 #ifdef _WIN32
-    static std::vector<DWORD> getJobProcesses(HANDLE job)
+    static std::vector<DWORD> getJobProcesses(HANDLE job) noexcept
     {
         std::vector<DWORD> pids;
         size_t bufferSize{ sizeof(JOBOBJECT_BASIC_PROCESS_ID_LIST) + 255 * sizeof(ULONG_PTR) };
@@ -97,12 +97,12 @@ namespace Nickvision::System
         }
         SetInformationJobObject(m_job, JobObjectExtendedLimitInformation, &jeli, sizeof(jeli));
         //Create process arguments
-        std::wstring appArgs{ L"\"" + m_path.wstring() + L"\"" };
+        std::wstring appArgs{ StringHelpers::wstr(StringHelpers::quote(m_path.string())) };
         for(const std::string& arg : m_args)
         {
-            if(arg.find(' ') != std::string::npos && arg[0] != '\"')
+            if(arg.find(' ') != std::string::npos)
             {
-                appArgs += L" \"" + StringHelpers::wstr(arg) + L"\"";
+                appArgs += L" " + StringHelpers::wstr(StringHelpers::quote(arg));
             }
             else
             {
@@ -141,7 +141,7 @@ namespace Nickvision::System
 #endif
     }
 
-    Process::~Process()
+    Process::~Process() noexcept
     {
         if(m_watchThread.joinable())
         {
@@ -161,37 +161,37 @@ namespace Nickvision::System
 #endif
     }
 
-    Event<ProcessExitedEventArgs>& Process::exited()
+    Event<ProcessExitedEventArgs>& Process::exited() noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_exited;
     }
 
-    const std::filesystem::path& Process::getPath() const
+    const std::filesystem::path& Process::getPath() const noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_path;
     }
 
-    ProcessState Process::getState() const
+    ProcessState Process::getState() const noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_state;
     }
 
-    int Process::getExitCode() const
+    int Process::getExitCode() const noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_exitCode;
     }
 
-    const std::string& Process::getOutput() const
+    const std::string& Process::getOutput() const noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_output;
     }
 
-    double Process::getCPUUsage() const
+    double Process::getCPUUsage() const noexcept
     {
         if(m_state != ProcessState::Running)
         {
@@ -275,7 +275,7 @@ namespace Nickvision::System
         return 0.0;
     }
 
-    unsigned long long Process::getRAMUsage() const
+    unsigned long long Process::getRAMUsage() const noexcept
     {
         if(m_state != ProcessState::Running)
         {
@@ -351,7 +351,7 @@ namespace Nickvision::System
         return 0L;
     }
 
-    bool Process::start()
+    bool Process::start() noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if(m_state == ProcessState::Running)
@@ -382,6 +382,10 @@ namespace Nickvision::System
             }
             //Create process arguments
             std::string filename{ m_path.filename().string() };
+            if(filename.find(' ') != std::string::npos)
+            {
+                filename = StringHelpers::quote(filename);
+            }
             std::vector<char*> appArgs;
             appArgs.push_back(filename.data());
             for(std::string& arg : m_args)
@@ -414,7 +418,7 @@ namespace Nickvision::System
         return true;
     }
 
-    bool Process::kill()
+    bool Process::kill() noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if(m_state != ProcessState::Running && m_state != ProcessState::Paused)
@@ -434,7 +438,7 @@ namespace Nickvision::System
         return true;
     }
 
-    bool Process::resume()
+    bool Process::resume() noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if(m_state != ProcessState::Paused)
@@ -479,7 +483,7 @@ namespace Nickvision::System
         return true;
     }
 
-    bool Process::pause()
+    bool Process::pause() noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if(m_state != ProcessState::Running)
@@ -524,7 +528,7 @@ namespace Nickvision::System
         return true;
     }
 
-    int Process::waitForExit()
+    int Process::waitForExit() noexcept
     {
         while(getState() != ProcessState::Completed)
         {
@@ -533,7 +537,7 @@ namespace Nickvision::System
         return getExitCode();
     }
 
-    bool Process::send(const std::string& s)
+    bool Process::send(const std::string& s) noexcept
     {
         if(m_state != ProcessState::Running)
         {
@@ -546,7 +550,7 @@ namespace Nickvision::System
 #endif
     }
 
-    bool Process::sendCommand(std::string s)
+    bool Process::sendCommand(std::string s) noexcept
     {
 #ifndef _WIN32
         s += "\n";
@@ -556,7 +560,7 @@ namespace Nickvision::System
         return send(s);
     }
 
-    void Process::watch()
+    void Process::watch() noexcept
     {
 #ifdef _WIN32
         DWORD exitCode{ 0 };

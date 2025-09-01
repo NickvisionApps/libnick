@@ -1,5 +1,40 @@
 # Changelog
 
+## 2025.9.0
+### Breaking Changes
+#### App
+- Removed `DataFileBase`
+- Removed `DataFileManager`
+- Moved `AppInfo::convertUrlMapToVector()` to `Helpers::CodeHelpers` namespace
+- Moved `App::CancellationToken` to `Helpers` namespace
+#### Database
+- Rewrote all classes with a more modern interface
+- Renamed all classes with `Sqlite` prefix
+#### Keyring
+- Rewrote `Keyring` class with a more modern interface
+- Moved `SystemCredentials` to `System::Credentials` namespace
+- Removed `CredentialCheckStatus` enum
+- Removed `PasswordStrength` module
+#### Network
+- Removed `DNS` module
+- Removed `Socket` and related classes
+#### Taskbar
+- Removed module
+### New APIs
+#### Helpers
+- Added `DEFINE_ENUM_FLAGS()` macro to `CodeHelpers` namespace
+- Added `IJsonSerializable` interface
+- Added `JsonFileBase` to replace `DataFileBase`
+- Added `quote()` function to `StringHelpers` namespace
+#### Keyring
+- Added `Space` value to `PasswordContent`
+#### System
+- Added `execAsync()` function to `Environment` namespace 
+### Fixes
+- Marked functions and methods with `noexcept` where applicable
+#### System
+- Fixed `Process`'s handling of quoted strings
+
 ## 2025.8.0
 ### Breaking Changes
 None

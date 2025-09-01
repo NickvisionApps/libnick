@@ -15,14 +15,14 @@ namespace Nickvision::Helpers
         /**
          * @brief Constructs a PairHash.
          */
-        PairHash() = default;
+        PairHash() noexcept = default;
         /**
          * @brief The call operator.
          * @param p The std::pair to determine a hash value for
          * @return The hash value of the std::pair
          */
         template <class T1, class T2>
-        size_t operator()(const std::pair<T1,T2>& p) const
+        size_t operator()(const std::pair<T1,T2>& p) const noexcept
         {
             return CodeHelpers::combineHash(std::hash<T1>()(p.first), std::hash<T2>()(p.second));
         }

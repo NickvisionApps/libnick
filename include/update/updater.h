@@ -47,7 +47,7 @@ namespace Nickvision::Update
          * @brief Constructs an Updater via copy.
          * @param u The object to copy 
          */
-        Updater(const Updater& u);
+        Updater(const Updater& u) noexcept;
             /**
          * @brief Constructs an Updater via move.
          * @param u The object to move 
@@ -59,7 +59,7 @@ namespace Nickvision::Update
          * @param versionType The type of the version to get
          * @return The current version of the provided type if available, else empty Version
          */
-        Version fetchCurrentVersion(VersionType versionType);
+        Version fetchCurrentVersion(VersionType versionType) noexcept;
         /**
          * @brief Downloads an update for the application.
          * @brief fetchCurrentVersion should be called first before running this method.
@@ -70,7 +70,7 @@ namespace Nickvision::Update
          * @param progress An optional cpr::ProgressCallback to track the downloading update
          * @return True if successful, else false
          */
-        bool downloadUpdate(VersionType versionType, const std::filesystem::path& path, const std::string& assetName, bool exactMatch = true, const cpr::ProgressCallback& progress = {});
+        bool downloadUpdate(VersionType versionType, const std::filesystem::path& path, const std::string& assetName, bool exactMatch = true, const cpr::ProgressCallback& progress = {}) noexcept;
 #ifdef _WIN32
         /**
          * @brief Downloads and installs an application update for Windows. 
@@ -80,14 +80,14 @@ namespace Nickvision::Update
          * @param progress An optional cpr::ProgressCallback to track the downloading update
          * @return True if successful, else false
          */
-        bool windowsUpdate(VersionType versionType, const cpr::ProgressCallback& progress = {});
+        bool windowsUpdate(VersionType versionType, const cpr::ProgressCallback& progress = {}) noexcept;
 #endif
         /**
          * @brief Copies an Updater.
          * @param u The Updater to copy
          * @return this
          */
-        Updater& operator=(const Updater& u);
+        Updater& operator=(const Updater& u) noexcept;
         /**
          * @brief Moves an Updater.
          * @param u The Updater to move

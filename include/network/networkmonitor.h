@@ -52,17 +52,17 @@ namespace Nickvision::Network
         /**
          * @brief Destructs a NetworkMonitor. 
          */
-        ~NetworkMonitor();
+        ~NetworkMonitor() noexcept;
         /**
          * @brief Gets the StateChanged event. This event is invoked whenever the state of the network connection changes.
          * @return The StateChanged event
          */
-        Events::Event<NetworkStateChangedEventArgs>& stateChanged();
+        Events::Event<NetworkStateChangedEventArgs>& stateChanged() noexcept;
         /**
          * @brief Gets the state of the network connection.
          * @return NetworkState
          */
-        NetworkState getConnectionState() const;
+        NetworkState getConnectionState() const noexcept;
 #ifdef _WIN32
         ULONG STDMETHODCALLTYPE AddRef() override;
         ULONG STDMETHODCALLTYPE Release() override;
@@ -75,7 +75,7 @@ namespace Nickvision::Network
         /**
          * @brief Manually checks the state of the system's network connection. If a change is detected, the StateChanged event will be invoked.
          */
-        void checkConnectionState();
+        void checkConnectionState() noexcept;
         mutable std::mutex m_mutex;
         Events::Event<NetworkStateChangedEventArgs> m_stateChanged;
         NetworkState m_connectionState;

@@ -13,13 +13,6 @@ TEST(NetworkTests, ConnectedGlobal)
     ASSERT_EQ(netmon.getConnectionState(), NetworkState::ConnectedGlobal);
 }
 
-TEST(NetworkTests, DisableNetCheck)
-{
-    ASSERT_TRUE(Environment::setVariable("AURA_DISABLE_NETCHECK", "true"));
-    NetworkMonitor netmon;
-    ASSERT_EQ(netmon.getConnectionState(), NetworkState::ConnectedGlobal);
-}
-
 TEST(NetworkTests, IPv4Address1)
 {
     IPv4Address ip{ 192, 168, 1, 1 };

@@ -1,4 +1,4 @@
-#include "keyring/systemcredentials.h"
+#include "system/credentials.h"
 #include <vector>
 #include "helpers/stringhelpers.h"
 #include "keyring/passwordgenerator.h"
@@ -13,14 +13,15 @@
 #endif
 
 using namespace Nickvision::Helpers;
+using namespace Nickvision::Keyring;
 
-namespace Nickvision::Keyring
+namespace Nickvision::System
 {
 #if !defined(_WIN32) && (!defined(__APPLE__) || defined(APPLE_USE_LIBSECRET))
     static const SecretSchema KEYRING_SCHEMA = { "org.nickvision.libnick", SECRET_SCHEMA_NONE, { { "application", SECRET_SCHEMA_ATTRIBUTE_STRING }, { "NULL", SECRET_SCHEMA_ATTRIBUTE_STRING } } };
 #endif
 
-    std::optional<Credential> SystemCredentials::getCredential(const std::string& name)
+    std::optional<Credential> Credentials::get(const std::string& name) noexcept
     {
 #ifdef _WIN32
         CREDENTIALW* cred{ nullptr };
@@ -90,18 +91,18 @@ namespace Nickvision::Keyring
         return std::nullopt;
     }
 
-    std::optional<Credential> SystemCredentials::addCredential(const std::string& name)
+    std::optional<Credential> Credentials::create(const std::string& name) noexcept
     {
         PasswordGenerator passGen;
-        Credential c{ name, "", "default", passGen.next() };
-        if (addCredential(c))
+        Credential c{ name, "", "default", passGen.next(64) };
+        if (add(c))
         {
             return c;
         }
         return std::nullopt;
     }
 
-    bool SystemCredentials::addCredential(const Credential& credential)
+    bool Credentials::add(const Credential& credential) noexcept
     {
         if(credential.getPassword().empty())
         {
@@ -156,7 +157,7 @@ namespace Nickvision::Keyring
 #endif
     }
 
-    bool SystemCredentials::updateCredential(const Credential& credential)
+    bool Credentials::update(const Credential& credential) noexcept
     {
         if(credential.getPassword().empty())
         {
@@ -237,7 +238,7 @@ namespace Nickvision::Keyring
         return false;
     }
     
-    bool SystemCredentials::deleteCredential(const std::string& name)
+    bool Credentials::remove(const std::string& name) noexcept
     {
 #ifdef _WIN32
         std::wstring wName{ StringHelpers::wstr(name) };

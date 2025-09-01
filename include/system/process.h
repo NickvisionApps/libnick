@@ -59,88 +59,88 @@ namespace Nickvision::System
          * @brief Destructs a Process.
          * @brief This method will wait for the process to exit if it is still running.
          */
-        ~Process();
+        ~Process() noexcept;
         /**
          * @brief Gets the event for when the process has exited.
          * @return The process exited event
          */
-        Events::Event<ProcessExitedEventArgs>& exited();
+        Events::Event<ProcessExitedEventArgs>& exited() noexcept;
         /**
          * @brief Gets the path of the process.
          * @return The path of the process
          */
-        const std::filesystem::path& getPath() const;
+        const std::filesystem::path& getPath() const noexcept;
         /**
          * @brief Gets the state of the proicess.
          * @return The state of the process.
          */
-        ProcessState getState() const;
+        ProcessState getState() const noexcept;
         /**
          * @brief Gets the exit code of the process.
          * @return The exit code of the process. -1 if the process has not completed
          */
-        int getExitCode() const;
+        int getExitCode() const noexcept;
         /**
          * @brief Gets the console output of the process.
          * @return The console output of the process. Empty if the process has not completed
          */
-        const std::string& getOutput() const;
+        const std::string& getOutput() const noexcept;
         /**
          * @brief Gets the percent of the CPU being used by the process.
          * @return The CPU usage of the process
          */
-        double getCPUUsage() const;
+        double getCPUUsage() const noexcept;
         /**
          * @brief Gets the amount of RAM being used by the process in bytes.
          * @return The amount of RAM used by the process
          */
-        unsigned long long getRAMUsage() const;
+        unsigned long long getRAMUsage() const noexcept;
         /**
          * @brief Starts the process.
          * @brief Use Process::resume() to start again a paused process.
          * @return True if the process was started, else false
          */
-        bool start();
+        bool start() noexcept;
         /**
          * @brief Kills the process.
          * @return True if the process was killed, else false
          */
-        bool kill();
+        bool kill() noexcept;
         /**
          * @brief Resumes the process.
          * @return True if the process was resumed, else false
          */
-        bool resume();
+        bool resume() noexcept;
         /**
          * @brief Pauses the process.
          * @return True if the process was paused, else false
          */
-        bool pause();
+        bool pause() noexcept;
         /**
          * @brief Waits for the process to exit.
          * @brief This function will block until the process has exited.
          * @brief Make sure to call start() / resume() before calling this function.
          * @return The exit code of the process
          */
-        int waitForExit();
+        int waitForExit() noexcept;
         /**
          * @brief Sends text to the process' console.
          * @param s The text to send
          * @return True if the text is sent, else false
          */
-        bool send(const std::string& s);
+        bool send(const std::string& s) noexcept;
         /**
          * @brief Sends text to the process' console and adds the return characters.
          * @param s The command to send
          * @return True if the command is sent, else false
          */
-        bool sendCommand(std::string s);
+        bool sendCommand(std::string s) noexcept;
 
     private:
         /**
          * @brief Watches the process.
          */
-        void watch();
+        void watch() noexcept;
         mutable std::mutex m_mutex;
         std::filesystem::path m_path;
         std::vector<std::string> m_args;

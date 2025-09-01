@@ -23,7 +23,6 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <algorithm>
 #include <functional>
 #include <mutex>
 #include <type_traits>
@@ -51,12 +50,12 @@ namespace Nickvision::Events
         /**
          * @brief Constructs an Event.
          */
-        Event() = default;
+        Event() noexcept = default;
         /**
          * @brief Constructs an Event via copy.
          * @param e The object to copy
          */
-        Event(const Event& e)
+        Event(const Event& e) noexcept
         { 
             std::lock_guard<std::mutex> lock{ e.m_mutex };
             m_handlers = e.m_handlers;
@@ -69,12 +68,13 @@ namespace Nickvision::Events
         {
             std::lock_guard<std::mutex> lock{ e.m_mutex };
             m_handlers = std::move(e.m_handlers);
+            e.m_handlers.clear();
         }
         /**
          * @brief Gets the number of handlers subscribed to the event.
          * @return The number of handlers
          */
-        size_t count() const
+        size_t count() const noexcept
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
             return m_handlers.size();
@@ -84,7 +84,7 @@ namespace Nickvision::Events
          * @param handler The handler function
          * @return The handler id
          */
-        HandlerId subscribe(const std::function<void(const T&)>& handler)
+        HandlerId subscribe(const std::function<void(const T&)>& handler) noexcept
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
             m_handlers.push_back(handler);
@@ -94,7 +94,7 @@ namespace Nickvision::Events
          * @brief Unsubscribes a handler from the event.
          * @param id The handler id
          */
-        void unsubscribe(HandlerId id)
+        void unsubscribe(HandlerId id) noexcept
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
             if (static_cast<size_t>(id) < 0 || static_cast<size_t>(id) >= m_handlers.size())
@@ -107,7 +107,7 @@ namespace Nickvision::Events
          * @brief Invokes the event, calling all handlers.
          * @param param The parameter to pass to the handlers
          */
-        void invoke(const T& param) const
+        void invoke(const T& param) const noexcept
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
             for (const std::function<void(const T&)>& handler : m_handlers)
@@ -123,7 +123,7 @@ namespace Nickvision::Events
          * @param handler The handler function
          * @return The handler id
          */
-        HandlerId operator+=(const std::function<void(const T&)>& handler)
+        HandlerId operator+=(const std::function<void(const T&)>& handler) noexcept
         {
             return subscribe(handler);
         }
@@ -131,7 +131,7 @@ namespace Nickvision::Events
          * @brief Unsubscribes a handler from the event.
          * @param id The handler id
          */
-        void operator-=(HandlerId id)
+        void operator-=(HandlerId id) noexcept
         {
             unsubscribe(id);
         }
@@ -139,7 +139,7 @@ namespace Nickvision::Events
          * @brief Invokes the event, calling all handlers.
          * @param param The parameter to pass to the handlers
          */
-        void operator()(const T& param)
+        void operator()(const T& param) noexcept
         {
             invoke(param);
         }
@@ -148,7 +148,7 @@ namespace Nickvision::Events
          * @param e The Event to copy
          * @return this
          */
-        Event& operator=(const Event& e)
+        Event& operator=(const Event& e) noexcept
         {
             if (this != &e)
             {
@@ -170,6 +170,7 @@ namespace Nickvision::Events
                 std::lock_guard<std::mutex> lock{ m_mutex };
                 std::lock_guard<std::mutex> lock2{ e.m_mutex };
                 m_handlers = std::move(e.m_handlers);
+                e.m_handlers.clear();
             }
             return *this;
         }
@@ -177,7 +178,7 @@ namespace Nickvision::Events
          * @brief Gets whether or not the object is valid or not.
          * @return True if valid (if count() > 0), else false 
          */
-        operator bool() const
+        operator bool() const noexcept
         {
             return count() > 0;
         }

@@ -35,14 +35,14 @@ namespace Nickvision::Network::Web
      * @param url The url to check
      * @return True if valid website, else false
      */
-    bool getWebsiteExists(const std::string& url);
+    bool getWebsiteExists(const std::string& url) noexcept;
     /**
      * @brief Makes a GET request for json from a url.
      * @param url The url of the json resource
      * @return The parsed json value
      * @return An empty json value if error
      */
-    boost::json::value getJson(const std::string& url);
+    boost::json::value getJson(const std::string& url) noexcept;
     /**
      * @brief Downloads a file to disk.
      * @param url The url of the file to download
@@ -50,7 +50,7 @@ namespace Nickvision::Network::Web
      * @param progress An optional function to receive progress on the download
      * @param overwrite Whether or not to overwrite existing files on disk
      */
-    bool downloadFile(const std::string& url, const std::filesystem::path& path, const cpr::ProgressCallback& progress = {}, bool overwrite = true);
+    bool downloadFile(const std::string& url, const std::filesystem::path& path, const cpr::ProgressCallback& progress = {}, bool overwrite = true) noexcept;
 }
 
 #endif //WEB_H

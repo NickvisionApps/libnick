@@ -39,19 +39,19 @@ namespace Nickvision::Helpers::StringHelpers
      * @param base64 The base64 encoded string
      * @return The bytes list from the base64 encoded string, empty list if error
      */
-    std::vector<std::byte> decode(const std::string& base64);
+    std::vector<std::byte> decode(const std::string& base64) noexcept;
     /**
      * @brief Converts a list of bytes into a base64 encoded string.
      * @param bytes The list of bytes
      * @return The base64 encoded string of the bytes list
      */
-    std::string encode(const std::vector<std::byte>& bytes);
+    std::string encode(const std::vector<std::byte>& bytes) noexcept;
     /**
      * @brief Gets whether or not the provided string is a valid url
      * @param s The string to check
      * @return True if the string is a valid url, else false
      */
-    bool isValidUrl(const std::string& s);
+    bool isValidUrl(const std::string& s) noexcept;
     /**
      * @brief Concatenates the elements of a string list using the specified separator between each element.
      * @param values The list of strings to join
@@ -59,31 +59,37 @@ namespace Nickvision::Helpers::StringHelpers
      * @param separateLast Whether or not to include the separator for the last joined element
      * @return A single string that consists of all elements of the string list separated by the delimiter
      */
-    std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = false);
+    std::string join(const std::vector<std::string>& values, const std::string& separator, bool separateLast = false) noexcept;
     /**
      * @brief Gets a fully lowercase string from the provided string.
      * @param s The string to get lowercase
      * @return The new lowercase string
      */
-    std::string lower(std::string s);
+    std::string lower(std::string s) noexcept;
     /**
      * @brief Generates a new uuid value.
      * @return The uuid value
      */
-    std::string newUuid();
+    std::string newUuid() noexcept;
     /**
      * @brief Generates a new guid value.
      * @brief This function simple calls newUuid() and returns the result.
      * @return The guid value
      */
-    std::string newGuid();
+    std::string newGuid() noexcept;
     /**
      * @brief Normalizes a string for use in a filename.
      * @param s The string to normalize
      * @param windowsOnly Whether or not to normalize strictly for Windows
      * @return The new normalized string
      */
-    std::string normalizeForFilename(const std::string& s, bool windowsOnly = false);
+    std::string normalizeForFilename(const std::string& s, bool windowsOnly = false) noexcept;
+    /**
+     * @brief Quotes a string for use in a command line.
+     * @param s The string to quote
+     * @return The quoted string
+     */
+    std::string quote(const std::string& s) noexcept;
     /**
      * @brief Replaces a substring within a string with a new string.
      * @param s The string to work on
@@ -91,7 +97,7 @@ namespace Nickvision::Helpers::StringHelpers
      * @param replace The new string to replace with
      * @return The new replaced string
      */
-    std::string replace(std::string s, const std::string& toReplace, const std::string& replace);
+    std::string replace(std::string s, const std::string& toReplace, const std::string& replace) noexcept;
     /**
      * @brief Replaces a character within a string with a new character.
      * @param s The string to work on
@@ -99,19 +105,19 @@ namespace Nickvision::Helpers::StringHelpers
      * @param replace The new character to replace with
      * @return The new replaced string
      */
-    std::string replace(std::string s, char toReplace, char replace);
+    std::string replace(std::string s, char toReplace, char replace) noexcept;
     /**
      * @brief Splits a string based on argument delimiters.
      * @param s The string to split
      * @return The splits of the argument string
      */
-    std::vector<std::string> splitArgs(std::string s);
+    std::vector<std::string> splitArgs(std::string s) noexcept;
     /**
      * @brief Converts the wstring to a string.
      * @param s The wstring to convert
      * @return The string version of the wstring
      */
-    std::string str(const std::wstring& s);
+    std::string str(const std::wstring& s) noexcept;
     /**
      * @brief Converts a string to an unsigned int
      * @param s The string to convert
@@ -121,32 +127,32 @@ namespace Nickvision::Helpers::StringHelpers
      * @return UINT_MAX if the converted string is too long
      * @return 0 if error
      */
-    unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10);
+    unsigned int stoui(const std::string& s, size_t* idx = nullptr, int base = 10) noexcept;
     /**
      * @brief Trims whitespace form the beginning and end of a string.
      * @param s The string to trim (unmodified)
      * @return The new trimmed string
      */
-    std::string trim(const std::string& s);
+    std::string trim(const std::string& s) noexcept;
     /**
      * @brief Trims the delimiter character form the beginning and end of a string.
      * @param s The string to trim (unmodified)
      * @param delimiter The character to trim
      * @return The new trimmed string
      */
-    std::string trim(const std::string& s, char delimiter);
+    std::string trim(const std::string& s, char delimiter) noexcept;
     /**
      * @brief Gets a fully uppercase string from the provided string.
      * @param s The string to get uppercase
      * @return The new uppercase string
      */
-    std::string upper(std::string s);
+    std::string upper(std::string s) noexcept;
     /**
      * @brief Converts the string to a wstring.
      * @param s The string to convert
      * @return The wstring version of the string
      */
-    std::wstring wstr(const std::string& s);
+    std::wstring wstr(const std::string& s) noexcept;
     /**
      * @brief Splits a string based on a delimiter.
      * @tparam T The type of the resulting splits (must be a type that can be implicitly converted to string)
@@ -156,7 +162,7 @@ namespace Nickvision::Helpers::StringHelpers
      * @return The splits of the string
      */
     template<StringImplicitlyConstructible T = std::string>
-    std::vector<T> split(const std::string& s, const std::string& delimiter, bool includeEmpty = true)
+    std::vector<T> split(const std::string& s, const std::string& delimiter, bool includeEmpty = true) noexcept
     {
         std::vector<T> splits;
         size_t last{ 0 };
@@ -187,7 +193,7 @@ namespace Nickvision::Helpers::StringHelpers
      * @return The splits of the string
      */
     template<StringImplicitlyConstructible T = std::string>
-    std::vector<T> split(const std::string& s, char delimiter, bool includeEmpty = true)
+    std::vector<T> split(const std::string& s, char delimiter, bool includeEmpty = true) noexcept
     {
         return split<T>(s, std::string(1, delimiter), includeEmpty);
     }

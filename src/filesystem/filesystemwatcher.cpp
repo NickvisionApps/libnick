@@ -20,9 +20,9 @@ FSEventStreamEventFlags   kFSEventStreamEventFlagItemRenamed = 0x00000800;
 
 namespace Nickvision::Filesystem
 {
-    FileSystemWatcher::FileSystemWatcher(const std::filesystem::path& path, bool incudeSubdirectories, WatcherFlags watcherFlags)
+    FileSystemWatcher::FileSystemWatcher(const std::filesystem::path& path, bool includeSubdirectories, WatcherFlags watcherFlags)
         : m_path{ path },
-        m_includeSubdirectories{ incudeSubdirectories },
+        m_includeSubdirectories{ includeSubdirectories },
         m_watcherFlags{ watcherFlags },
         m_watching{ true }
     {
@@ -52,7 +52,7 @@ namespace Nickvision::Filesystem
         m_watchThread = std::thread(&FileSystemWatcher::watch, this);
     }
 
-    FileSystemWatcher::~FileSystemWatcher()
+    FileSystemWatcher::~FileSystemWatcher() noexcept
     {
         m_watching = false;
 #ifdef _WIN32
@@ -72,27 +72,27 @@ namespace Nickvision::Filesystem
         }
     }
 
-    const std::filesystem::path& FileSystemWatcher::getPath() const
+    const std::filesystem::path& FileSystemWatcher::getPath() const noexcept
     {
         return m_path;
     }
 
-    WatcherFlags FileSystemWatcher::getWatcherFlags() const
+    WatcherFlags FileSystemWatcher::getWatcherFlags() const noexcept
     {
         return m_watcherFlags;
     }
 
-    bool FileSystemWatcher::getIncludeSubdirectories() const
+    bool FileSystemWatcher::getIncludeSubdirectories() const noexcept
     {
         return m_includeSubdirectories;
     }
 
-    Events::Event<FileSystemChangedEventArgs>& FileSystemWatcher::changed()
+    Events::Event<FileSystemChangedEventArgs>& FileSystemWatcher::changed() noexcept
     {
         return m_changed;
     }
 
-    bool FileSystemWatcher::isExtensionWatched(const std::filesystem::path& extension)
+    bool FileSystemWatcher::isExtensionWatched(const std::filesystem::path& extension) const noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if (m_extensionFilters.size() == 0)
@@ -102,7 +102,7 @@ namespace Nickvision::Filesystem
         return std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) != m_extensionFilters.end();
     }
 
-    bool FileSystemWatcher::addExtensionFilter(const std::filesystem::path& extension)
+    bool FileSystemWatcher::addExtensionFilter(const std::filesystem::path& extension) noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         if (std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) == m_extensionFilters.end())
@@ -113,7 +113,7 @@ namespace Nickvision::Filesystem
         return false;
     }
 
-    bool FileSystemWatcher::removeExtensionFilter(const std::filesystem::path& extension)
+    bool FileSystemWatcher::removeExtensionFilter(const std::filesystem::path& extension) noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         auto find{ std::find(m_extensionFilters.begin(), m_extensionFilters.end(), extension) };
@@ -125,14 +125,14 @@ namespace Nickvision::Filesystem
         return false;
     }
 
-    bool FileSystemWatcher::clearExtensionFilters()
+    bool FileSystemWatcher::clearExtensionFilters() noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         m_extensionFilters.clear();
         return true;
     }
 
-    void FileSystemWatcher::watch()
+    void FileSystemWatcher::watch() noexcept
     {
 #ifdef _WIN32
         HANDLE folder{ CreateFileW(m_path.c_str(), FILE_LIST_DIRECTORY, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, nullptr) };
@@ -283,7 +283,7 @@ namespace Nickvision::Filesystem
     }
 
 #ifdef __APPLE__
-    void FileSystemWatcher::callback(ConstFSEventStreamRef stream, void* clientCallBackInfo, size_t numEvents, void* eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[])
+    void FileSystemWatcher::callback(ConstFSEventStreamRef stream, void* clientCallBackInfo, size_t numEvents, void* eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]) noexcept
     {
         FileSystemWatcher* watcher{ static_cast<FileSystemWatcher*>(clientCallBackInfo) };
         char** paths{ static_cast<char**>(eventPaths) };

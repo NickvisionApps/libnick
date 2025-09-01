@@ -4,7 +4,7 @@
 
 namespace Nickvision::Update
 {
-    Version::Version()
+    Version::Version() noexcept
         : m_major{ 0 },
         m_minor{ 0 },
         m_build{ 0 },
@@ -13,7 +13,7 @@ namespace Nickvision::Update
 
     }
 
-    Version::Version(int major, int minor, int build)
+    Version::Version(int major, int minor, int build) noexcept
         : m_major{ major },
         m_minor{ minor },
         m_build{ build },
@@ -31,7 +31,7 @@ namespace Nickvision::Update
     {
         if (m_dev[0] != '-' && m_dev[0] != '.')
         {
-            throw std::invalid_argument("Dev version must contain a '-'.");
+            throw std::invalid_argument("Dev version must contain a '-' or '.' as the first character.");
         }
     }
 
@@ -66,51 +66,54 @@ namespace Nickvision::Update
             throw std::invalid_argument("Ill-formated version string.");
         }
         size_t dashIndex{ s.find('-') };
-        m_build = std::stoi(s.substr(0, dashIndex));
+        if(dashIndex == std::string::npos)
+        {
+            dashIndex = s.find('.');
+        }
         s.erase(0, dashIndex);
-        if (!s.empty() && s[0] == '-') //dev version
+        if (!s.empty() && (s[0] == '-' || s[0] == '.')) //dev version
         {
             m_dev = s;
         }
         m_str = std::to_string(m_major) + "." + std::to_string(m_minor) + "." + std::to_string(m_build) + m_dev;
     }
 
-    int Version::getMajor() const
+    int Version::getMajor() const noexcept
     {
         return m_major;
     }
 
-    int Version::getMinor() const
+    int Version::getMinor() const noexcept
     {
         return m_minor;
     }
 
-    int Version::getBuild() const
+    int Version::getBuild() const noexcept
     {
         return m_build;
     }
 
-    const std::string& Version::getDev() const
+    const std::string& Version::getDev() const noexcept
     {
         return m_dev;
     }
 
-    VersionType Version::getVersionType() const
+    VersionType Version::getVersionType() const noexcept
     {
         return m_dev.empty() ? VersionType::Stable : VersionType::Preview;
     }
 
-    const std::string& Version::str() const
+    const std::string& Version::str() const noexcept
     {
         return m_str;
     }
 
-    bool Version::empty() const
+    bool Version::empty() const noexcept
     {
         return m_major == 0 && m_minor == 0 && m_build == 0 && m_dev.empty();
     }
 
-    bool Version::operator<(const Version& compare) const
+    bool Version::operator<(const Version& compare) const noexcept
     {
         if(m_major > compare.m_major)
         {
@@ -156,12 +159,12 @@ namespace Nickvision::Update
         return false;
     }
 
-    bool Version::operator<=(const Version& compare) const
+    bool Version::operator<=(const Version& compare) const noexcept
     {
         return operator<(compare) || operator==(compare);
     }
 
-    bool Version::operator>(const Version& compare) const
+    bool Version::operator>(const Version& compare) const noexcept
     {
         if(m_major > compare.m_major)
         {
@@ -207,24 +210,18 @@ namespace Nickvision::Update
         return false;
     }
 
-    bool Version::operator>=(const Version& compare) const
+    bool Version::operator>=(const Version& compare) const noexcept
     {
         return operator>(compare) || operator==(compare);
     }
 
-    bool Version::operator==(const Version& compare) const
+    bool Version::operator==(const Version& compare) const noexcept
     {
         return m_major == compare.m_major && m_minor == compare.m_minor && m_build == compare.m_build && m_dev == compare.m_dev;
     }
 
-    bool Version::operator!=(const Version& compare) const
+    bool Version::operator!=(const Version& compare) const noexcept
     {
         return !(operator==(compare));
-    }
-
-    std::ostream& operator<<(std::ostream& os, const Version& version)
-    {
-        os << version.str();
-        return os;
     }
 }

@@ -40,49 +40,49 @@ namespace Nickvision::System
          * @brief Constructs a SuspendInhibitor.
          * @brief This will not inhibit the system from suspending until the inhibit() function is called.
          */
-        SuspendInhibitor();
+        SuspendInhibitor() noexcept;
         /**
-         * @brief Copies a SuspendInhibitor object.
-         * @param inhibitor The object to move
+         * @brief Constructs a SuspendInhibitor via copy.
+         * @param other The object to copy
          */
-        SuspendInhibitor(const SuspendInhibitor& inhibitor);
+        SuspendInhibitor(const SuspendInhibitor& other) noexcept;
         /**
-         * @brief Moves a SuspendInhibitor object.
-         * @param inhibitor The object to move
+         * @brief Constructs a SuspendInhibitor via move.
+         * @param other The object to move
          */
-        SuspendInhibitor(SuspendInhibitor&& inhibitor) noexcept;
+        SuspendInhibitor(SuspendInhibitor&& other) noexcept;
         /**
          * @brief Destructs a SuspendInhibitor.
          * @brief If the system is being inhibited, it will uninhibit.
          */
-        ~SuspendInhibitor();
+        ~SuspendInhibitor() noexcept;
         /**
          * @brief Gets whether or not the system is being inhibited from suspending.
          * @return True if inhibiting, else false
          */
-        bool isInhibiting() const;
+        bool isInhibiting() const noexcept;
         /**
          * @brief Inhibits the system from suspending.
          * @return True if successful, else false
          */
-        bool inhibit();
+        bool inhibit() noexcept;
         /**
          * @brief Uninhibits the system from suspending.
          * @return True if successful, else false
          */
-        bool uninhibit();
+        bool uninhibit() noexcept;
         /**
-         * @brief Copies a SuspendInhibitor object.
-         * @param inhibitor The SuspendInhibitor to copy
+         * @brief Assigns a SuspendInhibitor via copy.
+         * @param other The object to copy
          * @return this
          */
-        SuspendInhibitor& operator=(const SuspendInhibitor& inhibitor);
+        SuspendInhibitor& operator=(const SuspendInhibitor& other) noexcept;
         /**
-         * @brief Moves a SuspendInhibitor object.
-         * @param inhibitor The SuspendInhibitor to move
+         * @brief Assigns a SuspendInhibitor via move.
+         * @param other The object to move
          * @return this
          */
-        SuspendInhibitor& operator=(SuspendInhibitor&& inhibitor) noexcept;
+        SuspendInhibitor& operator=(SuspendInhibitor&& other) noexcept;
 
     private:
         mutable std::mutex m_mutex;

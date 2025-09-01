@@ -2,7 +2,7 @@
 
 namespace Nickvision::App
 {
-    WindowGeometry::WindowGeometry()
+    WindowGeometry::WindowGeometry() noexcept
         : m_width{ 800 },
         m_height{ 600 },
         m_isMaximized{ false },
@@ -12,7 +12,7 @@ namespace Nickvision::App
 
     }
 
-    WindowGeometry::WindowGeometry(long width, long height, bool isMaximized)
+    WindowGeometry::WindowGeometry(long width, long height, bool isMaximized) noexcept
         : m_width{ width },
         m_height{ height },
         m_isMaximized{ isMaximized },
@@ -22,7 +22,7 @@ namespace Nickvision::App
 
     }
 
-    WindowGeometry::WindowGeometry(long width, long height, bool isMaximized, long x, long y)
+    WindowGeometry::WindowGeometry(long width, long height, bool isMaximized, long x, long y) noexcept
         : m_width{ width },
         m_height{ height },
         m_isMaximized{ isMaximized },
@@ -32,7 +32,7 @@ namespace Nickvision::App
 
     }
 
-    WindowGeometry::WindowGeometry(boost::json::object json)
+    WindowGeometry::WindowGeometry(boost::json::object json) noexcept
         : m_width{ json["Width"].is_int64() ? static_cast<long>(json["Width"].as_int64()) : 800 },
         m_height{ json["Height"].is_int64() ? static_cast<long>(json["Height"].as_int64()) : 600 },
         m_isMaximized{ json["IsMaximized"].is_bool() ? json["IsMaximized"].as_bool() : false },
@@ -42,57 +42,57 @@ namespace Nickvision::App
 
     }
 
-    long WindowGeometry::getWidth() const
+    long WindowGeometry::getWidth() const noexcept
     {
         return m_width;
     }
 
-    void WindowGeometry::setWidth(long width)
+    void WindowGeometry::setWidth(long width) noexcept
     {
         m_width = width;
     }
 
-    long WindowGeometry::getHeight() const
+    long WindowGeometry::getHeight() const noexcept
     {
         return m_height;
     }
 
-    void WindowGeometry::setHeight(long height)
+    void WindowGeometry::setHeight(long height) noexcept
     {
         m_height = height;
     }
 
-    bool WindowGeometry::isMaximized() const
+    bool WindowGeometry::isMaximized() const noexcept
     {
         return m_isMaximized;
     }
 
-    void WindowGeometry::setIsMaximized(bool isMaximized)
+    void WindowGeometry::setIsMaximized(bool isMaximized) noexcept
     {
         m_isMaximized = isMaximized;
     }
 
-    long WindowGeometry::getX() const
+    long WindowGeometry::getX() const noexcept
     {
         return m_x;
     }
 
-    void WindowGeometry::setX(long x)
+    void WindowGeometry::setX(long x) noexcept
     {
         m_x = x;
     }
 
-    long WindowGeometry::getY() const
+    long WindowGeometry::getY() const noexcept
     {
         return m_y;
     }
 
-    void WindowGeometry::setY(long y)
+    void WindowGeometry::setY(long y) noexcept
     {
         m_y = y;
     }
 
-    boost::json::object WindowGeometry::toJson() const
+    boost::json::value WindowGeometry::toJson() const noexcept
     {
         boost::json::object json;
         json["Width"] = m_width;
