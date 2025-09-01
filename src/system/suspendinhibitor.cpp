@@ -136,7 +136,7 @@ namespace Nickvision::System
         return true;
     }
 
-    SuspendInhibitor& SuspendInhibitor::operator=(const SuspendInhibitor& other)
+    SuspendInhibitor& SuspendInhibitor::operator=(const SuspendInhibitor& other) noexcept
     {
         if (this != &other)
         {
