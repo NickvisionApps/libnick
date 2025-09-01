@@ -39,7 +39,11 @@
 namespace Nickvision::Database
 {
     template<typename T>
-    concept SupportedSqliteValue = std::is_same_v<T, int> || std::is_same_v<T, std::int64_t> || std::is_same_v<T, double> || std::is_same_v<T, bool> || std::is_same_v<T, std::string>;
+    concept SupportedSqliteValue = std::is_same_v<T, int> || 
+        std::is_same_v<T, std::int64_t> || 
+        std::is_same_v<T, double> || 
+        std::is_same_v<T, bool> || 
+        std::is_same_v<T, std::string>;
 }
 
 #endif //SQLITE_H

@@ -24,6 +24,7 @@
 #define JSONFILEBASE_H
 
 #include <filesystem>
+#include <mutex>
 #include <string>
 #include <boost/json.hpp>
 #include "events/event.h"
@@ -32,39 +33,36 @@
 namespace Nickvision::App
 {
     /**
-     * @brief A base class for json data files.
+     * @brief A base class for thread-safe json data files.
      */
     class JsonFileBase : public Helpers::IJsonSerializable
     {
     public:
         /**
          * @brief Constructs a JsonFileBase, loading the file from disk.
-         * @param key The key of the config file
-         * @param appName The name of the application the data file belongs to
-         * @param isPortable Whether or not the config file is portable (will save to executable directory instead of config directory)
-         * @throw std::invalid_argument Thrown if key is empty
-         * @throw std::invalid_argument Thrown if appName is empty
+         * @param path The path to the json file
+         * @throw std::invalid_argument Thrown if the path is empty
          */
-        JsonFileBase(const std::string& key, const std::string& appName, bool isPortable);
+        JsonFileBase(const std::filesystem::path& path);
         /**
          * @brief Destructs a JsonFileBase.
          */
-        virtual ~JsonFileBase() = default;
+        virtual ~JsonFileBase() noexcept = default;
         /**
-         * Gets the key of the config file.
-         * @return The key of the config file
+         * @brief Gets the path of the json file.
+         * @return The path of the json file
          */
-        const std::string& getKey() const;
+        const std::filesystem::path& getPath() const noexcept;
         /**
          * @brief Gets the Saved event.
          * @return The Saved event
          */
-        Events::Event<Events::EventArgs>& saved();
+        Events::Event<Events::EventArgs>& saved() noexcept;
         /**
          * @brief Saves the config file to disk. 
          * @return True if saved to disk, else false
          */
-        bool save();
+        bool save() noexcept;
         /**
          * @brief Serializes the object to Json.
          * @return The Json representation of the object
@@ -72,11 +70,95 @@ namespace Nickvision::App
         boost::json::value toJson() const noexcept override;
 
     protected:
-        mutable boost::json::object m_json;
+        /**
+         * @brief Gets whether or not the json object contains a key.
+         */
+        bool contains(const std::string& key) const noexcept;
+        /**
+         * @brief Gets a value from the json object.
+         * @tparam T The type of the value to get
+         * @param key The key of the value to get
+         * @param defaultValue The default value to return if the key is not found or if the value is not of the expected type
+         * @return The value associated with the key
+         */
+        template<Helpers::SupportedJsonValue T>
+        T get(const std::string& key, const T& defaultValue) const noexcept
+        {
+            std::lock_guard lock{ m_mutex };
+            if constexpr (std::is_same_v<T, int>)
+            {
+                if(!m_json.contains(key) || !m_json[key].is_int64())
+                {
+                    return defaultValue;
+                }
+                return static_cast<int>(m_json[key].as_int64());
+            }
+            else if constexpr (std::is_same_v<T, std::int64_t>)
+            {
+                if(!m_json.contains(key) || !m_json[key].is_int64())
+                {
+                    return defaultValue;
+                }
+                return m_json[key].as_int64();
+            }
+            else if constexpr (std::is_same_v<T, double>)
+            {
+                if(!m_json.contains(key) || !m_json[key].is_double())
+                {
+                    return defaultValue;
+                }
+                return m_json[key].as_double();
+            }
+            else if constexpr (std::is_same_v<T, bool>)
+            {
+                if(!m_json.contains(key) || !m_json[key].is_bool())
+                {
+                    return defaultValue;
+                }
+                return m_json[key].as_bool();
+            }
+            else if constexpr (std::is_same_v<T, std::string>)
+            {
+                if(!m_json.contains(key) || !m_json[key].is_string())
+                {
+                    return defaultValue;
+                }
+                return m_json[key].as_string();
+            }
+            else if constexpr (std::is_same_v<T, boost::json::array>)
+            {
+                if(!m_json.contains(key) || !m_json[key].is_array())
+                {
+                    return defaultValue;
+                }
+                return m_json[key].as_array();
+            }
+            else if constexpr (std::is_same_v<T, boost::json::object>)
+            {
+                if(!m_json.contains(key) || !m_json[key].is_object())
+                {
+                    return defaultValue;
+                }
+                return m_json[key].as_object();
+            }
+        }
+        /**
+         * @brief Sets a value in the json object.
+         * @tparam T The type of the value to set
+         * @param key The key of the value to set
+         * @param value The value to set
+         */
+        template<Helpers::SupportedJsonValue T>
+        void set(const std::string& key, const T& value) noexcept
+        {
+            std::lock_guard lock{ m_mutex };
+            m_json[key] = value;
+        }
 
     private:
-        std::string m_key;
+        mutable std::mutex m_mutex;
         std::filesystem::path m_path;
+        mutable boost::json::object m_json;
         Events::Event<Events::EventArgs> m_saved;
     };
 }

@@ -37,7 +37,6 @@ endif()
 add_library (${PROJECT_NAME}
     "include/app/appinfo.h"
     "include/app/jsonfilebase.h"
-    "include/app/jsonfilemanager.h"
     "include/app/windowgeometry.h"
     "include/database/sqlite.h"
     "include/database/sqlitedatabase.h"
@@ -95,7 +94,6 @@ add_library (${PROJECT_NAME}
     "include/update/versiontype.h"
     "src/app/appinfo.cpp"
     "src/app/jsonfilebase.cpp"
-    "src/app/jsonfilemanager.cpp"
     "src/app/windowgeometry.cpp"
     "src/database/sqlitedatabase.cpp"
     "src/database/sqlitefunctioncontext.cpp"

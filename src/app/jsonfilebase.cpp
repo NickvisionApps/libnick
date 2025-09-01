@@ -1,26 +1,16 @@
 #include "app/jsonfilebase.h"
 #include <fstream>
 #include <stdexcept>
-#include "filesystem/userdirectories.h"
-#include "system/environment.h"
-
-using namespace Nickvision::Filesystem;
-using namespace Nickvision::System;
 
 namespace Nickvision::App
 {
-    JsonFileBase::JsonFileBase(const std::string& key, const std::string& appName, bool isPortable)
-        : m_key{ key }
+    JsonFileBase::JsonFileBase(const std::filesystem::path& path)
+        : m_path{ path }
     {
-        if (m_key.empty())
+        if (m_path.empty())
         {
-            throw std::invalid_argument("Key must not be empty.");
+            throw std::invalid_argument("Path must not be empty.");
         }
-        if(appName.empty())
-        {
-            throw std::invalid_argument("Application name must not be empty.");
-        }
-        m_path = (isPortable ? Environment::getExecutableDirectory() : UserDirectories::get(ApplicationUserDirectory::Config, appName)) / (m_key + ".json");
         if (std::filesystem::exists(m_path))
         {
             try
@@ -43,18 +33,25 @@ namespace Nickvision::App
         }
     }
 
-    const std::string& JsonFileBase::getKey() const
+    const std::filesystem::path& JsonFileBase::getPath() const noexcept
     {
-        return m_key;
+        std::lock_guard lock{ m_mutex };
+        return m_path;
     }
 
-    Events::Event<Events::EventArgs>& JsonFileBase::saved()
+    Events::Event<Events::EventArgs>& JsonFileBase::saved() noexcept
     {
+        std::lock_guard lock{ m_mutex };
         return m_saved;
     }
 
-    bool JsonFileBase::save()
+    bool JsonFileBase::save() noexcept
     {
+        std::lock_guard lock{ m_mutex };
+        if(m_path.has_parent_path())
+        {
+            std::filesystem::create_directories(m_path.parent_path());
+        }
         std::ofstream out{ m_path };
         out << m_json << std::endl;
         m_saved({});
@@ -63,6 +60,13 @@ namespace Nickvision::App
 
     boost::json::value JsonFileBase::toJson() const noexcept
     {
+        std::lock_guard lock{ m_mutex };
         return m_json;
+    }
+
+    bool JsonFileBase::contains(const std::string& key) const noexcept
+    {
+        std::lock_guard lock{ m_mutex };
+        return m_json.contains(key);
     }
 }

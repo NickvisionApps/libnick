@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
+#include <filesystem>
 #include <memory>
 #include "app/jsonfilebase.h"
-#include "app/jsonfilemanager.h"
 #include "app/windowgeometry.h"
 #include "filesystem/userdirectories.h"
 
@@ -18,38 +18,33 @@ enum class Theme
 class AppConfig : public JsonFileBase
 {
 public:
-    AppConfig(const std::string& key, const std::string& appName, bool isPortable)
-        : JsonFileBase{ key, appName, isPortable }
+    AppConfig(const std::filesystem::path& path)
+        : JsonFileBase{ path }
     {
 
     }
 
     Theme getTheme() const
     {
-        const boost::json::value& theme{ m_json["Theme"] };
-        if(!theme.is_int64())
-        {
-            return Theme::System;
-        }
-        return static_cast<Theme>(theme.as_int64());
+        return static_cast<Theme>(get("Theme", static_cast<int>(Theme::System)));
     }
 
     void setTheme(Theme theme)
     {
-        m_json["Theme"] = static_cast<int>(theme);
+        set("Theme", static_cast<int>(theme));
     }
 
     WindowGeometry getWindowGeometry() const
     {
         WindowGeometry geometry;
-        if(!m_json["WindowGeometry"].is_object())
+        boost::json::object obj = get<boost::json::object>("WindowGeometry", {});
+        if(obj.empty())
         {
             geometry.setWidth(800);
             geometry.setHeight(600);
             geometry.setIsMaximized(false);
             return geometry;
         }
-        boost::json::object& obj{ m_json["WindowGeometry"].as_object() };
         geometry.setWidth(obj["Width"].is_int64() ? obj["Width"].as_int64() : 800);
         geometry.setHeight(obj["Height"].is_int64() ? obj["Height"].as_int64() : 600);
         geometry.setIsMaximized(obj["IsMaximized"].is_bool() ? obj["IsMaximized"].as_bool() : false);
@@ -62,94 +57,88 @@ public:
         obj["Width"] = geometry.getWidth();
         obj["Height"] = geometry.getHeight();
         obj["IsMaximized"] = geometry.isMaximized();
-        m_json["WindowGeometry"] = obj;
+        set("WindowGeometry", obj);
     }
 
     bool getAutomaticallyCheckForUpdates() const
     {
-        const boost::json::value& value{ m_json["AutomaticallyCheckForUpdates"] };
-        if(!value.is_bool())
-        {
-            return true;
-        }
-        return value.as_bool();
+        return get("AutomaticallyCheckForUpdates", true);
     }
 
     void setAutomaticallyCheckForUpdates(bool value)
     {
-        m_json["AutomaticallyCheckForUpdates"] = value;
+        set("AutomaticallyCheckForUpdates", value);
     }
 };
 
 class JsonFileTest : public testing::Test
 {
 public:
-    static std::shared_ptr<JsonFileManager> m_manager;
-    static std::shared_ptr<JsonFileManager> m_portableManager;
+    static std::filesystem::path m_path;
+    static std::filesystem::path m_portablePath;
+    static std::shared_ptr<AppConfig> m_config;
+    static std::shared_ptr<AppConfig> m_portableConfig;
 
     static void SetUpTestSuite()
     {
-        std::filesystem::remove(UserDirectories::get(ApplicationUserDirectory::Config, "Nickvision Aura Tests") / ("config.json"));
-        std::filesystem::remove("config.json");
-        m_manager = std::make_shared<JsonFileManager>("Nickvision Aura Tests", false);
-        m_portableManager = std::make_shared<JsonFileManager>("Nickvision Aura Tests", true);
+        std::filesystem::remove(m_path);
+        std::filesystem::remove(m_portablePath);
+        m_config = std::make_shared<AppConfig>(m_path);
+        m_portableConfig = std::make_shared<AppConfig>(m_portablePath);
     }
 
     static void TearDownTestSuite()
     {
-        m_manager.reset();
-        m_portableManager.reset();
-        std::filesystem::remove_all(UserDirectories::get(ApplicationUserDirectory::Config, "Nickvision Aura Tests"));
+        m_config.reset();
+        m_portableConfig.reset();
+        std::filesystem::remove_all(m_path.parent_path());
         std::filesystem::remove("config.json");
     }
 };
 
-std::shared_ptr<JsonFileManager> JsonFileTest::m_manager{ nullptr };
-std::shared_ptr<JsonFileManager> JsonFileTest::m_portableManager{ nullptr };
+std::filesystem::path JsonFileTest::m_path{ UserDirectories::get(ApplicationUserDirectory::Config, "Nickvision Aura Tests") / "config.json" };
+std::filesystem::path JsonFileTest::m_portablePath{ "config.json" };
+std::shared_ptr<AppConfig> JsonFileTest::m_config{ nullptr };
+std::shared_ptr<AppConfig> JsonFileTest::m_portableConfig{ nullptr };
 
 TEST_F(JsonFileTest, EnsureDefaultAppConfig)
 {
-    AppConfig& config{ m_manager->get<AppConfig>("config") };
-    WindowGeometry geometry{ config.getWindowGeometry() };
-    ASSERT_EQ(config.getTheme(), Theme::System);
+    WindowGeometry geometry{ m_config->getWindowGeometry() };
+    ASSERT_EQ(m_config->getTheme(), Theme::System);
     ASSERT_EQ(geometry.getWidth(), 800);
     ASSERT_EQ(geometry.getHeight(), 600);
     ASSERT_EQ(geometry.isMaximized(), false);
-    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), true);
+    ASSERT_EQ(m_config->getAutomaticallyCheckForUpdates(), true);
 }
 
 TEST_F(JsonFileTest, EnsureDefaultPortableAppConfig)
 {
-    AppConfig& config{ m_portableManager->get<AppConfig>("config") };
-    WindowGeometry geometry{ config.getWindowGeometry() };
-    ASSERT_EQ(config.getTheme(), Theme::System);
+    WindowGeometry geometry{ m_portableConfig->getWindowGeometry() };
+    ASSERT_EQ(m_portableConfig->getTheme(), Theme::System);
     ASSERT_EQ(geometry.getWidth(), 800);
     ASSERT_EQ(geometry.getHeight(), 600);
     ASSERT_EQ(geometry.isMaximized(), false);
-    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), true);
+    ASSERT_EQ(m_portableConfig->getAutomaticallyCheckForUpdates(), true);
 }
 
 TEST_F(JsonFileTest, ChangeAppConfig1)
 {
-    AppConfig& config{ m_manager->get<AppConfig>("config") };
-    ASSERT_NO_THROW(config.setTheme(Theme::Light));
-    ASSERT_NO_THROW(config.setWindowGeometry(WindowGeometry{ 1920, 1080, true }));
-    ASSERT_TRUE(config.save());
+    ASSERT_NO_THROW(m_config->setTheme(Theme::Light));
+    ASSERT_NO_THROW(m_config->setWindowGeometry(WindowGeometry{ 1920, 1080, true }));
+    ASSERT_TRUE(m_config->save());
 }
 
 TEST_F(JsonFileTest, ChangePortableAppConfig1)
 {
-    AppConfig& config{ m_portableManager->get<AppConfig>("config") };
-    ASSERT_NO_THROW(config.setTheme(Theme::Light));
-    ASSERT_NO_THROW(config.setWindowGeometry(WindowGeometry{ 1920, 1080, true }));
-    ASSERT_TRUE(config.save());
+    ASSERT_NO_THROW(m_portableConfig->setTheme(Theme::Light));
+    ASSERT_NO_THROW(m_portableConfig->setWindowGeometry(WindowGeometry{ 1920, 1080, true }));
+    ASSERT_TRUE(m_portableConfig->save());
 }
 
 TEST_F(JsonFileTest, EnsureChangeInAppConfig)
 {
-    AppConfig& config{ m_manager->get<AppConfig>("config") };
-    ASSERT_EQ(config.getTheme(), Theme::Light);
-    WindowGeometry geometry{ config.getWindowGeometry() };
+    ASSERT_EQ(m_config->getTheme(), Theme::Light);
+    WindowGeometry geometry{ m_config->getWindowGeometry() };
     ASSERT_EQ(geometry.getWidth(), 1920);
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
@@ -157,9 +146,8 @@ TEST_F(JsonFileTest, EnsureChangeInAppConfig)
 
 TEST_F(JsonFileTest, EnsureChangeInPortableAppConfig)
 {
-    AppConfig& config{ m_portableManager->get<AppConfig>("config") };
-    ASSERT_EQ(config.getTheme(), Theme::Light);
-    WindowGeometry geometry{ config.getWindowGeometry() };
+    ASSERT_EQ(m_portableConfig->getTheme(), Theme::Light);
+    WindowGeometry geometry{ m_portableConfig->getWindowGeometry() };
     ASSERT_EQ(geometry.getWidth(), 1920);
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
@@ -167,52 +155,46 @@ TEST_F(JsonFileTest, EnsureChangeInPortableAppConfig)
 
 TEST_F(JsonFileTest, ChangeAppConfig2)
 {
-    AppConfig& config{ m_manager->get<AppConfig>("config") };
-    ASSERT_NO_THROW(config.setAutomaticallyCheckForUpdates(false));
-    ASSERT_TRUE(config.save());
+    ASSERT_NO_THROW(m_config->setAutomaticallyCheckForUpdates(false));
+    ASSERT_TRUE(m_config->save());
 }
 
 TEST_F(JsonFileTest, ChangePortableAppConfig2)
 {
-    AppConfig& config{ m_portableManager->get<AppConfig>("config") };
-    ASSERT_NO_THROW(config.setAutomaticallyCheckForUpdates(false));
-    ASSERT_TRUE(config.save());
+    ASSERT_NO_THROW(m_portableConfig->setAutomaticallyCheckForUpdates(false));
+    ASSERT_TRUE(m_portableConfig->save());
 }
 
 TEST_F(JsonFileTest, EnsureChangeInAppConfig2)
 {
-    AppConfig& config{ m_manager->get<AppConfig>("config") };
-    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
+    ASSERT_EQ(m_config->getAutomaticallyCheckForUpdates(), false);
 }
 
 TEST_F(JsonFileTest, EnsureChangeInPortableAppConfig2)
 {
-    AppConfig& config{ m_portableManager->get<AppConfig>("config") };
-    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
+    ASSERT_EQ(m_portableConfig->getAutomaticallyCheckForUpdates(), false);
 }
 
 TEST_F(JsonFileTest, ReloadAndCheckConfig)
 {
-    m_manager.reset();
-    m_manager = std::make_shared<JsonFileManager>("Nickvision Aura Tests", false);
-    AppConfig& config{ m_manager->get<AppConfig>("config") };
-    ASSERT_EQ(config.getTheme(), Theme::Light);
-    WindowGeometry geometry{ config.getWindowGeometry() };
+    m_config.reset();
+    m_config = std::make_shared<AppConfig>(m_path);
+    ASSERT_EQ(m_config->getTheme(), Theme::Light);
+    WindowGeometry geometry{ m_config->getWindowGeometry() };
     ASSERT_EQ(geometry.getWidth(), 1920);
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
-    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
+    ASSERT_EQ(m_config->getAutomaticallyCheckForUpdates(), false);
 }
 
 TEST_F(JsonFileTest, ReloadAndCheckPortableConfig)
 {
-    m_portableManager.reset();
-    m_portableManager = std::make_shared<JsonFileManager>("Nickvision Aura Tests", true);
-    AppConfig& config{ m_portableManager->get<AppConfig>("config") };
-    ASSERT_EQ(config.getTheme(), Theme::Light);
-    WindowGeometry geometry{ config.getWindowGeometry() };
+    m_portableConfig.reset();
+    m_portableConfig = std::make_shared<AppConfig>(m_portablePath);
+    ASSERT_EQ(m_portableConfig->getTheme(), Theme::Light);
+    WindowGeometry geometry{ m_portableConfig->getWindowGeometry() };
     ASSERT_EQ(geometry.getWidth(), 1920);
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
-    ASSERT_EQ(config.getAutomaticallyCheckForUpdates(), false);
+    ASSERT_EQ(m_portableConfig->getAutomaticallyCheckForUpdates(), false);
 }
