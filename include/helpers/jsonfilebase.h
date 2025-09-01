@@ -123,7 +123,7 @@ namespace Nickvision::Helpers
                 {
                     return defaultValue;
                 }
-                return m_json[key].as_string();
+                return std::string(m_json[key].as_string());
             }
             else if constexpr (std::is_same_v<T, boost::json::array>)
             {

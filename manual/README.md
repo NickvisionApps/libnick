@@ -6,39 +6,14 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.9.0
+## 2025.9.1
 ### Breaking Changes
-#### App
-- Removed `DataFileBase`
-- Removed `DataFileManager`
-- Moved `AppInfo::convertUrlMapToVector()` to `Helpers::CodeHelpers` namespace
-- Moved `App::CancellationToken` to `Helpers` namespace
-#### Database
-- Rewrote all classes with a more modern interface
-- Renamed all classes with `Sqlite` prefix
-#### Keyring
-- Rewrote `Keyring` class with a more modern interface
-- Moved `SystemCredentials` to `System::Credentials` namespace
-- Removed `CredentialCheckStatus` enum
-- Removed `PasswordStrength` module
-#### Network
-- Removed `DNS` module
-#### Taskbar
-- Removed module
+None
 ### New APIs
-#### Helpers
-- Added `DEFINE_ENUM_FLAGS()` macro to `CodeHelpers` namespace
-- Added `IJsonSerializable` interface
-- Added `JsonFileBase` to replace `DataFileBase`
-- Added `quote()` function to `StringHelpers` namespace
-#### Keyring
-- Added `Space` value to `PasswordContent`
-#### System
-- Added `execAsync()` function to `Environment` namespace 
+None
 ### Fixes
-- Marked functions and methods with `noexcept` where applicable
-#### System
-- Fixed `Process`'s handling of quoted strings
+#### Helpers
+- Fixed an issue where `JsonFileBase::get()` did not work for `std::string`
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

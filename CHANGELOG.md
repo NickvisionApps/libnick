@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.9.1
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### Helpers
+- Fixed an issue where `JsonFileBase::get()` did not work for `std::string`
+
 ## 2025.9.0
 ### Breaking Changes
 #### App

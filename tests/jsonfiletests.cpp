@@ -70,6 +70,16 @@ public:
     {
         set("AutomaticallyCheckForUpdates", value);
     }
+
+    std::string getLanguage() const
+    {
+        return get<std::string>("Language", "en");
+    }
+
+    void setLanguage(const std::string& language)
+    {
+        set("Language", language);
+    }
 };
 
 class JsonFileTest : public testing::Test
@@ -110,6 +120,7 @@ TEST_F(JsonFileTest, EnsureDefaultAppConfig)
     ASSERT_EQ(geometry.getHeight(), 600);
     ASSERT_EQ(geometry.isMaximized(), false);
     ASSERT_EQ(m_config->getAutomaticallyCheckForUpdates(), true);
+    ASSERT_EQ(m_config->getLanguage(), "en");
 }
 
 TEST_F(JsonFileTest, EnsureDefaultPortableAppConfig)
@@ -120,6 +131,7 @@ TEST_F(JsonFileTest, EnsureDefaultPortableAppConfig)
     ASSERT_EQ(geometry.getHeight(), 600);
     ASSERT_EQ(geometry.isMaximized(), false);
     ASSERT_EQ(m_portableConfig->getAutomaticallyCheckForUpdates(), true);
+    ASSERT_EQ(m_portableConfig->getLanguage(), "en");
 }
 
 TEST_F(JsonFileTest, ChangeAppConfig1)
@@ -176,6 +188,28 @@ TEST_F(JsonFileTest, EnsureChangeInPortableAppConfig2)
     ASSERT_EQ(m_portableConfig->getAutomaticallyCheckForUpdates(), false);
 }
 
+TEST_F(JsonFileTest, ChangeAppConfig3)
+{
+    ASSERT_NO_THROW(m_config->setLanguage("fr"));
+    ASSERT_TRUE(m_config->save());
+}
+
+TEST_F(JsonFileTest, ChangePortableAppConfig3)
+{
+    ASSERT_NO_THROW(m_portableConfig->setLanguage("fr"));
+    ASSERT_TRUE(m_portableConfig->save());
+}
+
+TEST_F(JsonFileTest, EnsureChangeInAppConfig3)
+{
+    ASSERT_EQ(m_config->getLanguage(), "fr");
+}
+
+TEST_F(JsonFileTest, EnsureChangeInPortableAppConfig3)
+{
+    ASSERT_EQ(m_portableConfig->getLanguage(), "fr");
+}
+
 TEST_F(JsonFileTest, ReloadAndCheckConfig)
 {
     m_config.reset();
@@ -186,6 +220,7 @@ TEST_F(JsonFileTest, ReloadAndCheckConfig)
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
     ASSERT_EQ(m_config->getAutomaticallyCheckForUpdates(), false);
+    ASSERT_EQ(m_config->getLanguage(), "fr");
 }
 
 TEST_F(JsonFileTest, ReloadAndCheckPortableConfig)
@@ -198,4 +233,5 @@ TEST_F(JsonFileTest, ReloadAndCheckPortableConfig)
     ASSERT_EQ(geometry.getHeight(), 1080);
     ASSERT_EQ(geometry.isMaximized(), true);
     ASSERT_EQ(m_portableConfig->getAutomaticallyCheckForUpdates(), false);
+    ASSERT_EQ(m_portableConfig->getLanguage(), "fr");
 }
