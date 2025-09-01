@@ -3,7 +3,7 @@ The purpose of `Nickvision::Helpers::JsonFileBase` is to act as a base when defi
 
 Here are some key points when defining your own configuration objects:
 - Your data object's constructor must take `const std::filesystem::path& path` parameter and pass it to `JsonFileBase`'s constructor. 
-- `JsonFileBase` exposes protected templated `T get(const std::stirng& key, const T& defaultValue)` and `void set(const std::string& key, const T& value)` methods which you must use in your implementation to get and store data from the json object.
+- `JsonFileBase` exposes protected templated `T get(const std::string& key, const T& defaultValue)` and `void set(const std::string& key, const T& value)` methods which you must use in your implementation to get and store data from the json object.
 - You must explicitly call the `save` method on your object when you want to save the configuration json file to disk. Calling `get` and `set` are not enough to trigger saving the file on disk.
 
 Here is an example of a custom configuration object using `JsonFileBase`:
