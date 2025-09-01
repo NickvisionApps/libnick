@@ -1,12 +1,13 @@
 #include <gtest/gtest.h>
 #include <filesystem>
 #include <memory>
-#include "app/jsonfilebase.h"
 #include "app/windowgeometry.h"
 #include "filesystem/userdirectories.h"
+#include "helpers/jsonfilebase.h"
 
 using namespace Nickvision::App;
 using namespace Nickvision::Filesystem;
+using namespace Nickvision::Helpers;
 
 enum class Theme
 {

@@ -114,9 +114,22 @@ TEST_F(SystemTest, ClearTestVar)
 TEST_F(SystemTest, Exec)
 {
 #ifdef _WIN32
-    ASSERT_EQ(Environment::exec("echo \"Hello World\""), "\"Hello World\"\r\n");
+    ASSERT_EQ(Environment::exec("echo Hello World"), "Hello World\r\n");
 #else
-    ASSERT_EQ(Environment::exec("echo \"Hello World\""), "Hello World\n");
+    ASSERT_EQ(Environment::exec("echo Hello World"), "Hello World\n");
+#endif
+}
+
+TEST_F(SystemTest, ExecAsync)
+{
+    std::future<std::string> cmd1{ Environment::execAsync("echo Hello World") };
+    std::future<std::string> cmd2{ Environment::execAsync("echo World Hello") };
+#ifdef _WIN32
+    ASSERT_EQ(cmd1.get(), "Hello World\r\n");
+    ASSERT_EQ(cmd2.get(), "World Hello\r\n");
+#else
+    ASSERT_EQ(cmd1.get(), "Hello World\n");
+    ASSERT_EQ(cmd2.get(), "World Hello\n");
 #endif
 }
 

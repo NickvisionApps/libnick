@@ -8,7 +8,7 @@ using namespace Nickvision::System;
 
 namespace Nickvision::Network
 {
-    static bool isResponseOk(const cpr::Response& response)
+    static bool isResponseOk(const cpr::Response& response) noexcept
     {
         if(response.status_code == 0)
         {
@@ -17,7 +17,7 @@ namespace Nickvision::Network
         return response.status_code >= 100 && response.status_code < 400;
     }
 
-    bool Web::getWebsiteExists(const std::string& url)
+    bool Web::getWebsiteExists(const std::string& url) noexcept
     {
         if(url.empty())
         {
@@ -28,7 +28,7 @@ namespace Nickvision::Network
         return isResponseOk(session.Get());
     }
 
-    boost::json::value Web::getJson(const std::string& url)
+    boost::json::value Web::getJson(const std::string& url) noexcept
     {
         if(url.empty())
         {
@@ -58,7 +58,7 @@ namespace Nickvision::Network
         return {};
     }
 
-    bool Web::downloadFile(const std::string& url, const std::filesystem::path& path, const cpr::ProgressCallback& progress, bool overwrite)
+    bool Web::downloadFile(const std::string& url, const std::filesystem::path& path, const cpr::ProgressCallback& progress, bool overwrite) noexcept
     {
         if(url.empty())
         {

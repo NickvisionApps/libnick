@@ -173,6 +173,25 @@ namespace Nickvision::Helpers
         return result;
     }
 
+    std::string StringHelpers::quote(const std::string& s) noexcept
+    {
+        if(s[0] == '"' && s[s.size() - 1] == '"')
+        {
+            return s;
+        }
+#ifndef _WIN32
+        else if(s[0] == '\'' && s[s.size() - 1] == '\'')
+        {
+            return s;
+        }
+        if(s.find('"') != std::string::npos)
+        {
+            return '\'' + s + '\'';
+        }
+#endif
+        return '"' + s + '"';
+    }
+
     std::string StringHelpers::replace(std::string s, const std::string& toReplace, const std::string& replace) noexcept
     {
         if (s.empty() || toReplace.empty())

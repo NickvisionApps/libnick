@@ -35,21 +35,21 @@ namespace Nickvision::Network
          * @brief Destructs a Socket.
          * @brief This will disconnect from a child socket if disconnect was not already called.
          */
-        ~Socket();
+        ~Socket() noexcept;
         /**
          * @brief Establishes a connection.
          * @brief If the socket's purpose is SocketPurpose::Server, this method will block until a client is connected.
          * @brief Is the socket's purpose is SocketPurpose::Client, this method will connect to the server.
          * @return True if connected, else false
          */
-        bool connect();
+        bool connect() noexcept;
         /**
          * @brief Closes a connection.
          * @brief If the socket's purpose is SocketPurpose::Server, this method will drop the connection with the client.
          * @brief If the socket's purpose is SocketPurpose::Client, this method will have no effect.
          * @return True if disconnected, else false
          */
-        bool disconnect();
+        bool disconnect() noexcept;
         /**
          * @brief Receives a message.
          * @brief connect() must have been called first and have returned true.
@@ -57,7 +57,7 @@ namespace Nickvision::Network
          * @brief If the socket's purpose is SocketPurpose::Client, this method will receive a message from the server.
          * @return The received message
          */
-        std::string receiveMessage() const;
+        std::string receiveMessage() const noexcept;
         /**
          * @brief Sends a message.
          * @brief connect() must have been called first and have returned true.
@@ -66,7 +66,7 @@ namespace Nickvision::Network
          * @param message The message to send
          * @return True if message sent successfully, else false
          */
-        bool sendMessage(const std::string& message) const;
+        bool sendMessage(const std::string& message) const noexcept;
 
     private:
         SocketPurpose m_purpose;

@@ -1,13 +1,13 @@
 #include "network/ipv4address.h"
+#include <format>
 #include <limits>
-#include <sstream>
 #include "helpers/stringhelpers.h"
 
 using namespace Nickvision::Helpers;
 
 namespace Nickvision::Network
 {
-    IPv4Address::IPv4Address(unsigned char first, unsigned char second, unsigned char third, unsigned char fourth)
+    IPv4Address::IPv4Address(unsigned char first, unsigned char second, unsigned char third, unsigned char fourth) noexcept
         : m_first{ first },
         m_second{ second },
         m_third{ third },
@@ -16,7 +16,7 @@ namespace Nickvision::Network
 
     }
 
-    IPv4Address::IPv4Address(unsigned long address)
+    IPv4Address::IPv4Address(unsigned long address) noexcept
         : m_first{ static_cast<unsigned char>((address >> 24) & 0xFF) },
         m_second{ static_cast<unsigned char>((address >> 16) & 0xFF) },
         m_third{ static_cast<unsigned char>((address >> 8) & 0xFF) },
@@ -25,37 +25,7 @@ namespace Nickvision::Network
         
     }
 
-    unsigned char IPv4Address::getFirst() const
-    {
-        return m_first;
-    }
-
-    unsigned char IPv4Address::getSecond() const
-    {
-        return m_second;
-    }
-
-    unsigned char IPv4Address::getThird() const
-    {
-        return m_third;
-    }
-
-    unsigned char IPv4Address::getFourth() const
-    {
-        return m_fourth;
-    }
-
-    unsigned long IPv4Address::getNetworkByteOrder() const
-    {
-        return (static_cast<unsigned long>(m_first) << 24) | (static_cast<unsigned long>(m_second) << 16) | (static_cast<unsigned long>(m_third) << 8) | static_cast<unsigned long>(m_fourth);
-    }
-
-    std::string IPv4Address::str() const
-    {
-        return std::to_string(static_cast<int>(m_first)) + "." + std::to_string(static_cast<int>(m_second)) + "." + std::to_string(static_cast<int>(m_third)) + "." + std::to_string(static_cast<int>(m_fourth));
-    }
-
-    std::optional<IPv4Address> IPv4Address::parse(const std::string& address)
+    std::optional<IPv4Address> IPv4Address::parse(const std::string& address) noexcept
     {
         if(address == "localhost")
         {
@@ -83,5 +53,35 @@ namespace Nickvision::Network
         {
             return std::nullopt;
         }
+    }
+
+    unsigned char IPv4Address::getFirst() const noexcept
+    {
+        return m_first;
+    }
+
+    unsigned char IPv4Address::getSecond() const noexcept
+    {
+        return m_second;
+    }
+
+    unsigned char IPv4Address::getThird() const noexcept
+    {
+        return m_third;
+    }
+
+    unsigned char IPv4Address::getFourth() const noexcept
+    {
+        return m_fourth;
+    }
+
+    unsigned long IPv4Address::getNetworkByteOrder() const noexcept
+    {
+        return (static_cast<unsigned long>(m_first) << 24) | (static_cast<unsigned long>(m_second) << 16) | (static_cast<unsigned long>(m_third) << 8) | static_cast<unsigned long>(m_fourth);
+    }
+
+    std::string IPv4Address::str() const noexcept
+    {
+        return std::format("{}.{}.{}.{}", static_cast<int>(m_first), static_cast<int>(m_second), static_cast<int>(m_third), static_cast<int>(m_fourth));
     }
 }

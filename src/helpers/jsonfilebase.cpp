@@ -1,8 +1,8 @@
-#include "app/jsonfilebase.h"
+#include "helpers/jsonfilebase.h"
 #include <fstream>
 #include <stdexcept>
 
-namespace Nickvision::App
+namespace Nickvision::Helpers
 {
     JsonFileBase::JsonFileBase(const std::filesystem::path& path)
         : m_path{ path }

@@ -1,14 +1,13 @@
 #include "network/macaddress.h"
-#include <iomanip>
+#include <format>
 #include <limits>
-#include <sstream>
 #include "helpers/stringhelpers.h"
 
 using namespace Nickvision::Helpers;
 
 namespace Nickvision::Network
 {
-    MacAddress::MacAddress(unsigned char oui1, unsigned char oui2, unsigned char oui3, unsigned char nic1, unsigned char nic2, unsigned char nic3)
+    MacAddress::MacAddress(unsigned char oui1, unsigned char oui2, unsigned char oui3, unsigned char nic1, unsigned char nic2, unsigned char nic3) noexcept
         : m_oui1{ oui1 },
         m_oui2{ oui2 },
         m_oui3{ oui3 },
@@ -19,50 +18,7 @@ namespace Nickvision::Network
 
     }
 
-    unsigned char MacAddress::getFirst() const
-    {
-        return m_oui1;
-    }
-
-    unsigned char MacAddress::getSecond() const
-    {
-        return m_oui2;
-    }
-
-    unsigned char MacAddress::getThird() const
-    {
-        return m_oui3;
-    }
-
-    unsigned char MacAddress::getFourth() const
-    {
-        return m_nic1;
-    }
-
-    unsigned char MacAddress::getFifth() const
-    {
-        return m_nic2;
-    }
-
-    unsigned char MacAddress::getSixth() const
-    {
-        return m_nic3;
-    }
-
-    std::string MacAddress::str() const
-    {
-        std::stringstream builder;
-        builder << std::setfill('0') << std::setw(2) << std::hex;
-        builder << static_cast<int>(m_oui1) << ":";
-        builder << static_cast<int>(m_oui2) << ":";
-        builder << static_cast<int>(m_oui3) << ":";
-        builder << static_cast<int>(m_nic1) << ":";
-        builder << static_cast<int>(m_nic2) << ":"; 
-        builder << static_cast<int>(m_nic3);
-        return StringHelpers::upper(builder.str());
-    }
-
-    std::optional<MacAddress> MacAddress::parse(const std::string& address)
+    std::optional<MacAddress> MacAddress::parse(const std::string& address) noexcept
     {
         std::vector<std::string> parts{ StringHelpers::split(address, ":") };
         if(parts.size() != 6)
@@ -88,5 +44,40 @@ namespace Nickvision::Network
         {
             return std::nullopt;
         }
+    }
+
+    unsigned char MacAddress::getFirst() const noexcept
+    {
+        return m_oui1;
+    }
+
+    unsigned char MacAddress::getSecond() const noexcept
+    {
+        return m_oui2;
+    }
+
+    unsigned char MacAddress::getThird() const noexcept
+    {
+        return m_oui3;
+    }
+
+    unsigned char MacAddress::getFourth() const noexcept
+    {
+        return m_nic1;
+    }
+
+    unsigned char MacAddress::getFifth() const noexcept
+    {
+        return m_nic2;
+    }
+
+    unsigned char MacAddress::getSixth() const noexcept
+    {
+        return m_nic3;
+    }
+
+    std::string MacAddress::str() const noexcept
+    {
+        return StringHelpers::upper(std::format("{:02x}:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}", m_oui1, m_oui2, m_oui3, m_nic1, m_nic2, m_nic3));
     }
 }

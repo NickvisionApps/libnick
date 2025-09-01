@@ -17,7 +17,7 @@
  *
  * @section DESCRIPTION
  *
- * A base class for json data files.
+ * A base class for thread-safe json data files.
  */
 
 #ifndef JSONFILEBASE_H
@@ -28,14 +28,14 @@
 #include <string>
 #include <boost/json.hpp>
 #include "events/event.h"
-#include "helpers/ijsonserializable.h"
+#include "ijsonserializable.h"
 
-namespace Nickvision::App
+namespace Nickvision::Helpers
 {
     /**
      * @brief A base class for thread-safe json data files.
      */
-    class JsonFileBase : public Helpers::IJsonSerializable
+    class JsonFileBase : public IJsonSerializable
     {
     public:
         /**
@@ -81,7 +81,7 @@ namespace Nickvision::App
          * @param defaultValue The default value to return if the key is not found or if the value is not of the expected type
          * @return The value associated with the key
          */
-        template<Helpers::SupportedJsonValue T>
+        template<SupportedJsonValue T>
         T get(const std::string& key, const T& defaultValue) const noexcept
         {
             std::lock_guard lock{ m_mutex };
@@ -148,7 +148,7 @@ namespace Nickvision::App
          * @param key The key of the value to set
          * @param value The value to set
          */
-        template<Helpers::SupportedJsonValue T>
+        template<SupportedJsonValue T>
         void set(const std::string& key, const T& value) noexcept
         {
             std::lock_guard lock{ m_mutex };

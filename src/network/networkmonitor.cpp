@@ -56,7 +56,7 @@ namespace Nickvision::Network
         checkConnectionState();
     }
 
-    NetworkMonitor::~NetworkMonitor()
+    NetworkMonitor::~NetworkMonitor() noexcept
     {
 #ifdef _WIN32
         m_connectionPoint->Unadvise(m_cookie);
@@ -65,50 +65,29 @@ namespace Nickvision::Network
 #endif
     }
 
-    Events::Event<NetworkStateChangedEventArgs>& NetworkMonitor::stateChanged()
+    Events::Event<NetworkStateChangedEventArgs>& NetworkMonitor::stateChanged() noexcept
     {
         return m_stateChanged;
     }
 
-    NetworkState NetworkMonitor::getConnectionState() const
+    NetworkState NetworkMonitor::getConnectionState() const noexcept
     {
         std::lock_guard<std::mutex> lock{ m_mutex };
         return m_connectionState;
     }
 
-    void NetworkMonitor::checkConnectionState()
+    void NetworkMonitor::checkConnectionState() noexcept
     {
         NetworkState newState{ NetworkState::Disconnected };
-        if(Environment::testVariable("AURA_DISABLE_NETCHECK"))
-        {
-            newState = NetworkState::ConnectedGlobal;
-        }
-        else
-        {
 #ifdef _WIN32
-            NLM_CONNECTIVITY connection{ NLM_CONNECTIVITY_DISCONNECTED };
-            if (m_netListManager->GetConnectivity(&connection) == S_OK)
-            {
-                if (connection == NLM_CONNECTIVITY_DISCONNECTED)
-                {
-                    newState = NetworkState::Disconnected;
-                }
-                else if (connection & NLM_CONNECTIVITY_IPV4_INTERNET || connection & NLM_CONNECTIVITY_IPV6_INTERNET)
-                {
-                    newState = NetworkState::ConnectedGlobal;
-                }
-                else
-                {
-                    newState = NetworkState::ConnectedLocal;
-                }
-            }
-#else
-            GNetworkConnectivity connection{ g_network_monitor_get_connectivity(g_network_monitor_get_default()) };
-            if (connection == G_NETWORK_CONNECTIVITY_LOCAL)
+        NLM_CONNECTIVITY connection{ NLM_CONNECTIVITY_DISCONNECTED };
+        if (m_netListManager->GetConnectivity(&connection) == S_OK)
+        {
+            if (connection == NLM_CONNECTIVITY_DISCONNECTED)
             {
                 newState = NetworkState::Disconnected;
             }
-            else if (connection == G_NETWORK_CONNECTIVITY_FULL)
+            else if (connection & NLM_CONNECTIVITY_IPV4_INTERNET || connection & NLM_CONNECTIVITY_IPV6_INTERNET)
             {
                 newState = NetworkState::ConnectedGlobal;
             }
@@ -116,8 +95,22 @@ namespace Nickvision::Network
             {
                 newState = NetworkState::ConnectedLocal;
             }
-#endif
         }
+#else
+        GNetworkConnectivity connection{ g_network_monitor_get_connectivity(g_network_monitor_get_default()) };
+        if (connection == G_NETWORK_CONNECTIVITY_LOCAL)
+        {
+            newState = NetworkState::Disconnected;
+        }
+        else if (connection == G_NETWORK_CONNECTIVITY_FULL)
+        {
+            newState = NetworkState::ConnectedGlobal;
+        }
+        else
+        {
+            newState = NetworkState::ConnectedLocal;
+        }
+#endif
         if (m_connectionState != newState)
         {
             std::unique_lock<std::mutex> lock{ m_mutex };

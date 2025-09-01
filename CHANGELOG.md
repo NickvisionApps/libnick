@@ -15,18 +15,24 @@
 - Moved `SystemCredentials` to `System::Credentials` namespace
 - Removed `CredentialCheckStatus` enum
 - Removed `PasswordStrength` module
+#### Network
+- Removed `DNS` module
 #### Taskbar
 - Removed module
 ### New APIs
-#### App
-- Added `JsonFileBase` to replace `DataFileBase`
 #### Helpers
-- Added `DEFINE_ENUM_FLAGS()` macro to `CodeHelpers`
+- Added `DEFINE_ENUM_FLAGS()` macro to `CodeHelpers` namespace
 - Added `IJsonSerializable` interface
+- Added `JsonFileBase` to replace `DataFileBase`
+- Added `quote()` function to `StringHelpers` namespace
 #### Keyring
 - Added `Space` value to `PasswordContent`
+#### System
+- Added `execAsync()` function to `Environment` namespace 
 ### Fixes
 - Marked functions and methods with `noexcept` where applicable
+#### System
+- Fixed `Process`'s handling of quoted strings
 
 ## 2025.8.0
 ### Breaking Changes

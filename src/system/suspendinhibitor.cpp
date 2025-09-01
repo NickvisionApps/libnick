@@ -9,7 +9,7 @@
 
 namespace Nickvision::System
 {
-    SuspendInhibitor::SuspendInhibitor()
+    SuspendInhibitor::SuspendInhibitor() noexcept
         : m_inhibiting{ false }
 #ifdef __linux__
         , m_cookie{ 0 }
@@ -18,25 +18,27 @@ namespace Nickvision::System
     
     }
 
-    SuspendInhibitor::SuspendInhibitor(const SuspendInhibitor& inhibitor)
+    SuspendInhibitor::SuspendInhibitor(const SuspendInhibitor& other) noexcept
     {
-        std::lock_guard<std::mutex> lock{ inhibitor.m_mutex };
-        m_inhibiting = inhibitor.m_inhibiting;
+        std::lock_guard<std::mutex> lock{ other.m_mutex };
+        m_inhibiting = other.m_inhibiting;
 #ifndef _WIN32
-        m_cookie = inhibitor.m_cookie;
+        m_cookie = other.m_cookie;
 #endif
     }
 
-    SuspendInhibitor::SuspendInhibitor(SuspendInhibitor&& inhibitor) noexcept
+    SuspendInhibitor::SuspendInhibitor(SuspendInhibitor&& other) noexcept
     {
-        std::lock_guard<std::mutex> lock{ inhibitor.m_mutex };
-        m_inhibiting = std::move(inhibitor.m_inhibiting);
+        std::lock_guard<std::mutex> lock{ other.m_mutex };
+        m_inhibiting = std::move(other.m_inhibiting);
 #ifndef _WIN32
-        m_cookie = std::move(inhibitor.m_cookie);
+        m_cookie = std::move(other.m_cookie);
+        other.m_cookie = 0;
 #endif
+        other.m_inhibiting = false;
     }
 
-    SuspendInhibitor::~SuspendInhibitor()
+    SuspendInhibitor::~SuspendInhibitor() noexcept
     {
         if(m_inhibiting)
         {
@@ -44,13 +46,14 @@ namespace Nickvision::System
         }
     }
 
-    bool SuspendInhibitor::isInhibiting() const
+    bool SuspendInhibitor::isInhibiting() const noexcept
     {
         return m_inhibiting;
     }
 
-    bool SuspendInhibitor::inhibit()
+    bool SuspendInhibitor::inhibit() noexcept
     {
+        std::lock_guard<std::mutex> lock{ m_mutex };
         if(m_inhibiting)
         {
             return true;
@@ -93,8 +96,9 @@ namespace Nickvision::System
         return true;
     }
 
-    bool SuspendInhibitor::uninhibit()
+    bool SuspendInhibitor::uninhibit() noexcept
     {
+        std::lock_guard<std::mutex> lock{ m_mutex };
         if(!m_inhibiting)
         {
             return true;
@@ -132,30 +136,32 @@ namespace Nickvision::System
         return true;
     }
 
-    SuspendInhibitor& SuspendInhibitor::operator=(const SuspendInhibitor& inhibitor)
+    SuspendInhibitor& SuspendInhibitor::operator=(const SuspendInhibitor& other)
     {
-        if (this != &inhibitor)
+        if (this != &other)
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
-            std::lock_guard<std::mutex> lock2{ inhibitor.m_mutex };
-            m_inhibiting = inhibitor.m_inhibiting;
+            std::lock_guard<std::mutex> lock2{ other.m_mutex };
+            m_inhibiting = other.m_inhibiting;
 #ifndef _WIN32
-            m_cookie = inhibitor.m_cookie;
+            m_cookie = other.m_cookie;
 #endif
         }
         return *this;
     }
 
-    SuspendInhibitor& SuspendInhibitor::operator=(SuspendInhibitor&& inhibitor) noexcept
+    SuspendInhibitor& SuspendInhibitor::operator=(SuspendInhibitor&& other) noexcept
     {
-        if (this != &inhibitor)
+        if (this != &other)
         {
             std::lock_guard<std::mutex> lock{ m_mutex };
-            std::lock_guard<std::mutex> lock2{ inhibitor.m_mutex };
-            m_inhibiting = std::move(inhibitor.m_inhibiting);
+            std::lock_guard<std::mutex> lock2{ other.m_mutex };
+            m_inhibiting = std::move(other.m_inhibiting);
 #ifndef _WIN32
-            m_cookie = std::move(inhibitor.m_cookie);
+            m_cookie = std::move(other.m_cookie);
+            other.m_cookie = 0;
 #endif
+            other.m_inhibiting = false;
         }
         return *this;
     }

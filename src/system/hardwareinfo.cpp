@@ -16,12 +16,12 @@ using namespace Nickvision::Helpers;
 
 namespace Nickvision::System
 {
-    unsigned int HardwareInfo::getNumberOfProcessors()
+    unsigned int HardwareInfo::getNumberOfProcessors() noexcept
     {
         return std::thread::hardware_concurrency();
     }
 
-    unsigned long long HardwareInfo::getTotalRamSize()
+    unsigned long long HardwareInfo::getTotalRamSize() noexcept
     {
 #ifdef _WIN32
         MEMORYSTATUSEX status{};
@@ -50,7 +50,7 @@ namespace Nickvision::System
         return 0;
     }
 
-    unsigned long long HardwareInfo::getFreeRamSize()
+    unsigned long long HardwareInfo::getFreeRamSize() noexcept
     {
 #ifdef _WIN32
         MEMORYSTATUSEX status{};

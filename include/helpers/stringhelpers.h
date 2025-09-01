@@ -85,6 +85,12 @@ namespace Nickvision::Helpers::StringHelpers
      */
     std::string normalizeForFilename(const std::string& s, bool windowsOnly = false) noexcept;
     /**
+     * @brief Quotes a string for use in a command line.
+     * @param s The string to quote
+     * @return The quoted string
+     */
+    std::string quote(const std::string& s) noexcept;
+    /**
      * @brief Replaces a substring within a string with a new string.
      * @param s The string to work on
      * @param toReplace The substring to be replaced

@@ -158,7 +158,7 @@ namespace Nickvision::Network
         }
     }
 
-    Socket::~Socket()
+    Socket::~Socket() noexcept
     {
         //Disconnect from child
         disconnect();
@@ -189,7 +189,7 @@ namespace Nickvision::Network
 #endif
     }
 
-    bool Socket::connect()
+    bool Socket::connect() noexcept
     {        
         if(m_purpose == SocketPurpose::Server)
         {
@@ -230,7 +230,7 @@ namespace Nickvision::Network
                     std::optional<IPv4Address> ipv4{ IPv4Address::parse(m_address) };
                     if(!ipv4)
                     {
-                        throw std::invalid_argument("Invalid IPv4 Address");
+                        return false;
                     }
                     struct sockaddr_in address;
                     memset(&address, 0, sizeof(address));
@@ -251,7 +251,7 @@ namespace Nickvision::Network
         return false;
     }
 
-    bool Socket::disconnect()
+    bool Socket::disconnect() noexcept
     {
 #ifdef _WIN32
         if(m_family == AddressFamily::Pipe && m_purpose == SocketPurpose::Server)
@@ -273,7 +273,7 @@ namespace Nickvision::Network
         return true;
     }
 
-    std::string Socket::receiveMessage() const
+    std::string Socket::receiveMessage() const noexcept
     {
         std::vector<char> buffer(1024);
         std::string message;
@@ -315,7 +315,7 @@ namespace Nickvision::Network
         return message;
     }
 
-    bool Socket::sendMessage(const std::string& message) const
+    bool Socket::sendMessage(const std::string& message) const noexcept
     {
 #ifdef _WIN32
         if(m_family == AddressFamily::Pipe)

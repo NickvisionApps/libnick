@@ -75,8 +75,12 @@ TEST_F(ProcessTest, Send)
     Process p{ Environment::findDependency("sh") };
 #endif
     ASSERT_TRUE(p.start());
-    ASSERT_TRUE(p.sendCommand("echo \"Hello\""));
+    ASSERT_TRUE(p.sendCommand("echo Hello"));
     ASSERT_TRUE(p.sendCommand("exit"));
     p.waitForExit();
-    ASSERT_FALSE(p.getOutput().empty());
+#ifdef _WIN32
+    ASSERT_EQ(p.getOutput(), "Hello\r\n");
+#else
+    ASSERT_EQ(p.getOutput(), "Hello\n");
+#endif
 }
