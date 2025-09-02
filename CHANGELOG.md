@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.9.2
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### Helpers
+- Fixed a deadlock in `JsonFileBase`
+
 ## 2025.9.1
 ### Breaking Changes
 None

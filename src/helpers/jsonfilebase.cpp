@@ -47,13 +47,14 @@ namespace Nickvision::Helpers
 
     bool JsonFileBase::save() noexcept
     {
-        std::lock_guard lock{ m_mutex };
+        std::unique_lock lock{ m_mutex };
         if(m_path.has_parent_path())
         {
             std::filesystem::create_directories(m_path.parent_path());
         }
         std::ofstream out{ m_path };
         out << m_json << std::endl;
+        lock.unlock();
         m_saved({});
         return true;
     }
