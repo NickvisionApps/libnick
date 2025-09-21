@@ -132,7 +132,7 @@ namespace Nickvision::Database
             //Remove old encrypted database
             if(sqlite3_close(m_database) != SQLITE_OK)
             {
-                throw std::runtime_error("Unable to close old sql databse.");
+                throw std::runtime_error("Unable to close old sql database.");
             }
             std::filesystem::remove(m_path);
             std::filesystem::rename(tempPath, m_path);
@@ -166,7 +166,7 @@ namespace Nickvision::Database
             //Remove old encrypted database
             if(sqlite3_close(m_database) != SQLITE_OK)
             {
-                throw std::runtime_error("Unable to close old sql databse.");
+                throw std::runtime_error("Unable to close old sql database.");
             }
             std::filesystem::remove(m_path);
             std::filesystem::rename(tempPath, m_path);
