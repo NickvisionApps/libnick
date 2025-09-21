@@ -44,6 +44,15 @@ namespace Nickvision::Database
         return SqliteStepResult::Error;
     }
 
+    void SqliteStatement::reset() noexcept
+    {
+        if(m_statement)
+        {
+            sqlite3_reset(m_statement);
+            sqlite3_clear_bindings(m_statement);
+        }
+    }
+
     SqliteStatement& SqliteStatement::operator=(SqliteStatement&& other) noexcept
     {
         if(this != &other)

@@ -6,14 +6,15 @@
 
 libnick provides Nickvision apps with a common set of cross-platform APIs for managing system and desktop app functionality such as network management, taskbar icons, translations, app updates, and more.
 
-## 2025.9.3
+## 2025.9.4
 ### Breaking Changes
 None
 ### New APIs
-None
+#### Database
+- Added `reset` method to `SqliteStatement`
 ### Fixes
 #### Database
-- Fixed an issue where the sqlite database did not encrypt and decrypt correctly
+- Fixed an issue where the sqlite database crashed on Windows
 
 ## Dependencies
 The following are a list of dependencies used by libnick. 

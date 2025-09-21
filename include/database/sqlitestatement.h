@@ -57,6 +57,10 @@ namespace Nickvision::Database
          */
         SqliteStepResult step() noexcept;
         /**
+         * @brief Resets the statement to its initial state, clearing any bindings as well.
+         */
+        void reset() noexcept;
+        /**
          * @brief Binds a value to a sqlite parameter.
          * @tparam T The type of the value to bind
          * @param index The index of the parameter
