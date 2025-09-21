@@ -14,7 +14,7 @@ namespace Nickvision::Database
         {
             throw std::runtime_error("Unable to open sql database.");
         }
-        if(sqlite3_exec(m_database, "PRAGMA schema_version", nullptr, nullptr, nullptr) != SQLITE_OK)
+        if(sqlite3_exec(m_database, "SELECT count(*) FROM sqlite_master;", nullptr, nullptr, nullptr) != SQLITE_OK)
         {
             m_isEncrypted = true;
             m_isUnlocked = false;
@@ -82,7 +82,7 @@ namespace Nickvision::Database
         }
         else
         {
-            m_isUnlocked = sqlite3_exec(m_database, "PRAGMA schema_version", nullptr, nullptr, nullptr) == SQLITE_OK;
+            m_isUnlocked = sqlite3_exec(m_database, "SELECT count(*) FROM sqlite_master;", nullptr, nullptr, nullptr) == SQLITE_OK;
         }
         return m_isUnlocked;
     }
@@ -101,9 +101,29 @@ namespace Nickvision::Database
             {
                 return true;
             }
+            //If empty database, can use sqlite3_key
+            SqliteStatement statement{ m_database, "SELECT count(*) FROM sqlite_master;" };
+            int tableCount{ -1 };
+            if(statement.step() == SqliteStepResult::Row)
+            {
+                tableCount = statement.getColumn<int>(0);
+            }
+            if(tableCount == 0)
+            {
+                if(sqlite3_key(m_database, password.c_str(), static_cast<int>(password.size())) != SQLITE_OK)
+                {
+                    return false;
+                }
+                else
+                {
+                    m_isUnlocked = sqlite3_exec(m_database, "SELECT count(*) FROM sqlite_master;", nullptr, nullptr, nullptr) == SQLITE_OK;
+                    m_isEncrypted = true;
+                    return true;
+                }
+            }
             //Create temp encrypted database
             std::filesystem::path tempPath{ (m_path.string() + ".encrypt") };
-            std::string cmd{ "ATTACH DATABASE '" + tempPath.string() + "' AS encrypted  KEY '" + password + "'" };
+            std::string cmd{ "ATTACH DATABASE '" + tempPath.string() + "' AS encrypted KEY '" + password + "'" };
             sqlite3_exec(m_database, cmd.c_str(), nullptr, nullptr, nullptr);
             sqlite3_exec(m_database, "SELECT sqlcipher_export('encrypted')", nullptr, nullptr, nullptr);
             sqlite3_exec(m_database, "DETACH DATABASE encrypted", nullptr, nullptr, nullptr);
@@ -120,7 +140,7 @@ namespace Nickvision::Database
             {
                 throw std::runtime_error("Unable to open sql database with password.");
             }
-            m_isUnlocked = sqlite3_exec(m_database, "PRAGMA schema_version", nullptr, nullptr, nullptr) == SQLITE_OK;
+            m_isUnlocked = sqlite3_exec(m_database, "SELECT count(*) FROM sqlite_master;", nullptr, nullptr, nullptr) == SQLITE_OK;
             m_isEncrypted = true;
             return true;
         }
