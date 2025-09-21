@@ -10,7 +10,7 @@ namespace Nickvision::Database
         m_isUnlocked{ true },
         m_database{ nullptr }
     {
-        if (sqlite3_open_v2(m_path.string().c_str(), &m_database, m_flags, nullptr) != SQLITE_OK)
+        if(sqlite3_open_v2(m_path.string().c_str(), &m_database, m_flags, nullptr) != SQLITE_OK)
         {
             throw std::runtime_error("Unable to open sql database.");
         }
@@ -124,11 +124,23 @@ namespace Nickvision::Database
             //Create temp encrypted database
             std::filesystem::path tempPath{ (m_path.string() + ".encrypt") };
             std::string cmd{ "ATTACH DATABASE '" + tempPath.string() + "' AS encrypted KEY '" + password + "'" };
-            sqlite3_exec(m_database, cmd.c_str(), nullptr, nullptr, nullptr);
-            sqlite3_exec(m_database, "SELECT sqlcipher_export('encrypted')", nullptr, nullptr, nullptr);
-            sqlite3_exec(m_database, "DETACH DATABASE encrypted", nullptr, nullptr, nullptr);
+            if(sqlite3_exec(m_database, cmd.c_str(), nullptr, nullptr, nullptr) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to attach temporary database.");
+            }
+            if(sqlite3_exec(m_database, "SELECT sqlcipher_export('encrypted')", nullptr, nullptr, nullptr) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to encrypt temporary database.");
+            }
+            if(sqlite3_exec(m_database, "DETACH DATABASE encrypted", nullptr, nullptr, nullptr) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to detach temporary database.");
+            }
             //Remove old encrypted database
-            sqlite3_close(m_database);
+            if(sqlite3_close(m_database) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to close old sql databse.");
+            }
             std::filesystem::remove(m_path);
             std::filesystem::rename(tempPath, m_path);
             //Open new encrypted database
@@ -155,11 +167,23 @@ namespace Nickvision::Database
             //Create temporary decrypted database
             std::filesystem::path tempPath{ (m_path.string() + ".decrypt") };
             std::string cmd{ "ATTACH DATABASE '" + tempPath.string() + "' AS plaintext KEY ''" };
-            sqlite3_exec(m_database, cmd.c_str(), nullptr, nullptr, nullptr);
-            sqlite3_exec(m_database, "SELECT sqlcipher_export('plaintext')", nullptr, nullptr, nullptr);
-            sqlite3_exec(m_database, "DETACH DATABASE plaintext", nullptr, nullptr, nullptr);
+            if(sqlite3_exec(m_database, cmd.c_str(), nullptr, nullptr, nullptr) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to attach temporary database.");
+            }
+            if(sqlite3_exec(m_database, "SELECT sqlcipher_export('plaintext')", nullptr, nullptr, nullptr) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to decrypt temporary database.");
+            }
+            if(sqlite3_exec(m_database, "DETACH DATABASE plaintext", nullptr, nullptr, nullptr) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to detach temporary database.");
+            }
             //Remove old encrypted database
-            sqlite3_close(m_database);
+            if(sqlite3_close(m_database) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to close old sql databse.");
+            }
             std::filesystem::remove(m_path);
             std::filesystem::rename(tempPath, m_path);
             //Open new decrypted database
