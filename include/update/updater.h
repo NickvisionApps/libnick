@@ -56,6 +56,7 @@ namespace Nickvision::Update
         /**
          * @brief Gets the latest version of the provided type from the GitHub repo.
          * @brief This method looks for tags in the format major.minor.build-dev or major.minor.build.dev for preview versions and major.minor.build for stable versions.
+         * @brief If the VersionType is Preview, the updater may return a stable version if it is greater than the latest preview.
          * @param versionType The type of the version to get
          * @return The current version of the provided type if available, else empty Version
          */

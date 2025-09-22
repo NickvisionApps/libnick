@@ -9,6 +9,8 @@ None
 ### Fixes
 #### Database
 - Fixed an issue where the sqlite database crashed on Windows
+#### Update
+- Fixed parsing of development versions
 
 ## 2025.9.3
 ### Breaking Changes

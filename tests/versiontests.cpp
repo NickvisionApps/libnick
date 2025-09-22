@@ -95,9 +95,18 @@ TEST(VersionTests, CompareVersion3)
 
 TEST(VersionTests, CompareVersion4)
 {
-    Version v1{ "2024.6.0" };
-    Version v2{ "2024.6.0" };
-    ASSERT_FALSE(v1 > v2);
-    ASSERT_FALSE(v2 < v1);
-    ASSERT_TRUE(v1 == v2);
+    Version v1{ "2025.9.0-beta1" };
+    Version v2{ "2025.8.0" };
+    ASSERT_TRUE(v1 > v2);
+    ASSERT_TRUE(v2 < v1);
+    ASSERT_FALSE(v1 == v2);
+}
+
+TEST(VersionTests, CompareVersion5)
+{
+    Version v1{ "2025.9.0-beta2" };
+    Version v2{ "2025.9.0-beta1" };
+    ASSERT_TRUE(v1 > v2);
+    ASSERT_TRUE(v2 < v1);
+    ASSERT_FALSE(v1 == v2);
 }

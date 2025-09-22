@@ -158,6 +158,10 @@ namespace Nickvision::Update
                     {
                         return true;
                     }
+                    else
+                    {
+                        return m_dev < compare.m_dev;
+                    }
                 }
             }
         }
@@ -208,6 +212,10 @@ namespace Nickvision::Update
                     else if(!m_dev.empty() && compare.m_dev.empty())
                     {
                         return false;
+                    }
+                    else
+                    {
+                        return m_dev > compare.m_dev;
                     }
                 }
             }

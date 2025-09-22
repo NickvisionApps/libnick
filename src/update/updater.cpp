@@ -63,8 +63,8 @@ namespace Nickvision::Update
         {
             return {};
         }
-        std::string stableVersion;
-        std::string previewVersion;
+        Version stable;
+        Version preview;
         for (const boost::json::value& release : root.as_array())
         {
             if(!release.is_object())
@@ -72,38 +72,42 @@ namespace Nickvision::Update
                 continue;
             }
             boost::json::object releaseObject = release.as_object();
-            const boost::json::value& tagNameValue{ releaseObject["tag_name"] };
-            if (!tagNameValue.is_string())
-            {
-                return {};
-            }
-            std::string version{ tagNameValue.as_string() };
-            size_t splitCount{ StringHelpers::split(version, ".", false).size() };
             const boost::json::value& id{ releaseObject["id"] };
-            if (stableVersion.empty() && versionType == VersionType::Stable && version.find('-') == std::string::npos && splitCount == 3)
+            const boost::json::value& tagName{ releaseObject["tag_name"] };
+            const boost::json::value& prerelease{ releaseObject["prerelease"] };
+            if (!id.is_int64() || !tagName.is_string() || !prerelease.is_bool())
             {
-                m_latestStableReleaseId = id.is_int64() ? static_cast<int>(id.as_int64()) : -1;
-                stableVersion = version;
+                continue;
             }
-            if (previewVersion.empty() && versionType == VersionType::Preview && (version.find('-') != std::string::npos || splitCount == 4))
+            if (prerelease.as_bool() && preview.empty())
             {
-                m_latestPreviewReleaseId = id.is_int64() ? static_cast<int>(id.as_int64()) : -1;
-                previewVersion = version;
+                preview = Version(tagName.as_string().c_str());
+                m_latestPreviewReleaseId = id.as_int64();
             }
-            if (!stableVersion.empty() && !previewVersion.empty())
+            else if(stable.empty())
+            {
+                stable = Version(tagName.as_string().c_str());
+                m_latestStableReleaseId = id.as_int64();
+            }
+            if(!stable.empty() && !preview.empty())
             {
                 break;
             }
         }
+        if(stable > preview)
+        {
+            preview = stable;
+            m_latestPreviewReleaseId = m_latestStableReleaseId;
+        }
         if(versionType == VersionType::Stable)
         {
-            return stableVersion.empty() ? Version() : Version(stableVersion);
+            return stable;
         }
         else if(versionType == VersionType::Preview)
         {
-            return previewVersion.empty() ? Version() : Version(previewVersion);
+            return preview;
         }
-        return Version();
+        return {};
     }
 
     bool Updater::downloadUpdate(VersionType versionType, const std::filesystem::path& path, const std::string& assetName, bool exactMatch, const cpr::ProgressCallback& progress) noexcept
