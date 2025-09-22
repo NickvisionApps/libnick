@@ -1,6 +1,8 @@
 #include "update/version.h"
 #include <stdexcept>
-#include <iostream>
+#include "helpers/stringhelpers.h"
+
+using namespace Nickvision::Helpers;
 
 namespace Nickvision::Update
 {
@@ -40,42 +42,45 @@ namespace Nickvision::Update
         m_minor{ 0 },
         m_build{ 0 }
     {
-        std::string s{ version };
-        size_t pos{ 0 };
-        int i{ 0 };
-        while ((pos = s.find('.')) != std::string::npos)
-        {
-            std::string token{ s.substr(0, pos) };
-            if (i == 0) 
-            {
-                m_major = std::stoi(token);
-            }
-            else if (i == 1)
-            {
-                m_minor = std::stoi(token);
-            }
-            else
-            {
-                throw std::invalid_argument("Ill-formated version string.");
-            }
-            s.erase(0, pos + 1);
-            i++;
-        }
-        if (i != 2)
+
+        std::vector<std::string> splits{ StringHelpers::split(version, ".", false) };
+        if(splits.size() < 3)
         {
             throw std::invalid_argument("Ill-formated version string.");
         }
-        size_t dashIndex{ s.find('-') };
-        if(dashIndex == std::string::npos)
+        m_major = std::stoi(splits[0]);
+        m_minor = std::stoi(splits[1]);
+        if(splits.size() == 3)
         {
-            dashIndex = s.find('.');
+            if(splits[2].find("-") == std::string::npos)
+            {
+                m_build = std::stoi(splits[2]);
+            }
+            else
+            {
+                std::vector<std::string> devSplits{ StringHelpers::split(splits[2], "-", false) };
+                if(devSplits.size() != 2)
+                {
+                    throw std::invalid_argument("Ill-formated version string.");
+                }
+                m_build = std::stoi(devSplits[0]);
+                m_dev = devSplits[1];
+            }
         }
-        s.erase(0, dashIndex);
-        if (!s.empty() && (s[0] == '-' || s[0] == '.')) //dev version
+        else if(splits.size() == 4)
         {
-            m_dev = s;
+            m_build = std::stoi(splits[2]);
+            m_dev = splits[3];
         }
-        m_str = std::to_string(m_major) + "." + std::to_string(m_minor) + "." + std::to_string(m_build) + m_dev;
+        else
+        {
+            throw std::invalid_argument("Ill-formated version string.");
+        }
+        m_str = std::to_string(m_major) + "." + std::to_string(m_minor) + "." + std::to_string(m_build);
+        if(!m_dev.empty())
+        {
+            m_str += "-" + m_dev;
+        }
     }
 
     int Version::getMajor() const noexcept
@@ -153,6 +158,10 @@ namespace Nickvision::Update
                     {
                         return true;
                     }
+                    else
+                    {
+                        return m_dev < compare.m_dev;
+                    }
                 }
             }
         }
@@ -203,6 +212,10 @@ namespace Nickvision::Update
                     else if(!m_dev.empty() && compare.m_dev.empty())
                     {
                         return false;
+                    }
+                    else
+                    {
+                        return m_dev > compare.m_dev;
                     }
                 }
             }

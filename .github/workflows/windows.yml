@@ -11,7 +11,7 @@ permissions:
   contents: read
 env:
   GITHUB_ACTIONS: true
-  VCPKG_ROOT: ${{github.workspace}}/vcpkg
+  VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 jobs:
   build:
     name: "Build on Windows"
@@ -19,7 +19,7 @@ jobs:
       matrix:
         variant:
           - arch: x64
-            runner: windows-latest
+            runner: windows-2025
             triplet: x64-windows
           #- arch: arm64
           #  runner: windows-11-arm

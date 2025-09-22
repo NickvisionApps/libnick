@@ -10,7 +10,7 @@ namespace Nickvision::Database
         m_isUnlocked{ true },
         m_database{ nullptr }
     {
-        if (sqlite3_open_v2(m_path.string().c_str(), &m_database, m_flags, nullptr) != SQLITE_OK)
+        if(sqlite3_open_v2(m_path.string().c_str(), &m_database, m_flags, nullptr) != SQLITE_OK)
         {
             throw std::runtime_error("Unable to open sql database.");
         }
@@ -102,33 +102,38 @@ namespace Nickvision::Database
                 return true;
             }
             //If empty database, can use sqlite3_key
-            SqliteStatement statement{ m_database, "SELECT count(*) FROM sqlite_master;" };
-            int tableCount{ -1 };
-            if(statement.step() == SqliteStepResult::Row)
             {
-                tableCount = statement.getColumn<int>(0);
-            }
-            if(tableCount == 0)
-            {
-                if(sqlite3_key(m_database, password.c_str(), static_cast<int>(password.size())) != SQLITE_OK)
+                SqliteStatement statement{ m_database, "SELECT count(*) FROM sqlite_master;" };
+                int tableCount{ -1 };
+                if(statement.step() == SqliteStepResult::Row)
                 {
-                    return false;
+                    tableCount = statement.getColumn<int>(0);
                 }
-                else
+                if(tableCount == 0)
                 {
-                    m_isUnlocked = sqlite3_exec(m_database, "SELECT count(*) FROM sqlite_master;", nullptr, nullptr, nullptr) == SQLITE_OK;
-                    m_isEncrypted = true;
-                    return true;
+                    if(sqlite3_key(m_database, password.c_str(), static_cast<int>(password.size())) != SQLITE_OK)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        m_isUnlocked = sqlite3_exec(m_database, "SELECT count(*) FROM sqlite_master;", nullptr, nullptr, nullptr) == SQLITE_OK;
+                        m_isEncrypted = true;
+                        return true;
+                    }
                 }
             }
             //Create temp encrypted database
             std::filesystem::path tempPath{ (m_path.string() + ".encrypt") };
-            std::string cmd{ "ATTACH DATABASE '" + tempPath.string() + "' AS encrypted KEY '" + password + "'" };
+            std::string cmd{ "ATTACH DATABASE '" + tempPath.string() + "' AS encrypted KEY '" + password + "';" };
             sqlite3_exec(m_database, cmd.c_str(), nullptr, nullptr, nullptr);
-            sqlite3_exec(m_database, "SELECT sqlcipher_export('encrypted')", nullptr, nullptr, nullptr);
-            sqlite3_exec(m_database, "DETACH DATABASE encrypted", nullptr, nullptr, nullptr);
+            sqlite3_exec(m_database, "SELECT sqlcipher_export('encrypted');", nullptr, nullptr, nullptr);
+            sqlite3_exec(m_database, "DETACH DATABASE encrypted;", nullptr, nullptr, nullptr);
             //Remove old encrypted database
-            sqlite3_close(m_database);
+            if(sqlite3_close(m_database) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to close old sql database.");
+            }
             std::filesystem::remove(m_path);
             std::filesystem::rename(tempPath, m_path);
             //Open new encrypted database
@@ -154,12 +159,15 @@ namespace Nickvision::Database
         {
             //Create temporary decrypted database
             std::filesystem::path tempPath{ (m_path.string() + ".decrypt") };
-            std::string cmd{ "ATTACH DATABASE '" + tempPath.string() + "' AS plaintext KEY ''" };
+            std::string cmd{ "ATTACH DATABASE '" + tempPath.string() + "' AS plaintext KEY '';" };
             sqlite3_exec(m_database, cmd.c_str(), nullptr, nullptr, nullptr);
-            sqlite3_exec(m_database, "SELECT sqlcipher_export('plaintext')", nullptr, nullptr, nullptr);
-            sqlite3_exec(m_database, "DETACH DATABASE plaintext", nullptr, nullptr, nullptr);
+            sqlite3_exec(m_database, "SELECT sqlcipher_export('plaintext');", nullptr, nullptr, nullptr);
+            sqlite3_exec(m_database, "DETACH DATABASE plaintext;", nullptr, nullptr, nullptr);
             //Remove old encrypted database
-            sqlite3_close(m_database);
+            if(sqlite3_close(m_database) != SQLITE_OK)
+            {
+                throw std::runtime_error("Unable to close old sql database.");
+            }
             std::filesystem::remove(m_path);
             std::filesystem::rename(tempPath, m_path);
             //Open new decrypted database
