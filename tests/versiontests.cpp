@@ -9,10 +9,46 @@ TEST(VersionTests, EmptyVersion)
     ASSERT_EQ(v.empty(), true);
 }
 
+TEST(VersionTests, StableVersion1)
+{
+    Version v{ "2025.9.0" };
+    ASSERT_EQ(v.getVersionType(), VersionType::Stable);
+    ASSERT_EQ(v.str(), "2025.9.0");
+}
+
+TEST(VersionTests, StableVersion2)
+{
+    Version v{ "0.2.0" };
+    ASSERT_EQ(v.getVersionType(), VersionType::Stable);
+    ASSERT_EQ(v.str(), "0.2.0");
+}
+
+TEST(VersionTests, StableVersion3)
+{
+    Version v{ "1.2.4" };
+    ASSERT_EQ(v.getVersionType(), VersionType::Stable);
+    ASSERT_EQ(v.str(), "1.2.4");
+}
+
 TEST(VersionTests, BetaVersion1)
 {
     Version v{ "2010.5.0-beta1" };
     ASSERT_EQ(v.getVersionType(), VersionType::Preview);
+    ASSERT_EQ(v.str(), "2010.5.0-beta1");
+}
+
+TEST(VersionTests, BetaVersion2)
+{
+    Version v{ "2025.9.1-next" };
+    ASSERT_EQ(v.getVersionType(), VersionType::Preview);
+    ASSERT_EQ(v.str(), "2025.9.1-next");
+}
+
+TEST(VersionTests, BetaVersion3)
+{
+    Version v{ "2025.9.1.beta1" };
+    ASSERT_EQ(v.getVersionType(), VersionType::Preview);
+    ASSERT_EQ(v.str(), "2025.9.1-beta1");
 }
 
 TEST(VersionTests, BadVersion1)
