@@ -31,9 +31,9 @@ jobs:
         with:
           pkgs: boost-json cpr gettext-libintl glib gtest maddy
           triplet: arm64-osx
-          revision: 29ff5b8131d0c6c8fcb8fbaef35992f0d507cd7c
+          revision: 6548e2ee65216d462b945337ba74d09269fb4e8f
           token: ${{ github.token }}
-          cache-key: "arm64-osx-29ff5b8131d0c6c8fcb8fbaef35992f0d507cd7c"
+          cache-key: "arm64-osx-6548e2ee65216d462b945337ba74d09269fb4e8f"
       - name: "Build"
         working-directory: ${{github.workspace}}/build
         run: |
