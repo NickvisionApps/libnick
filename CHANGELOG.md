@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025.10.0
+### Breaking Changes
+None
+### New APIs
+None
+### Fixes
+#### Keyring
+- Better error handling
+
 ## 2025.9.4
 ### Breaking Changes
 None

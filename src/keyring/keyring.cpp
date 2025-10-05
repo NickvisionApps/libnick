@@ -13,38 +13,53 @@ namespace Nickvision::Keyring
         : m_name{ name },
         m_database{ nullptr }
     {
-        std::optional<Credential> credential{ Credentials::get(name) };
-        if(!credential)
+        std::optional<Credential> credential;
+        try
         {
-            credential = Credentials::create(name);
+            credential = Credentials::get(name);
+            if(!credential)
+            {
+                credential = Credentials::create(name);
+            }
+        }
+        catch(...)
+        {
+            credential = std::nullopt;
         }
         if(credential)
         {
             static std::filesystem::path keyringDir{ UserDirectories::get(UserDirectory::Config) / "Nickvision" / "Keyring" };
             std::filesystem::create_directories(keyringDir);
-            m_database = std::make_unique<SqliteDatabase>(keyringDir / (m_name + ".ring2"));
-            if(m_database->isEncrypted()) // Existing Keyring
+            try
             {
-                if(!m_database->unlock(credential->getPassword()))
+                m_database = std::make_unique<SqliteDatabase>(keyringDir / (m_name + ".ring2"));
+                if(m_database->isEncrypted()) // Existing Keyring
                 {
-                    m_database.reset();
+                    if(!m_database->unlock(credential->getPassword()))
+                    {
+                        m_database.reset();
+                    }
+                    SqliteStatement statement{ m_database->createStatement("SELECT * FROM credentials") };
+                    while(statement.step() != SqliteStepResult::Done)
+                    {
+                        m_credentials.push_back({ statement.getColumn<std::string>(0), statement.getColumn<std::string>(1), statement.getColumn<std::string>(2), statement.getColumn<std::string>(3) });
+                    }
                 }
-                SqliteStatement statement{ m_database->createStatement("SELECT * FROM credentials") };
-                while(statement.step() != SqliteStepResult::Done)
+                else // New Keyring
                 {
-                    m_credentials.push_back({ statement.getColumn<std::string>(0), statement.getColumn<std::string>(1), statement.getColumn<std::string>(2), statement.getColumn<std::string>(3) });
+                    if(!m_database->setPassword(credential->getPassword()))
+                    {
+                        m_database.reset();
+                    }
+                    else if(!m_database->execute("CREATE TABLE IF NOT EXISTS credentials (name TEXT, uri TEXT, username TEXT, password TEXT)"))
+                    {
+                        m_database.reset();
+                    }
                 }
             }
-            else // New Keyring
+            catch(...)
             {
-                if(!m_database->setPassword(credential->getPassword()))
-                {
-                    m_database.reset();
-                }
-                else if(!m_database->execute("CREATE TABLE IF NOT EXISTS credentials (name TEXT, uri TEXT, username TEXT, password TEXT)"))
-                {
-                    m_database.reset();
-                }
+                m_database.reset();
             }
         }
     }
